@@ -1,0 +1,113 @@
+cmake_minimum_required(VERSION 3.31)
+project(GEngineCore)
+
+set(CMAKE_CXX_STANDARD 20)
+
+# Add raylib
+add_subdirectory(vendor/raylib)
+
+# Add rlImGui
+add_subdirectory(vendor/rlImGui)
+
+# Add imgui
+add_subdirectory(vendor/imgui)
+
+# Add ourselves
+add_library(GEngineCore STATIC
+        src/Core/GEngineCoreApplication.cpp
+        src/Core/GEngineCoreApplication.h
+        src/Modules/EntitiesModule.cpp
+        src/Modules/EntitiesModule.h
+        src/Entities/Entity.h
+        src/Components/Component.cpp
+        src/Components/Component.h
+        src/Components/ComponentType.h
+        src/Helpers/PointersList.h
+        src/Helpers/PointerRef.h
+        src/Components/TransformComponent.cpp
+        src/Components/TransformComponent.h
+        src/Extensions/UnorderedMapExtensions.h
+        src/Modules/ModuleEvent.h
+        src/Events/EventBus.h
+        src/Events/ModuleEvent.h
+        src/Events/EntityDestroyedEvent.h
+        src/Events/EventBuses.h
+        src/Modules/GameModule.cpp
+        src/Modules/GameModule.h
+        src/Games/Game.h
+        src/Modules/WindowModule.cpp
+        src/Modules/WindowModule.h
+        src/Modules/ComponentsModule.cpp
+        src/Modules/ComponentsModule.h
+        src/Modules/RenderingModule.cpp
+        src/Modules/RenderingModule.h
+        src/Rendering/LayeredRenderQueue.cpp
+        src/Rendering/LayeredRenderQueue.h
+        src/Extensions/MapExtensions.h
+        src/Rendering/Renderer2d.cpp
+        src/Rendering/Renderer2d.h
+        src/Modules/SystemsModule.cpp
+        src/Modules/SystemsModule.h
+        src/Systems/System.h
+        src/Components/ShapeRenderer2dComponent.cpp
+        src/Components/ShapeRenderer2dComponent.h
+        src/Systems/TickShapeRenderer2dComponentsSystem.cpp
+        src/Systems/TickShapeRenderer2dComponentsSystem.h
+        src/Entities/Entity.cpp
+        src/Events/Event.h
+        src/Components/ComponentFactory.h
+        src/Modules/TransformsModule.cpp
+        src/Modules/TransformsModule.h
+        src/Rendering/ImGuiRenderer.cpp
+        src/Rendering/ImGuiRenderer.h
+        src/Modules/EditorModule.cpp
+        src/Modules/EditorModule.h
+        src/Editor/Windows/EditorWindow.cpp
+        src/Editor/Windows/EditorWindow.h
+        src/Rendering/SimpleRenderQueue.cpp
+        src/Rendering/SimpleRenderQueue.h
+        src/Editor/Windows/HierarchyEditorWindow.cpp
+        src/Editor/Windows/HierarchyEditorWindow.h
+        src/Editor/Windows/InspectorEditorWindow.cpp
+        src/Editor/Windows/InspectorEditorWindow.h
+        src/Objects/GEngineObject.h
+        src/Objects/GEngineObjectType.h
+        src/Editor/Inspector/GEngineObjectInspectorEditor.h
+        src/Editor/Inspector/EntityInspectorEditor.cpp
+        src/Editor/Inspector/EntityInspectorEditor.h
+        src/Editor/Extensions/ImGuiExtensions.cpp
+        src/Editor/Extensions/ImGuiExtensions.h
+        src/Editor/ComponentsInspector/ComponentInspectorEditor.h
+        src/Editor/ComponentsInspector/TransformComponentInspectorEditor.cpp
+        src/Editor/ComponentsInspector/TransformComponentInspectorEditor.h
+        src/Components/TextureRenderer2dComponent.cpp
+        src/Components/TextureRenderer2dComponent.h
+        src/Modules/ResourcesModule.cpp
+        src/Modules/ResourcesModule.h
+        src/Resources/Resource.h
+        src/Resources/ResourceType.h
+        src/Resources/Resource.cpp
+        src/ResourceImporters/ResourceImporter.cpp
+        src/ResourceImporters/ResourceImporter.h
+        src/ResourceImporters/TextureResourceImporter.cpp
+        src/ResourceImporters/TextureResourceImporter.h
+        src/Resources/TextureResource.cpp
+        src/Resources/TextureResource.h
+        src/Extensions/StringExtensions.h
+        src/Editor/Windows/ResourcesEditorWindow.cpp
+        src/Editor/Windows/ResourcesEditorWindow.h
+)
+
+# Link raylib
+target_link_libraries(GEngineCore PUBLIC raylib)
+
+# Link rlImGui
+target_link_libraries(GEngineCore PUBLIC rlImGui)
+
+# Link imgui
+target_link_libraries(GEngineCore PUBLIC imgui)
+
+# Include spdlog
+target_include_directories(GEngineCore PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/vendor/")
+
+target_include_directories(GEngineCore PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src")
