@@ -19,7 +19,6 @@ namespace GEngineCore
 
 	public:
 		explicit Resource(
-			std::uint32_t id,
 			const std::filesystem::path &fullPath,
 			const std::filesystem::path &resourcesPath
 			);
@@ -33,8 +32,10 @@ namespace GEngineCore
 		std::filesystem::path GetFullPath() const;
 		std::filesystem::path GetResourcesPath() const;
 
+	protected:
+		virtual void Dispose() {};
+
 	private:
-		std::uint32_t _id = 0;
 		std::filesystem::path _fullPath;
 		std::filesystem::path _resourcesPath;
 	};

@@ -4,8 +4,8 @@
 
 #include "TestGame.h"
 
-#include "Components/ShapeRenderer2dComponent.h"
-#include "Components/TextureRenderer2dComponent.h"
+#include "Components/Shape2dRendererComponent.h"
+#include "Components/Texture2dRendererComponent.h"
 #include "Components/TransformComponent.h"
 #include "Core/GEngineCoreApplication.h"
 #include "Modules/EntitiesModule.h"
@@ -28,24 +28,25 @@ void TestGame::Init()
 
 	_entity1 = entities->AddEntity();
 	auto entity2 = entities->AddEntity();
-	auto entity3 = entities->AddEntity();
+	//auto entity3 = entities->AddEntity();
 
 	_entity1.lock()->GetTransform().lock()->SetPosition({0, 0, 0});
 	entity2.lock()->GetTransform().lock()->SetPosition({0, 100, 0});
 
 	entity2.lock()->SetParent(_entity1);
-	entity3.lock()->SetParent(entity2);
+	//entity3.lock()->SetParent(entity2);
 
-	_entity1.lock()->AddComponent<GEngineCore::ShapeRenderer2dComponent>();
-	_entity1.lock()->AddComponent<GEngineCore::TextureRenderer2dComponent>();
-	entity2.lock()->AddComponent<GEngineCore::ShapeRenderer2dComponent>();
-	//entity3.lock()->AddComponent<GEngineCore::ShapeRenderer2dComponent>();
+	_entity1.lock()->AddComponent<GEngineCore::Shape2dRendererComponent>();
+	_entity1.lock()->AddComponent<GEngineCore::Texture2dRendererComponent>();
+	entity2.lock()->AddComponent<GEngineCore::Shape2dRendererComponent>();
+	//std::weak_ptr<GEngineCore::Texture2dRendererComponent> textureComponent = entity3.lock()->AddComponent<GEngineCore::Texture2dRendererComponent>();
 
 	//entity2.lock()->GetTransform().lock()->SetPosition({100, 100, 0});
 	//entity3.lock()->GetTransform().lock()->SetLocalPosition({30, 00, 0});
 	_entity1.lock()->GetTransform().lock()->SetLocalRotationEulerDegreesZ(30);
 
-	resources->GetResource<GEngineCore::TextureResource>("proxy-image.png");
+	//std::weak_ptr<GEngineCore::TextureResource> texture = resources->GetResource<GEngineCore::TextureResource>("proxy-image.png");
+	//textureComponent.lock()->SetTexture(texture);
 }
 
 void TestGame::Tick()

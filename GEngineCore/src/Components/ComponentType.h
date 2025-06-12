@@ -10,8 +10,8 @@ namespace GEngineCore
 	enum ComponentType
 	{
 		TRANSFORM,
-		SHAPE_RENDERER_2D,
-		TEXTURE_RENDERER_2D,
+		SHAPE_2D_RENDERER,
+		TEXTURE_2D_RENDERER,
 	};
 }
 

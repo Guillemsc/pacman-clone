@@ -9,12 +9,16 @@
 #include "ComponentType.h"
 #include "raylib.h"
 #include "raymath.h"
+#include "glm/vec3.hpp"
+#include "glm/vec2.hpp"
+#include "glm/gtc/quaternion.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
 namespace GEngineCore
 {
 	class TransformComponent : public Component, public std::enable_shared_from_this<TransformComponent>
 	{
-		friend class TransformsModule;
+		friend class EntitiesModule;
 
 	public:
 		explicit TransformComponent(const std::weak_ptr<Entity> &entity);
@@ -24,40 +28,55 @@ namespace GEngineCore
 		ComponentType GetType() override { return GetTypeStatic(); }
 		const char* GetTypeName() override { return "Transform"; }
 
-		void SetPosition(const Vector3 &position);
-		void SetLocalPosition(const Vector3 &position);
-		void SetRotation(const Quaternion &rotation);
+		void SetPosition(const glm::vec3 &position);
+		void SetLocalPosition(const glm::vec3 &position);
 
-		void SetLocalRotation(const Quaternion &rotation);
-		void SetLocalRotationEuler(const Vector3 &rotation);
-		void SetLocalRotationEulerDegrees(const Vector3 &rotation);
+		void SetRotation(const glm::quat &rotation);
+		void SetLocalRotation(const glm::quat &rotation);
+		void SetLocalRotationEuler(const glm::vec3 &rotation);
+		void SetLocalRotationEulerDegrees(const glm::vec3 &rotation);
 		void SetLocalRotationEulerDegreesZ(float rotationZ);
 
-		void SetLocalScale(const Vector3 &scale);
+		void SetLocalScale(const glm::vec3 &scale);
 
-		Vector3 GetPosition() const;
-		Vector3 GetLocalPosition() const;
+		glm::vec3 GetPosition() const;
+		glm::vec2 GetPositionXY() const;
+		glm::vec3 GetLocalPosition() const;
 
-		Quaternion GetLocalRotation() const;
-		Vector3 GetLocalRotationEuler() const;
-		Vector3 GetLocalRotationEulerDegrees() const;
+		glm::vec3 GetRotationEuler() const;
+		glm::vec3 GetRotationEulerDegrees() const;
 		float GetRotationEulerZ() const;
 		float GetRotationEulerDegreesZ() const;
+		glm::quat GetLocalRotation() const;
+		glm::vec3 GetLocalRotationEuler() const;
+		glm::vec3 GetLocalRotationEulerDegrees() const;
 		float GetLocalRotationEulerZ() const;
 		float GetLocalRotationEulerDegreesZ() const;
 
-	private:
-		Vector3 _worldPosition = Vector3Zero();
-		Quaternion _worldRotation = QuaternionIdentity();
-		Vector3 _worldRotationEuler = Vector3Zero();
-		Vector3 _worldScale = Vector3One();
-		Matrix _worldMatrix = MatrixIdentity();
+		glm::vec3 GetScale() const;
+		glm::vec2 GetScaleXY() const;
+		glm::vec3 GetLocalScale() const;
 
-		Vector3 _localPosition = Vector3Zero();
-		Quaternion _localRotation = QuaternionIdentity();
-		Vector3 _localRotationEuler = Vector3Zero();
-		Vector3 _localScale = Vector3One();
-		Matrix _localMatrix = MatrixIdentity();
+	private:
+		void SetLocalPositionAsWorldPosition();
+		void RecalculateLocalPosition();
+		void RecalculateLocalRotation();
+		void RecalculateChildrenHierarchyWorldMatrices() const;
+		void ComposeLocalMatrix();
+		void RecalculateWorldMatrix();
+
+	private:
+		glm::vec3 _worldPosition = glm::vec3(0);
+		glm::quat _worldRotation = glm::quat();
+		glm::vec3 _worldRotationEuler = glm::vec3(0);
+		glm::vec3 _worldScale = glm::vec3(1);
+		glm::mat4 _worldMatrix = glm::mat4(1);
+
+		glm::vec3 _localPosition = glm::vec3(0);
+		glm::quat _localRotation = glm::quat();
+		glm::vec3 _localRotationEuler = glm::vec3(0);
+		glm::vec3 _localScale = glm::vec3(1);
+		glm::mat4 _localMatrix = glm::mat4(1);
 	};
 }
 

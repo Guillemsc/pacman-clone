@@ -5,6 +5,7 @@
 #ifndef TEXTURERESOURCE_H
 #define TEXTURERESOURCE_H
 
+#include "raylib.h"
 #include "Resource.h"
 
 namespace GEngineCore
@@ -13,14 +14,19 @@ namespace GEngineCore
 	{
 	public:
 		explicit TextureResource(
-			std::uint32_t id,
 			const std::filesystem::path& fullPath,
-			const std::filesystem::path& resourcesPath
+			const std::filesystem::path& resourcesPath,
+			const Texture2D& rawTexture
 			);
 
 		static ResourceType GetTypeStatic() { return ResourceType::TEXTURE; }
 		ResourceType GetType() override { return GetTypeStatic(); }
 		const char* GetTypeName() override { return "Texture"; }
+
+		const Texture2D& GetRawTexture() const;
+
+	private:
+		Texture2D _rawTexture;
 	};
 }
 

@@ -4,16 +4,18 @@
 
 #include "ComponentsModule.h"
 
-#include "Components/ShapeRenderer2dComponent.h"
+#include "Components/Shape2dRendererComponent.h"
 #include "Components/TransformComponent.h"
 #include "Components/ComponentFactory.h"
+#include "Components/Texture2dRendererComponent.h"
 
 namespace GEngineCore
 {
 	ComponentsModule::ComponentsModule()
 	{
 		RegisterComponent<TransformComponent>(false);
-		RegisterComponent<ShapeRenderer2dComponent>(false);
+		RegisterComponent<Shape2dRendererComponent>(false);
+		RegisterComponent<Texture2dRendererComponent>(false);
 	}
 
 	void ComponentsModule::Dispose()

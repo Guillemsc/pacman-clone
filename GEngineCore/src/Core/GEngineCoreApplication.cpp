@@ -10,7 +10,6 @@
 #include "Modules/GameModule.h"
 #include "Modules/RenderingModule.h"
 #include "Modules/SystemsModule.h"
-#include "Modules/TransformsModule.h"
 #include "Modules/WindowModule.h"
 #include "spdlog/spdlog.h"
 
@@ -21,7 +20,6 @@ namespace GEngineCore
 		spdlog::info("Welcome to GEngineCore :)");
 
 		_components = std::make_shared<ComponentsModule>();
-		_transforms = std::make_shared<TransformsModule>();
 		_entities = std::make_shared<EntitiesModule>();
 		_game = std::make_shared<GameModule>();
 		_window = std::make_shared<WindowModule>();
@@ -41,12 +39,12 @@ namespace GEngineCore
 		spdlog::info("GEngineCore Init");
 
 		_entities->Init(weak_from_this());
-		_game->Init(weak_from_this());
-		_resources->Init();
-		_systems->Init(weak_from_this());
 		_editor->Init(weak_from_this());
 		_window->Init();
 		_rendering->Init();
+		_resources->Init();
+		_systems->Init(weak_from_this());
+		_game->Init(weak_from_this());
 	}
 
 	bool GEngineCoreApplication::CanRun() const

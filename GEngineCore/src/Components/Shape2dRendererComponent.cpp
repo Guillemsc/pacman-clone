@@ -2,7 +2,7 @@
 // Created by guillem on 6/8/25.
 //
 
-#include "Texture2dRendererComponent.h"
+#include "Shape2dRendererComponent.h"
 
 #include "raylib.h"
 #include "TransformComponent.h"
@@ -10,12 +10,12 @@
 
 namespace GEngineCore
 {
-	Texture2dRendererComponent::Texture2dRendererComponent(const std::weak_ptr<Entity> &entity) : Component(entity)
+	Shape2dRendererComponent::Shape2dRendererComponent(const std::weak_ptr<Entity> &entity) : Component(entity)
 	{
 
 	}
 
-	void Texture2dRendererComponent::OnTick()
+	void Shape2dRendererComponent::OnTick()
 	{
 		const std::shared_ptr<GEngineCoreApplication> app = GetApp().lock();
 		if (app == nullptr) return;
@@ -31,16 +31,17 @@ namespace GEngineCore
 
 		float positionX = transform->GetPosition().x;
 		float positionY = -transform->GetPosition().y;
-		float rotation = transform->GetRotationEulerDegreesZ();
+		float rotation = -transform->GetRotationEulerDegreesZ();
+		glm::vec2 scale = transform->GetScaleXY();
 
-		rendering->Render2D().lock()->Add(0, [positionX, positionY, rotation]()
+		rendering->Render2D().lock()->Add(0, [positionX, positionY, rotation, scale]()
 		{
-			Vector2 size = {20, 20};
+			Vector2 size = {20 * scale.x, 20 * scale.y};
 			Vector2 center = { size.x * 0.5f, size.y * 0.5f };
 
 			Rectangle rectangle = {
-				positionX - center.x,
-				positionY - center.y,
+				positionX,
+				positionY,
 				size.x,
 				size.y,
 			};
@@ -49,7 +50,7 @@ namespace GEngineCore
 		});
 	}
 
-	void Texture2dRendererComponent::OnDestroy()
+	void Shape2dRendererComponent::OnDestroy()
 	{
 
 	}

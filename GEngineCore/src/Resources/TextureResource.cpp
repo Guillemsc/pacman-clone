@@ -7,10 +7,16 @@
 namespace GEngineCore
 {
 	TextureResource::TextureResource(
-		const std::uint32_t id,
 		const std::filesystem::path &fullPath,
-		const std::filesystem::path &resourcesPath
-		) : Resource(id, fullPath, resourcesPath)
+		const std::filesystem::path &resourcesPath,
+		const Texture2D& rawTexture
+		) : Resource(fullPath, resourcesPath)
 	{
+		_rawTexture = rawTexture;
+	}
+
+	const Texture2D& TextureResource::GetRawTexture() const
+	{
+		return _rawTexture;
 	}
 } // GEngineCore

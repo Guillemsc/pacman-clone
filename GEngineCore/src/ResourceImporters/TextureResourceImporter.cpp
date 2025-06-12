@@ -4,6 +4,7 @@
 
 #include "TextureResourceImporter.h"
 
+#include "raylib.h"
 #include "Resources/TextureResource.h"
 
 namespace GEngineCore
@@ -17,10 +18,17 @@ namespace GEngineCore
 		const std::filesystem::path& resourcesPath
 		)
 	{
+		Texture2D rawTexture = LoadTexture(fullPath.c_str());
+
+		if (rawTexture.height == 0 || rawTexture.width == 0)
+		{
+			return nullptr;
+		}
+
 		std::shared_ptr<TextureResource> texture = std::make_shared<TextureResource>(
-			32,
 			fullPath,
-			resourcesPath
+			resourcesPath,
+			rawTexture
 			);
 
 		return texture;

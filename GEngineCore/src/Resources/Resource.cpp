@@ -6,9 +6,8 @@
 
 namespace GEngineCore
 {
-	Resource::Resource(const std::uint32_t id, const std::filesystem::path &fullPath, const std::filesystem::path &resourcesPath)
+	Resource::Resource(const std::filesystem::path &fullPath, const std::filesystem::path &resourcesPath)
 	{
-		_id = id;
 		_fullPath = fullPath;
 		_resourcesPath = resourcesPath;
 	}

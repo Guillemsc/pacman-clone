@@ -12,6 +12,9 @@ add_subdirectory(vendor/rlImGui)
 # Add imgui
 add_subdirectory(vendor/imgui)
 
+# Add gml
+add_subdirectory(vendor/glm)
+
 # Add ourselves
 add_library(GEngineCore STATIC
         src/Core/GEngineCoreApplication.cpp
@@ -49,15 +52,13 @@ add_library(GEngineCore STATIC
         src/Modules/SystemsModule.cpp
         src/Modules/SystemsModule.h
         src/Systems/System.h
-        src/Components/ShapeRenderer2dComponent.cpp
-        src/Components/ShapeRenderer2dComponent.h
+        src/Components/Shape2dRendererComponent.cpp
+        src/Components/Shape2dRendererComponent.h
         src/Systems/TickShapeRenderer2dComponentsSystem.cpp
         src/Systems/TickShapeRenderer2dComponentsSystem.h
         src/Entities/Entity.cpp
         src/Events/Event.h
         src/Components/ComponentFactory.h
-        src/Modules/TransformsModule.cpp
-        src/Modules/TransformsModule.h
         src/Rendering/ImGuiRenderer.cpp
         src/Rendering/ImGuiRenderer.h
         src/Modules/EditorModule.cpp
@@ -80,8 +81,8 @@ add_library(GEngineCore STATIC
         src/Editor/ComponentsInspector/ComponentInspectorEditor.h
         src/Editor/ComponentsInspector/TransformComponentInspectorEditor.cpp
         src/Editor/ComponentsInspector/TransformComponentInspectorEditor.h
-        src/Components/TextureRenderer2dComponent.cpp
-        src/Components/TextureRenderer2dComponent.h
+        src/Components/Texture2dRendererComponent.cpp
+        src/Components/Texture2dRendererComponent.h
         src/Modules/ResourcesModule.cpp
         src/Modules/ResourcesModule.h
         src/Resources/Resource.h
@@ -96,6 +97,8 @@ add_library(GEngineCore STATIC
         src/Extensions/StringExtensions.h
         src/Editor/Windows/ResourcesEditorWindow.cpp
         src/Editor/Windows/ResourcesEditorWindow.h
+        src/Extensions/RayLibExtensions.cpp
+        src/Extensions/RayLibExtensions.h
 )
 
 # Link raylib
@@ -106,6 +109,9 @@ target_link_libraries(GEngineCore PUBLIC rlImGui)
 
 # Link imgui
 target_link_libraries(GEngineCore PUBLIC imgui)
+
+# Link gml
+target_link_libraries(GEngineCore PUBLIC glm::glm-header-only)
 
 # Include spdlog
 target_include_directories(GEngineCore PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/vendor/")

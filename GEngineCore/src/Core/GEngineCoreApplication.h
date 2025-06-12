@@ -13,7 +13,6 @@
 namespace GEngineCore
 {
 	class EditorModule;
-	class TransformsModule;
 	class RenderingModule;
 	class GameModule;
 	class ComponentsModule;
@@ -34,7 +33,6 @@ namespace GEngineCore
 		void Dispose() const;
 
 		std::weak_ptr<ComponentsModule> Components() { return _components; }
-		std::weak_ptr<TransformsModule> Transforms() { return _transforms; }
 		std::weak_ptr<EntitiesModule> Entities() { return _entities; }
 		std::weak_ptr<GameModule> Game() { return _game; }
 		std::weak_ptr<WindowModule> Window() { return _window; }
@@ -45,7 +43,6 @@ namespace GEngineCore
 
 	private:
 		std::shared_ptr<ComponentsModule> _components = nullptr;
-		std::shared_ptr<TransformsModule> _transforms = nullptr;
 		std::shared_ptr<EntitiesModule> _entities = nullptr;
 		std::shared_ptr<GameModule> _game = nullptr;
 		std::shared_ptr<WindowModule> _window = nullptr;

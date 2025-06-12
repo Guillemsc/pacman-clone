@@ -6,7 +6,6 @@
 
 #include <format>
 
-#include "TransformsModule.h"
 #include "Entities/Entity.h"
 #include "Extensions/VectorExtensions.h"
 #include "Components/TransformComponent.h"
@@ -138,9 +137,6 @@ namespace GEngineCore
 		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
 		if (app == nullptr) return;
 
-		const std::shared_ptr<TransformsModule> transforms = app->Transforms().lock();
-		if (transforms == nullptr) return;
-
 		const std::shared_ptr<Entity> target = targetPtr.lock();
 		if (target == nullptr) return;
 
@@ -168,10 +164,10 @@ namespace GEngineCore
 		{
 			if (worldPositionStays)
 			{
-				transforms->SetLocalPositionAsWorldPosition(targetTransform.get());
+				targetTransform->SetLocalPositionAsWorldPosition();
 			}
 
-			transforms->RebuildTransformWorldMatrix(targetTransform.get());
+			targetTransform->RecalculateWorldMatrix();
 		}
 	}
 
@@ -179,9 +175,6 @@ namespace GEngineCore
 	{
 		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
 		if (app == nullptr) return;
-
-		const std::shared_ptr<TransformsModule> transforms = app->Transforms().lock();
-		if (transforms == nullptr) return;
 
 		const std::shared_ptr<Entity> target = targetPtr.lock();
 		if (target == nullptr) return;
@@ -194,14 +187,14 @@ namespace GEngineCore
 
 		_rootEntities.push_back(target);
 
-		if (auto targetTransform = target->GetTransform().lock())
+		if (const auto targetTransform = target->GetTransform().lock())
 		{
 			if (worldPositionStays)
 			{
-				transforms->SetLocalPositionAsWorldPosition(targetTransform.get());
+				targetTransform->SetLocalPositionAsWorldPosition();
 			}
 
-			transforms->RebuildTransformWorldMatrix(targetTransform.get());
+			targetTransform->RecalculateWorldMatrix();
 		}
 	}
 

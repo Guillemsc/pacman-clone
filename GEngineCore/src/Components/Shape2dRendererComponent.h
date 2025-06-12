@@ -10,14 +10,14 @@
 
 namespace GEngineCore
 {
-	class Texture2dRendererComponent : public Component
+	class Shape2dRendererComponent : public Component
 	{
 	public:
-		explicit Texture2dRendererComponent(const std::weak_ptr<Entity> &entity);
+		explicit Shape2dRendererComponent(const std::weak_ptr<Entity> &entity);
 
-		static ComponentType GetTypeStatic() { return ComponentType::SHAPE_RENDERER_2D; }
+		static ComponentType GetTypeStatic() { return ComponentType::SHAPE_2D_RENDERER; }
 		ComponentType GetType() override { return GetTypeStatic(); }
-		const char* GetTypeName() override { return "ShapeRenderer2d"; }
+		const char* GetTypeName() override { return "Shape2dRenderer"; }
 
 		void OnTick() override;
 		void OnDestroy() override;
