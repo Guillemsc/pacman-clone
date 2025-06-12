@@ -2,7 +2,7 @@
 // Created by guillem on 6/8/25.
 //
 
-#include "ShapeRenderer2dComponent.h"
+#include "Texture2dRendererComponent.h"
 
 #include "raylib.h"
 #include "TransformComponent.h"
@@ -10,12 +10,12 @@
 
 namespace GEngineCore
 {
-	ShapeRenderer2dComponent::ShapeRenderer2dComponent(const std::weak_ptr<Entity> &entity) : Component(entity)
+	Texture2dRendererComponent::Texture2dRendererComponent(const std::weak_ptr<Entity> &entity) : Component(entity)
 	{
 
 	}
 
-	void ShapeRenderer2dComponent::OnTick()
+	void Texture2dRendererComponent::OnTick()
 	{
 		const std::shared_ptr<GEngineCoreApplication> app = GetApp().lock();
 		if (app == nullptr) return;
@@ -49,7 +49,7 @@ namespace GEngineCore
 		});
 	}
 
-	void ShapeRenderer2dComponent::OnDestroy()
+	void Texture2dRendererComponent::OnDestroy()
 	{
 
 	}
