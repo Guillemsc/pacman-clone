@@ -8,7 +8,9 @@
 #include "Modules/EditorModule.h"
 #include "Modules/EntitiesModule.h"
 #include "Modules/GameModule.h"
+#include "Modules/InputModule.h"
 #include "Modules/RenderingModule.h"
+#include "Modules/ResourcesModule.h"
 #include "Modules/SystemsModule.h"
 #include "Modules/WindowModule.h"
 #include "spdlog/spdlog.h"
@@ -26,6 +28,7 @@ namespace GEngineCore
 		_rendering = std::make_shared<RenderingModule>();
 		_resources = std::make_shared<ResourcesModule>();
 		_systems = std::make_shared<SystemsModule>();
+		_input = std::make_shared<InputModule>();
 		_editor = std::make_shared<EditorModule>();
 	}
 
@@ -57,7 +60,7 @@ namespace GEngineCore
 		return true;
 	}
 
-	void GEngineCoreApplication::Tick()
+	void GEngineCoreApplication::Tick() const
 	{
 		_game->Tick();
 		_entities->Tick();

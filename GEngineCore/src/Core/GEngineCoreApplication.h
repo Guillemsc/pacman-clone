@@ -8,7 +8,6 @@
 #include <memory>
 
 #include "Core/GEngineCoreApplication.h"
-#include "Modules/ResourcesModule.h"
 
 namespace GEngineCore
 {
@@ -19,6 +18,8 @@ namespace GEngineCore
 	class EntitiesModule;
 	class WindowModule;
 	class SystemsModule;
+	class ResourcesModule;
+	class InputModule;
 	class EventBuses;
 
 	class GEngineCoreApplication : public std::enable_shared_from_this<GEngineCoreApplication>
@@ -29,7 +30,7 @@ namespace GEngineCore
 
 		void Init();
 		bool CanRun() const;
-		void Tick();
+		void Tick() const;
 		void Dispose() const;
 
 		std::weak_ptr<ComponentsModule> Components() { return _components; }
@@ -39,6 +40,7 @@ namespace GEngineCore
 		std::weak_ptr<RenderingModule> Rendering() { return _rendering; }
 		std::weak_ptr<ResourcesModule> Resources() { return _resources; }
 		std::weak_ptr<SystemsModule> Systems() { return _systems; }
+		std::weak_ptr<InputModule> Input() { return _input; }
 		std::weak_ptr<EditorModule> Editor() { return _editor; }
 
 	private:
@@ -49,6 +51,7 @@ namespace GEngineCore
 		std::shared_ptr<RenderingModule> _rendering = nullptr;
 		std::shared_ptr<ResourcesModule> _resources = nullptr;
 		std::shared_ptr<SystemsModule> _systems = nullptr;
+		std::shared_ptr<InputModule> _input = nullptr;
 		std::shared_ptr<EditorModule> _editor = nullptr;
 	};
 } // GEngineCore

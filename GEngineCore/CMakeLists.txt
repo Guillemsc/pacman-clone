@@ -99,6 +99,8 @@ add_library(GEngineCore STATIC
         src/Editor/Windows/ResourcesEditorWindow.h
         src/Extensions/RayLibExtensions.cpp
         src/Extensions/RayLibExtensions.h
+        src/Modules/InputModule.cpp
+        src/Modules/InputModule.h
 )
 
 # Link raylib
