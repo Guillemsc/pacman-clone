@@ -9,6 +9,7 @@
 #include "Extensions/UnorderedMapExtensions.h"
 #include "ResourceImporters/TextureResourceImporter.h"
 #include "Resources/TextureResource.h"
+#include "spdlog/spdlog.h"
 
 namespace GEngineCore
 {
@@ -26,7 +27,7 @@ namespace GEngineCore
 
 	void ResourcesModule::Dispose()
 	{
-
+		DisposeAllResources();
 	}
 
 	const std::vector<std::shared_ptr<Resource>>& ResourcesModule::GetResources()
@@ -68,9 +69,25 @@ namespace GEngineCore
 		}
 	}
 
-	std::vector<std::filesystem::path> ResourcesModule::GetAllResourcesPathsToImport()
+	void ResourcesModule::DisposeAllResources()
+	{
+		for (auto it = _resources.begin(); it != _resources.end(); ++it)
+		{
+			(*it)->Dispose();
+		}
+
+		_resources.clear();
+	}
+
+	std::vector<std::filesystem::path> ResourcesModule::GetAllResourcesPathsToImport() const
 	{
 		std::vector<std::filesystem::path> files;
+
+		if (!std::filesystem::exists(_resourcesPath) || !std::filesystem::is_directory(_resourcesPath))
+		{
+			spdlog::error("Could not get resources to import, because resources folder does not exist");
+			return files;
+		}
 
 		for (const auto& entry : std::filesystem::recursive_directory_iterator(_resourcesPath))
 		{

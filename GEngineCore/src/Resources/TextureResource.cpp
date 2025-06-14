@@ -19,4 +19,10 @@ namespace GEngineCore
 	{
 		return _rawTexture;
 	}
+
+	void TextureResource::Dispose()
+	{
+		UnloadTexture(_rawTexture);
+		_rawTexture = Texture2D();
+	}
 } // GEngineCore

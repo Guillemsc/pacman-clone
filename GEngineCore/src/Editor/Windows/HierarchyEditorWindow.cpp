@@ -31,6 +31,8 @@ namespace GEngineCore
 
 		ImGui::Begin("Hierarchy");
 
+		const std::shared_ptr<GEngineObject> selectedObject = editor->GetSelectedObject().lock();
+
 		const std::vector<std::weak_ptr<Entity>>& rootEntities = entities->GetRootEntities();
 
 		_stack.clear();
@@ -40,7 +42,7 @@ namespace GEngineCore
 			const std::shared_ptr<Entity> entity = it->lock();
 			if (!entity) continue;
 
-			_stack.push_back({entity, 0});
+			_stack.emplace_back(entity, 0);
 		}
 
 		if (ImGui::Button("Add Entity"))
@@ -50,7 +52,7 @@ namespace GEngineCore
 
 		int currentDepth = 0;
 
-		while (_stack.size() > 0)
+		while (!_stack.empty())
 		{
 			const auto [node, depth] = _stack.front();
 			_stack.erase(_stack.begin());
@@ -64,18 +66,26 @@ namespace GEngineCore
 
 			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow;
 
-			if (children.size() == 0)
+			if (children.empty())
 			{
 				flags |= ImGuiTreeNodeFlags_Leaf;
+			}
+
+			if (selectedObject)
+			{
+				bool isSelected = node.get() == selectedObject.get();
+
+				if (isSelected)
+				{
+					flags |= ImGuiTreeNodeFlags_Selected;
+				}
 			}
 
 			ImGui::PushID(node->GetId());
 
 			if (ImGui::TreeNodeEx(node->GetName().c_str(), flags))
 			{
-				const std::vector<std::weak_ptr<Entity>>& children = node->GetChildren();
-
-				if (children.size() == 0)
+				if (children.empty())
 				{
 					ImGui::TreePop();
 				}

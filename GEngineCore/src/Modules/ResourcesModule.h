@@ -31,7 +31,9 @@ namespace GEngineCore
 
 	private:
 		void ImportAllResources();
-		std::vector<std::filesystem::path> GetAllResourcesPathsToImport();
+		void DisposeAllResources();
+
+		std::vector<std::filesystem::path> GetAllResourcesPathsToImport() const;
 
 		std::weak_ptr<IResourceImporter> GetImporterForExtension(const std::string& extension) const;
 

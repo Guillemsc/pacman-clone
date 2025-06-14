@@ -24,7 +24,9 @@ namespace GEngineCore
 		void Dispose();
 
 		void SetSelectedObject(const std::weak_ptr<GEngineObject> &object);
-		std::weak_ptr<GEngineObject> GetSelectedObject() const;
+		[[nodiscard]] std::weak_ptr<GEngineObject> GetSelectedObject() const;
+		template<typename T>
+		bool IsSelectedObject(std::weak_ptr<T> object);
 
 	private:
 		void DrawEditor();
@@ -43,6 +45,20 @@ namespace GEngineCore
 
 	// -------------------------------------------------------
 	// -------------------------------------------------------
+
+	template <typename T>
+	bool EditorModule::IsSelectedObject(std::weak_ptr<T> object)
+	{
+		static_assert(std::is_base_of_v<GEngineObject, T>, "T is not derived from GEngineObject");
+
+		const std::shared_ptr<GEngineObject> selectedObject = _selectedObject.lock();
+		if (!selectedObject) return false;
+
+		const std::shared_ptr<GEngineObject> sharedDerived = std::static_pointer_cast<GEngineObject>(object);
+		if (!sharedDerived) return false;
+
+		return selectedObject.get() == sharedDerived.get();
+	}
 
 	template<class T>
 	void EditorModule::RegisterWindow()

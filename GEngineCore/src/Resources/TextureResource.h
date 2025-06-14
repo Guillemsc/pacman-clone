@@ -23,10 +23,13 @@ namespace GEngineCore
 		ResourceType GetType() override { return GetTypeStatic(); }
 		const char* GetTypeName() override { return "Texture"; }
 
-		const Texture2D& GetRawTexture() const;
+		[[nodiscard]] const Texture2D& GetRawTexture() const;
+
+	protected:
+		void Dispose() override;
 
 	private:
-		Texture2D _rawTexture;
+		Texture2D _rawTexture{};
 	};
 }
 
