@@ -101,6 +101,10 @@ add_library(GEngineCore STATIC
         src/Extensions/RayLibExtensions.h
         src/Modules/InputModule.cpp
         src/Modules/InputModule.h
+        src/Modules/CameraModule.cpp
+        src/Modules/CameraModule.h
+        src/Cameras/Camera.cpp
+        src/Cameras/Camera.h
 )
 
 # Link raylib

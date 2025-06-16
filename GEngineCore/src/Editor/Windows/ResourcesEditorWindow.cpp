@@ -5,9 +5,11 @@
 #include "ResourcesEditorWindow.h"
 
 #include <format>
+#include <vector>
 
 #include "imgui.h"
 #include "Core/GEngineCoreApplication.h"
+#include "Modules/ResourcesModule.h"
 #include "Resources/Resource.h"
 
 namespace GEngineCore

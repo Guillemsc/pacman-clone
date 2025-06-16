@@ -25,20 +25,21 @@ namespace GEngineCore
 			DrawText("Hello, raylib! 2", 190, 200, 20, RED);
 		});
 
-		float screenWidth = GetScreenWidth();
-		float screenHeight = GetScreenHeight();
-		Camera2D camera = { 0 };
-		camera.target = (Vector2){ 0, 0 };                 // World space origin is at the center
-		camera.offset = (Vector2){ screenWidth / 2, screenHeight / 2 }; // Move (0,0) to center of screen
-		camera.rotation = 0.0f;
-		camera.zoom = 0.9f;
 
-		BeginMode2D(camera);
+
+		Camera3D camera3d = { 0 };
+		camera3d.position = (Vector3){ 0.0f, 0.0f, -50.0f };
+		camera3d.target = { 0.0f, 0.0f, 1 };
+		camera3d.up = { 0.0f, 1.0f, 0.0f };
+		camera3d.fovy = -185.0f;
+		camera3d.projection = CAMERA_ORTHOGRAPHIC;
+
+		BeginMode3D(camera3d);
 
 		ClearBackground(RAYWHITE);
 
 		_renderQueue.Execute();
 
-		EndMode2D();
+		EndMode3D();
 	}
 } // GEngineCore
