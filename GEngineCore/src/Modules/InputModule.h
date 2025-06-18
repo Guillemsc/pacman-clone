@@ -6,6 +6,7 @@
 #define INPUTMODULE_H
 
 #include "raylib.h"
+#include "glm/vec2.hpp"
 
 namespace GEngineCore
 {
@@ -15,6 +16,10 @@ namespace GEngineCore
         static bool IsKeyPressed(KeyboardKey keyboardKey);
         static bool IsKeyDown(KeyboardKey keyboardKey);
         static bool IsKeyReleased(KeyboardKey keyboardKey);
+        static bool IsMouseButtonPressed(MouseButton mouseButton);
+        static bool IsMouseButtonDown(MouseButton mouseButton);
+        static bool IsMouseButtonReleased(MouseButton mouseButton);
+        static glm::vec2 GetMousePosition();
     };
 }
 

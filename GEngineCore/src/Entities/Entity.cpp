@@ -46,6 +46,23 @@ namespace GEngineCore
 		return _name;
 	}
 
+	bool Entity::IsActiveSelf() const
+	{
+		return _isActiveSelf;
+	}
+
+	bool Entity::IsActiveInHierarchy() const
+	{
+		return _isActiveInHierarchy;
+	}
+
+	void Entity::SetActive(const bool active)
+	{
+		_isActiveSelf = active;
+
+		RefreshChildrenHierarchyActiveState();
+	}
+
 	bool Entity::IsInsideChildHierarchy(const std::weak_ptr<Entity> &checkingPtr) const
 	{
 		std::shared_ptr<Entity> checking = checkingPtr.lock();
@@ -87,7 +104,7 @@ namespace GEngineCore
 
 	void Entity::ForEachEntityInChildHierarchy(
 		const bool includeCurrent,
-		const std::function<void(const std::shared_ptr<Entity>&)> &callback
+		const std::function<bool(const std::shared_ptr<Entity>&)> &callback
 		)
 	{
 		// TODO: Pool this vector
@@ -101,17 +118,22 @@ namespace GEngineCore
 			std::shared_ptr<Entity> checking = toCheck.front();
 			toCheck.erase(toCheck.begin());
 
+			bool shouldAddChildren = true;
+
 			if (includeCurrent || !firstChecking)
 			{
-				callback(checking);
+				shouldAddChildren = callback(checking);
 			}
 
-			for (auto it = checking->GetChildren().begin(); it != checking->GetChildren().end(); ++it)
+			if (shouldAddChildren)
 			{
-				const std::shared_ptr<Entity> childEntity = it->lock();
-				if (!childEntity) continue;
+				for (auto it = checking->GetChildren().begin(); it != checking->GetChildren().end(); ++it)
+				{
+					const std::shared_ptr<Entity> childEntity = it->lock();
+					if (!childEntity) continue;
 
-				toCheck.push_back(childEntity);
+					toCheck.push_back(childEntity);
+				}
 			}
 
 			firstChecking = false;
@@ -169,5 +191,41 @@ namespace GEngineCore
 		_childEntities.clear();
 		_components.clear();
 		_transformPtr.reset();
+	}
+
+	void Entity::RefreshChildrenHierarchyActiveState()
+	{
+		ForEachEntityInChildHierarchy(true, [](const std::shared_ptr<Entity> &checking)
+		{
+			return checking->RefreshActiveState();
+		});
+	}
+
+	bool Entity::RefreshActiveState()
+	{
+		bool parentIsActive = true;
+
+		const std::shared_ptr<Entity> parent = _parentPtr.lock();
+
+		if (parent)
+		{
+			parentIsActive = parent->IsActiveInHierarchy();
+		}
+
+		const bool shouldBeActive = parentIsActive && _isActiveSelf;
+
+		if (shouldBeActive == _isActiveInHierarchy)
+		{
+			return false;
+		}
+
+		_isActiveInHierarchy = shouldBeActive;
+
+		for (auto it = _components.begin(); it != _components.end(); ++it)
+		{
+			(*it)->RefreshEnabledState();
+		}
+
+		return true;
 	}
 }

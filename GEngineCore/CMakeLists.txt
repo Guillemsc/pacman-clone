@@ -15,6 +15,9 @@ add_subdirectory(vendor/imgui)
 # Add gml
 add_subdirectory(vendor/glm)
 
+# Add tmxlite
+add_subdirectory(vendor/tmxlite)
+
 # Add ourselves
 add_library(GEngineCore STATIC
         src/Core/GEngineCoreApplication.cpp
@@ -30,7 +33,6 @@ add_library(GEngineCore STATIC
         src/Components/TransformComponent.cpp
         src/Components/TransformComponent.h
         src/Extensions/UnorderedMapExtensions.h
-        src/Modules/ModuleEvent.h
         src/Events/EventBus.h
         src/Events/ModuleEvent.h
         src/Events/EntityDestroyedEvent.h
@@ -105,6 +107,16 @@ add_library(GEngineCore STATIC
         src/Modules/CameraModule.h
         src/Cameras/Camera.cpp
         src/Cameras/Camera.h
+        src/Constants/MathConstants.h
+        src/Editor/MenuBar/MenuBarEditor.cpp
+        src/Editor/MenuBar/MenuBarEditor.h
+        src/Components/CameraComponent.cpp
+        src/Components/CameraComponent.h
+        src/Editor/Inspector/ResourcesInspectorEditor.cpp
+        src/Editor/Inspector/ResourcesInspectorEditor.h
+        src/Editor/ResourcesInspector/ResourceInspectorEditor.h
+        src/Editor/ResourcesInspector/TextureResourceInspectorEditor.cpp
+        src/Editor/ResourcesInspector/TextureResourceInspectorEditor.h
 )
 
 # Link raylib
@@ -118,6 +130,9 @@ target_link_libraries(GEngineCore PUBLIC imgui)
 
 # Link gml
 target_link_libraries(GEngineCore PUBLIC glm::glm-header-only)
+
+# Link imgui
+target_link_libraries(GEngineCore PUBLIC tmxlite)
 
 # Include spdlog
 target_include_directories(GEngineCore PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/vendor/")

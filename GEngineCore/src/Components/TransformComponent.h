@@ -43,6 +43,7 @@ namespace GEngineCore
 		glm::vec2 GetPositionXY() const;
 		glm::vec3 GetLocalPosition() const;
 
+		glm::quat GetRotation() const;
 		glm::vec3 GetRotationEuler() const;
 		glm::vec3 GetRotationEulerDegrees() const;
 		float GetRotationEulerZ() const;
@@ -67,13 +68,13 @@ namespace GEngineCore
 
 	private:
 		glm::vec3 _worldPosition = glm::vec3(0);
-		glm::quat _worldRotation = glm::quat();
+		glm::quat _worldRotation = glm::identity<glm::quat>();
 		glm::vec3 _worldRotationEuler = glm::vec3(0);
 		glm::vec3 _worldScale = glm::vec3(1);
 		glm::mat4 _worldMatrix = glm::mat4(1);
 
 		glm::vec3 _localPosition = glm::vec3(0);
-		glm::quat _localRotation = glm::quat();
+		glm::quat _localRotation = glm::identity<glm::quat>();
 		glm::vec3 _localRotationEuler = glm::vec3(0);
 		glm::vec3 _localScale = glm::vec3(1);
 		glm::mat4 _localMatrix = glm::mat4(1);

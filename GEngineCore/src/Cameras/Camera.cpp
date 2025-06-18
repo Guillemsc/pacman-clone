@@ -4,6 +4,8 @@
 
 #include "Camera.h"
 
+#include "Constants/MathConstants.h"
+
 namespace GEngineCore
 {
     Camera::Camera()
@@ -16,27 +18,74 @@ namespace GEngineCore
         _projection = projection;
     }
 
-    ::Camera Camera::GetRawCamera()
+    void Camera::SetPosition(const glm::vec3 &position)
     {
-        const glm::vec3 FORWARD = glm::vec3(0, 0, -1);  // -Z in right-handed OpenGL
-        const glm::vec3 UP      = glm::vec3(0, 1,  0);  // +Y
+        _position = position;
+    }
 
-        glm::vec3 lookAt = _rotation * FORWARD;
-        glm::vec3 up     = _rotation * UP;
+    void Camera::SetRotation(const glm::quat &rotation)
+    {
+        _rotation = rotation;
+    }
+
+    void Camera::SetPrespectiveFov(const float fov)
+    {
+        _prespectiveFov = fov;
+    }
+
+    void Camera::SetOrthographicPlane(const float plane)
+    {
+        _orthographicPlane = plane;
+    }
+
+    glm::vec3 Camera::GetPosition() const
+    {
+        return _position;
+    }
+
+    glm::quat Camera::GetRotation() const
+    {
+        return _rotation;
+    }
+
+    glm::vec3 Camera::GetForwardDirection() const
+    {
+        return _rotation * MathConstants::FORWARD;
+    }
+
+    glm::vec3 Camera::GetUpDirection() const
+    {
+        return _rotation * MathConstants::UP;
+    }
+
+    glm::vec3 Camera::GetRightDirection() const
+    {
+        return _rotation * MathConstants::RIGHT;
+    }
+
+    ::Camera Camera::GetRawCamera() const
+    {
+        const glm::vec3 forward = GetForwardDirection();
+        const glm::vec3 actualPosition = { _position.x, -_position.y, _position.z };
+        const glm::vec3 actualForward = { forward.x, -forward.y, forward.z };
+
+
+        const glm::vec3 lookAt = actualPosition - actualForward;
+        const glm::vec3 up = GetUpDirection();
 
         ::Camera _rawCamera = {};
-        _rawCamera.position = { _position.x, _position.y, _position.z };
-        _rawCamera.target = { lookAt.x, lookAt.y, lookAt.z };
+        _rawCamera.position = { actualPosition.x, actualPosition.y, actualPosition.z };
+        _rawCamera.target = { lookAt.x, lookAt.y, lookAt.z  };
         _rawCamera.up = { up.x, up.y, up.z };
         _rawCamera.projection = _projection;
 
         if (_projection == CameraProjection::CAMERA_ORTHOGRAPHIC)
         {
-            _rawCamera.fovy = _orthographicPlane;
+            _rawCamera.fovy = -_orthographicPlane;
         }
         else
         {
-            _rawCamera.fovy = _prespectiveFov;
+            _rawCamera.fovy = -_prespectiveFov;
         }
 
         return _rawCamera;

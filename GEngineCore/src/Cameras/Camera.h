@@ -15,20 +15,33 @@ namespace GEngineCore
 {
     class Camera
     {
+        friend class CameraModule;
+
     public:
         Camera();
 
         void SetProjection(CameraProjection projection);
+        void SetPosition(const glm::vec3& position);
+        void SetRotation(const glm::quat& rotation);
+        void SetPrespectiveFov(float fov);
+        void SetOrthographicPlane(float plane);
 
-    private:
-        ::Camera GetRawCamera();
+        glm::vec3 GetPosition() const;
+        glm::quat GetRotation() const;
+
+        glm::vec3 GetForwardDirection() const;
+        glm::vec3 GetUpDirection() const;
+        glm::vec3 GetRightDirection() const;
+
+    public:
+        ::Camera GetRawCamera() const;
 
     private:
         glm::vec3 _position = glm::vec3(0, 0, -100);
-        glm::quat _rotation = glm::quat();
+        glm::quat _rotation = glm::identity<glm::quat>();
         CameraProjection _projection = CameraProjection::CAMERA_PERSPECTIVE;
         float _prespectiveFov = 45;
-        float _orthographicPlane = -200;
+        float _orthographicPlane = 200;
     };
 }
 

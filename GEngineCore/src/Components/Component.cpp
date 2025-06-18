@@ -22,9 +22,45 @@ namespace GEngineCore
 
 	std::weak_ptr<GEngineCoreApplication> Component::GetApp() const
 	{
-		std::shared_ptr<Entity> entity = _entity.lock();
+		const std::shared_ptr<Entity> entity = _entity.lock();
 		if (!entity) return std::weak_ptr<GEngineCoreApplication>();
 
 		return entity->GetApp();
+	}
+
+	bool Component::IsEnanbled() const
+	{
+		return _isEnabledSelf;
+	}
+
+	void Component::SetEnabled(const bool enabled)
+	{
+		_isEnabledSelf = enabled;
+
+		RefreshEnabledState();
+	}
+
+	void Component::RefreshEnabledState()
+	{
+		const std::shared_ptr<Entity> entity = GetEntity().lock();
+		if (!entity) return;
+
+		const bool shouldBeEnabled = entity->IsActiveInHierarchy() && _isEnabledSelf;
+
+		if (shouldBeEnabled == _isEnabledInHierarchy)
+		{
+			return;
+		}
+
+		_isEnabledInHierarchy = shouldBeEnabled;
+
+		if (_isEnabledInHierarchy)
+		{
+			OnEnable();
+		}
+		else
+		{
+			OnDisable();
+		}
 	}
 } // GEngineCore

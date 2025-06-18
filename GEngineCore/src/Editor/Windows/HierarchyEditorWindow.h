@@ -33,7 +33,7 @@ namespace GEngineCore
 			);
 
 	private:
-		std::vector<std::pair<std::shared_ptr<Entity>, int>>  _stack;
+		std::vector<std::pair<std::shared_ptr<Entity>, int>> _stack;
 	};
 }
 

@@ -7,14 +7,17 @@
 #include "imgui.h"
 #include "Core/GEngineCoreApplication.h"
 #include "Editor/Inspector/EntityInspectorEditor.h"
+#include "Editor/Inspector/ResourcesInspectorEditor.h"
 #include "Modules/EditorModule.h"
 #include "Entities/Entity.h"
+#include "Resources/Resource.h"
 
 namespace GEngineCore
 {
 	InspectorEditorWindow::InspectorEditorWindow(const std::weak_ptr<GEngineCoreApplication> &app): EditorWindow(app)
 	{
 		RegisterInspectorEditor<EntityInspectorEditor, Entity>();
+		RegisterInspectorEditor<ResourcesInspectorEditor, Resource>();
 	}
 
 	void InspectorEditorWindow::Draw()

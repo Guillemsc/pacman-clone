@@ -38,7 +38,7 @@ namespace GEngineCore
 		template <class T>
 		std::weak_ptr<ComponentFactory<T>> GetComponentFactory();
 		std::weak_ptr<IComponentFactory> GetComponentFactory(ComponentType componentType);
-		void TickEntityComponents(const std::weak_ptr<Entity> &entityPtr);
+		void TickEntityComponents(Entity* entityPtr);
 
 		template <class T>
 		void RegisterComponent(bool allowMultiple);

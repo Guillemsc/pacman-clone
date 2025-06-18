@@ -21,12 +21,21 @@ namespace GEngineCore
 
 	void EntityInspectorEditor::DrawSpecific(const std::shared_ptr<Entity> &inspect)
 	{
+		bool activeSelf = inspect->IsActiveSelf();
+		if (ImGui::Checkbox("##Enabled", &activeSelf))
+		{
+			inspect->SetActive(activeSelf);
+		}
+
+		ImGui::SameLine();
 		std::string name = inspect->GetName();
 		if (ImGuiExtensions::InputText("Name", &name))
 		{
 			inspect->SetName(name);
 		}
-		ImGui::Text("Id: %d", inspect->GetId());
+
+		ImGui::SameLine();
+		ImGui::Text("[%d]", inspect->GetId());
 
 		DrawComponents(inspect);
 	}
@@ -58,11 +67,11 @@ namespace GEngineCore
 	{
 		const std::size_t objectIndex = static_cast<std::size_t>(componentType);
 
-		if (_componentInspectorEditors.size() <= objectIndex)
+		if (_inspectorEditors.size() <= objectIndex)
 		{
 			return nullptr;
 		}
 
-		return _componentInspectorEditors[objectIndex];
+		return _inspectorEditors[objectIndex];
 	}
 } // GEngineCore

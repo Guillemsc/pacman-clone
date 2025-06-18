@@ -10,7 +10,7 @@
 
 namespace GEngineCore
 {
-	class Shape2dRendererComponent : public Component
+	class Shape2dRendererComponent final : public Component
 	{
 	public:
 		explicit Shape2dRendererComponent(const std::weak_ptr<Entity> &entity);

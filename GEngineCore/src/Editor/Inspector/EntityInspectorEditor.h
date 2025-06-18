@@ -16,7 +16,7 @@ namespace GEngineCore
 	class IComponentInspectorEditor;
 	class Entity;
 
-	class EntityInspectorEditor : public GEngineObjectInspectorEditor<Entity>
+	class EntityInspectorEditor final : public GEngineObjectInspectorEditor<Entity>
 	{
 	public:
 		EntityInspectorEditor();
@@ -32,7 +32,7 @@ namespace GEngineCore
 		void RegisterInspector();
 
 	private:
-		std::vector<std::shared_ptr<IComponentInspectorEditor>> _componentInspectorEditors;
+		std::vector<std::shared_ptr<IComponentInspectorEditor>> _inspectorEditors;
 	};
 
 	// -------------------------------------------------------
@@ -47,12 +47,12 @@ namespace GEngineCore
 		const ComponentType componentType = TComponent::GetTypeStatic();
 		const std::size_t componentIndex = static_cast<std::size_t>(componentType);
 
-		while (componentIndex + 1 > _componentInspectorEditors.size())
+		while (componentIndex + 1 > _inspectorEditors.size())
 		{
-			_componentInspectorEditors.push_back(nullptr);
+			_inspectorEditors.push_back(nullptr);
 		}
 
-		_componentInspectorEditors[componentIndex] = std::make_shared<TEditor>();
+		_inspectorEditors[componentIndex] = std::make_shared<TEditor>();
 	}
 }
 

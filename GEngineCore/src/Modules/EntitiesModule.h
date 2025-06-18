@@ -35,7 +35,7 @@ namespace GEngineCore
 		void SetEntityParent(const std::weak_ptr<Entity> &targetPtr, const std::weak_ptr<Entity> &parentPtr, bool worldPositionStays = true);
 		void RemoveEntityParent(const std::weak_ptr<Entity>& targetPtr, bool worldPositionStays = true);
 
-		void ForEachEntityInHierarchy(const std::function<void(const std::weak_ptr<Entity>&)> &callback);
+		void ForEachEntityInHierarchy(const std::function<void(const std::shared_ptr<Entity>&)> &callback);
 
 		void TickEntities();
 

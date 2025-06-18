@@ -42,10 +42,14 @@ namespace GEngineCore
 		void SetName(const std::string& name);
 		std::string GetName() const;
 
+		bool IsActiveSelf() const;
+		bool IsActiveInHierarchy() const;
+		void SetActive(bool active);
+
 		bool IsInsideChildHierarchy(const std::weak_ptr<Entity> &checkingPtr) const;
 		void SetParent(const std::weak_ptr<Entity> &parentPtr, bool worldPositionStays = true);
 		void RemoveParent(bool worldPositionStays = true);
-		void ForEachEntityInChildHierarchy(bool includeCurrent, const std::function<void(const std::shared_ptr<Entity>&)> &callback);
+		void ForEachEntityInChildHierarchy(bool includeCurrent, const std::function<bool(const std::shared_ptr<Entity>&)> &callback);
 
 		std::weak_ptr<Entity> GetParent() const;
 		const std::vector<std::weak_ptr<Entity>>& GetChildren() const;
@@ -63,11 +67,17 @@ namespace GEngineCore
 	private:
 		void Dispose();
 
+		void RefreshChildrenHierarchyActiveState();
+		bool RefreshActiveState();
+
 	private:
 		std::weak_ptr<GEngineCoreApplication> _appPtr;
 		std::uint32_t _id = 0;
 		std::string _name;
-		bool _alive = true;
+
+		bool _isAlive = true;
+		bool _isActiveSelf = false;
+		bool _isActiveInHierarchy = false;
 
 		std::weak_ptr<Entity> _parentPtr;
 		std::vector<std::weak_ptr<Entity>> _childEntities;

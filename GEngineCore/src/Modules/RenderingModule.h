@@ -11,6 +11,12 @@
 
 namespace GEngineCore
 {
+	class CameraModule;
+	class Camera;
+}
+
+namespace GEngineCore
+{
 	class ImGuiRenderer;
 }
 
@@ -19,7 +25,7 @@ namespace GEngineCore
 	class RenderingModule
 	{
 	public:
-		RenderingModule();
+		RenderingModule(const std::weak_ptr<CameraModule>& cameraModule);
 
 		void Init();
 		void Tick();
@@ -29,9 +35,12 @@ namespace GEngineCore
 		std::weak_ptr<ImGuiRenderer> ImGuiRender() { return _imGuiRenderer; }
 
 	private:
-		void Render();
+		void RenderOnCurrentCamera() const;
+		void Render(const std::weak_ptr<Camera>& cameraPtr) const;
 
 	private:
+		std::weak_ptr<CameraModule> _cameraModulePtr;
+
 		std::shared_ptr<Renderer2d> _renderer2d;
 		std::shared_ptr<ImGuiRenderer> _imGuiRenderer;
 	};

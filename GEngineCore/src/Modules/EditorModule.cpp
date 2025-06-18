@@ -7,6 +7,7 @@
 #include "imgui.h"
 #include "RenderingModule.h"
 #include "Core/GEngineCoreApplication.h"
+#include "Editor/MenuBar/MenuBarEditor.h"
 #include "Editor/Windows/EditorWindow.h"
 #include "Editor/Windows/HierarchyEditorWindow.h"
 #include "Editor/Windows/InspectorEditorWindow.h"
@@ -18,6 +19,8 @@ namespace GEngineCore
 	void EditorModule::Init(const std::weak_ptr<GEngineCoreApplication> &app)
 	{
 		_app = app;
+
+		_menuBar = std::make_shared<MenuBarEditor>(app);
 
 		RegisterWindow<HierarchyEditorWindow>();
 		RegisterWindow<InspectorEditorWindow>();
@@ -58,6 +61,8 @@ namespace GEngineCore
 		{
 			bool open = true;
 			ImGui::ShowDemoWindow(&open);
+
+			_menuBar->Draw();
 
 			DrawWindows();
 		});

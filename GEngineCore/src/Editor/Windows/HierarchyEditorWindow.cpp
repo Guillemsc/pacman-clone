@@ -73,12 +73,19 @@ namespace GEngineCore
 
 			if (selectedObject)
 			{
-				bool isSelected = node.get() == selectedObject.get();
+				const bool isSelected = node.get() == selectedObject.get();
 
 				if (isSelected)
 				{
 					flags |= ImGuiTreeNodeFlags_Selected;
 				}
+			}
+
+			const bool isActiveInHierarchy = node->IsActiveInHierarchy();
+
+			if (!isActiveInHierarchy)
+			{
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));  // Grey color
 			}
 
 			ImGui::PushID(node->GetId());
@@ -99,6 +106,11 @@ namespace GEngineCore
 						_stack.insert(_stack.begin(), { child, depth + 1 });
 					}
 				}
+			}
+
+			if (!isActiveInHierarchy)
+			{
+				ImGui::PopStyleColor();
 			}
 
 			DrawRightClickContextMenu(entities, node);
@@ -148,7 +160,6 @@ namespace GEngineCore
 		const std::shared_ptr<EditorModule> &editor,
 		const std::shared_ptr<Entity> &entity)
 	{
-		// Check if the tree node was right-clicked
 		if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
 		{
 			editor->SetSelectedObject(entity);

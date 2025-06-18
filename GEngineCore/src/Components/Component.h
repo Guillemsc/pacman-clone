@@ -12,6 +12,7 @@ namespace GEngineCore
 	class Component
 	{
 	friend class ComponentsModule;
+	friend class Entity;
 
 	public:
 		explicit Component(const std::weak_ptr<Entity> &entity);
@@ -19,6 +20,9 @@ namespace GEngineCore
 
 		std::weak_ptr<Entity> GetEntity() const;
 		std::weak_ptr<GEngineCoreApplication> GetApp() const;
+
+		bool IsEnanbled() const;
+		void SetEnabled(bool enabled);
 
 		virtual ComponentType GetType() = 0;
 		virtual const char* GetTypeName() = 0;
@@ -31,7 +35,13 @@ namespace GEngineCore
 		virtual void OnDestroy() {}
 
 	private:
+		void RefreshEnabledState();
+
+	private:
 		std::weak_ptr<Entity> _entity;
+
+		bool _isEnabledSelf = false;
+		bool _isEnabledInHierarchy = false;
 	};
 }
 

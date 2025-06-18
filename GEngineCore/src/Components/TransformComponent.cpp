@@ -79,7 +79,7 @@ namespace GEngineCore
 	void TransformComponent::SetLocalRotationEuler(const glm::vec3 &rotation)
 	{
 		const std::shared_ptr<GEngineCoreApplication> app = GetApp().lock();
-		if (app == nullptr) return;
+		if (!app) return;
 
 		if (_localRotationEuler == rotation)
 		{
@@ -133,6 +133,11 @@ namespace GEngineCore
 	glm::vec3 TransformComponent::GetLocalPosition() const
 	{
 		return _localPosition;
+	}
+
+	glm::quat TransformComponent::GetRotation() const
+	{
+		return _worldRotation;
 	}
 
 	glm::vec3 TransformComponent::GetRotationEuler() const
@@ -274,9 +279,10 @@ namespace GEngineCore
 			[this](const std::shared_ptr<Entity> &checkingEntity)
 			{
 				const std::shared_ptr<TransformComponent> childTransform = checkingEntity->GetTransform().lock();
-				if (!childTransform) return;
+				if (!childTransform) return false;
 
 				childTransform->RecalculateWorldMatrix();
+				return true;
 			}
 		);
 	}

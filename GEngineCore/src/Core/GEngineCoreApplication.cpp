@@ -4,6 +4,7 @@
 
 #include "GEngineCoreApplication.h"
 
+#include "Modules/CameraModule.h"
 #include "Modules/ComponentsModule.h"
 #include "Modules/EditorModule.h"
 #include "Modules/EntitiesModule.h"
@@ -24,8 +25,9 @@ namespace GEngineCore
 		_components = std::make_shared<ComponentsModule>();
 		_entities = std::make_shared<EntitiesModule>();
 		_game = std::make_shared<GameModule>();
+		_camera = std::make_shared<CameraModule>();
 		_window = std::make_shared<WindowModule>();
-		_rendering = std::make_shared<RenderingModule>();
+		_rendering = std::make_shared<RenderingModule>(_camera);
 		_resources = std::make_shared<ResourcesModule>();
 		_systems = std::make_shared<SystemsModule>();
 		_input = std::make_shared<InputModule>();
@@ -62,10 +64,13 @@ namespace GEngineCore
 
 	void GEngineCoreApplication::Tick() const
 	{
+		const float deltaTime = GetFrameTime();
+
 		_game->Tick();
 		_entities->Tick();
 		_systems->Tick();
 		_editor->Tick();
+		_camera->Tick(deltaTime);
 		_rendering->Tick();
 		_window->Tick();
 	}

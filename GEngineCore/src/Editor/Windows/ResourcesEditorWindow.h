@@ -8,12 +8,21 @@
 
 namespace GEngineCore
 {
+	class Resource;
+	class EditorModule;
+
 	class ResourcesEditorWindow : public EditorWindow
 	{
 	public:
 		explicit ResourcesEditorWindow(const std::weak_ptr<GEngineCoreApplication> &app);
 
 		void Draw() override;
+
+	private:
+		void DrawLeftClickContextMenu(
+			const std::shared_ptr<EditorModule> &editor,
+			const std::shared_ptr<Resource> &resource
+		);
 	};
 }
 

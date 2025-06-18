@@ -1,0 +1,39 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "pac-man-map-tileset.tsx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "pac-man-map-tileset.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1.5
+        },
+        "pac-man-tileset.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 5.5
+        }
+    },
+    "last.imagePath": "/home/guillem/Guillem/Projects/C++/pacman-clone/TestGame/Tiled/textures",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 8,
+    "map.tileWidth": 8,
+    "openFiles": [
+        "pac-man-map-tileset.tsx"
+    ],
+    "project": "untitled.tiled-project",
+    "recentFiles": [
+        "pac-man-tileset.tsx",
+        "pac-man-map-tileset.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.margin": 1,
+    "tileset.spacing": 1,
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}

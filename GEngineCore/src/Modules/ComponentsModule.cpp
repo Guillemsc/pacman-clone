@@ -4,6 +4,7 @@
 
 #include "ComponentsModule.h"
 
+#include "Components/CameraComponent.h"
 #include "Components/Shape2dRendererComponent.h"
 #include "Components/TransformComponent.h"
 #include "Components/ComponentFactory.h"
@@ -14,6 +15,7 @@ namespace GEngineCore
 	ComponentsModule::ComponentsModule()
 	{
 		RegisterComponent<TransformComponent>(false);
+		RegisterComponent<CameraComponent>(false);
 		RegisterComponent<Shape2dRendererComponent>(false);
 		RegisterComponent<Texture2dRendererComponent>(false);
 	}
@@ -45,6 +47,8 @@ namespace GEngineCore
 
 		const std::shared_ptr<Component> component = componentFactory->CreateComponent(entityPtr);
 		if (!component) return std::weak_ptr<Component>();
+
+		component->SetEnabled(true);
 
 		entity->_components.push_back(component);
 
@@ -103,6 +107,7 @@ namespace GEngineCore
 
 		for (auto it = entity->_components.begin(); it != entity->_components.end(); ++it)
 		{
+			(*it)->SetEnabled(false);
 			(*it)->OnDestroy();
 		}
 
@@ -121,13 +126,15 @@ namespace GEngineCore
 		return _componentFactories[componentIndex];
 	}
 
-	void ComponentsModule::TickEntityComponents(const std::weak_ptr<Entity> &entityPtr)
+	void ComponentsModule::TickEntityComponents(Entity* entityPtr)
 	{
-		const std::shared_ptr<Entity> entity = entityPtr.lock();
-		if (entity == nullptr) return;
-
-		for (auto it = entity->_components.begin(); it != entity->_components.end(); ++it)
+		for (auto it = entityPtr->_components.begin(); it != entityPtr->_components.end(); ++it)
 		{
+			if (!(*it)->_isEnabledInHierarchy)
+			{
+				continue;
+			}
+
 			(*it)->OnTick();
 		}
 	}

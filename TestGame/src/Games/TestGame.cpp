@@ -4,6 +4,7 @@
 
 #include "TestGame.h"
 
+#include "Components/CameraComponent.h"
 #include "Components/Shape2dRendererComponent.h"
 #include "Components/Texture2dRendererComponent.h"
 #include "Components/TransformComponent.h"
@@ -25,6 +26,11 @@ void TestGame::Init()
 	std::shared_ptr<GEngineCore::EntitiesModule> entities = app->Entities().lock();
 	std::shared_ptr<GEngineCore::GameModule> game = app->Game().lock();
 	std::shared_ptr<GEngineCore::ResourcesModule> resources = app->Resources().lock();
+
+	auto cameraEntity = entities->AddEntity();
+	cameraEntity.lock()->SetName("Camera");
+	cameraEntity.lock()->AddComponent<GEngineCore::CameraComponent>();
+	cameraEntity.lock()->GetTransform().lock()->SetPosition({0, 0, -320});
 
 	_entity1 = entities->AddEntity();
 	auto entity2 = entities->AddEntity();

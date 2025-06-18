@@ -10,6 +10,7 @@ namespace GEngineCore
 	enum ComponentType
 	{
 		TRANSFORM,
+		CAMERA,
 		SHAPE_2D_RENDERER,
 		TEXTURE_2D_RENDERER,
 	};

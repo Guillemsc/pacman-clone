@@ -11,6 +11,7 @@
 
 namespace GEngineCore
 {
+	class MenuBarEditor;
 	class GEngineObject;
 	class Entity;
 	class EditorWindow;
@@ -38,6 +39,7 @@ namespace GEngineCore
 	private:
 		std::weak_ptr<GEngineCoreApplication> _app;
 
+		std::shared_ptr<MenuBarEditor> _menuBar;
 		std::vector<std::shared_ptr<EditorWindow>> _windows;
 
 		std::weak_ptr<GEngineObject> _selectedObject;

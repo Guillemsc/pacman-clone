@@ -9,6 +9,7 @@
 
 #include "imgui.h"
 #include "Core/GEngineCoreApplication.h"
+#include "Modules/EditorModule.h"
 #include "Modules/ResourcesModule.h"
 #include "Resources/Resource.h"
 
@@ -26,7 +27,12 @@ namespace GEngineCore
 		const std::shared_ptr<ResourcesModule> resources = app->Resources().lock();
 		if (!resources) return;
 
+		const std::shared_ptr<EditorModule> editor = app->Editor().lock();
+		if (!editor) return;
+
 		ImGui::Begin("Resources");
+
+		const std::shared_ptr<GEngineObject> selectedObject = editor->GetSelectedObject().lock();
 
 		const std::vector<std::shared_ptr<Resource>>& resourcesList = resources->GetResources();
 
@@ -36,12 +42,35 @@ namespace GEngineCore
 
 			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf;
 
+			if (selectedObject)
+			{
+				const bool isSelected = it->get() == selectedObject.get();
+
+				if (isSelected)
+				{
+					flags |= ImGuiTreeNodeFlags_Selected;
+				}
+			}
+
 			if (ImGui::TreeNodeEx(displayString.c_str(), flags))
 			{
+				DrawLeftClickContextMenu(editor, *it);
+
 				ImGui::TreePop();
 			}
 		}
 
 		ImGui::End();
+	}
+
+	void ResourcesEditorWindow::DrawLeftClickContextMenu(
+		const std::shared_ptr<EditorModule> &editor,
+		const std::shared_ptr<Resource> &resource
+		)
+	{
+		if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
+		{
+			editor->SetSelectedObject(resource);
+		}
 	}
 } // GEngineCore

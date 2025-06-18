@@ -11,6 +11,7 @@
 
 namespace GEngineCore
 {
+	class CameraModule;
 	class EditorModule;
 	class RenderingModule;
 	class GameModule;
@@ -36,6 +37,7 @@ namespace GEngineCore
 		std::weak_ptr<ComponentsModule> Components() { return _components; }
 		std::weak_ptr<EntitiesModule> Entities() { return _entities; }
 		std::weak_ptr<GameModule> Game() { return _game; }
+		std::weak_ptr<CameraModule> Camera() { return _camera; }
 		std::weak_ptr<WindowModule> Window() { return _window; }
 		std::weak_ptr<RenderingModule> Rendering() { return _rendering; }
 		std::weak_ptr<ResourcesModule> Resources() { return _resources; }
@@ -47,6 +49,7 @@ namespace GEngineCore
 		std::shared_ptr<ComponentsModule> _components = nullptr;
 		std::shared_ptr<EntitiesModule> _entities = nullptr;
 		std::shared_ptr<GameModule> _game = nullptr;
+		std::shared_ptr<CameraModule> _camera = nullptr;
 		std::shared_ptr<WindowModule> _window = nullptr;
 		std::shared_ptr<RenderingModule> _rendering = nullptr;
 		std::shared_ptr<ResourcesModule> _resources = nullptr;

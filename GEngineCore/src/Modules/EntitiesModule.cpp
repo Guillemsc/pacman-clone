@@ -45,6 +45,7 @@ namespace GEngineCore
 		std::shared_ptr<Entity> entity = std::make_shared<Entity>(_appPtr, _nextEntityId);
 
 		entity->SetName(std::format("Entity: {}", _nextEntityId));
+		entity->SetActive(true);
 
 		entity->_transformPtr = components->AddEntityComponent<TransformComponent>(entity);
 
@@ -61,14 +62,15 @@ namespace GEngineCore
 		const std::shared_ptr<Entity> entity = entityPtr.lock();
 		if (entity == nullptr) return false;
 
-		if (!entity->_alive)
+		if (!entity->_isAlive)
 		{
 			return false;
 		}
 
 		entity->ForEachEntityInChildHierarchy(true, [](const std::shared_ptr<Entity>& childEntity)
 		{
-			childEntity->_alive = false;
+			childEntity->_isAlive = false;
+			return true;
 		});
 
 		_entitiesToRemove.push_back(entity);
@@ -169,6 +171,8 @@ namespace GEngineCore
 
 			targetTransform->RecalculateWorldMatrix();
 		}
+
+		target->RefreshActiveState();
 	}
 
 	void EntitiesModule::RemoveEntityParent(const std::weak_ptr<Entity> &targetPtr, const bool worldPositionStays)
@@ -196,9 +200,11 @@ namespace GEngineCore
 
 			targetTransform->RecalculateWorldMatrix();
 		}
+
+		target->RefreshActiveState();
 	}
 
-	void EntitiesModule::ForEachEntityInHierarchy(const std::function<void(const std::weak_ptr<Entity> &)> &callback)
+	void EntitiesModule::ForEachEntityInHierarchy(const std::function<void(const std::shared_ptr<Entity> &)> &callback)
 	{
 		std::vector<std::shared_ptr<Entity>> toCheck;
 
@@ -235,9 +241,15 @@ namespace GEngineCore
 		const std::shared_ptr<ComponentsModule> components = app->Components().lock();
 		if (components == nullptr) return;
 
-		ForEachEntityInHierarchy([components](const std::weak_ptr<Entity>& entity)
+		ForEachEntityInHierarchy([components](const std::shared_ptr<Entity>& entity)
 		{
-			components->TickEntityComponents(entity);
+			if (!entity->IsActiveInHierarchy())
+			{
+				return false;
+			}
+
+			components->TickEntityComponents(entity.get());
+			return true;
 		});
 	}
 
