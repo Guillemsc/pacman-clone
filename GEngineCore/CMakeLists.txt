@@ -117,6 +117,15 @@ add_library(GEngineCore STATIC
         src/Editor/ResourcesInspector/ResourceInspectorEditor.h
         src/Editor/ResourcesInspector/TextureResourceInspectorEditor.cpp
         src/Editor/ResourcesInspector/TextureResourceInspectorEditor.h
+        src/Resources/TiledMapResource.cpp
+        src/Resources/TiledMapResource.h
+        src/ResourceImporters/TiledMapImporter.cpp
+        src/ResourceImporters/TiledMapImporter.h
+        src/Editor/ResourcesInspector/TiledMapResourceInspectorEditor.cpp
+        src/Editor/ResourcesInspector/TiledMapResourceInspectorEditor.h
+        src/Components/TiledMap2dRendererComponent.cpp
+        src/Components/TiledMap2dRendererComponent.h
+        src/Extensions/MathExtensions.h
 )
 
 # Link raylib

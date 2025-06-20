@@ -19,6 +19,14 @@ namespace GEngineCore
 
 			DrawTexturePro(texture, source, dest, origin, rotation, tint);
 		}
+
+		static void DrawTextureEx(const Texture2D &texture, const Rectangle& source, const Vector2 position, const float rotation, const Vector2 scale, const Color tint)
+		{
+			const Rectangle dest = { position.x, position.y, source.width * scale.x, source.height * scale.y };
+			constexpr Vector2 origin = { 0.0f, 0.0f };
+
+			DrawTexturePro(texture, source, dest, origin, rotation, tint);
+		}
 	};
 }
 

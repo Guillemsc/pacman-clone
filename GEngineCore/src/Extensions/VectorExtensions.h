@@ -44,6 +44,12 @@ namespace GEngineCore
 				vec.end()
 			);
 		}
+
+		template <typename T>
+		static bool IsIndexOutsideBounds(const std::vector<T>& vec, const std::int32_t index)
+		{
+			return index < 0 || vec.size() <= index;
+		}
 	};
 } // GEngineCore
 

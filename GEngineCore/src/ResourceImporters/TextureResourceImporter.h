@@ -11,13 +11,12 @@ namespace GEngineCore
 {
 	class TextureResource;
 
-	class TextureResourceImporter final : public ResourceImporter<TextureResource>
+	class TextureResourceImporter final : public ResourceImporter
 	{
 	public:
 		explicit TextureResourceImporter();
 
 		std::shared_ptr<Resource> Import(const std::filesystem::path& fullPath, const std::filesystem::path& resourcesPath) override;
-		std::vector<std::string> GetSupportedExtensions() const override;
 	};
 }
 

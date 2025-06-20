@@ -14,7 +14,7 @@ namespace GEngineCore
 	class TextureResource;
 	class Entity;
 
-	class Texture2dRendererComponent : public Component
+	class Texture2dRendererComponent final : public Component
 	{
 	public:
 		explicit Texture2dRendererComponent(const std::weak_ptr<Entity> &entity);

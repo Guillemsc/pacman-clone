@@ -3,17 +3,32 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "pac-man-map-tileset.tsx",
+    "activeFile": "maps/test-map.tmx",
     "expandedProjectPaths": [
+        "tilesets",
+        "maps",
         "."
     ],
+    "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
+        "maps/test-map.tmx": {
+            "scale": 3,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 94.66666666666664,
+                "y": 68.99999999999999
+            }
+        },
         "pac-man-map-tileset.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1.5
         },
         "pac-man-tileset.tsx": {
             "scaleInDock": 1,
+            "scaleInEditor": 5.5
+        },
+        "tilesets/pac-man-tileset.tsx": {
+            "scaleInDock": 3,
             "scaleInEditor": 5.5
         }
     },
@@ -22,10 +37,13 @@
     "map.tileHeight": 8,
     "map.tileWidth": 8,
     "openFiles": [
-        "pac-man-map-tileset.tsx"
+        "tilesets/pac-man-tileset.tsx",
+        "maps/test-map.tmx"
     ],
     "project": "untitled.tiled-project",
     "recentFiles": [
+        "tilesets/pac-man-tileset.tsx",
+        "maps/test-map.tmx",
         "pac-man-tileset.tsx",
         "pac-man-map-tileset.tsx"
     ],

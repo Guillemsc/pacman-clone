@@ -13,6 +13,7 @@ namespace GEngineCore
 		CAMERA,
 		SHAPE_2D_RENDERER,
 		TEXTURE_2D_RENDERER,
+		TILED_MAP_2D_RENDERER,
 	};
 }
 

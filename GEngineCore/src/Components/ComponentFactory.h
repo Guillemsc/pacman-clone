@@ -30,7 +30,7 @@ namespace GEngineCore
 	// -------------------------------------------------------
 
 	template <class T>
-	class ComponentFactory : public IComponentFactory
+	class ComponentFactory final : public IComponentFactory
 	{
 	public:
 		explicit ComponentFactory(bool allowMultiple);

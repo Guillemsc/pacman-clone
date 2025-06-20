@@ -9,6 +9,7 @@
 #include "Components/TransformComponent.h"
 #include "Components/ComponentFactory.h"
 #include "Components/Texture2dRendererComponent.h"
+#include "Components/TiledMap2dRendererComponent.h"
 
 namespace GEngineCore
 {
@@ -18,6 +19,7 @@ namespace GEngineCore
 		RegisterComponent<CameraComponent>(false);
 		RegisterComponent<Shape2dRendererComponent>(false);
 		RegisterComponent<Texture2dRendererComponent>(false);
+		RegisterComponent<TiledMap2dRendererComponent>(false);
 	}
 
 	void ComponentsModule::Dispose()

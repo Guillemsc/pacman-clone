@@ -13,7 +13,6 @@ namespace GEngineCore
 	{
 		const Texture& rawTexture = inspect->GetRawTexture();
 
-		ImGui::Text(inspect->GetResourcesPath().c_str());
 		ImGui::Text("Size [width: %d] [height: %d]", rawTexture.width, rawTexture.height);
 
 		const bool canDraw = rawTexture.height > 0 && rawTexture.width > 0;

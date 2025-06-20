@@ -4,8 +4,11 @@
 
 #include "ResourcesInspectorEditor.h"
 
+#include <format>
+
 #include "imgui.h"
 #include "Editor/ResourcesInspector/TextureResourceInspectorEditor.h"
+#include "Editor/ResourcesInspector/TiledMapResourceInspectorEditor.h"
 #include "Resources/Resource.h"
 
 namespace GEngineCore
@@ -13,6 +16,7 @@ namespace GEngineCore
 	ResourcesInspectorEditor::ResourcesInspectorEditor()
 	{
 		RegisterInspector<TextureResourceInspectorEditor, TextureResource>();
+		RegisterInspector<TiledMapResourceInspectorEditor, TiledMapResource>();
 	}
 
 	void ResourcesInspectorEditor::DrawSpecific(const std::shared_ptr<Resource> &inspect)
@@ -28,6 +32,8 @@ namespace GEngineCore
 				ImGui::Text("Cannot be inspected");
 				return;;
 			}
+
+			ImGui::Text(std::format("Path: {0}", inspect->GetResourcesPath().string()).c_str());
 
 			inspector->Draw(inspect);
 		}

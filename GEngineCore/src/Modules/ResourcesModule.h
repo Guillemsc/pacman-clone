@@ -29,6 +29,9 @@ namespace GEngineCore
 		template <class T>
 		std::weak_ptr<T> GetResource(const std::string& path) const;
 
+		std::filesystem::path FullPathToRelativeResourcesPath(const std::filesystem::path& path) const;
+		std::filesystem::path RelativeResourcesPathToFullPath(const std::filesystem::path& path) const;
+
 	private:
 		void ImportAllResources();
 		void DisposeAllResources();
@@ -37,10 +40,7 @@ namespace GEngineCore
 
 		std::weak_ptr<IResourceImporter> GetImporterForExtension(const std::string& extension) const;
 
-		std::filesystem::path FullPathToRelativeResourcesPath(const std::filesystem::path& path) const;
-		std::filesystem::path RelativeResourcesPathToFullPath(const std::filesystem::path& path) const;
-
-		template <class TImporter, class TResource>
+		template <class TImporter>
 		void RegisterResourceImporter();
 
 	private:
@@ -69,22 +69,13 @@ namespace GEngineCore
 		return std::static_pointer_cast<T>(resource);
 	}
 
-	template<class TImporter, class TResource>
+	template<class TImporter>
 	void ResourcesModule::RegisterResourceImporter()
 	{
-		static_assert(std::is_base_of_v<ResourceImporter<TResource>, TImporter>, "TImporter is not derived from ResourceImporter");
-		static_assert(std::is_base_of_v<Resource, TResource>, "TResource is not derived from Resource");
-
-		const ResourceType resourceType = TResource::GetTypeStatic();
-		const std::size_t componentIndex = static_cast<std::size_t>(resourceType);
-
-		while (componentIndex + 1 > _resourceImporters.size())
-		{
-			_resourceImporters.push_back(nullptr);
-		}
+		static_assert(std::is_base_of_v<ResourceImporter, TImporter>, "TImporter is not derived from ResourceImporter");
 
 		std::shared_ptr<TImporter> importer = std::make_shared<TImporter>();
-		_resourceImporters[componentIndex] = importer;
+		_resourceImporters.push_back(importer);
 
 		std::vector<std::string> supportedExtensions = importer->GetSupportedExtensions();
 

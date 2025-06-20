@@ -7,11 +7,14 @@
 #include "Components/CameraComponent.h"
 #include "Components/Shape2dRendererComponent.h"
 #include "Components/Texture2dRendererComponent.h"
+#include "Components/TiledMap2dRendererComponent.h"
 #include "Components/TransformComponent.h"
 #include "Core/GEngineCoreApplication.h"
 #include "Modules/EntitiesModule.h"
 #include "Modules/GameModule.h"
+#include "Modules/ResourcesModule.h"
 #include "Resources/TextureResource.h"
+#include "Resources/TiledMapResource.h"
 
 TestGame::~TestGame()
 {
@@ -20,7 +23,7 @@ TestGame::~TestGame()
 
 void TestGame::Init()
 {
-	auto app = _app.lock();
+	const auto app = _app.lock();
 	if (!app) return;
 
 	std::shared_ptr<GEngineCore::EntitiesModule> entities = app->Entities().lock();
@@ -32,6 +35,15 @@ void TestGame::Init()
 	cameraEntity.lock()->AddComponent<GEngineCore::CameraComponent>();
 	cameraEntity.lock()->GetTransform().lock()->SetPosition({0, 0, -320});
 
+	const auto tilemapEntity = entities->AddEntity();
+	tilemapEntity.lock()->SetName("Tilemap");
+	auto tilemapComponent = tilemapEntity.lock()->AddComponent<GEngineCore::TiledMap2dRendererComponent>();
+
+	auto tilemapResource = resources->GetResource<GEngineCore::TiledMapResource>("Tiled/maps/test-map.tmx");
+
+	tilemapComponent.lock()->SetTiledMap(tilemapResource);
+	tilemapComponent.lock()->GetLayerGridSize(0);
+
 	_entity1 = entities->AddEntity();
 	auto entity2 = entities->AddEntity();
 	//auto entity3 = entities->AddEntity();
@@ -42,9 +54,9 @@ void TestGame::Init()
 	entity2.lock()->SetParent(_entity1);
 	//entity3.lock()->SetParent(entity2);
 
-	_entity1.lock()->AddComponent<GEngineCore::Shape2dRendererComponent>();
-	_entity1.lock()->AddComponent<GEngineCore::Texture2dRendererComponent>();
-	entity2.lock()->AddComponent<GEngineCore::Shape2dRendererComponent>();
+	//_entity1.lock()->AddComponent<GEngineCore::Shape2dRendererComponent>();
+	//_entity1.lock()->AddComponent<GEngineCore::Texture2dRendererComponent>();
+	//entity2.lock()->AddComponent<GEngineCore::Shape2dRendererComponent>();
 	//std::weak_ptr<GEngineCore::Texture2dRendererComponent> textureComponent = entity3.lock()->AddComponent<GEngineCore::Texture2dRendererComponent>();
 
 	//entity2.lock()->GetTransform().lock()->SetPosition({100, 100, 0});

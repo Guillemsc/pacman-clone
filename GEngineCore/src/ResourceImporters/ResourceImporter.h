@@ -19,16 +19,22 @@ namespace GEngineCore
 		virtual ~IResourceImporter() = default;
 
 		virtual std::shared_ptr<Resource> Import(const std::filesystem::path& fullPath, const std::filesystem::path& resourcesPath) = 0;
-		[[nodiscard]] virtual std::vector<std::string> GetSupportedExtensions() const = 0;
+		[[nodiscard]] virtual const std::vector<std::string>& GetSupportedExtensions() const = 0;
 	};
 
 	// -------------------------------------------------------
 	// -------------------------------------------------------
 
-	template<class T>
 	class ResourceImporter : public IResourceImporter
 	{
+	public:
+		[[nodiscard]] const std::vector<std::string>& GetSupportedExtensions() const override;
 
+	protected:
+		void AddSupportedExtension(const std::string& extension);
+
+	private:
+		std::vector<std::string> _supportedExtensions;
 	};
 }
 

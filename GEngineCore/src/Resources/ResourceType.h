@@ -7,9 +7,10 @@
 
 namespace GEngineCore
 {
-	enum  ResourceType
+	enum ResourceType
 	{
 		TEXTURE,
+		TILED_MAP,
 	};
 }
 

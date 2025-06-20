@@ -8,6 +8,7 @@
 #include "Extensions/StringExtensions.h"
 #include "Extensions/UnorderedMapExtensions.h"
 #include "ResourceImporters/TextureResourceImporter.h"
+#include "ResourceImporters/TiledMapImporter.h"
 #include "Resources/TextureResource.h"
 #include "spdlog/spdlog.h"
 
@@ -17,7 +18,8 @@ namespace GEngineCore
 	{
 		_resourcesPath = std::filesystem::current_path() / "resources";
 
-		RegisterResourceImporter<TextureResourceImporter, TextureResource>();
+		RegisterResourceImporter<TextureResourceImporter>();
+		RegisterResourceImporter<TiledMapImporter>();
 	}
 
 	void ResourcesModule::Init()
@@ -45,6 +47,17 @@ namespace GEngineCore
 		}
 
 		return optionalResource.value();
+	}
+
+
+	std::filesystem::path ResourcesModule::FullPathToRelativeResourcesPath(const std::filesystem::path &path) const
+	{
+		return std::filesystem::relative(path, _resourcesPath);
+	}
+
+	std::filesystem::path ResourcesModule::RelativeResourcesPathToFullPath(const std::filesystem::path &path) const
+	{
+		return _resourcesPath / path;
 	}
 
 	void ResourcesModule::ImportAllResources()
@@ -113,15 +126,5 @@ namespace GEngineCore
 		}
 
 		return resourceImporter.value();
-	}
-
-	std::filesystem::path ResourcesModule::FullPathToRelativeResourcesPath(const std::filesystem::path &path) const
-	{
-		return std::filesystem::relative(path, _resourcesPath);
-	}
-
-	std::filesystem::path ResourcesModule::RelativeResourcesPathToFullPath(const std::filesystem::path &path) const
-	{
-		return _resourcesPath / path;
 	}
 } // GEngineCore

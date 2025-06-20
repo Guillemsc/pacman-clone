@@ -10,7 +10,7 @@
 
 namespace GEngineCore
 {
-	class TextureResource : public Resource
+	class TextureResource final : public Resource
 	{
 	public:
 		explicit TextureResource(

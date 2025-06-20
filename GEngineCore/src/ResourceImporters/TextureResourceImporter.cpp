@@ -11,6 +11,8 @@ namespace GEngineCore
 {
 	TextureResourceImporter::TextureResourceImporter()
 	{
+		AddSupportedExtension(".png");
+		AddSupportedExtension(".jpg");
 	}
 
 	std::shared_ptr<Resource> TextureResourceImporter::Import(
@@ -25,17 +27,12 @@ namespace GEngineCore
 			return nullptr;
 		}
 
-		std::shared_ptr<TextureResource> texture = std::make_shared<TextureResource>(
+		std::shared_ptr<TextureResource> resource = std::make_shared<TextureResource>(
 			fullPath,
 			resourcesPath,
 			rawTexture
 			);
 
-		return texture;
-	}
-
-	std::vector<std::string> TextureResourceImporter::GetSupportedExtensions() const
-	{
-		return std::vector<std::string> {".png", ".jpg"};
+		return resource;
 	}
 } // GEngineCore
