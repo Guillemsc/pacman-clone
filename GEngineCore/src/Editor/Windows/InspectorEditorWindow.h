@@ -52,7 +52,7 @@ namespace GEngineCore
 			_inspectorEditors.push_back(nullptr);
 		}
 
-		_inspectorEditors[objectIndex] = std::make_shared<TEditor>();
+		_inspectorEditors[objectIndex] = std::make_shared<TEditor>(_app);
 	}
 }
 

@@ -17,7 +17,8 @@ namespace GEngineCore
 		TiledMapResource(
 			const std::filesystem::path& fullPath,
 			const std::filesystem::path& resourcesPath,
-			const std::shared_ptr<tmx::Map>& tiledMap
+			const std::shared_ptr<tmx::Map>& tiledMap,
+			const std::map<std::int32_t, std::int32_t>& tilesetFirstGuidByTilesetIndex
 		);
 
 		static ResourceType GetTypeStatic() { return ResourceType::TILED_MAP; }
@@ -26,8 +27,11 @@ namespace GEngineCore
 
 		std::weak_ptr<tmx::Map> GetRawMap() const;
 
+		std::int32_t GetTilesetIndexForTileID(uint32_t gid) const;
+
 	private:
 		std::shared_ptr<tmx::Map> _tiledMapPtr;
+		std::map<std::int32_t, std::int32_t> _tilesetFirstGuidByTilesetIndex;
 	};
 }
 

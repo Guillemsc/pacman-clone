@@ -10,9 +10,13 @@
 
 namespace GEngineCore
 {
+	class GEngineCoreApplication;
+
 	class TiledMapResourceInspectorEditor final : public ResourceInspectorEditor<TiledMapResource>
 	{
 	public:
+		TiledMapResourceInspectorEditor(const std::weak_ptr<GEngineCoreApplication>& app);
+
 		void DrawSpecific(const std::shared_ptr<TiledMapResource> &inspect) override;
 	};
 }

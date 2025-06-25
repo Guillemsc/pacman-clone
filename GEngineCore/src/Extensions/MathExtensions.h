@@ -23,6 +23,26 @@ namespace GEngineCore
 
 			return { rotatedX, rotatedY };
 		}
+
+		static float SafeDivide(const float v1, const float v2)
+		{
+			if (v2 == 0.0f)
+			{
+				return 0.0f;
+			}
+
+			return v1 / v2;
+		}
+
+		static float IntSafeDivide(const int v1, const int v2)
+		{
+			if (v2 == 0)
+			{
+				return 0.0f;
+			}
+
+			return v1 / v2;
+		}
 	};
 }
 

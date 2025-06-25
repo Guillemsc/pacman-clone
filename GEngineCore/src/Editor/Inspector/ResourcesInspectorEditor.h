@@ -14,13 +14,14 @@
 
 namespace GEngineCore
 {
+	class EditorModule;
 	class IResourceInspectorEditor;
 	class Resource;
 
 	class ResourcesInspectorEditor final : public GEngineObjectInspectorEditor<Resource>
 	{
 	public:
-		ResourcesInspectorEditor();
+		ResourcesInspectorEditor(const std::weak_ptr<GEngineCoreApplication>& app);
 
 	protected:
 		void DrawSpecific(const std::shared_ptr<Resource>& inspect) override;
@@ -49,7 +50,7 @@ namespace GEngineCore
 			_inspectorEditors.push_back(nullptr);
 		}
 
-		_inspectorEditors[objectIndex] = std::make_shared<TEditor>();
+		_inspectorEditors[objectIndex] = std::make_shared<TEditor>(_app);
 	}
 }
 

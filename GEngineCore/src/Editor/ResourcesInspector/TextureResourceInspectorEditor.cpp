@@ -9,6 +9,11 @@
 
 namespace GEngineCore
 {
+	TextureResourceInspectorEditor::TextureResourceInspectorEditor(const std::weak_ptr<GEngineCoreApplication> &app)
+		: ResourceInspectorEditor(app)
+	{
+	}
+
 	void TextureResourceInspectorEditor::DrawSpecific(const std::shared_ptr<TextureResource> &inspect)
 	{
 		const Texture& rawTexture = inspect->GetRawTexture();

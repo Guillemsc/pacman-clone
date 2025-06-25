@@ -8,15 +8,17 @@
 
 #include "imgui.h"
 #include "Components/Component.h"
+#include "Editor/ComponentsInspector/TiledMap2dRendererComponentInspectorEditor.h"
 #include "Editor/ComponentsInspector/TransformComponentInspectorEditor.h"
 #include "Editor/Extensions/ImGuiExtensions.h"
 #include "Entities/Entity.h"
 
 namespace GEngineCore
 {
-	EntityInspectorEditor::EntityInspectorEditor()
+	EntityInspectorEditor::EntityInspectorEditor(const std::weak_ptr<GEngineCoreApplication>& app): GEngineObjectInspectorEditor(app)
 	{
 		RegisterInspector<TransformComponentInspectorEditor, TransformComponent>();
+		RegisterInspector<TiledMap2dRendererComponentInspectorEditor, TiledMap2dRendererComponent>();
 	}
 
 	void EntityInspectorEditor::DrawSpecific(const std::shared_ptr<Entity> &inspect)

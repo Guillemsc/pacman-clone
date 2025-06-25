@@ -10,9 +10,13 @@
 
 namespace GEngineCore
 {
+	class GEngineCoreApplication;
+
 	class TextureResourceInspectorEditor final : public ResourceInspectorEditor<TextureResource>
 	{
 	public:
+		TextureResourceInspectorEditor(const std::weak_ptr<GEngineCoreApplication> &app);
+
 		void DrawSpecific(const std::shared_ptr<TextureResource> &inspect) override;
 	};
 }

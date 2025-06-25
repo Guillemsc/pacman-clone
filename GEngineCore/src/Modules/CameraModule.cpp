@@ -101,15 +101,12 @@ namespace GEngineCore
 			float yaw = delta.x * lookSensitivity * deltaTime;
 			float pitch = delta.y * lookSensitivity * deltaTime;
 
-			// Convert current rotation to euler, then apply pitch/yaw
-			glm::vec3 euler = glm::eulerAngles(rotation);
-			euler.x += pitch;
-			euler.y += yaw;
+			glm::quat yawQuat = glm::angleAxis(yaw, glm::vec3(0, 1, 0));
+			rotation = yawQuat * rotation;
 
-			// Clamp pitch
-			euler.x = glm::clamp(euler.x, -glm::half_pi<float>() + 0.01f, glm::half_pi<float>() - 0.01f);
-
-			rotation = glm::quat(euler);
+			glm::vec3 localRight = rotation * glm::vec3(1, 0, 0);
+			glm::quat pitchQuat = glm::angleAxis(pitch, localRight);
+			rotation = pitchQuat * rotation;
 
 			_editorCamera->SetRotation(rotation);
 		}

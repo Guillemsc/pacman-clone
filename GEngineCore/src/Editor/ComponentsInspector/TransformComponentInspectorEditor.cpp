@@ -10,6 +10,11 @@
 
 namespace GEngineCore
 {
+	TransformComponentInspectorEditor::TransformComponentInspectorEditor(const std::weak_ptr<GEngineCoreApplication> &app)
+		: ComponentInspectorEditor(app)
+	{
+	}
+
 	void TransformComponentInspectorEditor::DrawSpecific(const std::shared_ptr<TransformComponent> &inspect)
 	{
 		ImGui::Text("Transform");

@@ -29,10 +29,22 @@ namespace GEngineCore
 			return nullptr;
 		}
 
+		std::map<std::int32_t, std::int32_t> tilesetFirstGuidByTilesetIndex;
+
+		const std::vector<tmx::Tileset>& tileSets = tiledMap->getTilesets();
+
+		for (int i = 0; i < tileSets.size(); ++i)
+		{
+			const tmx::Tileset& tileset = tileSets[i];
+
+			tilesetFirstGuidByTilesetIndex.emplace(tileset.getFirstGID(), i);
+		}
+
 		std::shared_ptr<TiledMapResource> resource = std::make_shared<TiledMapResource>(
 			fullPath,
 			resourcesPath,
-			tiledMap
+			tiledMap,
+			tilesetFirstGuidByTilesetIndex
 			);
 
 		return resource;

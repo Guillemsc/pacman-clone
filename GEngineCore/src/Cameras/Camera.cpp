@@ -69,7 +69,6 @@ namespace GEngineCore
         const glm::vec3 actualPosition = { _position.x, -_position.y, _position.z };
         const glm::vec3 actualForward = { forward.x, -forward.y, forward.z };
 
-
         const glm::vec3 lookAt = actualPosition - actualForward;
         const glm::vec3 up = GetUpDirection();
 

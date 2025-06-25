@@ -6,6 +6,7 @@
 
 #include "CameraModule.h"
 #include "raylib.h"
+#include "rlgl.h"
 #include "Cameras/Camera.h"
 #include "Rendering/ImGuiRenderer.h"
 
@@ -62,6 +63,8 @@ namespace GEngineCore
 		if (camera != nullptr)
 		{
 			BeginMode3D(camera->GetRawCamera());
+
+			rlSetClipPlanes(0.01, 9999);
 
 			_renderer2d->Render();
 

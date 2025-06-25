@@ -10,6 +10,7 @@
 namespace GEngineCore
 {
 	class Resource;
+	class GEngineCoreApplication;
 
 	class IResourceInspectorEditor
 	{
@@ -26,14 +27,25 @@ namespace GEngineCore
 	class ResourceInspectorEditor : public IResourceInspectorEditor
 	{
 	public:
+		explicit ResourceInspectorEditor(const std::weak_ptr<GEngineCoreApplication>& app);
+
 		void Draw(const std::shared_ptr<Resource>& inspect) override;
 
 	protected:
 		virtual void DrawSpecific(const std::shared_ptr<T>& inspect) = 0;
+
+	protected:
+		std::weak_ptr<GEngineCoreApplication> _app;
 	};
 
 	// -------------------------------------------------------
 	// -------------------------------------------------------
+
+	template<class T>
+	ResourceInspectorEditor<T>::ResourceInspectorEditor(const std::weak_ptr<GEngineCoreApplication> &app)
+	{
+		_app = app;
+	}
 
 	template<class T>
 	void ResourceInspectorEditor<T>::Draw(const std::shared_ptr<Resource> &inspect)

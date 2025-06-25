@@ -13,7 +13,7 @@
 
 namespace GEngineCore
 {
-	ResourcesInspectorEditor::ResourcesInspectorEditor()
+	ResourcesInspectorEditor::ResourcesInspectorEditor(const std::weak_ptr<GEngineCoreApplication>& app): GEngineObjectInspectorEditor(app)
 	{
 		RegisterInspector<TextureResourceInspectorEditor, TextureResource>();
 		RegisterInspector<TiledMapResourceInspectorEditor, TiledMapResource>();

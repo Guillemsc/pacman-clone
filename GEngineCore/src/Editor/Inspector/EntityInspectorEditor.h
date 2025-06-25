@@ -19,7 +19,7 @@ namespace GEngineCore
 	class EntityInspectorEditor final : public GEngineObjectInspectorEditor<Entity>
 	{
 	public:
-		EntityInspectorEditor();
+		explicit EntityInspectorEditor(const std::weak_ptr<GEngineCoreApplication>& app);
 
 	protected:
 		void DrawSpecific(const std::shared_ptr<Entity>& inspect) override;
@@ -52,7 +52,7 @@ namespace GEngineCore
 			_inspectorEditors.push_back(nullptr);
 		}
 
-		_inspectorEditors[componentIndex] = std::make_shared<TEditor>();
+		_inspectorEditors[componentIndex] = std::make_shared<TEditor>(_app);
 	}
 }
 

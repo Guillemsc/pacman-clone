@@ -9,6 +9,11 @@
 
 namespace GEngineCore
 {
+	class GEngineCoreApplication;
+}
+
+namespace GEngineCore
+{
 	class Component;
 
 	class IComponentInspectorEditor
@@ -26,14 +31,25 @@ namespace GEngineCore
 	class ComponentInspectorEditor : public IComponentInspectorEditor
 	{
 	public:
+		ComponentInspectorEditor(const std::weak_ptr<GEngineCoreApplication>& app);
+
 		void Draw(const std::shared_ptr<Component>& inspect) override;
 
 	protected:
 		virtual void DrawSpecific(const std::shared_ptr<T>& inspect) = 0;
+
+	protected:
+		std::weak_ptr<GEngineCoreApplication> _app;
 	};
 
 	// -------------------------------------------------------
 	// -------------------------------------------------------
+
+	template<class T>
+	ComponentInspectorEditor<T>::ComponentInspectorEditor(const std::weak_ptr<GEngineCoreApplication>& app)
+	{
+		_app = app;
+	}
 
 	template<class T>
 	void ComponentInspectorEditor<T>::Draw(const std::shared_ptr<Component> &inspect)

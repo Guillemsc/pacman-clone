@@ -50,6 +50,17 @@ namespace GEngineCore
 		{
 			return index < 0 || vec.size() <= index;
 		}
+
+		template <typename T>
+		static bool GetOrDefault(const std::vector<T>& vec, const std::int32_t index, T defaultValue)
+		{
+			if (IsIndexOutsideBounds(vec, index))
+			{
+				return defaultValue;
+			}
+
+			return vec[index];
+		}
 	};
 } // GEngineCore
 
