@@ -1,0 +1,64 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "maps/test-map.tmx",
+    "expandedProjectPaths": [
+        "maps",
+        ".",
+        "tilesets"
+    ],
+    "fileStates": {
+        "/home/guillem/Guillem/Projects/C++/pacman-clone/TestGame/Tiled/maps/test-map.tmx": {
+            "scale": 1.3695833333333332,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 119.74444782476425,
+                "y": 80.3163979312443
+            }
+        },
+        "maps/test-map.tmx": {
+            "scale": 2,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 119,
+                "y": 30.5
+            }
+        },
+        "pac-man-map-tileset.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1.5
+        },
+        "pac-man-tileset.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 5.5
+        },
+        "tilesets/pac-man-tileset.tsx": {
+            "scaleInDock": 3,
+            "scaleInEditor": 5.5
+        }
+    },
+    "last.imagePath": "/home/guillem/Guillem/Projects/C++/pacman-clone/cmake-build-debug/TestGame/resources/Tiled/textures",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 8,
+    "map.tileWidth": 8,
+    "openFiles": [
+        "maps/test-map.tmx"
+    ],
+    "project": "untitled.tiled-project",
+    "property.type": "bool",
+    "recentFiles": [
+        "maps/test-map.tmx",
+        "tilesets/pac-man-tileset.tsx",
+        "pac-man-tileset.tsx",
+        "pac-man-map-tileset.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.margin": 0,
+    "tileset.spacing": 0,
+    "tileset.tileSize": {
+        "height": 8,
+        "width": 8
+    }
+}

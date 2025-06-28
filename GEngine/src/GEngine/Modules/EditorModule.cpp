@@ -1,0 +1,83 @@
+//
+// Created by guillem on 6/9/25.
+//
+
+#include "EditorModule.h"
+
+#include "imgui.h"
+#include "RenderingModule.h"
+#include "GEngine/Core/GEngineCoreApplication.h"
+#include "GEngine/Editor/MenuBar/MenuBarEditor.h"
+#include "GEngine/Editor/Windows/EditorWindow.h"
+#include "GEngine/Editor/Windows/HierarchyEditorWindow.h"
+#include "GEngine/Editor/Windows/InspectorEditorWindow.h"
+#include "GEngine/Editor/Windows/ResourcesEditorWindow.h"
+#include "GEngine/Rendering/ImGuiRenderer.h"
+
+namespace GEngine
+{
+	void EditorModule::Init(const std::weak_ptr<GEngineCoreApplication> &app)
+	{
+		_app = app;
+
+		_menuBar = std::make_shared<MenuBarEditor>(app);
+
+		RegisterWindow<HierarchyEditorWindow>();
+		RegisterWindow<InspectorEditorWindow>();
+		RegisterWindow<ResourcesEditorWindow>();
+	}
+
+	void EditorModule::Tick()
+	{
+		DrawEditor();
+	}
+
+	void EditorModule::Dispose()
+	{
+	}
+
+	void EditorModule::SetSelectedObject(const std::weak_ptr<GEngineObject> &object)
+	{
+		_selectedObject = object;
+	}
+
+	std::weak_ptr<GEngineObject> EditorModule::GetSelectedObject() const
+	{
+		return _selectedObject;
+	}
+
+	void EditorModule::DrawEditor()
+	{
+		const std::shared_ptr<GEngineCoreApplication> app = _app.lock();
+		if (app == nullptr) return;
+
+		const std::shared_ptr<RenderingModule> rendering = app->Rendering().lock();
+		if (rendering == nullptr) return;
+
+		const std::shared_ptr<ImGuiRenderer> imGuiRenderer = rendering->ImGuiRender().lock();
+		if (imGuiRenderer == nullptr) return;
+
+		imGuiRenderer->Add([this]()
+		{
+			bool open = true;
+			ImGui::ShowDemoWindow(&open);
+
+			_menuBar->Draw();
+
+			DrawWindows();
+		});
+	}
+
+	void EditorModule::DrawWindows()
+	{
+		for (auto it = _windows.begin(); it != _windows.end(); ++it)
+		{
+			if (!(*it)->visible)
+			{
+				continue;
+			}
+
+			(*it)->Draw();
+		}
+	}
+} // GEngineCore
