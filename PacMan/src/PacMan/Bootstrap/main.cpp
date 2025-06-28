@@ -15,7 +15,7 @@ int main()
         app->Tick();
     }
 
-     app->Dispose();
+	app->Dispose();
 
     return 0;
 }

@@ -7,7 +7,9 @@ add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Games/PacManGame.h
         src/PacMan/Games/PacManGame.cpp
         src/PacMan/Systems/MapMovementSystem.cpp
-        src/PacMan/Systems/MapMovementSystem.h)
+        src/PacMan/Systems/MapMovementSystem.h
+        src/PacMan/Components/GridPositionComponent.h
+        src/PacMan/Components/ViewComponent.h)
 
 target_link_libraries(PacMan PRIVATE GEngineCore)
 

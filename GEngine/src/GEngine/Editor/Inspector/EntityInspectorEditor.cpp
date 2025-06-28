@@ -5,6 +5,7 @@
 #include "EntityInspectorEditor.h"
 
 #include <format>
+#include <typeindex>
 
 #include "imgui.h"
 #include "GEngine/Components/Component.h"
@@ -48,7 +49,7 @@ namespace GEngine
 
 		for (auto it = components.begin(); it != components.end(); ++it)
 		{
-			const std::shared_ptr<IComponentInspectorEditor> inspector = GetInspectorEditor((*it)->GetType());
+			const std::shared_ptr<IComponentInspectorEditor> inspector = GetInspectorEditor(it->get());
 
 			const char* name = (*it)->GetTypeName();
 
@@ -65,15 +66,17 @@ namespace GEngine
 		}
 	}
 
-	std::shared_ptr<IComponentInspectorEditor> EntityInspectorEditor::GetInspectorEditor(const ComponentType componentType)
+	std::shared_ptr<IComponentInspectorEditor> EntityInspectorEditor::GetInspectorEditor(Component* component)
 	{
-		const std::size_t objectIndex = static_cast<std::size_t>(componentType);
+		const std::type_index typeIndex = typeid(*component);
 
-		if (_inspectorEditors.size() <= objectIndex)
+		const auto it = _inspectorEditors.find(typeIndex);
+
+		if (it == _inspectorEditors.end())
 		{
 			return nullptr;
 		}
 
-		return _inspectorEditors[objectIndex];
+		return it->second;
 	}
 } // GEngineCore

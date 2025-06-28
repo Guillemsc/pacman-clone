@@ -47,7 +47,7 @@ namespace GEngine
 		entity->SetName(std::format("Entity: {}", _nextEntityId));
 		entity->SetActive(true);
 
-		entity->_transformPtr = components->AddEntityComponent<TransformComponent>(entity);
+		entity->AddComponent<TransformComponent>();
 
 		++_nextEntityId;
 
@@ -108,7 +108,6 @@ namespace GEngine
 				_checkingRemovingEntitiesBuffer.push_back(child);
 			}
 
-			components->RemoveAllComponentsFromEntity(checking);
 			checking->Dispose();
 
 			VectorExtensions::Remove(_entities, checking);

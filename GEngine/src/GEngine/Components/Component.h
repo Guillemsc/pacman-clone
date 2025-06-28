@@ -24,7 +24,6 @@ namespace GEngine
 		bool IsEnanbled() const;
 		void SetEnabled(bool enabled);
 
-		virtual ComponentType GetType() = 0;
 		virtual const char* GetTypeName() = 0;
 
 	protected:

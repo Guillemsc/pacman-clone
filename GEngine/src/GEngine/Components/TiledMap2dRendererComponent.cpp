@@ -185,7 +185,7 @@ namespace GEngine
 		return GridPositionToWorldPosition(
 			tileLayer,
 			position,
-			-rotation,
+			rotation,
 			scale,
 			mapData.get(),
 			gridPosition.x,
@@ -238,7 +238,7 @@ namespace GEngine
 		const glm::vec2 layerEndPosition = layerStartPosition + layerPixelSizeScaled;
 		const glm::vec2 pivot = position;
 
-		const glm::vec2 finalPosition = MathExtensions::InverseRotatePointAroundPivot(worldPosition, pivot, -rotation);
+		const glm::vec2 finalPosition = MathExtensions::InverseRotatePointAroundPivot(worldPosition, pivot, rotation);
 
 		glm::vec2 normalizedPosition = Vec2Extensions::GetNormalizedValue(finalPosition, layerStartPosition, layerEndPosition);
 
@@ -317,7 +317,7 @@ namespace GEngine
 
 		const glm::vec2 point = { tilePositionX, tilePositionY };
 		const glm::vec2 pivot = tilemapPosition;
-		const glm::vec2 finalPosition = MathExtensions::RotatePointAroundPivot(point, pivot, tilemapRotation);
+		const glm::vec2 finalPosition = MathExtensions::RotatePointAroundPivot(point, pivot, -tilemapRotation);
 
 		return finalPosition;
 	}
@@ -394,7 +394,7 @@ namespace GEngine
 				const glm::vec2 finalPosition = GridPositionToWorldPosition(
 					tileLayer,
 					position,
-					rotation,
+					-rotation,
 					scale,
 					mapData,
 					x,

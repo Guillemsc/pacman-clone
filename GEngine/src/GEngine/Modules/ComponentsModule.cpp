@@ -7,7 +7,6 @@
 #include "GEngine/Components/CameraComponent.h"
 #include "GEngine/Components/Shape2dRendererComponent.h"
 #include "GEngine/Components/TransformComponent.h"
-#include "GEngine/Components/ComponentFactory.h"
 #include "GEngine/Components/Texture2dRendererComponent.h"
 #include "GEngine/Components/TiledMap2dRendererComponent.h"
 
@@ -15,46 +14,12 @@ namespace GEngine
 {
 	ComponentsModule::ComponentsModule()
 	{
-		RegisterComponent<TransformComponent>(false);
-		RegisterComponent<CameraComponent>(false);
-		RegisterComponent<Shape2dRendererComponent>(false);
-		RegisterComponent<Texture2dRendererComponent>(false);
-		RegisterComponent<TiledMap2dRendererComponent>(false);
+
 	}
 
 	void ComponentsModule::Dispose()
 	{
 		_componentFactories.clear();
-	}
-
-	std::weak_ptr<Component> ComponentsModule::AddEntityComponent(const std::weak_ptr<Entity> &entityPtr, const ComponentType componentType)
-	{
-		const std::shared_ptr<Entity> entity = entityPtr.lock();
-		if (entity == nullptr) return std::weak_ptr<Component>();
-
-		const std::weak_ptr<IComponentFactory> componentFactoryPtr = GetComponentFactory(componentType);
-
-		const std::shared_ptr<IComponentFactory> componentFactory = componentFactoryPtr.lock();
-		if (!componentFactory) return std::weak_ptr<Component>();
-
-		if (!componentFactory->GetAllowMultiple())
-		{
-			const bool alreadyExists = entity->GetComponent(componentType).lock() != nullptr;
-
-			if (alreadyExists)
-			{
-				return std::weak_ptr<Component>();
-			}
-		}
-
-		const std::shared_ptr<Component> component = componentFactory->CreateComponent(entityPtr);
-		if (!component) return std::weak_ptr<Component>();
-
-		component->SetEnabled(true);
-
-		entity->_components.push_back(component);
-
-		return component;
 	}
 
 	bool ComponentsModule::RemoveComponentFromEntity(
@@ -81,27 +46,6 @@ namespace GEngine
 		return false;
 	}
 
-	bool ComponentsModule::RemoveComponentFromEntity(
-		const std::weak_ptr<Entity> &entityPtr,
-		ComponentType componentType
-		)
-	{
-		const std::shared_ptr<Entity> entity = entityPtr.lock();
-		if (entity == nullptr) return false;
-
-		for (auto it = entity->_components.begin(); it != entity->_components.end(); ++it)
-		{
-			if ((*it)->GetType() == componentType)
-			{
-				(*it)->OnDestroy();
-				entity->_components.erase(it);
-				return true;
-			}
-		}
-
-		return false;
-	}
-
 	void ComponentsModule::RemoveAllComponentsFromEntity(const std::weak_ptr<Entity> &entityPtr)
 	{
 		const std::shared_ptr<Entity> entity = entityPtr.lock();
@@ -114,18 +58,6 @@ namespace GEngine
 		}
 
 		entity->_components.clear();
-	}
-
-	std::weak_ptr<IComponentFactory> ComponentsModule::GetComponentFactory(ComponentType componentType)
-	{
-		const std::size_t componentIndex = static_cast<std::size_t>(componentType);
-
-		if (_componentFactories.size() <= componentIndex)
-		{
-			return std::weak_ptr<IComponentFactory>();
-		}
-
-		return _componentFactories[componentIndex];
 	}
 
 	void ComponentsModule::TickEntityComponents(Entity* entityPtr)

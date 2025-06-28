@@ -19,8 +19,6 @@ namespace GEngine
 	public:
 		explicit Texture2dRendererComponent(const std::weak_ptr<Entity> &entity);
 
-		static ComponentType GetTypeStatic() { return ComponentType::TEXTURE_2D_RENDERER; }
-		ComponentType GetType() override { return GetTypeStatic(); }
 		const char* GetTypeName() override { return "Texture2dRenderer"; }
 
 		void OnTick() override;

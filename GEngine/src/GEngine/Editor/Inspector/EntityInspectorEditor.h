@@ -5,10 +5,11 @@
 #ifndef ENTITYINSPECTOREDITOR_H
 #define ENTITYINSPECTOREDITOR_H
 
+#include <unordered_map>
 #include <vector>
+#include <typeindex>
 
 #include "GEngineObjectInspectorEditor.h"
-#include "GEngine/Components/ComponentType.h"
 #include "GEngine/Editor/ComponentsInspector/ComponentInspectorEditor.h"
 
 namespace GEngine
@@ -21,18 +22,18 @@ namespace GEngine
 	public:
 		explicit EntityInspectorEditor(const std::weak_ptr<GEngineCoreApplication>& app);
 
+		template<class TEditor, class TObject>
+		void RegisterInspector();
+
 	protected:
 		void DrawSpecific(const std::shared_ptr<Entity>& inspect) override;
 
 	private:
 		void DrawComponents(const std::shared_ptr<Entity> &inspect);
-		std::shared_ptr<IComponentInspectorEditor> GetInspectorEditor(ComponentType componentType);
-
-		template<class TEditor, class TObject>
-		void RegisterInspector();
+		std::shared_ptr<IComponentInspectorEditor> GetInspectorEditor(Component* component);
 
 	private:
-		std::vector<std::shared_ptr<IComponentInspectorEditor>> _inspectorEditors;
+		std::unordered_map<std::type_index, std::shared_ptr<IComponentInspectorEditor>> _inspectorEditors;
 	};
 
 	// -------------------------------------------------------
@@ -44,15 +45,9 @@ namespace GEngine
 		static_assert(std::is_base_of_v<ComponentInspectorEditor<TComponent>, TEditor>, "TEditor is not derived from ComponentInspectorEditor");
 		static_assert(std::is_base_of_v<Component, TComponent>, "TComponent is not derived from Component");
 
-		const ComponentType componentType = TComponent::GetTypeStatic();
-		const std::size_t componentIndex = static_cast<std::size_t>(componentType);
+		const std::type_index typeIndex = typeid(TComponent);
 
-		while (componentIndex + 1 > _inspectorEditors.size())
-		{
-			_inspectorEditors.push_back(nullptr);
-		}
-
-		_inspectorEditors[componentIndex] = std::make_shared<TEditor>(_app);
+		_inspectorEditors[typeIndex] = std::make_shared<TEditor>(_app);
 	}
 }
 

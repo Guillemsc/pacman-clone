@@ -29,7 +29,7 @@ namespace GEngine
 
 	void EditorModule::Tick()
 	{
-		DrawEditor();
+		RenderEditor();
 	}
 
 	void EditorModule::Dispose()
@@ -46,7 +46,7 @@ namespace GEngine
 		return _selectedObject;
 	}
 
-	void EditorModule::DrawEditor()
+	void EditorModule::RenderEditor()
 	{
 		const std::shared_ptr<GEngineCoreApplication> app = _app.lock();
 		if (app == nullptr) return;

@@ -4,9 +4,11 @@
 
 #ifndef CAMERAMODULE_H
 #define CAMERAMODULE_H
+
 #include <memory>
 #include <vector>
 
+#include "GEngine/Extensions/Vec2Extensions.h"
 #include "glm/vec2.hpp"
 
 namespace GEngine
@@ -42,8 +44,8 @@ namespace GEngine
         std::weak_ptr<Camera> _currentCamera;
         std::weak_ptr<Camera> _currentRenderingCamera;
 
-        bool _isUsingEditorCamera;
-        glm::vec2 _lastMousePos;
+        bool _isUsingEditorCamera = false;
+        glm::vec2 _lastMousePos = Vec2Extensions::Zero;
     };
 }
 

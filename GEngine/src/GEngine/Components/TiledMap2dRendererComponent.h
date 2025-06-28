@@ -29,8 +29,6 @@ namespace GEngine
 	public:
 		explicit TiledMap2dRendererComponent(const std::weak_ptr<Entity> &entity);
 
-		static ComponentType GetTypeStatic() { return ComponentType::TILED_MAP_2D_RENDERER; }
-		ComponentType GetType() override { return GetTypeStatic(); }
 		const char* GetTypeName() override { return "TiledMap2dRenderer"; }
 
 		void OnTick() override;

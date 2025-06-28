@@ -6,7 +6,6 @@
 #define SHAPERENDERER2DCOMPONENT_H
 
 #include "Component.h"
-#include "ComponentType.h"
 
 namespace GEngine
 {
@@ -15,8 +14,6 @@ namespace GEngine
 	public:
 		explicit Shape2dRendererComponent(const std::weak_ptr<Entity> &entity);
 
-		static ComponentType GetTypeStatic() { return ComponentType::SHAPE_2D_RENDERER; }
-		ComponentType GetType() override { return GetTypeStatic(); }
 		const char* GetTypeName() override { return "Shape2dRenderer"; }
 
 		void OnTick() override;

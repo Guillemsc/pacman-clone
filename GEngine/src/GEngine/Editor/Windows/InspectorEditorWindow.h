@@ -8,8 +8,6 @@
 #include <vector>
 
 #include "EditorWindow.h"
-#include "GEngine/Components/ComponentFactory.h"
-#include "GEngine/Components/ComponentType.h"
 #include "GEngine/Editor/Inspector/GEngineObjectInspectorEditor.h"
 #include "GEngine/Objects/GEngineObjectType.h"
 

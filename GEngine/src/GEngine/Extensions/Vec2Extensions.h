@@ -6,6 +6,7 @@
 #define VEC2EXTENSIONS_H
 
 #include "glm/vec2.hpp"
+#include "GEngine/Extensions/MathExtensions.h"
 
 namespace GEngine
 {

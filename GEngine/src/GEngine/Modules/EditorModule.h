@@ -30,7 +30,7 @@ namespace GEngine
 		bool IsSelectedObject(std::weak_ptr<T> object);
 
 	private:
-		void DrawEditor();
+		void RenderEditor();
 		void DrawWindows();
 
 		template <class T>

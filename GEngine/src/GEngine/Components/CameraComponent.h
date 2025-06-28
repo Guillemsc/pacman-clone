@@ -19,8 +19,6 @@ namespace GEngine
 	public:
 		explicit CameraComponent(const std::weak_ptr<Entity> &entity);
 
-		static ComponentType GetTypeStatic() { return ComponentType::CAMERA; }
-		ComponentType GetType() override { return GetTypeStatic(); }
 		const char* GetTypeName() override { return "Camera"; }
 
 		void OnEnable() override;

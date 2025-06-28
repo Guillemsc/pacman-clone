@@ -6,7 +6,6 @@
 #define TRANSFORMCOMPONENT_H
 
 #include "Component.h"
-#include "ComponentType.h"
 #include "raylib.h"
 #include "raymath.h"
 #include "glm/vec3.hpp"
@@ -24,8 +23,6 @@ namespace GEngine
 		explicit TransformComponent(const std::weak_ptr<Entity> &entity);
 		~TransformComponent() override;
 
-		static ComponentType GetTypeStatic() { return ComponentType::TRANSFORM; }
-		ComponentType GetType() override { return GetTypeStatic(); }
 		const char* GetTypeName() override { return "Transform"; }
 
 		void SetPosition(const glm::vec3 &position);

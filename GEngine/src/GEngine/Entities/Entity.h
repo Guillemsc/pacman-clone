@@ -10,7 +10,6 @@
 #include <vector>
 
 #include "GEngine/Core/GEngineCoreApplication.h"
-#include "GEngine/Components/ComponentType.h"
 #include "GEngine/Modules/ComponentsModule.h"
 #include "GEngine/Objects/GEngineObject.h"
 
@@ -55,17 +54,18 @@ namespace GEngine
 		const std::vector<std::weak_ptr<Entity>>& GetChildren() const;
 
 		const std::vector<std::shared_ptr<Component>>& GetComponents() const;
-		std::weak_ptr<Component> GetComponent(ComponentType componentType);
 		template <class T>
 		std::weak_ptr<T> GetComponent();
-		std::weak_ptr<Component> AddComponent(ComponentType componentType);
 		template <class T>
 		std::weak_ptr<T> AddComponent();
+		bool RemoveComponent(const std::weak_ptr<Component> &componentPtr);
 
 		std::weak_ptr<TransformComponent> GetTransform() const;
 
 	private:
 		void Dispose();
+
+		void RemoveAllComponents();
 
 		void RefreshChildrenHierarchyActiveState();
 		bool RefreshActiveState();
@@ -90,26 +90,41 @@ namespace GEngine
 	std::weak_ptr<T> Entity::GetComponent()
 	{
 		static_assert(std::is_base_of_v<Component, T>, "T is not derived from Component");
-		const ComponentType componentType = T::GetTypeStatic();
 
-		const std::weak_ptr<Component> componentPtr = GetComponent(componentType);
+		for (auto it = _components.begin(); it != _components.end(); ++it)
+		{
+			if (auto casted = std::dynamic_pointer_cast<T>(*it))
+			{
+				return casted;
+			}
+		}
 
-		const std::shared_ptr<Component> component = componentPtr.lock();
-		if (!component) return std::weak_ptr<T>();
-
-		return std::static_pointer_cast<T>(component);
+		return std::weak_ptr<T>();
 	}
 
 	template<class T>
 	std::weak_ptr<T> Entity::AddComponent()
 	{
+		static_assert(std::is_base_of_v<Component, T>, "T is not derived from Component");
+
 		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
 		if (app == nullptr) return std::weak_ptr<T>();
 
-		const std::shared_ptr<ComponentsModule> components = app->Components().lock();
-		if (components == nullptr) return std::weak_ptr<T>();
+		const std::shared_ptr<T> component = std::make_shared<T>(weak_from_this());
 
-		return components->AddEntityComponent<T>(weak_from_this());
+		if (_transformPtr.expired())
+		{
+			if constexpr (std::is_same_v<T, TransformComponent>)
+			{
+				_transformPtr = component;
+			}
+		}
+
+		_components.push_back(component);
+
+		component->SetEnabled(true);
+
+		return component;
 	}
 }
 

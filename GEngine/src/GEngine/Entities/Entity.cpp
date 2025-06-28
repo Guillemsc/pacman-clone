@@ -155,28 +155,23 @@ namespace GEngine
 		return _components;
 	}
 
-	std::weak_ptr<Component> Entity::GetComponent(const ComponentType componentType)
+	bool Entity::RemoveComponent(const std::weak_ptr<Component> &componentPtr)
 	{
+		const std::shared_ptr<Component> component = componentPtr.lock();
+		if (!component) return false;
+
 		for (auto it = _components.begin(); it != _components.end(); ++it)
 		{
-			if ((*it)->GetType() == componentType)
+			if (it->get() == component.get())
 			{
-				return *it;
+				(*it)->SetEnabled(false);
+				(*it)->OnDestroy();
+				_components.erase(it);
+				return true;
 			}
 		}
 
-		return std::weak_ptr<Component>();
-	}
-
-	std::weak_ptr<Component> Entity::AddComponent(const ComponentType componentType)
-	{
-		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
-		if (app == nullptr) return std::weak_ptr<Component>();
-
-		const std::shared_ptr<ComponentsModule> components = app->Components().lock();
-		if (components == nullptr) return std::weak_ptr<Component>();
-
-		return components->AddEntityComponent(weak_from_this(), componentType);
+		return false;
 	}
 
 	std::weak_ptr<TransformComponent> Entity::GetTransform() const
@@ -186,11 +181,24 @@ namespace GEngine
 
 	void GEngine::Entity::Dispose()
 	{
+		RemoveAllComponents();
+
 		_id = 0;
 		_parentPtr.reset();
 		_childEntities.clear();
 		_components.clear();
 		_transformPtr.reset();
+	}
+
+	void Entity::RemoveAllComponents()
+	{
+		for (auto it = _components.begin(); it != _components.end(); ++it)
+		{
+			(*it)->SetEnabled(false);
+			(*it)->OnDestroy();
+		}
+
+		_components.clear();
 	}
 
 	void Entity::RefreshChildrenHierarchyActiveState()

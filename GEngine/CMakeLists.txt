@@ -27,7 +27,6 @@ add_library(GEngineCore STATIC
         src/GEngine/Entities/Entity.h
         src/GEngine/Components/Component.cpp
         src/GEngine/Components/Component.h
-        src/GEngine/Components/ComponentType.h
         src/GEngine/Components/TransformComponent.cpp
         src/GEngine/Components/TransformComponent.h
         src/GEngine/Extensions/UnorderedMapExtensions.h
@@ -58,7 +57,6 @@ add_library(GEngineCore STATIC
         src/GEngine/Systems/TickShapeRenderer2dComponentsSystem.h
         src/GEngine/Entities/Entity.cpp
         src/GEngine/Events/Event.h
-        src/GEngine/Components/ComponentFactory.h
         src/GEngine/Rendering/ImGuiRenderer.cpp
         src/GEngine/Rendering/ImGuiRenderer.h
         src/GEngine/Modules/EditorModule.cpp
