@@ -23,7 +23,7 @@ namespace GEngine
 				continue;
 			}
 
-			it->first->_isFinished = it->second->MoveNext();
+			it->first->_isFinished = !it->second->MoveNext();
 
 			VectorExtensions::EraseOrIncrease(_coroutines, it, it->first->_isFinished);
 		}

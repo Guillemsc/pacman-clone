@@ -11,6 +11,7 @@
 
 namespace GEngine
 {
+	class CoroutinesModule;
 	class CameraModule;
 	class EditorModule;
 	class RenderingModule;
@@ -43,6 +44,7 @@ namespace GEngine
 		std::weak_ptr<ResourcesModule> Resources() { return _resources; }
 		std::weak_ptr<SystemsModule> Systems() { return _systems; }
 		std::weak_ptr<InputModule> Input() { return _input; }
+		std::weak_ptr<CoroutinesModule> Coroutines() { return _coroutines; }
 		std::weak_ptr<EditorModule> Editor() { return _editor; }
 
 	private:
@@ -55,6 +57,7 @@ namespace GEngine
 		std::shared_ptr<ResourcesModule> _resources = nullptr;
 		std::shared_ptr<SystemsModule> _systems = nullptr;
 		std::shared_ptr<InputModule> _input = nullptr;
+		std::shared_ptr<CoroutinesModule> _coroutines = nullptr;
 		std::shared_ptr<EditorModule> _editor = nullptr;
 	};
 } // GEngineCore

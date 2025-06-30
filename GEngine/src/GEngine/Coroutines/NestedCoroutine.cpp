@@ -10,23 +10,23 @@ namespace GEngine
 	{
 		while (!_coroutines.empty())
 		{
-			const bool finished = (*_coroutines.begin())->MoveNext();
+			const bool canContinue = (*_coroutines.begin())->MoveNext();
 
-			if (finished)
+			if (canContinue)
 			{
-				_coroutines.erase(_coroutines.begin());
+				return true;
 			}
-			else
-			{
-				return false;
-			}
+
+			_coroutines.erase(_coroutines.begin());
 		}
 
-		return true;
+		return false;
 	}
 
 	void NestedCoroutine::Add(const std::shared_ptr<Coroutine> &coroutine)
 	{
+		if(!coroutine) return;
+
 		_coroutines.push_back(coroutine);
 	}
 } // GEngineCore

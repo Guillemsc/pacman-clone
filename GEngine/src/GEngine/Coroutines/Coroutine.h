@@ -4,6 +4,7 @@
 
 #ifndef ICOROUTINE_H
 #define ICOROUTINE_H
+#include <memory>
 
 namespace GEngine
 {
@@ -12,7 +13,9 @@ namespace GEngine
 	public:
 		virtual ~Coroutine() = default;
 
-		virtual bool MoveNext() { return true; };
+		virtual bool MoveNext() { return false; };
+
+		static std::shared_ptr<Coroutine> Empty();
 	};
 }
 

@@ -22,9 +22,9 @@ namespace GEngine
 
 		while (!shouldTimeSlice)
 		{
-			const bool finished = MoveNextTimeSliced();
+			const bool canContinue = MoveNextTimeSliced();
 
-			if (finished)
+			if (canContinue)
 			{
 				return true;
 			}

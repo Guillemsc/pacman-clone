@@ -2,8 +2,8 @@
 // Created by guillem on 6/27/25.
 //
 
-#ifndef COROUTINERUNNER_H
-#define COROUTINERUNNER_H
+#ifndef NESTEDCOROUTINE_H
+#define NESTEDCOROUTINE_H
 
 #include <memory>
 #include <vector>
@@ -24,4 +24,4 @@ namespace GEngine
 	};
 }
 
-#endif //COROUTINERUNNER_H
+#endif //NESTEDCOROUTINE_H

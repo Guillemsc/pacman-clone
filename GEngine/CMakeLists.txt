@@ -162,6 +162,10 @@ add_library(GEngineCore STATIC
         src/GEngine/Editor/PropertyDrawers/Vec3PropertyDrawerEditor.h
         src/GEngine/Directions/CardinalDirection.h
         src/GEngine/Extensions/CardinalDirectionExtensions.h
+        src/GEngine/Coroutines/Coroutine.cpp
+        src/GEngine/Modules/CoroutinesModule.cpp
+        src/GEngine/Modules/CoroutinesModule.h
+        src/GEngine/ServiceLocators/ServiceLocator.h
 )
 
 # Link raylib

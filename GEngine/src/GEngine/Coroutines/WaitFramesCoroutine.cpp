@@ -15,6 +15,6 @@ namespace GEngine
 	{
 		_framesLeft -= 1;
 
-		return _framesLeft <= 0;
+		return _framesLeft > 0;
 	}
 } // GEngineCore

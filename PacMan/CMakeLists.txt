@@ -10,6 +10,16 @@ add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Systems/GridMovementSystem.h
         src/PacMan/Components/GridMovementComponent.cpp
         src/PacMan/Components/GridMovementComponent.h
+        src/PacMan/Flow/FlowManager.cpp
+        src/PacMan/Flow/FlowManager.h
+        src/PacMan/Contexts/GameplayContext.cpp
+        src/PacMan/Contexts/GameplayContext.h
+        src/PacMan/Contexts/Context.cpp
+        src/PacMan/Contexts/Context.h
+        src/PacMan/Contexts/ContextsStack.cpp
+        src/PacMan/Contexts/ContextsStack.h
+        src/PacMan/Systems/PlayerInputSystem.cpp
+        src/PacMan/Systems/PlayerInputSystem.h
 )
 
 target_link_libraries(PacMan PRIVATE GEngineCore)

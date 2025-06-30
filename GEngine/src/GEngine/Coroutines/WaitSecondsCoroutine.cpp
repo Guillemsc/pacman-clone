@@ -21,6 +21,6 @@ namespace GEngine
 		const double currentSeconds = _timer->GetTimeSeconds();
 		const double secondsLeft = _seconds - currentSeconds;
 
-		return secondsLeft <= 0;
+		return secondsLeft > 0;
 	}
 } // GEngineCore

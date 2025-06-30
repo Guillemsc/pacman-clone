@@ -6,6 +6,7 @@
 
 #include "GEngine/Modules/CameraModule.h"
 #include "GEngine/Modules/ComponentsModule.h"
+#include "GEngine/Modules/CoroutinesModule.h"
 #include "GEngine/Modules/EditorModule.h"
 #include "GEngine/Modules/EntitiesModule.h"
 #include "GEngine/Modules/GameModule.h"
@@ -22,6 +23,7 @@ namespace GEngine
 	{
 		spdlog::info("Welcome to GEngineCore :)");
 
+		_coroutines = std::make_shared<CoroutinesModule>();
 		_components = std::make_shared<ComponentsModule>();
 		_entities = std::make_shared<EntitiesModule>();
 		_game = std::make_shared<GameModule>();
@@ -69,6 +71,7 @@ namespace GEngine
 		_game->Tick();
 		_entities->Tick();
 		_systems->Tick();
+		_coroutines->Tick();
 		_editor->Tick();
 		_camera->Tick(deltaTime);
 		_rendering->Tick();

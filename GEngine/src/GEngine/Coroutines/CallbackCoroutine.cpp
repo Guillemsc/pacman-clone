@@ -14,6 +14,6 @@ namespace GEngine
 	bool CallbackCoroutine::MoveNext()
 	{
 		_callback();
-		return true;
+		return false;
 	}
 } // GEngineCore
