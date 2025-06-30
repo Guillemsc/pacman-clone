@@ -53,6 +53,12 @@ namespace GEngine
 		{
 			return SafeDivide(value - start, end - start);
 		}
+
+		template <typename T>
+		static T Lerp(const T& start, const T& end, float time)
+		{
+			return start * (1.0f - time) + end * time;
+		}
 	};
 }
 

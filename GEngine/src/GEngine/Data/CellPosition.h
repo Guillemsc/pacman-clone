@@ -9,8 +9,8 @@ namespace GEngine {
 
 enum CellPosition
 {
-	CENTER,
 	BOTTOM_LEFT,
+	CENTER,
 };
 
 } // GEngineCore

@@ -40,6 +40,11 @@ namespace GEngine
 		RefreshEnabledState();
 	}
 
+	const SerializedPropertyContainer & Component::GetSerializedProperties() const
+	{
+		return _serializedProperties;
+	}
+
 	void Component::RefreshEnabledState()
 	{
 		const std::shared_ptr<Entity> entity = GetEntity().lock();

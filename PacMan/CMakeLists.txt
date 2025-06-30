@@ -6,10 +6,11 @@ set(CMAKE_CXX_STANDARD 20)
 add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Games/PacManGame.h
         src/PacMan/Games/PacManGame.cpp
-        src/PacMan/Systems/MapMovementSystem.cpp
-        src/PacMan/Systems/MapMovementSystem.h
-        src/PacMan/Components/GridPositionComponent.h
-        src/PacMan/Components/ViewComponent.h)
+        src/PacMan/Systems/GridMovementSystem.cpp
+        src/PacMan/Systems/GridMovementSystem.h
+        src/PacMan/Components/GridMovementComponent.cpp
+        src/PacMan/Components/GridMovementComponent.h
+)
 
 target_link_libraries(PacMan PRIVATE GEngineCore)
 

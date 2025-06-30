@@ -8,9 +8,12 @@
 #include <functional>
 #include <memory>
 #include <vector>
+#include <typeindex>
 
 namespace GEngine
 {
+	class IPropertyDrawerEditor;
+	class ISerializedProperty;
 	class MenuBarEditor;
 	class GEngineObject;
 	class Entity;
@@ -23,6 +26,11 @@ namespace GEngine
 		void Init(const std::weak_ptr<GEngineCoreApplication>& app);
 		void Tick();
 		void Dispose();
+
+		template<class TPropertyDrawer, class TSerializedProperty>
+		void RegisterPropertyDrawer();
+
+		void DrawProperty(ISerializedProperty* property) const;
 
 		void SetSelectedObject(const std::weak_ptr<GEngineObject> &object);
 		[[nodiscard]] std::weak_ptr<GEngineObject> GetSelectedObject() const;
@@ -39,6 +47,8 @@ namespace GEngine
 	private:
 		std::weak_ptr<GEngineCoreApplication> _app;
 
+		std::unordered_map<std::type_index, std::shared_ptr<IPropertyDrawerEditor>> _propertyDrawers;
+
 		std::shared_ptr<MenuBarEditor> _menuBar;
 		std::vector<std::shared_ptr<EditorWindow>> _windows;
 
@@ -47,6 +57,17 @@ namespace GEngine
 
 	// -------------------------------------------------------
 	// -------------------------------------------------------
+
+	template<class TPropertyDrawer, class TSerializedProperty>
+	void EditorModule::RegisterPropertyDrawer()
+	{
+		static_assert(std::is_base_of_v<IPropertyDrawerEditor, TPropertyDrawer>, "TPropertyDrawer is not derived from PropertyDrawerEditor");
+		static_assert(std::is_base_of_v<ISerializedProperty, TSerializedProperty>, "TSerializedProperty is not derived from ISerializedProperty");
+
+		const std::type_index typeIndex = typeid(TSerializedProperty);
+
+		_propertyDrawers[typeIndex] = std::make_shared<TPropertyDrawer>();
+	}
 
 	template <typename T>
 	bool EditorModule::IsSelectedObject(std::weak_ptr<T> object)

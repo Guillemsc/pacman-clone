@@ -8,10 +8,12 @@
 #include "RenderingModule.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
 #include "GEngine/Editor/MenuBar/MenuBarEditor.h"
+#include "GEngine/Editor/PropertyDrawers/Vec3PropertyDrawerEditor.h"
 #include "GEngine/Editor/Windows/EditorWindow.h"
 #include "GEngine/Editor/Windows/HierarchyEditorWindow.h"
 #include "GEngine/Editor/Windows/InspectorEditorWindow.h"
 #include "GEngine/Editor/Windows/ResourcesEditorWindow.h"
+#include "GEngine/Extensions/UnorderedMapExtensions.h"
 #include "GEngine/Rendering/ImGuiRenderer.h"
 
 namespace GEngine
@@ -21,6 +23,8 @@ namespace GEngine
 		_app = app;
 
 		_menuBar = std::make_shared<MenuBarEditor>(app);
+
+		RegisterPropertyDrawer<Vec3PropertyDrawerEditor, SerializedProperty<glm::vec3>>();
 
 		RegisterWindow<HierarchyEditorWindow>();
 		RegisterWindow<InspectorEditorWindow>();
@@ -34,6 +38,20 @@ namespace GEngine
 
 	void EditorModule::Dispose()
 	{
+	}
+
+	void EditorModule::DrawProperty(ISerializedProperty *property) const
+	{
+		const std::type_index typeIndex = typeid(*property);
+
+		const std::optional<std::shared_ptr<IPropertyDrawerEditor>> optional = UnorderedMapExtensions::GetValue(_propertyDrawers, typeIndex);
+
+		if (!optional.has_value())
+		{
+			return;
+		}
+
+		optional.value()->Draw(property);
 	}
 
 	void EditorModule::SetSelectedObject(const std::weak_ptr<GEngineObject> &object)

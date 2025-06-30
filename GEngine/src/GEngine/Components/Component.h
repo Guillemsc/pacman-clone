@@ -6,6 +6,7 @@
 #define COMPONENT_H
 
 #include "GEngine/Entities/Entity.h"
+#include "GEngine/SerializedProperties/SerializedPropertyContainer.h"
 
 namespace GEngine
 {
@@ -24,7 +25,9 @@ namespace GEngine
 		bool IsEnanbled() const;
 		void SetEnabled(bool enabled);
 
-		virtual const char* GetTypeName() = 0;
+		const SerializedPropertyContainer& GetSerializedProperties() const;
+
+		virtual constexpr const char* GetTypeName() = 0;
 
 	protected:
 		virtual void OnAwake() {}
@@ -35,6 +38,9 @@ namespace GEngine
 
 	private:
 		void RefreshEnabledState();
+
+	protected:
+		SerializedPropertyContainer _serializedProperties;
 
 	private:
 		std::weak_ptr<Entity> _entity;

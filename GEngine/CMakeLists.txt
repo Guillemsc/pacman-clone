@@ -154,6 +154,14 @@ add_library(GEngineCore STATIC
         src/GEngine/Coroutines/TimeSlicedCoroutine.cpp
         src/GEngine/Coroutines/TimeSlicedCoroutine.h
         src/GEngine/Data/CellPosition.h
+        src/GEngine/SerializedProperties/SerializedProperty.h
+        src/GEngine/SerializedProperties/SerializedPropertyContainer.h
+        src/GEngine/Extensions/Vec3Extensions.h
+        src/GEngine/Editor/PropertyDrawers/PropertyDrawerEditor.h
+        src/GEngine/Editor/PropertyDrawers/Vec3PropertyDrawerEditor.cpp
+        src/GEngine/Editor/PropertyDrawers/Vec3PropertyDrawerEditor.h
+        src/GEngine/Directions/CardinalDirection.h
+        src/GEngine/Extensions/CardinalDirectionExtensions.h
 )
 
 # Link raylib

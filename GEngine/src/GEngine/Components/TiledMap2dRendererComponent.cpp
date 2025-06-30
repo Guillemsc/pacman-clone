@@ -36,9 +36,6 @@ namespace GEngine
 		const std::shared_ptr<RenderingModule> rendering = app->Rendering().lock();
 		if (rendering == nullptr) return;
 
-		const std::shared_ptr<ResourcesModule> resources = app->Resources().lock();
-		if (resources == nullptr) return;
-
 		const std::shared_ptr<Entity> entity = GetEntity().lock();
 		if (entity == nullptr) return;
 
@@ -52,7 +49,7 @@ namespace GEngine
 		float rotation = transform->GetRotationEulerZ();
 		glm::vec2 scale = transform->GetScaleXY();
 
-		rendering->Render2D().lock()->Add(0, [resources, rawMap, position, scale, rotation, this, tiledMap]
+		rendering->Render2D().lock()->Add(0, [rawMap, position, scale, rotation, this, tiledMap]
 		{
 			const tmx::Vector2u pixelSizeOfTile = rawMap->getTileSize();
 			const std::vector<tmx::Tileset>& tileSets = rawMap->getTilesets();
@@ -86,7 +83,6 @@ namespace GEngine
 				const std::vector<tmx::TileLayer::Tile>& tileIds = tileLayer.getTiles();
 
 				RenderLayerGrid(
-					resources.get(),
 					tiledMap.get(),
 					rawMap.get(),
 					tileIds,
@@ -128,22 +124,35 @@ namespace GEngine
 
 	glm::i32vec2 TiledMap2dRendererComponent::GetLayerGridSize(const std::int32_t layerIndex) const
 	{
-		const std::shared_ptr<TiledMapResource> tiledMap = _tiledMapPtr.lock();
-		if (!tiledMap) return glm::i32vec2(0);
-
-		const std::shared_ptr<tmx::Map> mapData = tiledMap->GetRawMap().lock();
-		if (!mapData) return glm::i32vec2(0);
-
-		const std::vector<tmx::Layer::Ptr>& layers = mapData->getLayers();
-
-		if (VectorExtensions::IsIndexOutsideBounds(layers, layerIndex)) return glm::i32vec2(0);
-
-		const tmx::Layer::Ptr& layer = layers[layerIndex];
-		const tmx::TileLayer& tileLayer = layer->getLayerAs<tmx::TileLayer>();
+		const auto optionalLayer = GetTileLayer(layerIndex);
+		if (!optionalLayer) return Vec2Extensions::Int32Zero;
+		const tmx::TileLayer& tileLayer = optionalLayer->get();
 
 		const tmx::Vector2u layerTileSize = tileLayer.getSize();
 
 		return { layerTileSize.x, layerTileSize.y };
+	}
+
+	bool TiledMap2dRendererComponent::HasTileAtGridPosition(const std::int32_t layerIndex, const glm::i32vec2 &gridPosition) const
+	{
+		const auto optionalLayer = GetTileLayer(layerIndex);
+		if (!optionalLayer) return false;
+		const tmx::TileLayer& tileLayer = optionalLayer->get();
+
+		const glm::i32vec2 layerGridSize = { tileLayer.getSize().x,  tileLayer.getSize().y};
+
+		if (gridPosition.x < 0 || gridPosition.x >= layerGridSize.x || gridPosition.y < 0 || gridPosition.y >= layerGridSize.y) return false;
+
+		const std::vector<tmx::TileLayer::Tile>& tileIds = tileLayer.getTiles();
+
+		const glm::i32vec2 goodGridPosition = TiledGridPositionToEngineGridPosition(tileLayer, gridPosition);
+		const std::int32_t tileIdIndex = goodGridPosition.y * layerGridSize.x + goodGridPosition.x;
+
+		const bool outsideTileIdsBounds = tileIdIndex < 0 || tileIdIndex >= tileIds.size();
+
+		if (outsideTileIdsBounds) return false;
+
+		return tileIds[tileIdIndex].ID != 0;
 	}
 
 	glm::vec2 TiledMap2dRendererComponent::GridPositionToWorldPosition(
@@ -152,21 +161,9 @@ namespace GEngine
 		const CellPosition cellPosition
 		) const
 	{
-		const std::shared_ptr<TiledMapResource> tiledMap = _tiledMapPtr.lock();
-		if (!tiledMap) return Vec2Extensions::Zero;
-
-		const std::shared_ptr<tmx::Map> mapData = tiledMap->GetRawMap().lock();
-		if (!mapData) return Vec2Extensions::Zero;
-
-		const std::vector<tmx::Layer::Ptr>& layers = mapData->getLayers();
-
-		if (VectorExtensions::IsIndexOutsideBounds(layers, layerIndex)) return Vec2Extensions::Zero;
-
-		const tmx::Layer::Ptr& layer = layers[layerIndex];
-
-		if (layer->getType() != tmx::Layer::Type::Tile) return Vec2Extensions::Zero;
-
-		const tmx::TileLayer& tileLayer = layer->getLayerAs<tmx::TileLayer>();
+		const auto optionalLayer = GetTileLayer(layerIndex);
+		if (!optionalLayer) return Vec2Extensions::Zero;
+		const tmx::TileLayer& tileLayer = optionalLayer->get();
 
 		const std::shared_ptr<Entity> entity = GetEntity().lock();
 		if (entity == nullptr) return Vec2Extensions::Zero;
@@ -174,9 +171,7 @@ namespace GEngine
 		const std::shared_ptr<TransformComponent> transform = entity->GetTransform().lock();
 		if (transform == nullptr) return Vec2Extensions::Zero;
 
-		const tmx::Vector2u pixelSizeOfTile = mapData->getTileSize();
-
-		if (pixelSizeOfTile.x == 0 || pixelSizeOfTile.y == 0) return Vec2Extensions::Zero;
+		if (_tilePixelSize.x == 0 || _tilePixelSize.y == 0) return Vec2Extensions::Zero;
 
 		const glm::vec2 position = transform->GetPositionXY();
 		const float rotation = transform->GetRotationEulerZ();
@@ -187,9 +182,7 @@ namespace GEngine
 			position,
 			rotation,
 			scale,
-			mapData.get(),
-			gridPosition.x,
-			gridPosition.y,
+			gridPosition,
 			cellPosition
 		);
 	}
@@ -199,36 +192,22 @@ namespace GEngine
 		const glm::vec2 &worldPosition
 		) const
 	{
-		const std::shared_ptr<TiledMapResource> tiledMap = _tiledMapPtr.lock();
-		if (!tiledMap) return Vec2Extensions::Zero;
-
-		const std::shared_ptr<tmx::Map> mapData = tiledMap->GetRawMap().lock();
-		if (!mapData) return Vec2Extensions::Zero;
-
-		const std::vector<tmx::Layer::Ptr>& layers = mapData->getLayers();
-
-		if (VectorExtensions::IsIndexOutsideBounds(layers, layerIndex)) return Vec2Extensions::Zero;
-
-		const tmx::Layer::Ptr& layer = layers[layerIndex];
-
-		if (layer->getType() != tmx::Layer::Type::Tile) return Vec2Extensions::Zero;
-
-		const tmx::TileLayer& tileLayer = layer->getLayerAs<tmx::TileLayer>();
+		const auto optionalLayer = GetTileLayer(layerIndex);
+		if (!optionalLayer) return Vec2Extensions::Int32Zero;
+		const tmx::TileLayer& tileLayer = optionalLayer->get();
 
 		const std::shared_ptr<Entity> entity = GetEntity().lock();
-		if (entity == nullptr) return Vec2Extensions::Zero;
+		if (entity == nullptr) return Vec2Extensions::Int32Zero;
 
 		const std::shared_ptr<TransformComponent> transform = entity->GetTransform().lock();
-		if (transform == nullptr) return Vec2Extensions::Zero;
+		if (transform == nullptr) return Vec2Extensions::Int32Zero;
 
 		const glm::vec2 position = transform->GetPositionXY();
 		const float rotation = transform->GetRotationEulerZ();
 		const glm::vec2 scale = transform->GetScaleXY();
 
-		const tmx::Vector2u pixelSizeOfTile = mapData->getTileSize();
-
-		const tmx::Vector2u layerGridSize = tileLayer.getSize();
-		const tmx::Vector2u layerPixelSize = layerGridSize * pixelSizeOfTile;
+		const glm::vec2 layerGridSize = { tileLayer.getSize().x, tileLayer.getSize().y };
+		const glm::vec2 layerPixelSize = layerGridSize * _tilePixelSize;
 		const glm::vec2 layerPixelSizeScaled = { layerPixelSize.x * scale.x, layerPixelSize.y * scale.y };
 
 		const float layerStartPositionX = position.x - (layerPixelSizeScaled.x * 0.5f);
@@ -259,6 +238,16 @@ namespace GEngine
 		return VectorExtensions::GetOrDefault(_layersData, layerIndex, TiledLayerData::Default).Visible;
 	}
 
+	glm::i32vec2 TiledMap2dRendererComponent::TiledGridPositionToEngineGridPosition(
+		const tmx::TileLayer& tileLayer,
+		const glm::i32vec2 gridPosition
+	)
+	{
+		const tmx::Vector2 layerGridSize = tileLayer.getSize();
+		const std::int32_t gridPositionY = layerGridSize.y - gridPosition.y - 1;
+		return { gridPosition.x, gridPositionY };
+	}
+
 	void TiledMap2dRendererComponent::GenerateLayersData()
 	{
 		_layersData.clear();
@@ -282,6 +271,29 @@ namespace GEngine
 
 			_layersData.push_back(layerData);
 		}
+
+		_tilePixelSize = { mapData->getTileSize().x, mapData->getTileSize().y };
+	}
+
+	std::optional<std::reference_wrapper<const tmx::TileLayer>> TiledMap2dRendererComponent::GetTileLayer(const std::int32_t layerIndex) const
+	{
+		const std::shared_ptr<TiledMapResource> tiledMap = _tiledMapPtr.lock();
+		if (!tiledMap) return std::nullopt;
+
+		const std::shared_ptr<tmx::Map> mapData = tiledMap->GetRawMap().lock();
+		if (!mapData) return std::nullopt;
+
+		const std::vector<tmx::Layer::Ptr>& layers = mapData->getLayers();
+
+		if (VectorExtensions::IsIndexOutsideBounds(layers, layerIndex)) return std::nullopt;
+
+		const tmx::Layer::Ptr& layer = layers[layerIndex];
+
+		if (layer->getType() != tmx::Layer::Type::Tile) return std::nullopt;
+
+		const tmx::TileLayer& tileLayer = layer->getLayerAs<tmx::TileLayer>();
+
+		return std::cref(tileLayer);
 	}
 
 	glm::vec2 TiledMap2dRendererComponent::GridPositionToWorldPosition(
@@ -289,30 +301,26 @@ namespace GEngine
 		const glm::vec2 tilemapPosition,
 		const float tilemapRotation,
 		const glm::vec2 tilemapScale,
-		const tmx::Map *mapData,
-		const std::int32_t x,
-		const std::int32_t y,
+		const glm::i32vec2& gridPosition,
 		const CellPosition cellPosition
-		)
+		) const
 	{
-		const tmx::Vector2u pixelSizeOfTile = mapData->getTileSize();
+		if (_tilePixelSize.x == 0 || _tilePixelSize.y == 0) return Vec2Extensions::Zero;
 
-		if (pixelSizeOfTile.x == 0 || pixelSizeOfTile.y == 0) return Vec2Extensions::Zero;
-
-		const tmx::Vector2u layerGridSize = tileLayer.getSize();
-		const tmx::Vector2u layerPixelSize = layerGridSize * pixelSizeOfTile;
+		const glm::vec2 layerGridSize = { tileLayer.getSize().x, tileLayer.getSize().y };
+		const glm::vec2 layerPixelSize = layerGridSize * _tilePixelSize;
 		const glm::vec2 layerPixelSizeScaled = { layerPixelSize.x * tilemapScale.x, layerPixelSize.y * tilemapScale.y };
 
 		const float layerStartPositionX = tilemapPosition.x - (layerPixelSizeScaled.x * 0.5f);
 		const float layerStartPositionY = tilemapPosition.y - (layerPixelSizeScaled.y * 0.5f);
 
-		float tilePositionX = layerStartPositionX + (static_cast<float>(x) * pixelSizeOfTile.x * tilemapScale.x);
-		float tilePositionY = layerStartPositionY + (static_cast<float>(y) * pixelSizeOfTile.y * tilemapScale.y);
+		float tilePositionX = layerStartPositionX + (static_cast<float>(gridPosition.x) * _tilePixelSize.x * tilemapScale.x);
+		float tilePositionY = layerStartPositionY + (static_cast<float>(gridPosition.y) * _tilePixelSize.y * tilemapScale.y);
 
 		if (cellPosition == CellPosition::CENTER)
 		{
-			tilePositionX += pixelSizeOfTile.x * 0.5f;
-			tilePositionY += pixelSizeOfTile.y * 0.5f;
+			tilePositionX += _tilePixelSize.x * 0.5f;
+			tilePositionY += _tilePixelSize.y * 0.5f;
 		}
 
 		const glm::vec2 point = { tilePositionX, tilePositionY };
@@ -323,7 +331,6 @@ namespace GEngine
 	}
 
 	void TiledMap2dRendererComponent::RenderLayerGrid(
-		const ResourcesModule* resourcesModule,
 		const TiledMapResource* tiledMapResource,
 		const tmx::Map* mapData,
 		const std::vector<tmx::TileLayer::Tile> &layerTileIds,
@@ -333,7 +340,7 @@ namespace GEngine
 		const glm::vec2& position,
 		const float rotation,
 		const glm::vec2& scale
-		)
+		) const
 	{
 		const std::vector<tmx::Tileset>& tileSets = mapData->getTilesets();
 
@@ -396,9 +403,7 @@ namespace GEngine
 					position,
 					-rotation,
 					scale,
-					mapData,
-					x,
-					y
+					{x, y}
 					);
 
 				Rectangle source = {

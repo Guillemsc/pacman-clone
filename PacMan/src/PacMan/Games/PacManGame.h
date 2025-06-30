@@ -16,22 +16,25 @@ namespace GEngine
 	class Entity;
 }
 
-class PacManGame : public GEngine::Game
+namespace PacMan
 {
-public:
-	~PacManGame() override;
+	class PacManGame : public GEngine::Game
+	{
+	public:
+		~PacManGame() override;
 
-	void Init() override;
-	void Tick() override;
-	void Dispose() override;
+		void Init() override;
+		void Tick() override;
+		void Dispose() override;
 
-private:
-	std::weak_ptr<GEngine::Entity> _playerEntity;
-	std::weak_ptr<GEngine::TiledMap2dRendererComponent> _tilemap;
-	glm::i32vec2 _playerGridPosition;
+	private:
+		std::weak_ptr<GEngine::Entity> _playerEntity;
+		std::weak_ptr<GEngine::TiledMap2dRendererComponent> _tilemap;
+		glm::i32vec2 _playerGridPosition;
 
-	GEngine::CoroutineRunner _runner;
-};
+		GEngine::CoroutineRunner _runner;
+	};
+}
 
 
 

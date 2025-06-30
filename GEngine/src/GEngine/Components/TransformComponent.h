@@ -23,9 +23,10 @@ namespace GEngine
 		explicit TransformComponent(const std::weak_ptr<Entity> &entity);
 		~TransformComponent() override;
 
-		const char* GetTypeName() override { return "Transform"; }
+		constexpr const char* GetTypeName() override { return "Transform"; }
 
 		void SetPosition(const glm::vec3 &position);
+		void SetPositionXY(const glm::vec2 &position);
 		void SetLocalPosition(const glm::vec3 &position);
 
 		void SetRotation(const glm::quat &rotation);
@@ -64,6 +65,8 @@ namespace GEngine
 		void RecalculateWorldMatrix();
 
 	private:
+		std::shared_ptr<SerializedProperty<glm::vec3>> _localPositionProperty;
+
 		glm::vec3 _worldPosition = glm::vec3(0);
 		glm::quat _worldRotation = glm::identity<glm::quat>();
 		glm::vec3 _worldRotationEuler = glm::vec3(0);

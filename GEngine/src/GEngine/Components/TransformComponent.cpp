@@ -6,6 +6,7 @@
 
 #include "TransformComponent.h"
 
+#include "GEngine/Extensions/Vec3Extensions.h"
 #include "glm/gtx/matrix_decompose.hpp"
 #include "glm/gtx/quaternion.hpp"
 
@@ -13,7 +14,7 @@ namespace GEngine
 {
 	TransformComponent::TransformComponent(const std::weak_ptr<Entity> &entity) : Component(entity)
 	{
-
+		_localPositionProperty = _serializedProperties.Add("Position", Vec3Extensions::Zero);
 	}
 
 	TransformComponent::~TransformComponent()
@@ -32,6 +33,11 @@ namespace GEngine
 		RecalculateLocalPosition();
 		ComposeLocalMatrix();
 		RecalculateChildrenHierarchyWorldMatrices();
+	}
+
+	void TransformComponent::SetPositionXY(const glm::vec2 &position)
+	{
+		SetPosition( {position.x, position.y, _worldPosition.z} );
 	}
 
 	void TransformComponent::SetLocalPosition(const glm::vec3 &position)

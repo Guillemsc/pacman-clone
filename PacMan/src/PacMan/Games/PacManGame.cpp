@@ -22,101 +22,102 @@
 #include "GEngine/Resources/TiledMapResource.h"
 #include "GEngine/Systems/System.h"
 #include "GEngine/Timers/ChronoTimer.h"
-#include "PacMan/Systems/MapMovementSystem.h"
+#include "PacMan/Components/GridMovementComponent.h"
+#include "PacMan/Systems/GridMovementSystem.h"
 #include "spdlog/spdlog.h"
 
-namespace Pacman
+namespace PacMan
 {
-	class MapMovementSystem;
-}
+	PacManGame::~PacManGame()
+	{
 
-PacManGame::~PacManGame()
-{
+	}
 
-}
+	void PacManGame::Init()
+	{
+		const auto app = _app.lock();
+		if (!app) return;
 
-void PacManGame::Init()
-{
-	const auto app = _app.lock();
-	if (!app) return;
+		std::shared_ptr<GEngine::EntitiesModule> entities = app->Entities().lock();
+		std::shared_ptr<GEngine::GameModule> game = app->Game().lock();
+		std::shared_ptr<GEngine::ResourcesModule> resources = app->Resources().lock();
+		std::shared_ptr<GEngine::SystemsModule> systems = app->Systems().lock();
 
-	std::shared_ptr<GEngine::EntitiesModule> entities = app->Entities().lock();
-	std::shared_ptr<GEngine::GameModule> game = app->Game().lock();
-	std::shared_ptr<GEngine::ResourcesModule> resources = app->Resources().lock();
-	std::shared_ptr<GEngine::SystemsModule> systems = app->Systems().lock();
+		auto cameraEntity = entities->AddEntity();
+		cameraEntity.lock()->SetName("Camera");
+		cameraEntity.lock()->AddComponent<GEngine::CameraComponent>();
+		cameraEntity.lock()->GetTransform().lock()->SetPosition({0, 0, -320});
 
-	auto cameraEntity = entities->AddEntity();
-	cameraEntity.lock()->SetName("Camera");
-	cameraEntity.lock()->AddComponent<GEngine::CameraComponent>();
-	cameraEntity.lock()->GetTransform().lock()->SetPosition({0, 0, -320});
+		const auto tilemapEntity = entities->AddEntity();
+		tilemapEntity.lock()->SetName("Tilemap");
+		_tilemap = tilemapEntity.lock()->AddComponent<GEngine::TiledMap2dRendererComponent>();
 
-	const auto tilemapEntity = entities->AddEntity();
-	tilemapEntity.lock()->SetName("Tilemap");
-	_tilemap = tilemapEntity.lock()->AddComponent<GEngine::TiledMap2dRendererComponent>();
+		auto tilemapResource = resources->GetResource<GEngine::TiledMapResource>("Tiled/maps/test-map.tmx");
 
-	auto tilemapResource = resources->GetResource<GEngine::TiledMapResource>("Tiled/maps/test-map.tmx");
+		_tilemap.lock()->SetTiledMap(tilemapResource);
+		_tilemap.lock()->GetLayerGridSize(0);
 
-	_tilemap.lock()->SetTiledMap(tilemapResource);
-	_tilemap.lock()->GetLayerGridSize(0);
+		_playerEntity = entities->AddEntity();
+		_playerEntity.lock()->SetName("Player");
+		_playerEntity.lock()->AddComponent<GEngine::Shape2dRendererComponent>();
+		_playerEntity.lock()->AddComponent<GridMovementComponent>();
 
-	_playerEntity = entities->AddEntity();
-	_playerEntity.lock()->SetName("Player");
-	_playerEntity.lock()->AddComponent<GEngine::Shape2dRendererComponent>();
+		_playerEntity.lock()->GetTransform().lock()->SetPosition({0, 0, 0});
 
-	_playerEntity.lock()->GetTransform().lock()->SetPosition({0, 0, 0});
+		//std::weak_ptr<GEngineCore::TextureResource> texture = resources->GetResource<GEngineCore::TextureResource>("proxy-image.png");
+		//textureComponent.lock()->SetTexture(texture);
 
-	//std::weak_ptr<GEngineCore::TextureResource> texture = resources->GetResource<GEngineCore::TextureResource>("proxy-image.png");
-	//textureComponent.lock()->SetTexture(texture);
+		const std::shared_ptr<GridMovementSystem> mapMovementSystem = std::make_shared<GridMovementSystem>(
+		tilemapEntity.lock()->GetComponent<GEngine::TiledMap2dRendererComponent>()
+		);
+		mapMovementSystem->Add(_playerEntity.lock()->GetComponent<GridMovementComponent>());
+		systems->AddSystem(mapMovementSystem);
 
-	std::shared_ptr<Pacman::MapMovementSystem> mapMovementSystem = std::make_shared<Pacman::MapMovementSystem>(
-		_playerEntity,
-		_tilemap
-	);
-	//systems->AddSystem(mapMovementSystem);
+		const std::shared_ptr<GEngine::Coroutine> coroutine = GEngine::CoroutineBuilder()
+			.Add(std::make_shared<GEngine::WaitFramesCoroutine>(4))
+			.Add(std::make_shared<GEngine::WaitSecondsCoroutine>(4))
+			.Add([]()
+			{
+				spdlog::info("Coroutine Finished!");
+			})
+			.Build();
 
-	const std::shared_ptr<GEngine::Coroutine> coroutine = GEngine::CoroutineBuilder()
-		.Add(std::make_shared<GEngine::WaitFramesCoroutine>(4))
-		.Add(std::make_shared<GEngine::WaitSecondsCoroutine>(4))
-		.Add([]()
+		_runner.Run(coroutine);
+	}
+
+	void PacManGame::Tick()
+	{
+		GEngine::CardinalDirection direction = _playerEntity.lock()->GetComponent<GridMovementComponent>().lock()->NextDirection;
+
+		if (IsKeyPressed(KEY_RIGHT))
 		{
-			spdlog::info("Coroutine Finished!");
-		})
-		.Build();
+			direction = GEngine::CardinalDirection::RIGHT;
+		}
 
-	_runner.Run(coroutine);
-}
+		if (IsKeyPressed(KEY_LEFT))
+		{
+			direction = GEngine::CardinalDirection::LEFT;
+		}
 
-void PacManGame::Tick()
-{
-	if (IsKeyPressed(KEY_RIGHT))
-	{
-		_playerGridPosition.x += 1;
+		if (IsKeyPressed(KEY_UP))
+		{
+			direction = GEngine::CardinalDirection::UP;
+		}
+
+		if (IsKeyPressed(KEY_DOWN))
+		{
+			direction = GEngine::CardinalDirection::DOWN;
+		}
+
+		_playerEntity.lock()->GetComponent<GridMovementComponent>().lock()->NextDirection = direction;
+
+		_runner.Tick();
 	}
 
-	if (IsKeyPressed(KEY_LEFT))
+	void PacManGame::Dispose()
 	{
-		_playerGridPosition.x -= 1;
+
 	}
-
-	if (IsKeyPressed(KEY_UP))
-	{
-		_playerGridPosition.y += 1;
-	}
-
-	if (IsKeyPressed(KEY_DOWN))
-	{
-		_playerGridPosition.y -= 1;
-	}
-
-	glm::vec2 worldPosition = _tilemap.lock()->GridPositionToWorldPosition(0, _playerGridPosition, GEngine::CellPosition::CENTER);
-	_playerEntity.lock()->GetTransform().lock()->SetPosition({worldPosition.x, worldPosition.y, 0});
-
-	_runner.Tick();
-}
-
-void PacManGame::Dispose()
-{
-
 }
 
 

@@ -8,7 +8,7 @@ int main()
 {
     const auto app = std::make_shared<GEngine::GEngineCoreApplication>();
     app->Init();
-	app->Game().lock()->LoadGame(std::make_shared<PacManGame>());
+	app->Game().lock()->LoadGame(std::make_shared<PacMan::PacManGame>());
 
     while (app->CanRun())
     {

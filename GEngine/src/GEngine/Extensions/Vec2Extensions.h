@@ -14,6 +14,7 @@ namespace GEngine
 	{
 	public:
 		constexpr static glm::vec2 Zero = glm::vec2(0);
+		constexpr static glm::i32vec2 Int32Zero = glm::i32vec2(0);
 
 		static glm::vec2 GetNormalizedValue(const glm::vec2 value, const glm::vec2 start, const glm::vec2 end)
 		{

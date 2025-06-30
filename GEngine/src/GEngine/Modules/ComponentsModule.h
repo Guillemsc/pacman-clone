@@ -25,9 +25,6 @@ namespace GEngine
 
 		void Dispose();
 
-		bool RemoveComponentFromEntity(const std::weak_ptr<Entity> &entityPtr, const std::weak_ptr<Component> &componentPtr);
-		void RemoveAllComponentsFromEntity(const std::weak_ptr<Entity> &entityPtr);
-
 	private:
 		void TickEntityComponents(Entity* entityPtr);
 

@@ -19,7 +19,7 @@ namespace GEngine
 	public:
 		explicit Texture2dRendererComponent(const std::weak_ptr<Entity> &entity);
 
-		const char* GetTypeName() override { return "Texture2dRenderer"; }
+		constexpr const char* GetTypeName() override { return "Texture2dRenderer"; }
 
 		void OnTick() override;
 

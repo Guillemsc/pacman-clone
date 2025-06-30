@@ -13,6 +13,7 @@
 #include "GEngine/Editor/ComponentsInspector/TransformComponentInspectorEditor.h"
 #include "GEngine/Editor/Extensions/ImGuiExtensions.h"
 #include "GEngine/Entities/Entity.h"
+#include "GEngine/Modules/EditorModule.h"
 
 namespace GEngine
 {
@@ -45,6 +46,12 @@ namespace GEngine
 
 	void EntityInspectorEditor::DrawComponents(const std::shared_ptr<Entity> &inspect)
 	{
+		const std::shared_ptr<GEngineCoreApplication> app = _app.lock();
+		if (!app) return;
+
+		const std::shared_ptr<EditorModule> editor = app->Editor().lock();
+		if (!editor) return;
+
 		const std::vector<std::shared_ptr<Component>>& components = inspect->GetComponents();
 
 		for (auto it = components.begin(); it != components.end(); ++it)
@@ -55,13 +62,19 @@ namespace GEngine
 
 			if (ImGui::CollapsingHeader(name, ImGuiTreeNodeFlags_DefaultOpen))
 			{
-				if (!inspector)
+				if (inspector)
 				{
-					ImGui::Text("Cannot be inspected");
+					inspector->Draw(*it);
 					continue;
 				}
 
-				inspector->Draw(*it);
+				const SerializedPropertyContainer& serializedProperties = (*it)->GetSerializedProperties();
+				const std::vector<std::shared_ptr<ISerializedProperty>>& properties = serializedProperties.GetProperties();
+
+				for (auto it = properties.begin(); it != properties.end(); ++it)
+				{
+					editor->DrawProperty(it->get());
+				}
 			}
 		}
 	}
