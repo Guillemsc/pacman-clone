@@ -65,7 +65,7 @@ namespace GEngine
 		void RecalculateWorldMatrix();
 
 	private:
-		std::shared_ptr<SerializedProperty<glm::vec3>> _localPositionProperty;
+		std::shared_ptr<Property<glm::vec3>> _localPositionProperty;
 
 		glm::vec3 _worldPosition = glm::vec3(0);
 		glm::quat _worldRotation = glm::identity<glm::quat>();

@@ -6,18 +6,17 @@
 #define COMPONENT_H
 
 #include "GEngine/Entities/Entity.h"
-#include "GEngine/SerializedProperties/SerializedPropertyContainer.h"
+#include "GEngine/SerializedProperties/PropertiesContainer.h"
 
 namespace GEngine
 {
-	class Component
+	class Component : public GEngineObject
 	{
 	friend class ComponentsModule;
 	friend class Entity;
 
 	public:
 		explicit Component(const std::weak_ptr<Entity> &entity);
-		virtual ~Component() = 0;
 
 		std::weak_ptr<Entity> GetEntity() const;
 		std::weak_ptr<GEngineCoreApplication> GetApp() const;
@@ -25,7 +24,7 @@ namespace GEngine
 		bool IsEnanbled() const;
 		void SetEnabled(bool enabled);
 
-		const SerializedPropertyContainer& GetSerializedProperties() const;
+		const PropertiesContainer& GetSerializedProperties() const;
 
 		virtual constexpr const char* GetTypeName() = 0;
 
@@ -40,7 +39,7 @@ namespace GEngine
 		void RefreshEnabledState();
 
 	protected:
-		SerializedPropertyContainer _serializedProperties;
+		PropertiesContainer _serializedProperties;
 
 	private:
 		std::weak_ptr<Entity> _entity;

@@ -30,12 +30,12 @@ namespace PacMan
 				continue;
 			}
 
-			// if(Gengine::CardinalDirectionExtensions::AreInverseDirections(component->Direction, component->NextDirection))
-			// {
-			// 	component->GridPosition = component->GridPosition + Gengine::CardinalDirectionExtensions::GetDirectionVector(component->Direction);
-			// 	component->Direction = component->NextDirection;
-			// 	component->ProgressToTarget = 1 - component->ProgressToTarget;
-			// }
+			if(GEngine::CardinalDirectionExtensions::AreInverseDirections(component->Direction, component->NextDirection))
+			{
+				component->GridPosition = component->GridPosition + GEngine::CardinalDirectionExtensions::GetDirectionVector(component->Direction);
+				component->Direction = component->NextDirection;
+				component->ProgressToTarget = 1 - component->ProgressToTarget;
+			}
 
 			glm::i32vec2 directionVector = GEngine::CardinalDirectionExtensions::GetDirectionVector(component->Direction);
 			glm::i32vec2 targetGridPosition = component->GridPosition + directionVector;
@@ -63,6 +63,8 @@ namespace PacMan
 						component.get(),
 						component->NextDirection
 					);
+
+					component->GetEntity().lock()->GetTransform().lock()->SetPositionXY(endWorldPosition);
 				}
 			}
 			else
@@ -83,7 +85,7 @@ namespace PacMan
 		_components.push_back(component);
 	}
 
-	void GridMovementSystem::TryApplyNextDirection(
+	bool GridMovementSystem::TryApplyNextDirection(
 		const GEngine::TiledMap2dRendererComponent* mapComponent,
 		GridMovementComponent *movementComponent,
 		const GEngine::CardinalDirection direction
@@ -100,6 +102,8 @@ namespace PacMan
 		{
 			movementComponent->Direction = movementComponent->NextDirection;
 		}
+
+		return isValidNextDirection;
 	}
 
 	bool GridMovementSystem::IsValidNextDirection(

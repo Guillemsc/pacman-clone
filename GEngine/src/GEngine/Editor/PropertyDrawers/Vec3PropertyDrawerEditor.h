@@ -6,7 +6,7 @@
 #define VEC3PROPERTYDRAWEREDITOR_H
 
 #include "PropertyDrawerEditor.h"
-#include "GEngine/SerializedProperties/SerializedProperty.h"
+#include "GEngine/SerializedProperties/Property.h"
 #include "glm/vec3.hpp"
 
 namespace GEngine
@@ -14,7 +14,7 @@ namespace GEngine
 	class Vec3PropertyDrawerEditor final : public PropertyDrawerEditor<glm::vec3>
 	{
 	public:
-		void DrawSpecific(SerializedProperty<glm::vec3>* inspect) override;
+		void DrawSpecific(Property<glm::vec3>* inspect) override;
 	};
 }
 

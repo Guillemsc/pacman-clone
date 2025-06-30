@@ -9,8 +9,10 @@ namespace GEngine
 {
 	enum GEngineObjectType
 	{
+		UNKNOWN,
 		ENTITY,
 		RESOURCE,
+		SHAPE_2D
 	};
 }
 

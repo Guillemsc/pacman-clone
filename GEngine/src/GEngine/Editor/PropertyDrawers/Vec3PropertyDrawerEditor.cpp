@@ -8,7 +8,7 @@
 
 namespace GEngine
 {
-	void Vec3PropertyDrawerEditor::DrawSpecific(SerializedProperty<glm::vec3>* inspect)
+	void Vec3PropertyDrawerEditor::DrawSpecific(Property<glm::vec3>* inspect)
 	{
 		glm::vec3 value = inspect->GetValue();
 		if (ImGui::DragFloat3(inspect->GetName().c_str(), &value.x, 0.1f))

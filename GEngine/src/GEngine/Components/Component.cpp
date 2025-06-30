@@ -11,10 +11,6 @@ namespace GEngine
 		_entity = entity;
 	}
 
-	Component::~Component()
-	{
-	}
-
 	std::weak_ptr<Entity> Component::GetEntity() const
 	{
 		return _entity;
@@ -40,7 +36,7 @@ namespace GEngine
 		RefreshEnabledState();
 	}
 
-	const SerializedPropertyContainer & Component::GetSerializedProperties() const
+	const PropertiesContainer & Component::GetSerializedProperties() const
 	{
 		return _serializedProperties;
 	}

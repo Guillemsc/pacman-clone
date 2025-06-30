@@ -2,14 +2,14 @@
 // Created by guillem on 6/29/25.
 //
 
-#ifndef SERIALIZEDPROPERTY_H
-#define SERIALIZEDPROPERTY_H
+#ifndef PROPERTY_H
+#define PROPERTY_H
 
 #include <string>
 
 namespace GEngine
 {
-	class ISerializedProperty
+	class IProperty
 	{
 	public:
 		virtual const std::string& GetName() const = 0;
@@ -19,10 +19,10 @@ namespace GEngine
 	// -------------------------------------------------------
 
 	template<class TValue>
-	class SerializedProperty : public ISerializedProperty
+	class Property : public IProperty
 	{
 	public:
-		explicit SerializedProperty(const std::string &name, TValue value);
+		explicit Property(const std::string &name, TValue value);
 
 		const std::string& GetName() const override;
 		TValue GetValue() const;
@@ -37,26 +37,26 @@ namespace GEngine
 	// -------------------------------------------------------
 
 	template<class TValue>
-	SerializedProperty<TValue>::SerializedProperty(const std::string &name, TValue value)
+	Property<TValue>::Property(const std::string &name, TValue value)
 	{
 		_name = name;
 		_value = value;
 	}
 
 	template<class TValue>
-	const std::string & SerializedProperty<TValue>::GetName() const
+	const std::string & Property<TValue>::GetName() const
 	{
 		return _name;
 	}
 
 	template<class TValue>
-	TValue SerializedProperty<TValue>::GetValue() const
+	TValue Property<TValue>::GetValue() const
 	{
 		return _value;
 	}
 
 	template<class TValue>
-	void SerializedProperty<TValue>::SetValue(const TValue &value)
+	void Property<TValue>::SetValue(const TValue &value)
 	{
 		_value = value;
 	}

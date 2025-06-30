@@ -14,7 +14,7 @@ namespace GEngine
 {
 	TransformComponent::TransformComponent(const std::weak_ptr<Entity> &entity) : Component(entity)
 	{
-		_localPositionProperty = _serializedProperties.Add("Position", Vec3Extensions::Zero);
+		_localPositionProperty = _serializedProperties.Register("Position", Vec3Extensions::Zero);
 	}
 
 	TransformComponent::~TransformComponent()

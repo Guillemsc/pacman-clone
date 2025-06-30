@@ -13,7 +13,7 @@
 namespace GEngine
 {
 	class IPropertyDrawerEditor;
-	class ISerializedProperty;
+	class IProperty;
 	class MenuBarEditor;
 	class GEngineObject;
 	class Entity;
@@ -30,7 +30,8 @@ namespace GEngine
 		template<class TPropertyDrawer, class TSerializedProperty>
 		void RegisterPropertyDrawer();
 
-		void DrawProperty(ISerializedProperty* property) const;
+		void DrawProperty(IProperty* property) const;
+		void DrawObject(const GEngineObject* gEngineObject) const;
 
 		void SetSelectedObject(const std::weak_ptr<GEngineObject> &object);
 		[[nodiscard]] std::weak_ptr<GEngineObject> GetSelectedObject() const;
@@ -62,7 +63,7 @@ namespace GEngine
 	void EditorModule::RegisterPropertyDrawer()
 	{
 		static_assert(std::is_base_of_v<IPropertyDrawerEditor, TPropertyDrawer>, "TPropertyDrawer is not derived from PropertyDrawerEditor");
-		static_assert(std::is_base_of_v<ISerializedProperty, TSerializedProperty>, "TSerializedProperty is not derived from ISerializedProperty");
+		static_assert(std::is_base_of_v<IProperty, TSerializedProperty>, "TSerializedProperty is not derived from ISerializedProperty");
 
 		const std::type_index typeIndex = typeid(TSerializedProperty);
 

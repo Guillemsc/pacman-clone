@@ -6,6 +6,7 @@
 #define GENGINEOBJECT_H
 
 #include "GEngineObjectType.h"
+#include "GEngine/SerializedProperties/PropertiesContainer.h"
 
 namespace GEngine
 {
@@ -14,7 +15,18 @@ namespace GEngine
 	public:
 		virtual ~GEngineObject() = default;
 
-		virtual GEngineObjectType GetObjectType() = 0;
+		virtual GEngineObjectType GetObjectType()
+		{
+			return GEngineObjectType::UNKNOWN;
+		};
+
+		const PropertiesContainer& GetProperties() const
+		{
+			return _properties;
+		}
+
+	protected:
+		PropertiesContainer _properties;
 	};
 }
 

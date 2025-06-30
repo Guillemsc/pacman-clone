@@ -7,7 +7,7 @@
 
 #include <memory>
 
-#include "GEngine/SerializedProperties/SerializedProperty.h"
+#include "GEngine/SerializedProperties/Property.h"
 
 namespace GEngine
 {
@@ -16,7 +16,7 @@ namespace GEngine
 	public:
 		virtual ~IPropertyDrawerEditor() = default;
 
-		virtual void Draw(ISerializedProperty* inspect) = 0;
+		virtual void Draw(IProperty* inspect) = 0;
 	};
 
 	// -------------------------------------------------------
@@ -26,16 +26,16 @@ namespace GEngine
 	class PropertyDrawerEditor : public IPropertyDrawerEditor
 	{
 	public:
-		void Draw(ISerializedProperty* inspect) override;
+		void Draw(IProperty* inspect) override;
 
 	protected:
-		virtual void DrawSpecific(SerializedProperty<T>* inspect) = 0;
+		virtual void DrawSpecific(Property<T>* inspect) = 0;
 	};
 
 	template<class T>
-	void PropertyDrawerEditor<T>::Draw(ISerializedProperty* inspect)
+	void PropertyDrawerEditor<T>::Draw(IProperty* inspect)
 	{
-		if (auto casted = dynamic_cast<SerializedProperty<T>*>(inspect))
+		if (auto casted = dynamic_cast<Property<T>*>(inspect))
 		{
 			DrawSpecific(casted);
 		}

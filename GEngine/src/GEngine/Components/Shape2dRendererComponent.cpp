@@ -7,12 +7,14 @@
 #include "raylib.h"
 #include "TransformComponent.h"
 #include "GEngine/Modules/RenderingModule.h"
+#include "GEngine/Shapes2d/RectShape2d.h"
 
 namespace GEngine
 {
 	Shape2dRendererComponent::Shape2dRendererComponent(const std::weak_ptr<Entity> &entity) : Component(entity)
 	{
-
+		_layer = _properties.Register("Layer", 0);
+		_shape2d = _properties.RegisterObject<Shape2d>("Shape", std::make_shared<RectShape2d>());
 	}
 
 	void Shape2dRendererComponent::OnTick()
@@ -29,29 +31,51 @@ namespace GEngine
 		const std::shared_ptr<TransformComponent> transform = entity->GetTransform().lock();
 		if (transform == nullptr) return;
 
-		float positionX = transform->GetPosition().x;
-		float positionY = -transform->GetPosition().y;
+		if (!_shape2d) return;
+
+		glm::vec2 position = transform->GetPositionXY();
+		position.y = -position.y;
 		float rotation = -transform->GetRotationEulerDegreesZ();
 		glm::vec2 scale = transform->GetScaleXY();
 
-		rendering->Render2D().lock()->Add(0, [positionX, positionY, rotation, scale]()
+		rendering->Render2D().lock()->Add(_layer->GetValue(), [position, rotation, scale, this]()
 		{
-			Vector2 size = {20 * scale.x, 20 * scale.y};
-			Vector2 center = { size.x * 0.5f, size.y * 0.5f };
-
-			Rectangle rectangle = {
-				positionX,
-				positionY,
-				size.x,
-				size.y,
-			};
-
-			DrawRectanglePro(rectangle, center, rotation, RED);
+			if (const auto rectShape = std::dynamic_pointer_cast<RectShape2d>(_shape2d->GetValue()))
+			{
+				RenderRectShape2d(position, rotation, scale, rectShape.get());
+			}
 		});
 	}
 
 	void Shape2dRendererComponent::OnDestroy()
 	{
 
+	}
+
+	void Shape2dRendererComponent::SetLayer(const int layer) const
+	{
+		_layer->SetValue(layer);
+	}
+
+	void Shape2dRendererComponent::RenderRectShape2d(
+		const glm::vec2& position,
+		const float rotation,
+		const glm::vec2& scale,
+		const RectShape2d* rectShape
+		) const
+	{
+		const glm::vec2 rectSize = rectShape->GetSize();
+
+		const Vector2 size = {rectSize.x * scale.x, rectSize.y * scale.y};
+		const Vector2 center = { size.x * 0.5f, size.y * 0.5f };
+
+		const Rectangle rectangle = {
+			position.x,
+			position.y,
+			size.x,
+			size.y,
+		};
+
+		DrawRectanglePro(rectangle, center, rotation, _color);
 	}
 } // GEngineCore

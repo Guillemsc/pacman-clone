@@ -41,6 +41,7 @@ namespace PacMan
 		auto _playerEntity = entities->AddEntity();
 		_playerEntity.lock()->SetName("Player");
 		_playerEntity.lock()->AddComponent<GEngine::Shape2dRendererComponent>();
+		_playerEntity.lock()->GetComponent<GEngine::Shape2dRendererComponent>().lock()->SetLayer(1);
 		_playerEntity.lock()->AddComponent<GridMovementComponent>();
 
 		_playerEntity.lock()->GetTransform().lock()->SetPosition({0, 0, 0});

@@ -30,7 +30,7 @@ namespace PacMan
 		void Add(const std::weak_ptr<GridMovementComponent> &component);
 
 	private:
-		static void TryApplyNextDirection(
+		static bool TryApplyNextDirection(
 			const GEngine::TiledMap2dRendererComponent* mapComponent,
 			GridMovementComponent *movementComponent,
 			const GEngine::CardinalDirection direction

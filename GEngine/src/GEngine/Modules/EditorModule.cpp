@@ -14,6 +14,7 @@
 #include "GEngine/Editor/Windows/InspectorEditorWindow.h"
 #include "GEngine/Editor/Windows/ResourcesEditorWindow.h"
 #include "GEngine/Extensions/UnorderedMapExtensions.h"
+#include "GEngine/Objects/GEngineObject.h"
 #include "GEngine/Rendering/ImGuiRenderer.h"
 
 namespace GEngine
@@ -24,7 +25,7 @@ namespace GEngine
 
 		_menuBar = std::make_shared<MenuBarEditor>(app);
 
-		RegisterPropertyDrawer<Vec3PropertyDrawerEditor, SerializedProperty<glm::vec3>>();
+		RegisterPropertyDrawer<Vec3PropertyDrawerEditor, Property<glm::vec3>>();
 
 		RegisterWindow<HierarchyEditorWindow>();
 		RegisterWindow<InspectorEditorWindow>();
@@ -40,7 +41,7 @@ namespace GEngine
 	{
 	}
 
-	void EditorModule::DrawProperty(ISerializedProperty *property) const
+	void EditorModule::DrawProperty(IProperty *property) const
 	{
 		const std::type_index typeIndex = typeid(*property);
 
@@ -52,6 +53,17 @@ namespace GEngine
 		}
 
 		optional.value()->Draw(property);
+	}
+
+	void EditorModule::DrawObject(const GEngineObject *gEngineObject) const
+	{
+		const PropertiesContainer& constainer = gEngineObject->GetProperties();
+		const std::vector<std::shared_ptr<IProperty>>& properties = constainer.GetProperties();
+
+		for (auto it = properties.begin(); it != properties.end(); ++it)
+		{
+			DrawProperty(it->get());
+		}
 	}
 
 	void EditorModule::SetSelectedObject(const std::weak_ptr<GEngineObject> &object)

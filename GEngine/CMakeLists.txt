@@ -154,8 +154,8 @@ add_library(GEngineCore STATIC
         src/GEngine/Coroutines/TimeSlicedCoroutine.cpp
         src/GEngine/Coroutines/TimeSlicedCoroutine.h
         src/GEngine/Data/CellPosition.h
-        src/GEngine/SerializedProperties/SerializedProperty.h
-        src/GEngine/SerializedProperties/SerializedPropertyContainer.h
+        src/GEngine/SerializedProperties/Property.h
+        src/GEngine/SerializedProperties/PropertiesContainer.h
         src/GEngine/Extensions/Vec3Extensions.h
         src/GEngine/Editor/PropertyDrawers/PropertyDrawerEditor.h
         src/GEngine/Editor/PropertyDrawers/Vec3PropertyDrawerEditor.cpp
@@ -166,6 +166,9 @@ add_library(GEngineCore STATIC
         src/GEngine/Modules/CoroutinesModule.cpp
         src/GEngine/Modules/CoroutinesModule.h
         src/GEngine/ServiceLocators/ServiceLocator.h
+        src/GEngine/Shapes2d/Shape2d.h
+        src/GEngine/Shapes2d/RectShape2d.cpp
+        src/GEngine/Shapes2d/RectShape2d.h
 )
 
 # Link raylib
