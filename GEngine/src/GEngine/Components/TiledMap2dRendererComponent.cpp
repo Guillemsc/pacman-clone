@@ -15,6 +15,7 @@
 #include "glm/vec2.hpp"
 #include "GEngine/Modules/RenderingModule.h"
 #include "GEngine/Modules/ResourcesModule.h"
+#include "GEngine/Rendering/Renderer2d.h"
 #include "GEngine/Resources/TextureResource.h"
 #include "GEngine/Resources/TiledMapResource.h"
 #include "tmxlite/TileLayer.hpp"
@@ -49,7 +50,7 @@ namespace GEngine
 		float rotation = transform->GetRotationEulerZ();
 		glm::vec2 scale = transform->GetScaleXY();
 
-		rendering->Render2D().lock()->Add(0, [rawMap, position, scale, rotation, this, tiledMap]
+		rendering->Renderer2D().lock()->Add(0, [rawMap, position, scale, rotation, this, tiledMap]
 		{
 			const tmx::Vector2u pixelSizeOfTile = rawMap->getTileSize();
 			const std::vector<tmx::Tileset>& tileSets = rawMap->getTilesets();

@@ -16,7 +16,7 @@ namespace PacMan
 	class PlayerInputSystem : public GEngine::System
 	{
 	public:
-		PlayerInputSystem(const std::weak_ptr<GridMovementComponent>& component);
+		explicit PlayerInputSystem(const std::weak_ptr<GridMovementComponent>& component);
 
 		void Tick() override;
 

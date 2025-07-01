@@ -9,6 +9,7 @@
 #include "GEngine/Components/Texture2dRendererComponent.h"
 #include "GEngine/Components/TiledMap2dRendererComponent.h"
 #include "GEngine/Components/TransformComponent.h"
+#include "GEngine/Components/UiShapeRendererComponent.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
 #include "GEngine/Coroutines/CoroutineBuilder.h"
 #include "GEngine/Coroutines/NestedCoroutine.h"
@@ -56,6 +57,10 @@ namespace PacMan
 		cameraEntity.lock()->SetName("Camera");
 		cameraEntity.lock()->AddComponent<GEngine::CameraComponent>();
 		cameraEntity.lock()->GetTransform().lock()->SetPosition({0, 0, -320});
+
+		// ======================================================
+		auto _uiEntity = entities->AddEntity(true);
+		_uiEntity.lock()->AddComponent<GEngine::UiShapeRendererComponent>();
 	}
 
 	void PacManGame::Tick()

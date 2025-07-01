@@ -7,6 +7,7 @@
 #include "TransformComponent.h"
 #include "GEngine/Extensions/RayLibExtensions.h"
 #include "GEngine/Modules/RenderingModule.h"
+#include "GEngine/Rendering/Renderer2d.h"
 #include "GEngine/Resources/TextureResource.h"
 
 namespace GEngine
@@ -41,7 +42,7 @@ namespace GEngine
 		position.x -= rawTexture.width * 0.5f * scale.x;
 		position.y -= rawTexture.height * 0.5f * scale.y;
 
-		rendering->Render2D().lock()->Add(0, [position, rotation, scale, rawTexture]()
+		rendering->Renderer2D().lock()->Add(0, [position, rotation, scale, rawTexture]()
 		{
 			RayLibExtensions::DrawTextureEx(rawTexture, {position.x, position.y}, rotation, {scale.x, scale.y}, WHITE);
 		});

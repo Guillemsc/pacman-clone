@@ -35,7 +35,6 @@ namespace GEngine
 		void Tick() const;
 		void Dispose() const;
 
-		std::weak_ptr<ComponentsModule> Components() { return _components; }
 		std::weak_ptr<EntitiesModule> Entities() { return _entities; }
 		std::weak_ptr<GameModule> Game() { return _game; }
 		std::weak_ptr<CameraModule> Camera() { return _camera; }
@@ -48,7 +47,6 @@ namespace GEngine
 		std::weak_ptr<EditorModule> Editor() { return _editor; }
 
 	private:
-		std::shared_ptr<ComponentsModule> _components = nullptr;
 		std::shared_ptr<EntitiesModule> _entities = nullptr;
 		std::shared_ptr<GameModule> _game = nullptr;
 		std::shared_ptr<CameraModule> _camera = nullptr;

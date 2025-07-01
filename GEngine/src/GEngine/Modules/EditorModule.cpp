@@ -5,9 +5,12 @@
 #include "EditorModule.h"
 
 #include "imgui.h"
+#include "raylib.h"
 #include "RenderingModule.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
 #include "GEngine/Editor/MenuBar/MenuBarEditor.h"
+#include "GEngine/Editor/PropertyDrawers/IntPropertyDrawerEditor.h"
+#include "GEngine/Editor/PropertyDrawers/Vec2PropertyDrawerEditor.h"
 #include "GEngine/Editor/PropertyDrawers/Vec3PropertyDrawerEditor.h"
 #include "GEngine/Editor/Windows/EditorWindow.h"
 #include "GEngine/Editor/Windows/HierarchyEditorWindow.h"
@@ -25,6 +28,8 @@ namespace GEngine
 
 		_menuBar = std::make_shared<MenuBarEditor>(app);
 
+		RegisterPropertyDrawer<IntPropertyDrawerEditor, Property<int>>();
+		RegisterPropertyDrawer<Vec2PropertyDrawerEditor, Property<glm::vec2>>();
 		RegisterPropertyDrawer<Vec3PropertyDrawerEditor, Property<glm::vec3>>();
 
 		RegisterWindow<HierarchyEditorWindow>();
@@ -35,6 +40,11 @@ namespace GEngine
 	void EditorModule::Tick()
 	{
 		RenderEditor();
+
+		if (IsKeyPressed(KeyboardKey::KEY_F1))
+		{
+			_editorRenderingEnabled = !_editorRenderingEnabled;
+		}
 	}
 
 	void EditorModule::Dispose()
@@ -43,6 +53,14 @@ namespace GEngine
 
 	void EditorModule::DrawProperty(IProperty *property) const
 	{
+		const std::shared_ptr<GEngineObject> object = property->GetObjectValue().lock();
+
+		if (object)
+		{
+			DrawObject(object.get());
+			return;
+		}
+
 		const std::type_index typeIndex = typeid(*property);
 
 		const std::optional<std::shared_ptr<IPropertyDrawerEditor>> optional = UnorderedMapExtensions::GetValue(_propertyDrawers, typeIndex);
@@ -59,6 +77,8 @@ namespace GEngine
 	{
 		const PropertiesContainer& constainer = gEngineObject->GetProperties();
 		const std::vector<std::shared_ptr<IProperty>>& properties = constainer.GetProperties();
+
+		ImGui::Text(gEngineObject->GetObjectTypeName());
 
 		for (auto it = properties.begin(); it != properties.end(); ++it)
 		{
@@ -78,6 +98,11 @@ namespace GEngine
 
 	void EditorModule::RenderEditor()
 	{
+		if (!_editorRenderingEnabled)
+		{
+			return;
+		}
+
 		const std::shared_ptr<GEngineCoreApplication> app = _app.lock();
 		if (app == nullptr) return;
 

@@ -14,7 +14,7 @@ namespace GEngine
 {
 	TransformComponent::TransformComponent(const std::weak_ptr<Entity> &entity) : Component(entity)
 	{
-		_localPositionProperty = _serializedProperties.Register("Position", Vec3Extensions::Zero);
+		_localPositionProperty = _properties.Register("Position", Vec3Extensions::Zero);
 	}
 
 	TransformComponent::~TransformComponent()
@@ -84,9 +84,6 @@ namespace GEngine
 
 	void TransformComponent::SetLocalRotationEuler(const glm::vec3 &rotation)
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = GetApp().lock();
-		if (!app) return;
-
 		if (_localRotationEuler == rotation)
 		{
 			return;

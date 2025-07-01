@@ -68,8 +68,8 @@ namespace GEngine
 					continue;
 				}
 
-				const PropertiesContainer& serializedProperties = (*it)->GetSerializedProperties();
-				const std::vector<std::shared_ptr<IProperty>>& properties = serializedProperties.GetProperties();
+				const PropertiesContainer& propertiesContainer = (*it)->GetProperties();
+				const std::vector<std::shared_ptr<IProperty>>& properties = propertiesContainer.GetProperties();
 
 				for (auto it = properties.begin(); it != properties.end(); ++it)
 				{

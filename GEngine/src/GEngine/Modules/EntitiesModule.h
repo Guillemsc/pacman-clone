@@ -27,7 +27,7 @@ namespace GEngine
 		void Tick();
 		void Dispose();
 
-		std::weak_ptr<Entity> AddEntity();
+		std::weak_ptr<Entity> AddEntity(bool isUi = false);
 		bool RemoveEntity(const std::weak_ptr<Entity> &entityPtr);
 		bool RemoveEntityNow(const std::weak_ptr<Entity> &entityPtr);
 		void RemoveAllEntities();
@@ -35,13 +35,14 @@ namespace GEngine
 		void SetEntityParent(const std::weak_ptr<Entity> &targetPtr, const std::weak_ptr<Entity> &parentPtr, bool worldPositionStays = true);
 		void RemoveEntityParent(const std::weak_ptr<Entity>& targetPtr, bool worldPositionStays = true);
 
-		void ForEachEntityInHierarchy(const std::function<void(const std::shared_ptr<Entity>&)> &callback);
+		void RefreshUiTransforms();
 
-		void TickEntities();
+		void ForEachEntityInHierarchy(const std::function<void(const std::shared_ptr<Entity>&)> &callback);
 
 		const std::vector<std::weak_ptr<Entity>>& GetRootEntities();
 
 	private:
+		void TickEntities();
 		void ActuallyRemoveEntities();
 
 	private:

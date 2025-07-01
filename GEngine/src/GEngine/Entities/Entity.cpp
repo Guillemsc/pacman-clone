@@ -6,7 +6,6 @@
 
 #include "GEngine/Components/Component.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
-#include "GEngine/Modules/ComponentsModule.h"
 #include "GEngine/Modules/EntitiesModule.h"
 
 namespace GEngine
@@ -91,7 +90,7 @@ namespace GEngine
 		entities->SetEntityParent(weak_from_this(), parentPtr, worldPositionStays);
 	}
 
-	void Entity::RemoveParent(bool worldPositionStays)
+	void Entity::RemoveParent(const bool worldPositionStays)
 	{
 		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
 		if (app == nullptr) return;
@@ -179,6 +178,11 @@ namespace GEngine
 		return _transformPtr;
 	}
 
+	std::weak_ptr<UiTransformComponent> Entity::GetUiTransform() const
+	{
+		return _uiTransformPtr;
+	}
+
 	void GEngine::Entity::Dispose()
 	{
 		RemoveAllComponents();
@@ -188,6 +192,14 @@ namespace GEngine
 		_childEntities.clear();
 		_components.clear();
 		_transformPtr.reset();
+	}
+
+	void Entity::TickAllComponents()
+	{
+		for (auto it = _components.begin(); it != _components.end(); ++it)
+		{
+			(*it)->OnTick();
+		}
 	}
 
 	void Entity::RemoveAllComponents()

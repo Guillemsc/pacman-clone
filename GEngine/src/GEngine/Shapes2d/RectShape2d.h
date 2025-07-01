@@ -15,6 +15,11 @@ namespace GEngine
 	public:
 		RectShape2d();
 
+		constexpr const char *GetObjectTypeName() const override
+		{
+			return "RectShape2d";
+		}
+
 		void SetSize(const glm::vec2& size) const;
 		glm::vec2 GetSize() const;
 

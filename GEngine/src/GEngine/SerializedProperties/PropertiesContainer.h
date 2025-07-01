@@ -44,6 +44,7 @@ namespace GEngine
 	{
 		static_assert(std::is_base_of_v<GEngineObject, T>, "T must derive from GEngineObject");
 		std::shared_ptr<Property<std::shared_ptr<T>>> property = std::make_shared<Property<std::shared_ptr<T>>>(name, value);
+		_properties.push_back(property);
 		return property;
 	}
 

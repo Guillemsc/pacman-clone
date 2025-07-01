@@ -9,10 +9,14 @@
 
 namespace GEngine
 {
+	class GEngineObject;
+
 	class IProperty
 	{
 	public:
 		virtual const std::string& GetName() const = 0;
+
+		virtual std::weak_ptr<GEngineObject> GetObjectValue() = 0;
 	};
 
 	// -------------------------------------------------------
@@ -27,6 +31,8 @@ namespace GEngine
 		const std::string& GetName() const override;
 		TValue GetValue() const;
 		void SetValue(const TValue& value);
+
+		std::weak_ptr<GEngineObject> GetObjectValue() override;
 
 	private:
 		std::string _name;
@@ -59,6 +65,25 @@ namespace GEngine
 	void Property<TValue>::SetValue(const TValue &value)
 	{
 		_value = value;
+	}
+
+	template<class TValue>
+	std::weak_ptr<GEngineObject> Property<TValue>::GetObjectValue()
+	{
+		if constexpr (std::is_same_v<TValue, std::shared_ptr<GEngineObject>>)
+		{
+			return _value;
+		}
+		else if constexpr (std::is_convertible_v<TValue, std::shared_ptr<void>>)
+		{
+			// Try dynamic_pointer_cast if TValue is a shared_ptr to derived
+			auto shared = std::dynamic_pointer_cast<GEngineObject>(_value);
+			return shared;
+		}
+		else
+		{
+			return {};
+		}
 	}
 }
 

@@ -5,7 +5,6 @@
 #include "GEngineCoreApplication.h"
 
 #include "GEngine/Modules/CameraModule.h"
-#include "GEngine/Modules/ComponentsModule.h"
 #include "GEngine/Modules/CoroutinesModule.h"
 #include "GEngine/Modules/EditorModule.h"
 #include "GEngine/Modules/EntitiesModule.h"
@@ -24,12 +23,11 @@ namespace GEngine
 		spdlog::info("Welcome to GEngineCore :)");
 
 		_coroutines = std::make_shared<CoroutinesModule>();
-		_components = std::make_shared<ComponentsModule>();
 		_entities = std::make_shared<EntitiesModule>();
 		_game = std::make_shared<GameModule>();
 		_camera = std::make_shared<CameraModule>();
 		_window = std::make_shared<WindowModule>();
-		_rendering = std::make_shared<RenderingModule>(_camera);
+		_rendering = std::make_shared<RenderingModule>();
 		_resources = std::make_shared<ResourcesModule>();
 		_systems = std::make_shared<SystemsModule>();
 		_input = std::make_shared<InputModule>();
@@ -47,8 +45,8 @@ namespace GEngine
 
 		_entities->Init(weak_from_this());
 		_editor->Init(weak_from_this());
-		_window->Init();
-		_rendering->Init();
+		_window->Init(weak_from_this());
+		_rendering->Init(weak_from_this());
 		_resources->Init(weak_from_this());
 		_systems->Init(weak_from_this());
 		_game->Init(weak_from_this());

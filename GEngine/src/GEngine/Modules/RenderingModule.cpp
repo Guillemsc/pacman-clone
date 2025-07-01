@@ -9,19 +9,24 @@
 #include "rlgl.h"
 #include "GEngine/Cameras/Camera.h"
 #include "GEngine/Rendering/ImGuiRenderer.h"
+#include "GEngine/Rendering/Renderer2d.h"
+#include "GEngine/Rendering/UiRenderer.h"
 
 namespace GEngine
 {
-	RenderingModule::RenderingModule(const std::weak_ptr<CameraModule> &cameraModule)
+	RenderingModule::RenderingModule()
 	{
-		_cameraModulePtr = cameraModule;
 
-		_renderer2d = std::make_shared<Renderer2d>();
-		_imGuiRenderer = std::make_shared<ImGuiRenderer>();
 	}
 
-	void RenderingModule::Init()
+	void RenderingModule::Init(const std::weak_ptr<GEngineCoreApplication> &appPtr)
 	{
+		_appPtr = appPtr;
+
+		_renderer2d = std::make_shared<Renderer2d>();
+		_uiRenderer = std::make_shared<UiRenderer>(appPtr);
+		_imGuiRenderer = std::make_shared<ImGuiRenderer>();
+
 		_imGuiRenderer->Init();
 	}
 
@@ -37,7 +42,10 @@ namespace GEngine
 
 	void RenderingModule::RenderOnCurrentCamera() const
 	{
-		const std::shared_ptr<CameraModule> cameraModule = _cameraModulePtr.lock();
+		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
+		if (!app) return;
+
+		const std::shared_ptr<CameraModule> cameraModule = app->Camera().lock();
 		if (!cameraModule) return;
 
 		const std::weak_ptr<Camera> currentCameraPtr = cameraModule->GetCurrentRenderingCamera();
@@ -67,9 +75,18 @@ namespace GEngine
 			rlSetClipPlanes(0.01, 9999);
 
 			_renderer2d->Render();
-
-			EndMode3D();
 		}
+
+		EndMode3D();
+
+		// Temp UI
+		Camera2D uiCamera = { 0 };
+		uiCamera.rotation = 0.0f;
+		uiCamera.zoom = 1.0f;
+
+		BeginMode2D(uiCamera);
+		_uiRenderer->Render();
+		EndMode2D();
 
 		_imGuiRenderer->Render();
 

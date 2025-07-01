@@ -13,7 +13,7 @@ namespace GEngine
 		_coroutineRunner = std::make_shared<CoroutineRunner>();
 	}
 
-	void CoroutinesModule::Tick() const
+	void CoroutinesModule::Tick()
 	{
 		_coroutineRunner->Tick();
 	}

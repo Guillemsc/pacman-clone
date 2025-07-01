@@ -48,6 +48,8 @@ namespace GEngine
 	private:
 		std::weak_ptr<GEngineCoreApplication> _app;
 
+		bool _editorRenderingEnabled = true;
+
 		std::unordered_map<std::type_index, std::shared_ptr<IPropertyDrawerEditor>> _propertyDrawers;
 
 		std::shared_ptr<MenuBarEditor> _menuBar;

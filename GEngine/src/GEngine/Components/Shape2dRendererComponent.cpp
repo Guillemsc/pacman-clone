@@ -7,6 +7,7 @@
 #include "raylib.h"
 #include "TransformComponent.h"
 #include "GEngine/Modules/RenderingModule.h"
+#include "GEngine/Rendering/Renderer2d.h"
 #include "GEngine/Shapes2d/RectShape2d.h"
 
 namespace GEngine
@@ -19,6 +20,8 @@ namespace GEngine
 
 	void Shape2dRendererComponent::OnTick()
 	{
+		if (!_shape2d) return;
+
 		const std::shared_ptr<GEngineCoreApplication> app = GetApp().lock();
 		if (app == nullptr) return;
 
@@ -31,14 +34,12 @@ namespace GEngine
 		const std::shared_ptr<TransformComponent> transform = entity->GetTransform().lock();
 		if (transform == nullptr) return;
 
-		if (!_shape2d) return;
-
 		glm::vec2 position = transform->GetPositionXY();
 		position.y = -position.y;
 		float rotation = -transform->GetRotationEulerDegreesZ();
 		glm::vec2 scale = transform->GetScaleXY();
 
-		rendering->Render2D().lock()->Add(_layer->GetValue(), [position, rotation, scale, this]()
+		rendering->Renderer2D().lock()->Add(_layer->GetValue(), [position, rotation, scale, this]()
 		{
 			if (const auto rectShape = std::dynamic_pointer_cast<RectShape2d>(_shape2d->GetValue()))
 			{

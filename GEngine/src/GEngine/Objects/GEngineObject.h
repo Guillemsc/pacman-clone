@@ -20,6 +20,11 @@ namespace GEngine
 			return GEngineObjectType::UNKNOWN;
 		};
 
+		virtual constexpr const char* GetObjectTypeName() const
+		{
+			return "Unknown";
+		};
+
 		const PropertiesContainer& GetProperties() const
 		{
 			return _properties;

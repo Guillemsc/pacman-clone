@@ -39,8 +39,6 @@ add_library(GEngineCore STATIC
         src/GEngine/Games/Game.h
         src/GEngine/Modules/WindowModule.cpp
         src/GEngine/Modules/WindowModule.h
-        src/GEngine/Modules/ComponentsModule.cpp
-        src/GEngine/Modules/ComponentsModule.h
         src/GEngine/Modules/RenderingModule.cpp
         src/GEngine/Modules/RenderingModule.h
         src/GEngine/Rendering/LayeredRenderQueue.cpp
@@ -169,6 +167,17 @@ add_library(GEngineCore STATIC
         src/GEngine/Shapes2d/Shape2d.h
         src/GEngine/Shapes2d/RectShape2d.cpp
         src/GEngine/Shapes2d/RectShape2d.h
+        src/GEngine/Editor/PropertyDrawers/IntPropertyDrawerEditor.cpp
+        src/GEngine/Editor/PropertyDrawers/IntPropertyDrawerEditor.h
+        src/GEngine/Editor/PropertyDrawers/Vec2PropertyDrawerEditor.cpp
+        src/GEngine/Editor/PropertyDrawers/Vec2PropertyDrawerEditor.h
+        src/GEngine/Components/UiTransformComponent.cpp
+        src/GEngine/Components/UiTransformComponent.h
+        src/GEngine/Components/UiShapeRendererComponent.cpp
+        src/GEngine/Components/UiShapeRendererComponent.h
+        src/GEngine/Rendering/UiRenderer.cpp
+        src/GEngine/Rendering/UiRenderer.h
+        src/GEngine/Extensions/Vec4Extensions.h
 )
 
 # Link raylib

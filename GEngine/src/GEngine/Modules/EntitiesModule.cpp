@@ -9,7 +9,7 @@
 #include "GEngine/Entities/Entity.h"
 #include "GEngine/Extensions/VectorExtensions.h"
 #include "GEngine/Components/TransformComponent.h"
-#include "GEngine/Modules/ComponentsModule.h"
+#include "GEngine/Components/UiTransformComponent.h"
 
 namespace GEngine
 {
@@ -34,20 +34,24 @@ namespace GEngine
 		RemoveAllEntities();
 	}
 
-	std::weak_ptr<Entity> EntitiesModule::AddEntity()
+	std::weak_ptr<Entity> EntitiesModule::AddEntity(bool isUi)
 	{
 		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
 		if (app == nullptr) return std::weak_ptr<Entity>();
-
-		const std::shared_ptr<ComponentsModule> components = app->Components().lock();
-		if (components == nullptr) return std::weak_ptr<Entity>();
 
 		std::shared_ptr<Entity> entity = std::make_shared<Entity>(_appPtr, _nextEntityId);
 
 		entity->SetName(std::format("Entity: {}", _nextEntityId));
 		entity->SetActive(true);
 
-		entity->AddComponent<TransformComponent>();
+		if (!isUi)
+		{
+			entity->AddComponent<TransformComponent>();
+		}
+		else
+		{
+			entity->AddComponent<UiTransformComponent>();
+		}
 
 		++_nextEntityId;
 
@@ -82,9 +86,6 @@ namespace GEngine
 	{
 		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
 		if (app == nullptr) return false;
-
-		const std::shared_ptr<ComponentsModule> components = app->Components().lock();
-		if (components == nullptr) return false;
 
 		const std::shared_ptr<Entity> entity = entityPtr.lock();
 		if (entity == nullptr) return false;
@@ -203,6 +204,17 @@ namespace GEngine
 		target->RefreshActiveState();
 	}
 
+	void EntitiesModule::RefreshUiTransforms()
+	{
+		ForEachEntityInHierarchy([](const std::shared_ptr<Entity>& entity)
+		{
+			const std::shared_ptr<UiTransformComponent> transform = entity->GetUiTransform().lock();
+			if (!transform) return;
+
+			transform->Refresh();
+		});
+	}
+
 	void EntitiesModule::ForEachEntityInHierarchy(const std::function<void(const std::shared_ptr<Entity> &)> &callback)
 	{
 		std::vector<std::shared_ptr<Entity>> toCheck;
@@ -232,29 +244,26 @@ namespace GEngine
 		}
 	}
 
+	const std::vector<std::weak_ptr<Entity>>& EntitiesModule::GetRootEntities()
+	{
+		return _rootEntities;
+	}
+
 	void EntitiesModule::TickEntities()
 	{
 		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
 		if (app == nullptr) return;
 
-		const std::shared_ptr<ComponentsModule> components = app->Components().lock();
-		if (components == nullptr) return;
-
-		ForEachEntityInHierarchy([components](const std::shared_ptr<Entity>& entity)
+		ForEachEntityInHierarchy([](const std::shared_ptr<Entity>& entity)
 		{
 			if (!entity->IsActiveInHierarchy())
 			{
 				return false;
 			}
 
-			components->TickEntityComponents(entity.get());
+			entity->TickAllComponents();
 			return true;
 		});
-	}
-
-	const std::vector<std::weak_ptr<Entity>>& EntitiesModule::GetRootEntities()
-	{
-		return _rootEntities;
 	}
 
 	void EntitiesModule::ActuallyRemoveEntities()

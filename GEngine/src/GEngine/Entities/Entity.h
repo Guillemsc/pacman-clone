@@ -10,11 +10,11 @@
 #include <vector>
 
 #include "GEngine/Core/GEngineCoreApplication.h"
-#include "GEngine/Modules/ComponentsModule.h"
 #include "GEngine/Objects/GEngineObject.h"
 
 namespace GEngine
 {
+	class UiTransformComponent;
 	class Component;
 	class TransformComponent;
 }
@@ -61,10 +61,12 @@ namespace GEngine
 		bool RemoveComponent(const std::weak_ptr<Component> &componentPtr);
 
 		std::weak_ptr<TransformComponent> GetTransform() const;
+		std::weak_ptr<UiTransformComponent> GetUiTransform() const;
 
 	private:
 		void Dispose();
 
+		void TickAllComponents();
 		void RemoveAllComponents();
 
 		void RefreshChildrenHierarchyActiveState();
@@ -84,6 +86,7 @@ namespace GEngine
 
 		std::vector<std::shared_ptr<Component>> _components;
 		std::weak_ptr<TransformComponent> _transformPtr;
+		std::weak_ptr<UiTransformComponent> _uiTransformPtr;
 	};
 
 	template<class T>
@@ -117,6 +120,15 @@ namespace GEngine
 			if constexpr (std::is_same_v<T, TransformComponent>)
 			{
 				_transformPtr = component;
+			}
+		}
+
+		if (_uiTransformPtr.expired())
+		{
+			if constexpr (std::is_same_v<T, UiTransformComponent>)
+			{
+				_transformPtr = component;
+				_uiTransformPtr = component;
 			}
 		}
 

@@ -24,8 +24,6 @@ namespace GEngine
 		bool IsEnanbled() const;
 		void SetEnabled(bool enabled);
 
-		const PropertiesContainer& GetSerializedProperties() const;
-
 		virtual constexpr const char* GetTypeName() = 0;
 
 	protected:
@@ -37,9 +35,6 @@ namespace GEngine
 
 	private:
 		void RefreshEnabledState();
-
-	protected:
-		PropertiesContainer _serializedProperties;
 
 	private:
 		std::weak_ptr<Entity> _entity;

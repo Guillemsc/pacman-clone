@@ -5,6 +5,7 @@
 #ifndef COROUTINESMODULE_H
 #define COROUTINESMODULE_H
 #include <memory>
+#include <vector>
 
 namespace GEngine
 {
@@ -20,7 +21,7 @@ namespace GEngine
 	public:
 		CoroutinesModule();
 
-		void Tick() const;
+		void Tick();
 
 		std::weak_ptr<CoroutineTask> Run(const std::shared_ptr<Coroutine>& coroutine) const;
 
