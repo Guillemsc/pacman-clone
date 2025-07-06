@@ -12,7 +12,7 @@ A simple **Pac-Man** clone written in **C++** using my custom game engine framew
 - [CMake](https://cmake.org/) ≥ 3.31
 
 ## Third party
-- Raylib (rendering)
+- Raylib (OS layer and rendering)
 - ImGui (editor ui)
 - Glm (math)
 - Spdlog (logging)
