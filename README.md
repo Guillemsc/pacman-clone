@@ -1,6 +1,8 @@
-# PacMan Clone 
+# PacMan Clone
 
 A simple **Pac-Man** clone written in **C++** using my custom game engine framework **GEngine**. 
+
+> ⚠️ **This project is a Work In Progress** — features and gameplay are still under active development.
 
 ## Building
 
