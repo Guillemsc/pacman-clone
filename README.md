@@ -11,4 +11,12 @@ A simple **Pac-Man** clone written in **C++** using my custom game engine framew
 - C++20 compatible compiler (GCC, Clang, MSVC)
 - [CMake](https://cmake.org/) ≥ 3.31
 
+## Third party
+- Raylib (rendering)
+- ImGui (editor ui)
+- Glm (math)
+- Spdlog (logging)
+- Tmxlite (tiled importing)
+
+
 
