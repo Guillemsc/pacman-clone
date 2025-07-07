@@ -22,6 +22,7 @@ namespace GEngine
 		void SetAnchoredPosition(const glm::vec2& anchoredPosition);
 		void SetSizeDelta(const glm::vec2& sizeDelta);
 		void SetPivot(const glm::vec2& pivot);
+		bool IsContainedInScreenRect(const glm::vec2& screenPosition) const;
 
 		glm::vec2 GetAnchoredPosition() const;
 		glm::vec2 GetSizeDelta() const;

@@ -13,6 +13,7 @@
 #include "GEngine/Modules/RenderingModule.h"
 #include "GEngine/Modules/ResourcesModule.h"
 #include "GEngine/Modules/SystemsModule.h"
+#include "GEngine/Modules/UiModule.h"
 #include "GEngine/Modules/WindowModule.h"
 #include "spdlog/spdlog.h"
 
@@ -31,6 +32,7 @@ namespace GEngine
 		_resources = std::make_shared<ResourcesModule>();
 		_systems = std::make_shared<SystemsModule>();
 		_input = std::make_shared<InputModule>();
+		_ui = std::make_shared<UiModule>();
 		_editor = std::make_shared<EditorModule>();
 	}
 
@@ -48,6 +50,7 @@ namespace GEngine
 		_window->Init(weak_from_this());
 		_rendering->Init(weak_from_this());
 		_resources->Init(weak_from_this());
+		_ui->Init(weak_from_this());
 		_systems->Init(weak_from_this());
 		_game->Init(weak_from_this());
 	}
@@ -66,6 +69,7 @@ namespace GEngine
 	{
 		const float deltaTime = GetFrameTime();
 
+		_ui->Tick();
 		_game->Tick();
 		_entities->Tick();
 		_systems->Tick();
@@ -83,6 +87,7 @@ namespace GEngine
 		_systems->Dispose();
 		_game->Dispose();
 		_entities->Dispose();
+		_ui->Dispose();
 		_editor->Dispose();
 		_resources->Dispose();
 		_rendering->Dispose();

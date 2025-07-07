@@ -92,8 +92,6 @@ namespace GEngine
 	template<class T>
 	std::weak_ptr<T> Entity::GetComponent()
 	{
-		static_assert(std::is_base_of_v<Component, T>, "T is not derived from Component");
-
 		for (auto it = _components.begin(); it != _components.end(); ++it)
 		{
 			if (auto casted = std::dynamic_pointer_cast<T>(*it))

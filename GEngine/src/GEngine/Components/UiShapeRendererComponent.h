@@ -6,6 +6,7 @@
 #define UISHAPERENDERERCOMPONENT_H
 #include "Component.h"
 #include "raylib.h"
+#include "GEngine/Colors/Color01.h"
 
 namespace GEngine
 {
@@ -18,10 +19,10 @@ namespace GEngine
 
 		void OnTick() override;
 
-		void SetColor(const Color &color);
+		void SetColor(const Color01& color);
 
 	private:
-		Color _color = { 255, 255, 255, 255 };
+		Color01 _color = Color01::White;
 	};
 }
 

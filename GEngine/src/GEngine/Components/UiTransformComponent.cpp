@@ -16,6 +16,8 @@ namespace GEngine
 
 	void UiTransformComponent::SetAnchors(const glm::vec4& anchors)
 	{
+		if (_anchors == anchors) return;
+
 		_anchors = anchors;
 
 		RecalculateScreenRectFromParentAndAnchoredPositionAndSizeDelta();
@@ -24,6 +26,8 @@ namespace GEngine
 
 	void UiTransformComponent::SetAnchoredPosition(const glm::vec2 &anchoredPosition)
 	{
+		if (_anchoredPosition == anchoredPosition) return;
+
 		_anchoredPosition = anchoredPosition;
 
 		RecalculateScreenRectFromParentAndAnchoredPositionAndSizeDelta();
@@ -32,6 +36,8 @@ namespace GEngine
 
 	void UiTransformComponent::SetSizeDelta(const glm::vec2 &sizeDelta)
 	{
+		if (_sizeDelta == sizeDelta) return;
+
 		_sizeDelta = sizeDelta;
 
 		RecalculateScreenRectFromParentAndAnchoredPositionAndSizeDelta();
@@ -44,6 +50,11 @@ namespace GEngine
 
 		RecalculateScreenRectFromParentAndAnchoredPositionAndSizeDelta();
 		RefreshChildrenHierarchy();
+	}
+
+	bool UiTransformComponent::IsContainedInScreenRect(const glm::vec2 &screenPosition) const
+	{
+		return Vec4Extensions::Contains(_screenRect, screenPosition);
 	}
 
 	glm::vec2 UiTransformComponent::GetAnchoredPosition() const
@@ -72,7 +83,7 @@ namespace GEngine
 		const glm::vec4 parentScreenRect = GetParentScreenRect();
 		const glm::vec4 anchorsScreenPosition = GetAnchorsScreenRectFromParentScreenRect(parentScreenRect);
 
-		glm::vec2 pivotOffset = {
+		const glm::vec2 pivotOffset = {
 			MathExtensions::Lerp(-_sizeDelta.x * 0.5f, _sizeDelta.x * 0.5f, _pivot.x),
 			MathExtensions::Lerp(-_sizeDelta.y * 0.5f, _sizeDelta.y * 0.5f, _pivot.y)
 			};

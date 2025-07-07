@@ -16,7 +16,7 @@ namespace GEngine
 	{
 	public:
 		void Add(std::int32_t layer, const std::function<void()> &func);
-		void Execute();
+		void Execute(bool inverseOrder = false);
 
 	private:
 		std::map<std::int32_t, std::vector<std::function<void()>>> _queue;

@@ -178,6 +178,15 @@ add_library(GEngineCore STATIC
         src/GEngine/Rendering/UiRenderer.cpp
         src/GEngine/Rendering/UiRenderer.h
         src/GEngine/Extensions/Vec4Extensions.h
+        src/GEngine/Colors/Color01.cpp
+        src/GEngine/Colors/Color01.h
+        src/GEngine/Extensions/Color01Extensions.h
+        src/GEngine/UiRaycasting/UiRaycastTarget.h
+        src/GEngine/Modules/UiModule.cpp
+        src/GEngine/Modules/UiModule.h
+        src/GEngine/Components/UiShapeButtonComponent.cpp
+        src/GEngine/Components/UiShapeButtonComponent.h
+        src/GEngine/UiRaycasting/UiRaycastTargetState.h
 )
 
 # Link raylib

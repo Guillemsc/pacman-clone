@@ -21,7 +21,7 @@ namespace GEngine
 
 	void UiRenderer::Render()
 	{
-		_renderQueue.Execute();
+		_renderQueue.Execute(true);
 	}
 
 	glm::vec4 UiRenderer::RectToRenderRect(const glm::vec4 &rect) const

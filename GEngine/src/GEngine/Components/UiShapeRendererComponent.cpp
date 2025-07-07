@@ -6,6 +6,7 @@
 
 #include "TransformComponent.h"
 #include "UiTransformComponent.h"
+#include "GEngine/Extensions/Color01Extensions.h"
 #include "GEngine/Extensions/Vec4Extensions.h"
 #include "GEngine/Modules/RenderingModule.h"
 #include "GEngine/Rendering/UiRenderer.h"
@@ -38,13 +39,14 @@ namespace GEngine
 
 		rendering->UiRender().lock()->Add(0, [this, rect, size]()
 		{
+			const Color color = Color01Extensions::ToRaylibColor(_color);
 			const Rectangle button = { rect.x, rect.y, size.x, size.y};
-			DrawRectangleRec(button, _color);
+			DrawRectangleRec(button, color);
 			DrawText("Click Me", button.x + 10, button.y + 15, 20, BLACK);
 		});
 	}
 
-	void UiShapeRendererComponent::SetColor(const Color &color)
+	void UiShapeRendererComponent::SetColor(const Color01& color)
 	{
 		_color = color;
 	}

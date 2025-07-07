@@ -24,6 +24,11 @@ namespace GEngine
 		{
 			return { (value.x + value.z) * 0.5f, (value.y + value.w) * 0.5f };
 		}
+
+		static bool Contains(const glm::vec4 value, const glm::vec2 check)
+		{
+			return check.x >= value.x && check.y >= value.y && check.x <= value.z && check.y <= value.w;
+		}
 	};
 }
 

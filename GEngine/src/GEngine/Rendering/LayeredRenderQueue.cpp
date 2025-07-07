@@ -13,15 +13,30 @@ namespace GEngine
 		_queue[layer].push_back(func);
 	}
 
-	void LayeredRenderQueue::Execute()
+	void LayeredRenderQueue::Execute(const bool inverseOrder)
 	{
-		for (auto it = _queue.begin(); it != _queue.end(); ++it)
+		if (inverseOrder)
 		{
-			std::vector<std::function<void()>>& funcs = it->second;
-
-			for (auto funcsIt = funcs.rbegin(); funcsIt != funcs.rend(); ++funcsIt)
+			for (auto it = _queue.begin(); it != _queue.end(); ++it)
 			{
-				(*funcsIt)();
+				std::vector<std::function<void()>>& funcs = it->second;
+
+				for (auto funcsIt = funcs.begin(); funcsIt != funcs.end(); ++funcsIt)
+				{
+					(*funcsIt)();
+				}
+			}
+		}
+		else
+		{
+			for (auto it = _queue.begin(); it != _queue.end(); ++it)
+			{
+				std::vector<std::function<void()>>& funcs = it->second;
+
+				for (auto funcsIt = funcs.rbegin(); funcsIt != funcs.rend(); ++funcsIt)
+				{
+					(*funcsIt)();
+				}
 			}
 		}
 
