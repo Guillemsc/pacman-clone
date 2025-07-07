@@ -47,7 +47,7 @@ namespace GEngine
 
 		if (ImGui::Button("Add Entity"))
 		{
-			entities->AddEntity();
+			entities->AddWorldEntity();
 		}
 
 		int currentDepth = 0;

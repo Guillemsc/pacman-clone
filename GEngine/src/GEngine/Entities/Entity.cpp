@@ -79,7 +79,7 @@ namespace GEngine
 		return false;
 	}
 
-	void Entity::SetParent(const std::weak_ptr<Entity> &parentPtr, bool worldPositionStays)
+	void Entity::SetParent(const std::weak_ptr<Entity> &parentPtr, const bool worldPositionStays)
 	{
 		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
 		if (app == nullptr) return;

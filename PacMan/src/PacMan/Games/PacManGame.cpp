@@ -10,6 +10,7 @@
 #include "GEngine/Components/TiledMap2dRendererComponent.h"
 #include "GEngine/Components/TransformComponent.h"
 #include "GEngine/Components/UiShapeRendererComponent.h"
+#include "GEngine/Components/UiTransformComponent.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
 #include "GEngine/Coroutines/CoroutineBuilder.h"
 #include "GEngine/Coroutines/NestedCoroutine.h"
@@ -53,14 +54,29 @@ namespace PacMan
 
 		contextsStack->Push(std::make_shared<GameplayContext>());
 
-		const auto cameraEntity = entities->AddEntity();
+		const auto cameraEntity = entities->AddWorldEntity();
 		cameraEntity.lock()->SetName("Camera");
 		cameraEntity.lock()->AddComponent<GEngine::CameraComponent>();
 		cameraEntity.lock()->GetTransform().lock()->SetPosition({0, 0, -320});
 
 		// ======================================================
-		auto _uiEntity = entities->AddEntity(true);
+
+		auto _uiEntity2 = entities->AddUiEntity();
+		_uiEntity2.lock()->AddComponent<GEngine::UiShapeRendererComponent>();
+		_uiEntity2.lock()->GetComponent<GEngine::UiShapeRendererComponent>().lock()->SetColor( {255, 0, 0, 255} );
+		_uiEntity2.lock()->GetUiTransform().lock()->SetSizeDelta({50, 50});
+		_uiEntity2.lock()->GetUiTransform().lock()->SetPivot({1, 1});
+
+		auto _uiEntity = entities->AddUiEntity();
 		_uiEntity.lock()->AddComponent<GEngine::UiShapeRendererComponent>();
+		_uiEntity.lock()->GetComponent<GEngine::UiShapeRendererComponent>().lock()->SetColor( {255, 255, 255, 155} );
+		_uiEntity.lock()->GetUiTransform().lock()->SetAnchoredPosition({0, 0});
+		_uiEntity.lock()->GetUiTransform().lock()->SetSizeDelta({0, 0});
+		_uiEntity.lock()->GetUiTransform().lock()->SetAnchors({0.0f, .0f, 1.0f, 1});
+
+		_uiEntity2.lock()->GetUiTransform().lock()->SetAnchors({0.2, 1, 0.8, 1});
+
+		_uiEntity2.lock()->SetParent(_uiEntity);
 	}
 
 	void PacManGame::Tick()

@@ -9,7 +9,7 @@
 
 namespace GEngine
 {
-	class UiTransformComponent final : public TransformComponent
+	class UiTransformComponent final : public Component
 	{
 		friend class EntitiesModule;
 
@@ -18,8 +18,10 @@ namespace GEngine
 
 		constexpr const char* GetTypeName() override { return "Ui Transform"; }
 
+		void SetAnchors(const glm::vec4& anchors);
 		void SetAnchoredPosition(const glm::vec2& anchoredPosition);
 		void SetSizeDelta(const glm::vec2& sizeDelta);
+		void SetPivot(const glm::vec2& pivot);
 
 		glm::vec2 GetAnchoredPosition() const;
 		glm::vec2 GetSizeDelta() const;
@@ -28,18 +30,17 @@ namespace GEngine
 
 	private:
 		void Refresh();
-		void RecalculateScreenRectFromParentAndRectDelta();
-		void RecalculateAnchoredPositionAndSizeDeltaFromScreenRect();
-		void RecalculateRectDeltaFromAnchoredPositionAndSizeDelta();
+		void RecalculateScreenRectFromParentAndAnchoredPositionAndSizeDelta();
 		glm::vec4 GetParentScreenRect() const;
 		glm::vec4 GetAnchorsScreenRectFromParentScreenRect(const glm::vec4& parentRect) const;
+		void RefreshChildrenHierarchy() const;
 
 	private:
-		glm::vec4 _anchors = glm::vec4(0.5f, 0.5f, 0.5f, 0.5f);
-		glm::vec4 _rectDelta = glm::vec4(-50, -50, -50, -50);
+		glm::vec4 _anchors = glm::vec4(0.5f);
 		glm::vec2 _anchoredPosition = glm::vec2(0);
-		glm::vec2 _sizeDelta = glm::vec2(0);
-		glm::vec4 _screenRect = glm::vec4(0, 0, 0, 0);
+		glm::vec2 _sizeDelta = glm::vec2(100);
+		glm::vec2 _pivot = glm::vec2(0.5f);
+		glm::vec4 _screenRect = glm::vec4(0);
 	};
 }
 

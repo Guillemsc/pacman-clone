@@ -19,6 +19,11 @@ namespace GEngine
 		{
 			return { value.z - value.x, value.w - value.y };
 		}
+
+		static glm::vec2 GetCenter(const glm::vec4 value)
+		{
+			return { (value.x + value.z) * 0.5f, (value.y + value.w) * 0.5f };
+		}
 	};
 }
 

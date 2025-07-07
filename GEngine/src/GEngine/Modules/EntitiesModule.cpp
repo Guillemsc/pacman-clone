@@ -34,29 +34,22 @@ namespace GEngine
 		RemoveAllEntities();
 	}
 
-	std::weak_ptr<Entity> EntitiesModule::AddEntity(bool isUi)
+	std::weak_ptr<Entity> EntitiesModule::AddWorldEntity()
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
-		if (app == nullptr) return std::weak_ptr<Entity>();
+		std::shared_ptr<Entity> entity = AddEntity();
+		if (!entity) return std::weak_ptr<Entity>();
 
-		std::shared_ptr<Entity> entity = std::make_shared<Entity>(_appPtr, _nextEntityId);
+		entity->AddComponent<TransformComponent>();
 
-		entity->SetName(std::format("Entity: {}", _nextEntityId));
-		entity->SetActive(true);
+		return entity;
+	}
 
-		if (!isUi)
-		{
-			entity->AddComponent<TransformComponent>();
-		}
-		else
-		{
-			entity->AddComponent<UiTransformComponent>();
-		}
+	std::weak_ptr<Entity> EntitiesModule::AddUiEntity()
+	{
+		std::shared_ptr<Entity> entity = AddEntity();
+		if (!entity) return std::weak_ptr<Entity>();
 
-		++_nextEntityId;
-
-		_entities.push_back(entity);
-		_rootEntities.push_back(entity);
+		entity->AddComponent<UiTransformComponent>();
 
 		return entity;
 	}
@@ -172,6 +165,16 @@ namespace GEngine
 			targetTransform->RecalculateWorldMatrix();
 		}
 
+		if (const auto targetTransform = target->GetUiTransform().lock())
+		{
+			if (worldPositionStays)
+			{
+				//targetTransform->SetLocalPositionAsWorldPosition();
+			}
+
+			targetTransform->Refresh();
+		}
+
 		target->RefreshActiveState();
 	}
 
@@ -201,18 +204,31 @@ namespace GEngine
 			targetTransform->RecalculateWorldMatrix();
 		}
 
+		if (const auto targetTransform = target->GetUiTransform().lock())
+		{
+			if (worldPositionStays)
+			{
+				//targetTransform->SetLocalPositionAsWorldPosition();
+			}
+
+			targetTransform->Refresh();
+		}
+
 		target->RefreshActiveState();
 	}
 
 	void EntitiesModule::RefreshUiTransforms()
 	{
-		ForEachEntityInHierarchy([](const std::shared_ptr<Entity>& entity)
+		for (auto it = _rootEntities.begin(); it != _rootEntities.end(); ++it)
 		{
+			const std::shared_ptr<Entity> entity = it->lock();
+			if (!entity) continue;
+
 			const std::shared_ptr<UiTransformComponent> transform = entity->GetUiTransform().lock();
-			if (!transform) return;
+			if (!transform) continue;
 
 			transform->Refresh();
-		});
+		}
 	}
 
 	void EntitiesModule::ForEachEntityInHierarchy(const std::function<void(const std::shared_ptr<Entity> &)> &callback)
@@ -247,6 +263,24 @@ namespace GEngine
 	const std::vector<std::weak_ptr<Entity>>& EntitiesModule::GetRootEntities()
 	{
 		return _rootEntities;
+	}
+
+	std::shared_ptr<Entity> EntitiesModule::AddEntity()
+	{
+		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
+		if (app == nullptr) return std::shared_ptr<Entity>();
+
+		std::shared_ptr<Entity> entity = std::make_shared<Entity>(_appPtr, _nextEntityId);
+
+		entity->SetName(std::format("Entity: {}", _nextEntityId));
+		entity->SetActive(true);
+
+		++_nextEntityId;
+
+		_entities.push_back(entity);
+		_rootEntities.push_back(entity);
+
+		return entity;
 	}
 
 	void EntitiesModule::TickEntities()

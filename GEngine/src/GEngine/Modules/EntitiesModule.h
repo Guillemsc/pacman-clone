@@ -27,7 +27,8 @@ namespace GEngine
 		void Tick();
 		void Dispose();
 
-		std::weak_ptr<Entity> AddEntity(bool isUi = false);
+		std::weak_ptr<Entity> AddWorldEntity();
+		std::weak_ptr<Entity> AddUiEntity();
 		bool RemoveEntity(const std::weak_ptr<Entity> &entityPtr);
 		bool RemoveEntityNow(const std::weak_ptr<Entity> &entityPtr);
 		void RemoveAllEntities();
@@ -42,6 +43,7 @@ namespace GEngine
 		const std::vector<std::weak_ptr<Entity>>& GetRootEntities();
 
 	private:
+		std::shared_ptr<Entity> AddEntity();
 		void TickEntities();
 		void ActuallyRemoveEntities();
 

@@ -24,7 +24,7 @@ namespace GEngine
 		_renderQueue.Execute();
 	}
 
-	glm::vec4 UiRenderer::RectToRenderRect(const glm::vec4 &rect)
+	glm::vec4 UiRenderer::RectToRenderRect(const glm::vec4 &rect) const
 	{
 		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
 		if (!app) return rect;

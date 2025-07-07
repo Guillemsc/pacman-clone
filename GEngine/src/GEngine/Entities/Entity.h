@@ -84,7 +84,7 @@ namespace GEngine
 		std::weak_ptr<Entity> _parentPtr;
 		std::vector<std::weak_ptr<Entity>> _childEntities;
 
-		std::vector<std::shared_ptr<Component>> _components;
+		std::vector<std::shared_ptr<Component>> _components; // TODO: Make contiguous arrays of Components, this is faster to impl for now :)
 		std::weak_ptr<TransformComponent> _transformPtr;
 		std::weak_ptr<UiTransformComponent> _uiTransformPtr;
 	};
@@ -127,7 +127,6 @@ namespace GEngine
 		{
 			if constexpr (std::is_same_v<T, UiTransformComponent>)
 			{
-				_transformPtr = component;
 				_uiTransformPtr = component;
 			}
 		}

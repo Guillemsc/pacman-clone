@@ -30,7 +30,7 @@ namespace PacMan
 		std::shared_ptr<GEngine::SystemsModule> systems = app->Systems().lock();
 		std::shared_ptr<GEngine::CoroutinesModule> coroutines = app->Coroutines().lock();
 
-		const auto tilemapEntity = entities->AddEntity();
+		const auto tilemapEntity = entities->AddWorldEntity();
 		tilemapEntity.lock()->SetName("Tilemap");
 		auto _tilemap = tilemapEntity.lock()->AddComponent<GEngine::TiledMap2dRendererComponent>();
 
@@ -38,7 +38,7 @@ namespace PacMan
 
 		_tilemap.lock()->SetTiledMap(tilemapResource);
 
-		auto _playerEntity = entities->AddEntity();
+		auto _playerEntity = entities->AddWorldEntity();
 		_playerEntity.lock()->SetName("Player");
 		_playerEntity.lock()->AddComponent<GEngine::Shape2dRendererComponent>();
 		_playerEntity.lock()->GetComponent<GEngine::Shape2dRendererComponent>().lock()->SetLayer(1);

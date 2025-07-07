@@ -9,25 +9,41 @@
 
 namespace GEngine
 {
-	UiTransformComponent::UiTransformComponent(const std::weak_ptr<Entity> &entity) : TransformComponent(entity)
+	UiTransformComponent::UiTransformComponent(const std::weak_ptr<Entity> &entity) : Component(entity)
 	{
-		RecalculateScreenRectFromParentAndRectDelta();
+		RecalculateScreenRectFromParentAndAnchoredPositionAndSizeDelta();
+	}
+
+	void UiTransformComponent::SetAnchors(const glm::vec4& anchors)
+	{
+		_anchors = anchors;
+
+		RecalculateScreenRectFromParentAndAnchoredPositionAndSizeDelta();
+		RefreshChildrenHierarchy();
 	}
 
 	void UiTransformComponent::SetAnchoredPosition(const glm::vec2 &anchoredPosition)
 	{
 		_anchoredPosition = anchoredPosition;
 
-		RecalculateRectDeltaFromAnchoredPositionAndSizeDelta();
-		RecalculateScreenRectFromParentAndRectDelta();
+		RecalculateScreenRectFromParentAndAnchoredPositionAndSizeDelta();
+		RefreshChildrenHierarchy();
 	}
 
 	void UiTransformComponent::SetSizeDelta(const glm::vec2 &sizeDelta)
 	{
 		_sizeDelta = sizeDelta;
 
-		RecalculateRectDeltaFromAnchoredPositionAndSizeDelta();
-		RecalculateScreenRectFromParentAndRectDelta();
+		RecalculateScreenRectFromParentAndAnchoredPositionAndSizeDelta();
+		RefreshChildrenHierarchy();
+	}
+
+	void UiTransformComponent::SetPivot(const glm::vec2 &pivot)
+	{
+		_pivot = pivot;
+
+		RecalculateScreenRectFromParentAndAnchoredPositionAndSizeDelta();
+		RefreshChildrenHierarchy();
 	}
 
 	glm::vec2 UiTransformComponent::GetAnchoredPosition() const
@@ -47,34 +63,24 @@ namespace GEngine
 
 	void UiTransformComponent::Refresh()
 	{
-		RecalculateScreenRectFromParentAndRectDelta();
-		RecalculateAnchoredPositionAndSizeDeltaFromScreenRect();
+		RecalculateScreenRectFromParentAndAnchoredPositionAndSizeDelta();
+		RefreshChildrenHierarchy();
 	}
 
-	void UiTransformComponent::RecalculateScreenRectFromParentAndRectDelta()
+	void UiTransformComponent::RecalculateScreenRectFromParentAndAnchoredPositionAndSizeDelta()
 	{
 		const glm::vec4 parentScreenRect = GetParentScreenRect();
 		const glm::vec4 anchorsScreenPosition = GetAnchorsScreenRectFromParentScreenRect(parentScreenRect);
 
-		_screenRect.x = anchorsScreenPosition.x + _rectDelta.x;
-		_screenRect.y = anchorsScreenPosition.y + _rectDelta.y;
-		_screenRect.z = anchorsScreenPosition.z - _rectDelta.z;
-		_screenRect.w = anchorsScreenPosition.w - _rectDelta.w;
-	}
+		glm::vec2 pivotOffset = {
+			MathExtensions::Lerp(-_sizeDelta.x * 0.5f, _sizeDelta.x * 0.5f, _pivot.x),
+			MathExtensions::Lerp(-_sizeDelta.y * 0.5f, _sizeDelta.y * 0.5f, _pivot.y)
+			};
 
-	void UiTransformComponent::RecalculateAnchoredPositionAndSizeDeltaFromScreenRect()
-	{
-		_sizeDelta = Vec4Extensions::GetSize(_screenRect);
-		_anchoredPosition.x = _rectDelta.x + (_sizeDelta.x * 0.5f);
-		_anchoredPosition.y = _rectDelta.y + (_sizeDelta.y * 0.5f);
-	}
-
-	void UiTransformComponent::RecalculateRectDeltaFromAnchoredPositionAndSizeDelta()
-	{
-		_rectDelta.x = _anchoredPosition.x - (_sizeDelta.x * 0.5f);
-		_rectDelta.y = _anchoredPosition.y - (_sizeDelta.y * 0.5f);
-		_rectDelta.z = _anchoredPosition.x + (_sizeDelta.x * 0.5f);
-		_rectDelta.w = _anchoredPosition.y + (_sizeDelta.y * 0.5f);
+		_screenRect.x = anchorsScreenPosition.x + _anchoredPosition.x - pivotOffset.x - (_sizeDelta.x * 0.5f);
+		_screenRect.y = anchorsScreenPosition.y + _anchoredPosition.y - pivotOffset.y - (_sizeDelta.y * 0.5f);
+		_screenRect.z = anchorsScreenPosition.z + _anchoredPosition.x - pivotOffset.x + (_sizeDelta.x * 0.5f);
+		_screenRect.w = anchorsScreenPosition.w + _anchoredPosition.y - pivotOffset.y + (_sizeDelta.y * 0.5f);
 	}
 
 	glm::vec4 UiTransformComponent::GetParentScreenRect() const
@@ -117,5 +123,23 @@ namespace GEngine
 		screenRect.w = parentRect.y + (parentRectSize.y * _anchors.w);
 
 		return screenRect;
+	}
+
+	void UiTransformComponent::RefreshChildrenHierarchy() const
+	{
+		const std::shared_ptr<Entity> entity = GetEntity().lock();
+		if (!entity) return;
+
+		entity->ForEachEntityInChildHierarchy(
+			false,
+			[this](const std::shared_ptr<Entity> &checkingEntity)
+			{
+				const std::shared_ptr<UiTransformComponent> childTransform = checkingEntity->GetUiTransform().lock();
+				if (!childTransform) return false;
+
+				childTransform->Refresh();
+				return true;
+			}
+		);
 	}
 } // GEngine
