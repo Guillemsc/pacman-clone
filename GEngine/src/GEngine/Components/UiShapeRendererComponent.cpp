@@ -33,15 +33,24 @@ namespace GEngine
 		const std::shared_ptr<UiTransformComponent> transform = entity->GetUiTransform().lock();
 		if (transform == nullptr) return;
 
-		glm::vec4 rect = transform->GetScreenRect();
-		glm::vec2 size = Vec4Extensions::GetSize(rect);
-		rect = rendering->UiRender().lock()->RectToRenderRect(rect);
+		UiRect uiRect = transform->GetWorldUiRect();
 
-		rendering->UiRender().lock()->Add(0, [this, rect, size]()
+		glm::vec2 position = uiRect.position;
+		glm::vec2 size = uiRect.size;
+		float rotation = glm::degrees(uiRect.rotation);
+
+		glm::vec2 pivot = uiRect.pivot;
+		pivot.y = 1 - pivot.y;
+
+		const Vector2 center = { size.x * pivot.x, size.y * pivot.y };
+
+		position = rendering->UiRender().lock()->PositionToRenderPosition(position);
+
+		rendering->UiRender().lock()->Add(0, [this, size, rotation, center, position]()
 		{
 			const Color color = Color01Extensions::ToRaylibColor(_color);
-			const Rectangle button = { rect.x, rect.y, size.x, size.y};
-			DrawRectangleRec(button, color);
+			const Rectangle button = { position.x, position.y, size.x, size.y};
+			DrawRectanglePro(button, center, rotation, color);
 			DrawText("Click Me", button.x + 10, button.y + 15, 20, BLACK);
 		});
 	}

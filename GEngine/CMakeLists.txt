@@ -187,6 +187,12 @@ add_library(GEngineCore STATIC
         src/GEngine/Components/UiShapeButtonComponent.cpp
         src/GEngine/Components/UiShapeButtonComponent.h
         src/GEngine/UiRaycasting/UiRaycastTargetState.h
+        src/GEngine/Editor/PropertyDrawers/FloatPropertyDrawerEditor.cpp
+        src/GEngine/Editor/PropertyDrawers/FloatPropertyDrawerEditor.h
+        src/GEngine/Editor/PropertyDrawers/Vec4PropertyDrawerEditor.cpp
+        src/GEngine/Editor/PropertyDrawers/Vec4PropertyDrawerEditor.h
+        src/GEngine/Data/UiRect.cpp
+        src/GEngine/Data/UiRect.h
 )
 
 # Link raylib

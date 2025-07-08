@@ -9,9 +9,11 @@
 #include "RenderingModule.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
 #include "GEngine/Editor/MenuBar/MenuBarEditor.h"
+#include "GEngine/Editor/PropertyDrawers/FloatPropertyDrawerEditor.h"
 #include "GEngine/Editor/PropertyDrawers/IntPropertyDrawerEditor.h"
 #include "GEngine/Editor/PropertyDrawers/Vec2PropertyDrawerEditor.h"
 #include "GEngine/Editor/PropertyDrawers/Vec3PropertyDrawerEditor.h"
+#include "GEngine/Editor/PropertyDrawers/Vec4PropertyDrawerEditor.h"
 #include "GEngine/Editor/Windows/EditorWindow.h"
 #include "GEngine/Editor/Windows/HierarchyEditorWindow.h"
 #include "GEngine/Editor/Windows/InspectorEditorWindow.h"
@@ -19,6 +21,7 @@
 #include "GEngine/Extensions/UnorderedMapExtensions.h"
 #include "GEngine/Objects/GEngineObject.h"
 #include "GEngine/Rendering/ImGuiRenderer.h"
+#include "glm/vec4.hpp"
 
 namespace GEngine
 {
@@ -29,8 +32,10 @@ namespace GEngine
 		_menuBar = std::make_shared<MenuBarEditor>(app);
 
 		RegisterPropertyDrawer<IntPropertyDrawerEditor, Property<int>>();
+		RegisterPropertyDrawer<FloatPropertyDrawerEditor, Property<float>>();
 		RegisterPropertyDrawer<Vec2PropertyDrawerEditor, Property<glm::vec2>>();
 		RegisterPropertyDrawer<Vec3PropertyDrawerEditor, Property<glm::vec3>>();
+		RegisterPropertyDrawer<Vec4PropertyDrawerEditor, Property<glm::vec4>>();
 
 		RegisterWindow<HierarchyEditorWindow>();
 		RegisterWindow<InspectorEditorWindow>();

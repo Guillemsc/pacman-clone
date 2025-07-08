@@ -24,6 +24,21 @@ namespace GEngine
 		_renderQueue.Execute(true);
 	}
 
+	glm::vec2 UiRenderer::PositionToRenderPosition(const glm::vec2 &position) const
+	{
+		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
+		if (!app) return position;
+
+		const std::shared_ptr<WindowModule> window = app->Window().lock();
+		if (!window) return position;
+
+		const glm::vec2 windowSize = window->GetWindowSize();
+
+		const float newPositionY = windowSize.y - position.y;
+
+		return { position.x, newPositionY };
+	}
+
 	glm::vec4 UiRenderer::RectToRenderRect(const glm::vec4 &rect) const
 	{
 		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();

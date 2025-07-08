@@ -66,18 +66,18 @@ namespace PacMan
 		_uiEntity2.lock()->AddComponent<GEngine::UiShapeRendererComponent>();
 		_uiEntity2.lock()->AddComponent<GEngine::UiShapeButtonComponent>();
 		_uiEntity2.lock()->GetComponent<GEngine::UiShapeRendererComponent>().lock()->SetColor( {1, 0, 0, 1} );
-		_uiEntity2.lock()->GetUiTransform().lock()->SetSizeDelta({0, 0});
-		_uiEntity2.lock()->GetUiTransform().lock()->SetPivot({1, 1});
+		//_uiEntity2.lock()->GetUiTransform().lock()->SetSizeDelta({0, 0});
+		_uiEntity2.lock()->GetUiTransform().lock()->SetPivot({0, 0});
 
 		auto _uiEntity = entities->AddUiEntity();
 		_uiEntity.lock()->AddComponent<GEngine::UiShapeRendererComponent>();
-		_uiEntity.lock()->AddComponent<GEngine::UiShapeButtonComponent>();
-		_uiEntity.lock()->GetUiTransform().lock()->SetAnchoredPosition({0, 0});
-		_uiEntity.lock()->GetUiTransform().lock()->SetSizeDelta({0, 0});
-		_uiEntity.lock()->GetUiTransform().lock()->SetAnchors({0.0f, .0f, 1.0f, 1});
-
-		_uiEntity2.lock()->GetUiTransform().lock()->SetAnchors({0.2, 0.2, 0.8, 0.8});
-
+		// _uiEntity.lock()->AddComponent<GEngine::UiShapeButtonComponent>();
+		// _uiEntity.lock()->GetUiTransform().lock()->SetAnchoredPosition({0, 0});
+		// _uiEntity.lock()->GetUiTransform().lock()->SetSizeDelta({0, 0});
+		// _uiEntity.lock()->GetUiTransform().lock()->SetAnchors({0.0f, .0f, 1.0f, 1});
+		//
+		// _uiEntity2.lock()->GetUiTransform().lock()->SetAnchors({0.2, 0.2, 0.8, 0.8});
+		//
 		_uiEntity2.lock()->SetParent(_uiEntity);
 	}
 

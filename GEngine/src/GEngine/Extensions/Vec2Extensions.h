@@ -14,7 +14,10 @@ namespace GEngine
 	{
 	public:
 		constexpr static glm::vec2 Zero = glm::vec2(0);
+		constexpr static glm::vec2 One = glm::vec2(1);
+
 		constexpr static glm::i32vec2 Int32Zero = glm::i32vec2(0);
+		constexpr static glm::i32vec2 Int32One = glm::i32vec2(1);
 
 		static glm::vec2 GetNormalizedValue(const glm::vec2 value, const glm::vec2 start, const glm::vec2 end)
 		{
@@ -22,6 +25,21 @@ namespace GEngine
 				MathExtensions::GetNormalizedValue(value.x, start.x, end.x),
 				MathExtensions::GetNormalizedValue(value.y, start.y, end.y)
 			};
+		}
+
+		static glm::vec2 AddToRotatedAndScaledPoint(const glm::vec2& point, const glm::vec2& offset, const float radians, const glm::vec2& scale)
+		{
+			const glm::vec2 scaledOffset = offset * scale;
+
+			const float sin = std::sin(-radians);
+			const float cos = std::cos(-radians);
+
+			const glm::vec2 rotatedOffset = {
+				scaledOffset.x * cos - scaledOffset.y * sin,
+				scaledOffset.x * sin + scaledOffset.y * cos
+			};
+
+			return point + rotatedOffset;
 		}
 	};
 }

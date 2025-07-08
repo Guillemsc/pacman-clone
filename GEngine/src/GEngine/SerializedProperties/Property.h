@@ -7,6 +7,8 @@
 
 #include <string>
 
+#include "GEngine/Events/Event.h"
+
 namespace GEngine
 {
 	class GEngineObject;
@@ -29,14 +31,18 @@ namespace GEngine
 		explicit Property(const std::string &name, TValue value);
 
 		const std::string& GetName() const override;
-		TValue GetValue() const;
-		void SetValue(const TValue& value);
 
 		std::weak_ptr<GEngineObject> GetObjectValue() override;
+
+		TValue GetValue() const;
+		void SetValue(const TValue& value, bool raiseChange = true);
+
+		void RegisterOnChanged(std::function<void(const TValue&)> callback);
 
 	private:
 		std::string _name;
 		TValue _value;
+		Event<const TValue&> _changedEvent;
 	};
 
 	// -------------------------------------------------------
@@ -56,18 +62,6 @@ namespace GEngine
 	}
 
 	template<class TValue>
-	TValue Property<TValue>::GetValue() const
-	{
-		return _value;
-	}
-
-	template<class TValue>
-	void Property<TValue>::SetValue(const TValue &value)
-	{
-		_value = value;
-	}
-
-	template<class TValue>
 	std::weak_ptr<GEngineObject> Property<TValue>::GetObjectValue()
 	{
 		if constexpr (std::is_same_v<TValue, std::shared_ptr<GEngineObject>>)
@@ -84,6 +78,29 @@ namespace GEngine
 		{
 			return {};
 		}
+	}
+
+	template<class TValue>
+	TValue Property<TValue>::GetValue() const
+	{
+		return _value;
+	}
+
+	template<class TValue>
+	void Property<TValue>::SetValue(const TValue &value, const bool raiseChange)
+	{
+		_value = value;
+
+		if (raiseChange)
+		{
+			_changedEvent.Invoke(value);
+		}
+	}
+
+	template<class TValue>
+	void Property<TValue>::RegisterOnChanged(std::function<void(const TValue&)> callback)
+	{
+		_changedEvent.Add(callback);
 	}
 }
 
