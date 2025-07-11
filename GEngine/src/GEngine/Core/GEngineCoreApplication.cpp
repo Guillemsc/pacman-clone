@@ -45,11 +45,13 @@ namespace GEngine
 	{
 		spdlog::info("GEngineCore Init");
 
+		_input->Init(weak_from_this());
 		_entities->Init(weak_from_this());
 		_editor->Init(weak_from_this());
 		_window->Init(weak_from_this());
 		_rendering->Init(weak_from_this());
 		_resources->Init(weak_from_this());
+		_camera->Init(weak_from_this());
 		_ui->Init(weak_from_this());
 		_systems->Init(weak_from_this());
 		_game->Init(weak_from_this());

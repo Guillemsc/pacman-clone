@@ -19,12 +19,14 @@ namespace GEngine
 
 		constexpr const char* GetTypeName() override { return "Ui Transform"; }
 
+		void OnDrawSelectedGuizmo(GuizmoUiRenderer* guizmoUiRenderer) override;
+
 		void SetAnchors(const glm::vec4& anchors) const;
 		void SetAnchoredPosition(const glm::vec2& anchoredPosition) const;
 		void SetSizeDelta(const glm::vec2& sizeDelta) const;
 		void SetPivot(const glm::vec2& pivot) const;
 		void SetRotation(const float rotation) const;
-		bool IsContainedInScreenRect(const glm::vec2& screenPosition) const;
+		bool IsContainedInWorldRect(const glm::vec2& screenPosition) const;
 
 		void SetWorldPosition(const glm::vec2& worldPosition) const;
 
@@ -37,25 +39,15 @@ namespace GEngine
 
 		glm::vec2 GetAnchoredPosition() const;
 		glm::vec2 GetSizeDelta() const;
-		glm::vec4 GetScreenRect() const;
-		glm::vec2 GetPivotScreenPosition() const;
-		glm::vec2 GetPivotOffset() const;
 
 	private:
 		void ComposeLocalUiRect();
 		void RecalculateWorldUiRect();
 		void RecalculateChildrenHierarchyWorldUiRects() const;
-
-		glm::vec4 GetAnchorsScreenPosition() const;
-		void RecalculatePositionAndSizeFromAnchoredPositionAndSizeDelta() const;
-
-		void RefreshWhenLocalValueChanged();
-
-		void Refresh();
-		void RecalculateScreenPositionAndSizeFromParentAndAnchoredPositionAndSizeDelta();
 		UiRect GetParentWorldUiRect() const;
-		glm::vec4 GetAnchorsScreenRectFromParentScreenRect(const glm::vec4& parentRect) const;
-		void RefreshChildrenHierarchy() const;
+
+		CornersRect GetAnchorsScreenPosition(const UiRect& parentRect) const;
+		void RecalculateLocalPositionAndLocalSizeFromAnchoredPositionAndSizeDelta() const;
 
 	private:
 		std::shared_ptr<Property<glm::vec2>> _localPosition;

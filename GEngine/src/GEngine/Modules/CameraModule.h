@@ -13,6 +13,7 @@
 
 namespace GEngine
 {
+    class GEngineCoreApplication;
     class Camera;
 }
 
@@ -23,6 +24,7 @@ namespace GEngine
     public:
         CameraModule();
 
+        void Init(const std::weak_ptr<GEngineCoreApplication> &appPtr);
         void Tick(float deltaTime);
 
         std::weak_ptr<Camera> CreateCamera();
@@ -38,6 +40,8 @@ namespace GEngine
         void TickEditorCamera(float deltaTime);
 
     private:
+        std::weak_ptr<GEngineCoreApplication> _appPtr;
+
         std::vector<std::shared_ptr<Camera>> _cameras;
         std::shared_ptr<Camera> _editorCamera;
 

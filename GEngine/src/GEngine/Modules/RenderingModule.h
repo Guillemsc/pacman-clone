@@ -11,14 +11,11 @@ namespace GEngine
 {
 	class GEngineCoreApplication;
 	class UiRenderer;
+	class GuizmoUiRenderer;
 	class Renderer2d;
+	class ImGuiRenderer;
 	class CameraModule;
 	class Camera;
-}
-
-namespace GEngine
-{
-	class ImGuiRenderer;
 }
 
 namespace GEngine
@@ -34,6 +31,7 @@ namespace GEngine
 
 		std::weak_ptr<Renderer2d> Renderer2D() { return _renderer2d; }
 		std::weak_ptr<UiRenderer> UiRender() { return _uiRenderer; }
+		std::weak_ptr<GuizmoUiRenderer> GuizmoUiRender() { return _guizmoUiRenderer; }
 		std::weak_ptr<ImGuiRenderer> ImGuiRender() { return _imGuiRenderer; }
 
 	private:
@@ -45,6 +43,7 @@ namespace GEngine
 
 		std::shared_ptr<Renderer2d> _renderer2d;
 		std::shared_ptr<UiRenderer> _uiRenderer;
+		std::shared_ptr<GuizmoUiRenderer> _guizmoUiRenderer;
 		std::shared_ptr<ImGuiRenderer> _imGuiRenderer;
 	};
 }

@@ -28,7 +28,7 @@ namespace GEngine
 		std::shared_ptr<UiRaycastTarget> RaycastAtScreenPosition(const glm::vec2& mousePosition) const;
 
 	private:
-		std::weak_ptr<GEngineCoreApplication> _app;
+		std::weak_ptr<GEngineCoreApplication> _appPtr;
 
 		std::weak_ptr<UiRaycastTarget> _currentRaycastTargetPtr;
 		bool _mouseDown = false;

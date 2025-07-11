@@ -16,10 +16,20 @@ namespace GEngine
 	public:
 		static glm::vec2 RotatePointAroundPivot(const glm::vec2 point, const glm::vec2 pivot, const float radians)
 		{
-			const glm::vec2 pivotOffset = point - pivot;
+			const glm::vec2 pointInLocalSpace = point - pivot;
+			const glm::vec2 rotated = RotatePointAroundOrigin(pointInLocalSpace, radians);
+			const glm::vec2 pointInWorldSpace = rotated + pivot;
 
-			float rotatedX = pivot.x + (pivotOffset.x * std::cos(radians)) - (pivotOffset.y * std::sin(radians));
-			float rotatedY = pivot.y + (pivotOffset.x * std::sin(radians)) + (pivotOffset.y * std::cos(radians));
+			return pointInWorldSpace;
+		}
+
+		static glm::vec2 RotatePointAroundOrigin(const glm::vec2 point, const float radians)
+		{
+			const float sin = std::sin(radians);
+			const float cos = std::cos(radians);
+
+			float rotatedX = (point.x * cos) - (point.y * sin);
+			float rotatedY = (point.x * sin) + (point.y * cos);
 
 			return { rotatedX, rotatedY };
 		}

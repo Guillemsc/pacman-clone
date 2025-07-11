@@ -14,6 +14,7 @@
 #include "GEngine/Editor/Extensions/ImGuiExtensions.h"
 #include "GEngine/Entities/Entity.h"
 #include "GEngine/Modules/EditorModule.h"
+#include "GEngine/Modules/RenderingModule.h"
 
 namespace GEngine
 {
@@ -52,10 +53,18 @@ namespace GEngine
 		const std::shared_ptr<EditorModule> editor = app->Editor().lock();
 		if (!editor) return;
 
+		const std::shared_ptr<RenderingModule> rendering = app->Rendering().lock();
+		if (!rendering) return;
+
+		const std::shared_ptr<GuizmoUiRenderer> guizomUiRenderer = rendering->GuizmoUiRender().lock();
+		if (!guizomUiRenderer) return;
+
 		const std::vector<std::shared_ptr<Component>>& components = inspect->GetComponents();
 
 		for (auto it = components.begin(); it != components.end(); ++it)
 		{
+			(*it)->OnDrawSelectedGuizmo(guizomUiRenderer.get());
+
 			const std::shared_ptr<IComponentInspectorEditor> inspector = GetInspectorEditor(it->get());
 
 			const char* name = (*it)->GetTypeName();

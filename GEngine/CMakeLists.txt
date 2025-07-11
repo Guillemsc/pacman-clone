@@ -193,6 +193,10 @@ add_library(GEngineCore STATIC
         src/GEngine/Editor/PropertyDrawers/Vec4PropertyDrawerEditor.h
         src/GEngine/Data/UiRect.cpp
         src/GEngine/Data/UiRect.h
+        src/GEngine/Rendering/GuizmoUiRenderer.cpp
+        src/GEngine/Rendering/GuizmoUiRenderer.h
+        src/GEngine/Data/CornersRect.cpp
+        src/GEngine/Data/CornersRect.h
 )
 
 # Link raylib

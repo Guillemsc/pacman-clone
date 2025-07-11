@@ -6,6 +6,7 @@
 
 #include "GEngine/Extensions/Vec4Extensions.h"
 #include "GEngine/Modules/WindowModule.h"
+#include "GEngine/Rendering/GuizmoUiRenderer.h"
 #include "spdlog/spdlog.h"
 
 namespace GEngine
@@ -21,16 +22,32 @@ namespace GEngine
 		_anchoredPosition = _properties.Register("Anchored Position", Vec2Extensions::Zero);
 		_sizeDelta = _properties.Register("Size Delta", glm::vec2(50, 50));
 
-		_localPosition->RegisterOnChanged([this](const glm::vec2&) {RefreshWhenLocalValueChanged();});
-		_localSize->RegisterOnChanged([this](const glm::vec2&) {RefreshWhenLocalValueChanged();});
-		_localRotation->RegisterOnChanged([this](const float&) {RefreshWhenLocalValueChanged();});
-		_localScale->RegisterOnChanged([this](const glm::vec2&) {RefreshWhenLocalValueChanged();});
-		_pivot->RegisterOnChanged([this](const glm::vec2&) {RefreshWhenLocalValueChanged();});
-		_anchors->RegisterOnChanged([this](const glm::vec2&) {RefreshWhenLocalValueChanged();});
-		_anchoredPosition->RegisterOnChanged([this](const glm::vec2&) {RefreshWhenLocalValueChanged();});
-		_sizeDelta->RegisterOnChanged([this](const glm::vec2&) {RefreshWhenLocalValueChanged();});
+		_localPosition->RegisterOnChanged([this](const glm::vec2&) {RecalculateChildrenHierarchyWorldUiRects();});
+		_localSize->RegisterOnChanged([this](const glm::vec2&) {RecalculateChildrenHierarchyWorldUiRects();});
+		_localRotation->RegisterOnChanged([this](const float&) {RecalculateChildrenHierarchyWorldUiRects();});
+		_localScale->RegisterOnChanged([this](const glm::vec2&) {RecalculateChildrenHierarchyWorldUiRects();});
+		_pivot->RegisterOnChanged([this](const glm::vec2&) {RecalculateChildrenHierarchyWorldUiRects();});
+		_anchors->RegisterOnChanged([this](const glm::vec2&) {RecalculateChildrenHierarchyWorldUiRects();});
+		_anchoredPosition->RegisterOnChanged([this](const glm::vec2&) {RecalculateChildrenHierarchyWorldUiRects();});
+		_sizeDelta->RegisterOnChanged([this](const glm::vec2&) {RecalculateChildrenHierarchyWorldUiRects();});
 
-		RefreshWhenLocalValueChanged();
+		RecalculateChildrenHierarchyWorldUiRects();
+	}
+
+	void UiTransformComponent::OnDrawSelectedGuizmo(GuizmoUiRenderer* guizmoUiRenderer)
+	{
+		const UiRect parentUiRect = GetParentWorldUiRect();
+		const CornersRect anchorsScreenPosition = GetAnchorsScreenPosition(parentUiRect);
+		guizmoUiRenderer->AddCircle(anchorsScreenPosition.topLeft, 5, Color01::Green);
+		guizmoUiRenderer->AddCircle(anchorsScreenPosition.topRight, 5, Color01::Green);
+		guizmoUiRenderer->AddCircle(anchorsScreenPosition.bottomLeft, 5, Color01::Green);
+		guizmoUiRenderer->AddCircle(anchorsScreenPosition.bottomRight, 5, Color01::Green);
+
+		const glm::vec2 pivotPosition = _worldUiRect.GetPivotPosition(_localUiRect.pivot);
+		guizmoUiRenderer->AddCircle(pivotPosition, 5, Color01::Blue);
+
+		const CornersRect cornersRect = _worldUiRect.GetCorners();
+		guizmoUiRenderer->AddLineRect(cornersRect, 2, Color01::White);
 	}
 
 	void UiTransformComponent::SetAnchors(const glm::vec4& anchors) const
@@ -58,9 +75,9 @@ namespace GEngine
 		_localRotation->SetValue(rotation);
 	}
 
-	bool UiTransformComponent::IsContainedInScreenRect(const glm::vec2 &screenPosition) const
+	bool UiTransformComponent::IsContainedInWorldRect(const glm::vec2 &screenPosition) const
 	{
-		return false;
+		return _worldUiRect.ContainsPoint(screenPosition);
 	}
 
 	void UiTransformComponent::SetWorldPosition(const glm::vec2 &worldPosition) const
@@ -105,28 +122,13 @@ namespace GEngine
 		return _sizeDelta->GetValue();
 	}
 
-	glm::vec4 UiTransformComponent::GetScreenRect() const
-	{
-		return {};
-	}
-
-	glm::vec2 UiTransformComponent::GetPivotScreenPosition() const
-	{
-		return  {};
-	}
-
-	glm::vec2 UiTransformComponent::GetPivotOffset() const
-	{
-		return  {};
-	}
-
 	void UiTransformComponent::ComposeLocalUiRect()
 	{
 		_localUiRect = {
 			_localPosition->GetValue(),
-			_localSize->GetValue(),
 			_localRotation->GetValue(),
 			_localScale->GetValue(),
+			_localSize->GetValue(),
 			_pivot->GetValue()
 		};
 	}
@@ -150,7 +152,7 @@ namespace GEngine
 				const std::shared_ptr<UiTransformComponent> childTransform = checkingEntity->GetUiTransform().lock();
 				if (!childTransform) return false;
 
-				childTransform->RecalculatePositionAndSizeFromAnchoredPositionAndSizeDelta();
+				childTransform->RecalculateLocalPositionAndLocalSizeFromAnchoredPositionAndSizeDelta();
 				childTransform->ComposeLocalUiRect();
 				childTransform->RecalculateWorldUiRect();
 				return true;
@@ -158,63 +160,6 @@ namespace GEngine
 		);
 	}
 
-	glm::vec4 UiTransformComponent::GetAnchorsScreenPosition() const
-	{
-		const UiRect parentUiRect = GetParentWorldUiRect();
-		const glm::vec4 anchors = _anchors->GetValue();
-
-		return parentUiRect.GetRectFromNormalizedRect(anchors);
-	}
-
-	void UiTransformComponent::RecalculatePositionAndSizeFromAnchoredPositionAndSizeDelta() const
-	{
-		const glm::vec4 anchorsScreenRect = GetAnchorsScreenPosition();
-		const glm::vec2 anchorsCenter = Vec4Extensions::GetCenter(anchorsScreenRect);
-		const glm::vec2 anchorsSize = Vec4Extensions::GetSize(anchorsScreenRect);
-
-		const glm::vec2 anchoredPosition = _anchoredPosition->GetValue();
-		const glm::vec2 sizeDelta = _sizeDelta->GetValue();
-
-		const glm::vec2 finalPosition = anchorsCenter + anchoredPosition;
-		const glm::vec2 finalSize = anchorsSize + sizeDelta;
-
-		const UiRect parentRect = GetParentWorldUiRect();
-		const glm::vec2 localPosition = finalPosition - parentRect.position;
-		_localPosition->SetValue(localPosition, false);
-
-		_localSize->SetValue(finalSize, false);
-	}
-
-	void UiTransformComponent::RefreshWhenLocalValueChanged()
-	{
-		RecalculateChildrenHierarchyWorldUiRects();
-	}
-
-	void UiTransformComponent::Refresh()
-	{
-		RecalculateChildrenHierarchyWorldUiRects();
-	}
-
-	void UiTransformComponent::RecalculateScreenPositionAndSizeFromParentAndAnchoredPositionAndSizeDelta()
-	{
-		const UiRect parentScreenRect = GetParentWorldUiRect();
-		//const glm::vec4 anchorsScreenPosition = GetAnchorsScreenRectFromParentScreenRect(parentScreenRect);
-
-		// _screenRect.x = anchorsScreenPosition.x + _anchoredPosition.x - (_sizeDelta.x * 0.5f);
-		// _screenRect.y = anchorsScreenPosition.y + _anchoredPosition.y - (_sizeDelta.y * 0.5f);
-		// _screenRect.z = anchorsScreenPosition.z + _anchoredPosition.x + (_sizeDelta.x * 0.5f);
-		// _screenRect.w = anchorsScreenPosition.w + _anchoredPosition.y + (_sizeDelta.y * 0.5f);
-		//
-		// const glm::vec2 pivotOffset = GetPivotOffset();
-		//
-		// _screenRect.x -= pivotOffset.x;
-		// _screenRect.y -= pivotOffset.y;
-		// _screenRect.z -= pivotOffset.x;
-		// _screenRect.w -= pivotOffset.y;
-
-		//const glm::vec2 pivotScreen = GetPivotScreenPosition();
-		//_screenRect = Vec4Extensions::RotateAroundPivot(_screenRect, pivotScreen, _rotation->GetValue());
-	}
 
 	UiRect UiTransformComponent::GetParentWorldUiRect() const
 	{
@@ -242,40 +187,40 @@ namespace GEngine
 		const glm::vec2 screenSize = window->GetWindowSize();
 		const glm::vec2 screenPosition = screenSize * 0.5f;
 
-		return { screenPosition, screenSize, 0, Vec2Extensions::One };
+		return { screenPosition, 0, Vec2Extensions::One, screenSize, {0.5f, 0.5f } };
 	}
 
-	glm::vec4 UiTransformComponent::GetAnchorsScreenRectFromParentScreenRect(const glm::vec4 &parentRect) const
+	CornersRect UiTransformComponent::GetAnchorsScreenPosition(const UiRect& parentRect) const
 	{
-		glm::vec4 screenRect = glm::vec4(0);
-
-		const glm::vec2 parentRectSize = Vec4Extensions::GetSize(parentRect);
-
+		const CornersRect cornersRect = parentRect.GetCorners();
 		const glm::vec4 anchors = _anchors->GetValue();
 
-		screenRect.x = parentRect.x + (parentRectSize.x * anchors.x);
-		screenRect.y = parentRect.y + (parentRectSize.y * anchors.y);
-		screenRect.z = parentRect.x + (parentRectSize.x * anchors.z);
-		screenRect.w = parentRect.y + (parentRectSize.y * anchors.w);
-
-		return screenRect;
+		return cornersRect.GetFromNormalisedRect(anchors);
 	}
 
-	void UiTransformComponent::RefreshChildrenHierarchy() const
+	void UiTransformComponent::RecalculateLocalPositionAndLocalSizeFromAnchoredPositionAndSizeDelta() const
 	{
-		const std::shared_ptr<Entity> entity = GetEntity().lock();
-		if (!entity) return;
+		const UiRect parentUiRect = GetParentWorldUiRect();
+		const CornersRect anchorsScreenRect = GetAnchorsScreenPosition(parentUiRect);
+		const glm::vec2 anchorsCenter = anchorsScreenRect.GetCenter();
+		const glm::vec2 anchorsSize = anchorsScreenRect.GetSize();
 
-		entity->ForEachEntityInChildHierarchy(
-			true,
-			[this](const std::shared_ptr<Entity> &checkingEntity)
-			{
-				const std::shared_ptr<UiTransformComponent> childTransform = checkingEntity->GetUiTransform().lock();
-				if (!childTransform) return false;
+		glm::vec2 anchoredPosition = _anchoredPosition->GetValue();
+		const glm::vec2 sizeDelta = _sizeDelta->GetValue();
 
-				childTransform->RecalculateWorldUiRect();
-				return true;
-			}
-		);
+		anchoredPosition *= parentUiRect.scale;
+		anchoredPosition = MathExtensions::RotatePointAroundOrigin(anchoredPosition, -parentUiRect.rotation);
+
+		const glm::vec2 finalPosition = anchorsCenter + anchoredPosition;
+		const glm::vec2 finalSize = anchorsSize + sizeDelta;
+
+		const UiRect parentRect = GetParentWorldUiRect();
+		glm::vec2 localPosition = finalPosition - parentRect.position;
+
+		localPosition = MathExtensions::RotatePointAroundOrigin(localPosition, parentUiRect.rotation);
+		localPosition /= parentUiRect.scale;
+
+		_localPosition->SetValue(localPosition, false);
+		_localSize->SetValue(finalSize, false);
 	}
 } // GEngine

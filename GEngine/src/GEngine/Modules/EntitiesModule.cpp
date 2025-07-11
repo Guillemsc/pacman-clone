@@ -10,6 +10,7 @@
 #include "GEngine/Extensions/VectorExtensions.h"
 #include "GEngine/Components/TransformComponent.h"
 #include "GEngine/Components/UiTransformComponent.h"
+#include "spdlog/spdlog.h"
 
 namespace GEngine
 {
@@ -83,7 +84,14 @@ namespace GEngine
 		const std::shared_ptr<Entity> entity = entityPtr.lock();
 		if (entity == nullptr) return false;
 
-		entity->RemoveParent();
+		if (entity->_parentPtr.lock())
+		{
+			entity->RemoveParent();
+		}
+		else
+		{
+			VectorExtensions::Remove(_rootEntities, entity);
+		}
 
 		_checkingRemovingEntitiesBuffer.clear();
 
@@ -116,10 +124,13 @@ namespace GEngine
 		{
 			std::weak_ptr<Entity> entityPtr = _rootEntities.front();
 
-			if (entityPtr.expired()) return;
+			if (entityPtr.expired()) continue;
 			std::shared_ptr<Entity> entity = entityPtr.lock();
 
 			RemoveEntityNow(entity);
+
+			std::weak_ptr expiredCheck = entity;
+			entity.reset();
 		}
 	}
 
@@ -162,7 +173,7 @@ namespace GEngine
 				targetTransform->SetLocalPositionAsWorldPosition();
 			}
 
-			targetTransform->RecalculateWorldMatrix();
+			targetTransform->RecalculateChildrenHierarchyWorldMatrices();
 		}
 
 		if (const auto targetTransform = target->GetUiTransform().lock())
@@ -172,7 +183,7 @@ namespace GEngine
 				//targetTransform->SetLocalPositionAsWorldPosition();
 			}
 
-			targetTransform->Refresh();
+			targetTransform->RecalculateChildrenHierarchyWorldUiRects();
 		}
 
 		target->RefreshActiveState();
@@ -201,7 +212,7 @@ namespace GEngine
 				targetTransform->SetLocalPositionAsWorldPosition();
 			}
 
-			targetTransform->RecalculateWorldMatrix();
+			targetTransform->RecalculateChildrenHierarchyWorldMatrices();
 		}
 
 		if (const auto targetTransform = target->GetUiTransform().lock())
@@ -211,7 +222,7 @@ namespace GEngine
 				//targetTransform->SetLocalPositionAsWorldPosition();
 			}
 
-			targetTransform->Refresh();
+			targetTransform->RecalculateChildrenHierarchyWorldUiRects();
 		}
 
 		target->RefreshActiveState();
@@ -227,7 +238,7 @@ namespace GEngine
 			const std::shared_ptr<UiTransformComponent> transform = entity->GetUiTransform().lock();
 			if (!transform) continue;
 
-			transform->Refresh();
+			transform->RecalculateChildrenHierarchyWorldUiRects();
 		}
 	}
 

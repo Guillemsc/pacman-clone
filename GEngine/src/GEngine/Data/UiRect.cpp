@@ -2,63 +2,121 @@
 // Created by guillem on 7/8/25.
 //
 
+#define GLM_ENABLE_EXPERIMENTAL
+
 #include "UiRect.h"
 
 #include <cmath>
 
+#include "GEngine/Extensions/Vec2Extensions.h"
 #include "GEngine/Extensions/Vec4Extensions.h"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtx/matrix_decompose.hpp"
+#include "glm/gtx/quaternion.hpp"
 
 namespace GEngine
 {
 	UiRect UiRect::Transform(const UiRect &parent, const UiRect &child)
 	{
-		const glm::vec2 scaledLocalPos = child.position * parent.scale;
+		const glm::mat4 childMatrix = child.BuildMatrix();
+		const glm::mat4 parentMatrix = parent.BuildMatrix();
 
-		const float sin = std::sin(-parent.rotation);
-		const float cos = std::cos(-parent.rotation);
+		glm::mat4 worldMatrix = parentMatrix * childMatrix;
 
-		const glm::vec2 rotatedLocalPos = {
-			scaledLocalPos.x * cos - scaledLocalPos.y * sin,
-			scaledLocalPos.x * sin + scaledLocalPos.y * cos
-		};
+		glm::vec3 skew;
+		glm::vec4 perspective;
+		glm::vec3 translation;
+		glm::vec3 scale;
+		glm::quat rotation;
 
-		// Step 2: Compose transforms
+		glm::decompose(worldMatrix, scale, rotation, translation, skew, perspective);
+
+		glm::vec3 eulerRotation = glm::eulerAngles(rotation);
+
 		UiRect global;
-		global.position = parent.position + rotatedLocalPos;
-		global.rotation = parent.rotation + child.rotation;
-		global.scale = parent.scale * child.scale;
-		global.size = child.size * global.scale;
+		global.position = { translation.x, translation.y };
+		global.rotation = -eulerRotation.z;
+		global.scale = { scale.x, scale.y };
+
+		global.size = global.scale * child.size;
+		global.pivot = { 0.5f, 0.5f };
 
 		return global;
 	}
 
-	glm::vec2 UiRect::GetPointFromNormalizedPoint(const glm::vec2& point) const
+	glm::mat4 UiRect::BuildMatrix() const
 	{
-		glm::vec2 finalPoint = (point - glm::vec2(0.5f)) * size;
+		const glm::vec2 pivotOffset = GetPivotOffset();;
+		const glm::vec3 matrixPivotOffset = glm::vec3(pivotOffset.x, pivotOffset.y, 0);
+		const glm::vec3 matrixPosition = { position.x - pivotOffset.x, position.y - pivotOffset.y, 0 };
+		const glm::vec3 matrixRotation = {0, 0, -rotation};
+		const glm::quat matrixRotationQuaternion = glm::quat(matrixRotation);
+		const glm::quat normalizedRotation = glm::normalize(matrixRotationQuaternion);
+		const glm::vec3 matrixScale = { scale.x, scale.y, 1 };
 
-		finalPoint *= scale;
+		constexpr glm::mat4 identityMatrix = glm::mat4(1.0f);
 
-		const float sin = std::sin(-rotation);
-		const float cos = std::cos(-rotation);
+		const glm::mat4 translationMat = glm::translate(identityMatrix, matrixPosition );
+		const glm::mat4 rotationMat = glm::toMat4(normalizedRotation);
+		const glm::mat4 scaleMat = glm::scale(identityMatrix, matrixScale);
+		const glm::mat4 pivotToOriginMat = glm::translate(identityMatrix, -matrixPivotOffset);
+		const glm::mat4 pivotBackMat = glm::translate(identityMatrix, matrixPivotOffset);
 
-		const glm::vec2 rotated = {
-			finalPoint.x * cos - finalPoint.y * sin,
-			finalPoint.x * sin + finalPoint.y * cos
-		};
-
-		finalPoint = position + rotated;
-
-		return finalPoint;
+		return translationMat * pivotBackMat * rotationMat * scaleMat * pivotToOriginMat;
 	}
 
-	glm::vec4 UiRect::GetRectFromNormalizedRect(const glm::vec4 &point) const
+	glm::vec2 UiRect::GetPivotOffset(const glm::vec2 &pivot) const
 	{
-		const glm::vec2 min = Vec4Extensions::GetMin(point);
-		const glm::vec2 max = Vec4Extensions::GetMax(point);
+		return (pivot - glm::vec2(0.5f)) * size;
+	}
 
-		const glm::vec2 minFinal = GetPointFromNormalizedPoint(min);
-		const glm::vec2 maxFinal = GetPointFromNormalizedPoint(max);
+	glm::vec2 UiRect::GetPivotOffset() const
+	{
+		return GetPivotOffset(pivot);
+	}
 
-		return Vec4Extensions::FromMinMax(minFinal, maxFinal);
+	glm::vec2 UiRect::GetPivotPosition(const glm::vec2& pivot) const
+	{
+		glm::vec2 pivotOffset = GetPivotOffset(pivot);
+		pivotOffset = MathExtensions::RotatePointAroundOrigin(pivotOffset, -rotation);
+		return position + pivotOffset;
+	}
+
+	glm::vec2 UiRect::GetPivotPosition() const
+	{
+		return GetPivotPosition(pivot);
+	}
+
+	CornersRect UiRect::GetCorners() const
+	{
+		CornersRect corners;
+
+		const glm::vec2 pivotOffset = GetPivotOffset();
+		const glm::vec2 halfSize = size * 0.5f;
+
+		corners.bottomLeft = glm::vec2(-halfSize.x, -halfSize.y) + pivotOffset;
+		corners.topLeft = glm::vec2(-halfSize.x, halfSize.y) + pivotOffset;
+		corners.topRight = glm::vec2(halfSize.x, halfSize.y) + pivotOffset;
+		corners.bottomRight = glm::vec2(halfSize.x, -halfSize.y) + pivotOffset;
+
+		corners.bottomLeft = position + MathExtensions::RotatePointAroundPivot(corners.bottomLeft, pivotOffset, -rotation);
+		corners.topLeft = position + MathExtensions::RotatePointAroundPivot(corners.topLeft, pivotOffset, -rotation);
+		corners.topRight = position + MathExtensions::RotatePointAroundPivot(corners.topRight, pivotOffset, -rotation);
+		corners.bottomRight = position + MathExtensions::RotatePointAroundPivot(corners.bottomRight, pivotOffset, -rotation);
+
+		return corners;
+	}
+
+	bool UiRect::ContainsPoint(const glm::vec2 &point) const
+	{
+		const glm::vec2 local = point - position;
+		const glm::vec2 unrotated = MathExtensions::RotatePointAroundOrigin(local, -rotation);
+		const glm::vec2 unscaled = Vec2Extensions::SafeDivide(unrotated, scale);
+
+		const glm::vec2 min = -pivot * size;
+		const glm::vec2 max = min + size;
+
+		return unscaled.x >= min.x && unscaled.x <= max.x &&
+				unscaled.y >= min.y && unscaled.y <= max.y;
 	}
 } // GEngine

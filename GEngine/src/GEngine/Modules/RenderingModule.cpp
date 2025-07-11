@@ -11,6 +11,7 @@
 #include "GEngine/Rendering/ImGuiRenderer.h"
 #include "GEngine/Rendering/Renderer2d.h"
 #include "GEngine/Rendering/UiRenderer.h"
+#include "GEngine/Rendering/GuizmoUiRenderer.h"
 
 namespace GEngine
 {
@@ -25,6 +26,7 @@ namespace GEngine
 
 		_renderer2d = std::make_shared<Renderer2d>();
 		_uiRenderer = std::make_shared<UiRenderer>(appPtr);
+		_guizmoUiRenderer = std::make_shared<GuizmoUiRenderer>(appPtr);
 		_imGuiRenderer = std::make_shared<ImGuiRenderer>();
 
 		_imGuiRenderer->Init();
@@ -86,6 +88,7 @@ namespace GEngine
 
 		BeginMode2D(uiCamera);
 		_uiRenderer->Render();
+		_guizmoUiRenderer->Render();
 		EndMode2D();
 
 		_imGuiRenderer->Render();

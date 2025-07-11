@@ -49,8 +49,6 @@ namespace GEngine
 
 		_localPosition = position;
 
-		const std::shared_ptr<TransformComponent> thisShared = shared_from_this();
-
 		ComposeLocalMatrix();
 		RecalculateChildrenHierarchyWorldMatrices();
 	}

@@ -6,6 +6,7 @@
 
 #include "InputModule.h"
 #include "GEngine/Cameras/Camera.h"
+#include "GEngine/Core/GEngineCoreApplication.h"
 #include "GEngine/Extensions/VectorExtensions.h"
 #include "glm/gtc/quaternion.hpp"
 #include "spdlog/spdlog.h"
@@ -19,6 +20,11 @@ namespace GEngine
 		_editorCamera->SetProjection(CameraProjection::CAMERA_PERSPECTIVE);
 
 		_currentRenderingCamera = _editorCamera;
+	}
+
+	void CameraModule::Init(const std::weak_ptr<GEngineCoreApplication> &appPtr)
+	{
+		_appPtr = appPtr;
 	}
 
 	void CameraModule::Tick(const float deltaTime)
@@ -71,6 +77,12 @@ namespace GEngine
 
 	void CameraModule::TickEditorCamera(float deltaTime)
 	{
+		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
+		if (!app) return;
+
+		const std::shared_ptr<InputModule> input = app->Input().lock();
+		if (!input) return;
+
 		if (!_isUsingEditorCamera)
 		{
 			return;
@@ -92,14 +104,14 @@ namespace GEngine
 
 		_editorCamera->SetPosition(position);
 
-		glm::vec2 mousePos = InputModule::GetMousePosition();
+		glm::vec2 mousePos = input->GetMousePosition();
 		glm::vec2 delta = mousePos - _lastMousePos;
 		_lastMousePos = mousePos;
 
 		if (InputModule::IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
 		{
 			float yaw = delta.x * lookSensitivity * deltaTime;
-			float pitch = delta.y * lookSensitivity * deltaTime;
+			float pitch = -delta.y * lookSensitivity * deltaTime;
 
 			glm::quat yawQuat = glm::angleAxis(yaw, glm::vec3(0, 1, 0));
 			rotation = yawQuat * rotation;

@@ -41,4 +41,6 @@ namespace GEngine
 	}
 
 	const Color01 Color01::White = Color01(1);
+	const Color01 Color01::Green = Color01(0, 1, 0);
+	const Color01 Color01::Blue = Color01(0, 0, 1);
 } // GEngineCore

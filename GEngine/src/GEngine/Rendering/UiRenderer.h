@@ -17,7 +17,7 @@ namespace GEngine
 	class UiRenderer
 	{
 	public:
-		UiRenderer(const std::weak_ptr<GEngineCoreApplication> &appPtr);
+		explicit UiRenderer(const std::weak_ptr<GEngineCoreApplication> &appPtr);
 
 		void Add(std::int32_t layer, const std::function<void()> &func);
 		void Render();

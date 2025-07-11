@@ -42,15 +42,18 @@ namespace GEngine
 		glm::vec2 pivot = uiRect.pivot;
 		pivot.y = 1 - pivot.y;
 
-		const Vector2 center = { size.x * pivot.x, size.y * pivot.y };
+		const glm::vec2 center = { size.x * pivot.x, size.y * pivot.y };
+
+		const glm::vec2 offset = uiRect.GetPivotOffset();
+		position += offset;
 
 		position = rendering->UiRender().lock()->PositionToRenderPosition(position);
 
 		rendering->UiRender().lock()->Add(0, [this, size, rotation, center, position]()
 		{
 			const Color color = Color01Extensions::ToRaylibColor(_color);
-			const Rectangle button = { position.x, position.y, size.x, size.y};
-			DrawRectanglePro(button, center, rotation, color);
+			const Rectangle button = {position.x, position.y, size.x, size.y};
+			DrawRectanglePro(button, { center.x, center.y }, rotation, color);
 			DrawText("Click Me", button.x + 10, button.y + 15, 20, BLACK);
 		});
 	}

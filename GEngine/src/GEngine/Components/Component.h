@@ -10,10 +10,13 @@
 
 namespace GEngine
 {
+	class GuizmoUiRenderer;
+
 	class Component : public GEngineObject
 	{
-	friend class ComponentsModule;
-	friend class Entity;
+		friend class ComponentsModule;
+		friend class Entity;
+		friend class EntityInspectorEditor;
 
 	public:
 		explicit Component(const std::weak_ptr<Entity> &entity);
@@ -32,6 +35,7 @@ namespace GEngine
 		virtual void OnTick() {};
 		virtual void OnDisable() {}
 		virtual void OnDestroy() {}
+		virtual void OnDrawSelectedGuizmo(GuizmoUiRenderer* guizmoUiRenderer) {}
 
 	private:
 		void RefreshEnabledState();

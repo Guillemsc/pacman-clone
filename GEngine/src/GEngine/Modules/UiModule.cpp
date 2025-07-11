@@ -15,7 +15,7 @@ namespace GEngine
 {
 	void UiModule::Init(const std::weak_ptr<GEngineCoreApplication> &app)
 	{
-		_app = app;
+		_appPtr = app;
 	}
 
 	void UiModule::Tick()
@@ -29,7 +29,7 @@ namespace GEngine
 
 	void UiModule::TickRaycastTargetsState()
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _app.lock();
+		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
 		if (!app) return;
 
 		const std::shared_ptr<InputModule> input = app->Input().lock();
@@ -98,7 +98,7 @@ namespace GEngine
 
 	std::shared_ptr<UiRaycastTarget> UiModule::RaycastAtScreenPosition(const glm::vec2& mousePosition) const
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _app.lock();
+		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
 		if (!app) return std::shared_ptr<UiRaycastTarget>();
 
 		const std::shared_ptr<EntitiesModule> entities = app->Entities().lock();
@@ -115,7 +115,7 @@ namespace GEngine
 			const std::shared_ptr<UiRaycastTarget> raycastTarget = entity->GetComponent<UiRaycastTarget>().lock();
 			if (!raycastTarget) return;
 
-			const bool containsTarget = transform->IsContainedInScreenRect(mousePosition);
+			const bool containsTarget = transform->IsContainedInWorldRect(mousePosition);
 			if (!containsTarget) return;
 
 			target = raycastTarget;

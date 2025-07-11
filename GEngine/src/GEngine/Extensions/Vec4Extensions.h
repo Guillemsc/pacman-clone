@@ -36,6 +36,26 @@ namespace GEngine
 			return { value.z, value.w };
 		}
 
+		static glm::vec2 GetTopLeft(const glm::vec4& value)
+		{
+			return { value.x, value.w };
+		}
+
+		static glm::vec2 GetBottomLeft(const glm::vec4& value)
+		{
+			return { value.x, value.y };
+		}
+
+		static glm::vec2 GetTopRight(const glm::vec4& value)
+		{
+			return { value.z, value.w };
+		}
+
+		static glm::vec2 GetBottomRight(const glm::vec4& value)
+		{
+			return { value.z, value.y };
+		}
+
 		static glm::vec4 FromMinMax(const glm::vec2& min, const glm::vec2& max)
 		{
 			return { min.x, min.y, max.x, max.y };
