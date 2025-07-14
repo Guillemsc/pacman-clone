@@ -10,13 +10,16 @@
 #include "GEngine/Extensions/Vec4Extensions.h"
 #include "GEngine/Modules/RenderingModule.h"
 #include "GEngine/Rendering/UiRenderer.h"
+#include "GEngine/Shapes2d/RectShape2d.h"
+#include "GEngine/UiShapes2d/RectUiShape2d.h"
 #include "glm/vec2.hpp"
 
 namespace GEngine
 {
 	UiShapeRendererComponent::UiShapeRendererComponent(const std::weak_ptr<Entity> &entity) : Component(entity)
 	{
-
+		_shape2d = _properties.RegisterObject<UiShape2d>("Shape", std::make_shared<RectUiShape2d>());
+		_color = _properties.Register<Color01>("Color", Color01::White);
 	}
 
 	void UiShapeRendererComponent::OnTick()
@@ -51,15 +54,29 @@ namespace GEngine
 
 		rendering->UiRender().lock()->Add(0, [this, size, rotation, center, position]()
 		{
-			const Color color = Color01Extensions::ToRaylibColor(_color);
-			const Rectangle button = {position.x, position.y, size.x, size.y};
-			DrawRectanglePro(button, { center.x, center.y }, rotation, color);
-			DrawText("Click Me", button.x + 10, button.y + 15, 20, BLACK);
+			if (const auto rectShape = std::dynamic_pointer_cast<RectUiShape2d>(_shape2d->GetValue()))
+			{
+				RenderRectUiShape2d(position, rotation, size, center, rectShape.get());
+			}
 		});
 	}
 
-	void UiShapeRendererComponent::SetColor(const Color01& color)
+	void UiShapeRendererComponent::SetColor(const Color01& color) const
 	{
-		_color = color;
+		_color->SetValue(color);
+	}
+
+	void UiShapeRendererComponent::RenderRectUiShape2d(
+		const glm::vec2 &position,
+		const float rotation,
+		const glm::vec2 &size,
+		const glm::vec2 center,
+		const RectUiShape2d *rectShape
+		) const
+	{
+		const Color color = Color01Extensions::ToRaylibColor(_color->GetValue());
+		const Rectangle button = {position.x, position.y, size.x, size.y};
+		DrawRectanglePro(button, { center.x, center.y }, rotation, color);
+		DrawText("Click Me", button.x + 10, button.y + 15, 20, BLACK);
 	}
 } // GEngine

@@ -6,10 +6,12 @@
 
 #include "EntitiesModule.h"
 #include "InputModule.h"
+#include "WindowModule.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
 #include "GEngine/Entities/Entity.h"
 #include "GEngine/Components/UiShapeButtonComponent.h"
 #include "GEngine/Components/UiTransformComponent.h"
+#include "GEngine/Extensions/MathExtensions.h"
 
 namespace GEngine
 {
@@ -25,6 +27,17 @@ namespace GEngine
 
 	void UiModule::Dispose()
 	{
+	}
+
+	void UiModule::SetReferenceScreenSize(const glm::vec2 &size)
+	{
+		_referenceScreenSize = size;
+		RecalculateUiScaleAndRefreshUiTransforms();
+	}
+
+	float UiModule::GetUiScale() const
+	{
+		return _uiScale;
 	}
 
 	void UiModule::TickRaycastTargetsState()
@@ -122,5 +135,28 @@ namespace GEngine
 		});
 
 		return target;
+	}
+
+	void UiModule::RecalculateUiScaleAndRefreshUiTransforms()
+	{
+		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
+		if (!app) return;
+
+		const std::shared_ptr<WindowModule> window = app->Window().lock();
+		if (!window) return;
+
+		const std::shared_ptr<EntitiesModule> entities = app->Entities().lock();
+		if (!entities) return;
+
+		const glm::vec2 windowSize = window->GetWindowSize();
+
+		_uiScale = MathExtensions::GetNormalizedValue(windowSize.x, _referenceScreenSize.x);
+
+		entities->RefreshUiTransforms();
+	}
+
+	glm::vec2 UiModule::GetReferenceScreenSize() const
+	{
+		return _referenceScreenSize;
 	}
 }

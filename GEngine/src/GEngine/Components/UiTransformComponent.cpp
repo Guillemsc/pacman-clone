@@ -5,6 +5,7 @@
 #include "UiTransformComponent.h"
 
 #include "GEngine/Extensions/Vec4Extensions.h"
+#include "GEngine/Modules/UiModule.h"
 #include "GEngine/Modules/WindowModule.h"
 #include "GEngine/Rendering/GuizmoUiRenderer.h"
 #include "spdlog/spdlog.h"
@@ -31,7 +32,9 @@ namespace GEngine
 		_anchoredPosition->RegisterOnChanged([this](const glm::vec2&) {RecalculateChildrenHierarchyWorldUiRects();});
 		_sizeDelta->RegisterOnChanged([this](const glm::vec2&) {RecalculateChildrenHierarchyWorldUiRects();});
 
-		RecalculateChildrenHierarchyWorldUiRects();
+		RecalculateLocalPositionAndLocalSizeFromAnchoredPositionAndSizeDelta();
+		ComposeLocalUiRect();
+		RecalculateWorldUiRect();
 	}
 
 	void UiTransformComponent::OnDrawSelectedGuizmo(GuizmoUiRenderer* guizmoUiRenderer)
@@ -200,13 +203,27 @@ namespace GEngine
 
 	void UiTransformComponent::RecalculateLocalPositionAndLocalSizeFromAnchoredPositionAndSizeDelta() const
 	{
+		const std::shared_ptr<Entity> entity = GetEntity().lock();
+		if (!entity) return;
+
+		const std::shared_ptr<GEngineCoreApplication> app = entity->GetApp().lock();
+		if (!app) return;
+
+		const std::shared_ptr<UiModule> ui = app->Ui().lock();
+		if (!ui) return;
+
+		const float uiScale = ui->GetUiScale();
+
 		const UiRect parentUiRect = GetParentWorldUiRect();
 		const CornersRect anchorsScreenRect = GetAnchorsScreenPosition(parentUiRect);
 		const glm::vec2 anchorsCenter = anchorsScreenRect.GetCenter();
 		const glm::vec2 anchorsSize = anchorsScreenRect.GetSize();
 
 		glm::vec2 anchoredPosition = _anchoredPosition->GetValue();
-		const glm::vec2 sizeDelta = _sizeDelta->GetValue();
+		glm::vec2 sizeDelta = _sizeDelta->GetValue();
+
+		sizeDelta *= uiScale;
+		anchoredPosition *= uiScale;
 
 		anchoredPosition *= parentUiRect.scale;
 		anchoredPosition = MathExtensions::RotatePointAroundOrigin(anchoredPosition, -parentUiRect.rotation);

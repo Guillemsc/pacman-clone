@@ -32,7 +32,7 @@ namespace GEngine
 
 	void EntitiesModule::Dispose()
 	{
-		RemoveAllEntities();
+		RemoveAllEntitiesNow();
 	}
 
 	std::weak_ptr<Entity> EntitiesModule::AddWorldEntity()
@@ -118,7 +118,7 @@ namespace GEngine
 		return true;
 	}
 
-	void EntitiesModule::RemoveAllEntities()
+	void EntitiesModule::RemoveAllEntitiesNow()
 	{
 		while (_rootEntities.size() > 0)
 		{

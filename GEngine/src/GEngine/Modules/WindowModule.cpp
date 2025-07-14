@@ -6,6 +6,7 @@
 
 #include "EntitiesModule.h"
 #include "raylib.h"
+#include "UiModule.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
 
 namespace GEngine
@@ -59,16 +60,17 @@ namespace GEngine
 		}
 	}
 
-	void WindowModule::OnWindowSizeChanged()
+	void WindowModule::OnWindowSizeChanged() const
 	{
 		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
 		if (!app) return;
 
-		const std::shared_ptr<EntitiesModule> entities = app->Entities().lock();
+		const std::shared_ptr<UiModule> ui = app->Ui().lock();
+		if (!ui) return;
 
-		if (entities)
-		{
-			entities->RefreshUiTransforms();
-		}
+		const std::shared_ptr<EntitiesModule> entities = app->Entities().lock();
+		if (!entities) return;
+
+		ui->RecalculateUiScaleAndRefreshUiTransforms();
 	}
 } // GEngineCore

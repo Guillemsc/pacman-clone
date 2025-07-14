@@ -38,6 +38,8 @@ namespace GEngine
 		template<typename T>
 		bool IsSelectedObject(std::weak_ptr<T> object);
 
+		const std::vector<std::shared_ptr<EditorWindow>>& GetEditorWindows() const;
+
 	private:
 		void RenderEditor();
 		void DrawWindows();

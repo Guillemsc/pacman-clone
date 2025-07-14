@@ -23,6 +23,8 @@ namespace GEngine
 
 		void AddSystem(const std::shared_ptr<System>& system);
 
+		void RemoveAllSystemsNow();
+
 	private:
 		void TickSystems();
 

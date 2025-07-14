@@ -17,7 +17,7 @@ namespace GEngine
 		GameModule();
 
 		void Init(const std::weak_ptr<GEngineCoreApplication> &app);
-		void Tick();
+		void Tick() const;
 		void Dispose();
 
 		void LoadGame(const std::shared_ptr<Game> &game);

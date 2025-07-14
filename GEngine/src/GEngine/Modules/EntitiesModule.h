@@ -31,7 +31,7 @@ namespace GEngine
 		std::weak_ptr<Entity> AddUiEntity();
 		bool RemoveEntity(const std::weak_ptr<Entity> &entityPtr);
 		bool RemoveEntityNow(const std::weak_ptr<Entity> &entityPtr);
-		void RemoveAllEntities();
+		void RemoveAllEntitiesNow();
 
 		void SetEntityParent(const std::weak_ptr<Entity> &targetPtr, const std::weak_ptr<Entity> &parentPtr, bool worldPositionStays = true);
 		void RemoveEntityParent(const std::weak_ptr<Entity>& targetPtr, bool worldPositionStays = true);

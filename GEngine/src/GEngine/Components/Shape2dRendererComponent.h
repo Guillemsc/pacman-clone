@@ -7,11 +7,12 @@
 
 #include "Component.h"
 #include "raylib.h"
-#include "GEngine/Shapes2d/Shape2d.h"
 #include "glm/vec2.hpp"
 
 namespace GEngine
 {
+	struct Color01;
+	class Shape2d;
 	class RectShape2d;
 
 	class Shape2dRendererComponent final : public Component
@@ -37,7 +38,7 @@ namespace GEngine
 	private:
 		std::shared_ptr<Property<std::int32_t>> _layer;
 		std::shared_ptr<Property<std::shared_ptr<Shape2d>>> _shape2d;
-		Color _color = { 255, 255, 255, 255 };
+		std::shared_ptr<Property<Color01>> _color;
 	};
 }
 

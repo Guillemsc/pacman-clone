@@ -19,7 +19,7 @@ namespace GEngine
 	public:
 		explicit HierarchyEditorWindow(const std::weak_ptr<GEngineCoreApplication> &app);
 
-		void Draw() override;
+		void DrawWindowContent() override;
 
 	private:
 		void DrawRightClickContextMenu(

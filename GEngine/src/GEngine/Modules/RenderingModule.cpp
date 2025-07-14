@@ -84,7 +84,7 @@ namespace GEngine
 		// Temp UI
 		Camera2D uiCamera = { 0 };
 		uiCamera.rotation = 0.0f;
-		uiCamera.zoom = 1.0f;
+		uiCamera.zoom = 1;
 
 		BeginMode2D(uiCamera);
 		_uiRenderer->Render();

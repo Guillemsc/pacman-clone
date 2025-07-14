@@ -13,8 +13,9 @@ namespace GEngine
 {
 	struct Color01
 	{
-		Color01(char r, char g, char b, char a = 1);
+		Color01(float r, float g, float b, float a = 1);
 		Color01(char scalar);
+		Color01();
 
 		static Color01 FromHex(const std::string& hex);
 
@@ -22,10 +23,10 @@ namespace GEngine
 		static const Color01 Green;
 		static const Color01 Blue;
 
-		float r;
-		float g;
-		float b;
-		float a;
+		float r = 0;
+		float g = 0;
+		float b = 0;
+		float a = 1;
 	};
 }
 

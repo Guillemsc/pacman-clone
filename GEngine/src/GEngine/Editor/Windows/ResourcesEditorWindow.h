@@ -16,7 +16,7 @@ namespace GEngine
 	public:
 		explicit ResourcesEditorWindow(const std::weak_ptr<GEngineCoreApplication> &app);
 
-		void Draw() override;
+		void DrawWindowContent() override;
 
 	private:
 		void DrawLeftClickContextMenu(

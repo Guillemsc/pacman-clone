@@ -6,6 +6,8 @@
 
 #include "raylib.h"
 #include "TransformComponent.h"
+#include "GEngine/Colors/Color01.h"
+#include "GEngine/Extensions/Color01Extensions.h"
 #include "GEngine/Modules/RenderingModule.h"
 #include "GEngine/Rendering/Renderer2d.h"
 #include "GEngine/Shapes2d/RectShape2d.h"
@@ -16,6 +18,7 @@ namespace GEngine
 	{
 		_layer = _properties.Register("Layer", 0);
 		_shape2d = _properties.RegisterObject<Shape2d>("Shape", std::make_shared<RectShape2d>());
+		_color = _properties.Register<Color01>("Color", Color01::White);
 	}
 
 	void Shape2dRendererComponent::OnTick()
@@ -77,6 +80,8 @@ namespace GEngine
 			size.y,
 		};
 
-		DrawRectanglePro(rectangle, center, rotation, _color);
+		const Color color = Color01Extensions::ToRaylibColor(_color->GetValue());
+
+		DrawRectanglePro(rectangle, center, rotation, color);
 	}
 } // GEngineCore

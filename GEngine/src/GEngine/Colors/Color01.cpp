@@ -6,7 +6,7 @@
 
 namespace GEngine
 {
-	Color01::Color01(const char r, const char g, const char b, const char a)
+	Color01::Color01(const float r, const float g, const float b, const float a)
 	{
 		this->r = r;
 		this->g = g;
@@ -15,6 +15,10 @@ namespace GEngine
 	}
 
 	Color01::Color01(const char scalar) : Color01(scalar, scalar, scalar, scalar)
+	{
+	}
+
+	Color01::Color01()
 	{
 	}
 

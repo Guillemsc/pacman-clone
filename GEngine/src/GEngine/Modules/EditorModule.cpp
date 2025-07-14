@@ -9,15 +9,19 @@
 #include "RenderingModule.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
 #include "GEngine/Editor/MenuBar/MenuBarEditor.h"
+#include "GEngine/Editor/PropertyDrawers/Color01PropertyDrawerEditor.h"
 #include "GEngine/Editor/PropertyDrawers/FloatPropertyDrawerEditor.h"
 #include "GEngine/Editor/PropertyDrawers/IntPropertyDrawerEditor.h"
 #include "GEngine/Editor/PropertyDrawers/Vec2PropertyDrawerEditor.h"
 #include "GEngine/Editor/PropertyDrawers/Vec3PropertyDrawerEditor.h"
 #include "GEngine/Editor/PropertyDrawers/Vec4PropertyDrawerEditor.h"
+#include "GEngine/Editor/Windows/DemoEditorWindow.h"
 #include "GEngine/Editor/Windows/EditorWindow.h"
+#include "GEngine/Editor/Windows/ExamplesEditorWindow.h"
 #include "GEngine/Editor/Windows/HierarchyEditorWindow.h"
 #include "GEngine/Editor/Windows/InspectorEditorWindow.h"
 #include "GEngine/Editor/Windows/ResourcesEditorWindow.h"
+#include "GEngine/Editor/Windows/UiEditorWindow.h"
 #include "GEngine/Extensions/UnorderedMapExtensions.h"
 #include "GEngine/Objects/GEngineObject.h"
 #include "GEngine/Rendering/ImGuiRenderer.h"
@@ -36,10 +40,14 @@ namespace GEngine
 		RegisterPropertyDrawer<Vec2PropertyDrawerEditor, Property<glm::vec2>>();
 		RegisterPropertyDrawer<Vec3PropertyDrawerEditor, Property<glm::vec3>>();
 		RegisterPropertyDrawer<Vec4PropertyDrawerEditor, Property<glm::vec4>>();
+		RegisterPropertyDrawer<Color01PropertyDrawerEditor, Property<Color01>>();
 
 		RegisterWindow<HierarchyEditorWindow>();
 		RegisterWindow<InspectorEditorWindow>();
 		RegisterWindow<ResourcesEditorWindow>();
+		RegisterWindow<UiEditorWindow>();
+		RegisterWindow<ExamplesEditorWindow>();
+		RegisterWindow<DemoEditorWindow>();
 	}
 
 	void EditorModule::Tick()
@@ -101,6 +109,11 @@ namespace GEngine
 		return _selectedObject;
 	}
 
+	const std::vector<std::shared_ptr<EditorWindow>> & EditorModule::GetEditorWindows() const
+	{
+		return _windows;
+	}
+
 	void EditorModule::RenderEditor()
 	{
 		if (!_editorRenderingEnabled)
@@ -119,9 +132,6 @@ namespace GEngine
 
 		imGuiRenderer->Add([this]()
 		{
-			bool open = true;
-			ImGui::ShowDemoWindow(&open);
-
 			_menuBar->Draw();
 
 			DrawWindows();
@@ -132,7 +142,7 @@ namespace GEngine
 	{
 		for (auto it = _windows.begin(); it != _windows.end(); ++it)
 		{
-			if (!(*it)->visible)
+			if (!(*it)->Visible)
 			{
 				continue;
 			}

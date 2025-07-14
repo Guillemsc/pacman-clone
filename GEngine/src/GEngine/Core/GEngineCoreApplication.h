@@ -11,6 +11,8 @@
 
 namespace GEngine
 {
+	class TimeModule;
+	class ExamplesModule;
 	class UiModule;
 	class CoroutinesModule;
 	class CameraModule;
@@ -43,23 +45,27 @@ namespace GEngine
 		std::weak_ptr<RenderingModule> Rendering() { return _rendering; }
 		std::weak_ptr<ResourcesModule> Resources() { return _resources; }
 		std::weak_ptr<SystemsModule> Systems() { return _systems; }
+		std::weak_ptr<TimeModule> Time() { return _time; }
 		std::weak_ptr<InputModule> Input() { return _input; }
 		std::weak_ptr<UiModule> Ui() { return _ui; }
 		std::weak_ptr<CoroutinesModule> Coroutines() { return _coroutines; }
 		std::weak_ptr<EditorModule> Editor() { return _editor; }
+		std::weak_ptr<ExamplesModule> Examples() { return _examples; }
 
 	private:
-		std::shared_ptr<EntitiesModule> _entities = nullptr;
-		std::shared_ptr<GameModule> _game = nullptr;
-		std::shared_ptr<CameraModule> _camera = nullptr;
-		std::shared_ptr<WindowModule> _window = nullptr;
-		std::shared_ptr<RenderingModule> _rendering = nullptr;
-		std::shared_ptr<ResourcesModule> _resources = nullptr;
-		std::shared_ptr<SystemsModule> _systems = nullptr;
-		std::shared_ptr<InputModule> _input = nullptr;
-		std::shared_ptr<UiModule> _ui = nullptr;
-		std::shared_ptr<CoroutinesModule> _coroutines = nullptr;
-		std::shared_ptr<EditorModule> _editor = nullptr;
+		std::shared_ptr<EntitiesModule> _entities;
+		std::shared_ptr<GameModule> _game;
+		std::shared_ptr<CameraModule> _camera;
+		std::shared_ptr<WindowModule> _window;
+		std::shared_ptr<RenderingModule> _rendering;
+		std::shared_ptr<ResourcesModule> _resources;
+		std::shared_ptr<TimeModule> _time;
+		std::shared_ptr<SystemsModule> _systems;
+		std::shared_ptr<InputModule> _input;
+		std::shared_ptr<UiModule> _ui;
+		std::shared_ptr<CoroutinesModule> _coroutines;
+		std::shared_ptr<EditorModule> _editor;
+		std::shared_ptr<ExamplesModule> _examples;
 	};
 } // GEngineCore
 

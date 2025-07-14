@@ -14,11 +14,12 @@
 
 namespace GEngine
 {
-	HierarchyEditorWindow::HierarchyEditorWindow(const std::weak_ptr<GEngineCoreApplication> &app) : EditorWindow(app)
+	HierarchyEditorWindow::HierarchyEditorWindow(const std::weak_ptr<GEngineCoreApplication> &app)
+		: EditorWindow(app, "Hierarchy")
 	{
 	}
 
-	void HierarchyEditorWindow::Draw()
+	void HierarchyEditorWindow::DrawWindowContent()
 	{
 		const std::shared_ptr<GEngineCoreApplication> app = _app.lock();
 		if (!app) return;
@@ -28,8 +29,6 @@ namespace GEngine
 
 		const std::shared_ptr<EditorModule> editor = app->Editor().lock();
 		if (!editor) return;
-
-		ImGui::Begin("Hierarchy");
 
 		const std::shared_ptr<GEngineObject> selectedObject = editor->GetSelectedObject().lock();
 
@@ -126,8 +125,6 @@ namespace GEngine
 			--currentDepth;
 			ImGui::TreePop();
 		}
-
-		ImGui::End();
 	}
 
 	void HierarchyEditorWindow::DrawRightClickContextMenu(

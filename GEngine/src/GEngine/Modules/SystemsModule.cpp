@@ -34,6 +34,11 @@ namespace GEngine
 		_systems.push_back(system);
 	}
 
+	void SystemsModule::RemoveAllSystemsNow()
+	{
+		_systems.clear();
+	}
+
 	void SystemsModule::TickSystems()
 	{
 		for (auto it = _systems.begin(); it != _systems.end(); ++it)

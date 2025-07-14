@@ -8,11 +8,13 @@
 #include "GEngine/Modules/CoroutinesModule.h"
 #include "GEngine/Modules/EditorModule.h"
 #include "GEngine/Modules/EntitiesModule.h"
+#include "GEngine/Modules/ExamplesModule.h"
 #include "GEngine/Modules/GameModule.h"
 #include "GEngine/Modules/InputModule.h"
 #include "GEngine/Modules/RenderingModule.h"
 #include "GEngine/Modules/ResourcesModule.h"
 #include "GEngine/Modules/SystemsModule.h"
+#include "GEngine/Modules/TimeModule.h"
 #include "GEngine/Modules/UiModule.h"
 #include "GEngine/Modules/WindowModule.h"
 #include "spdlog/spdlog.h"
@@ -30,10 +32,12 @@ namespace GEngine
 		_window = std::make_shared<WindowModule>();
 		_rendering = std::make_shared<RenderingModule>();
 		_resources = std::make_shared<ResourcesModule>();
+		_time = std::make_shared<TimeModule>();
 		_systems = std::make_shared<SystemsModule>();
 		_input = std::make_shared<InputModule>();
 		_ui = std::make_shared<UiModule>();
 		_editor = std::make_shared<EditorModule>();
+		_examples = std::make_shared<ExamplesModule>();
 	}
 
 	GEngineCoreApplication::~GEngineCoreApplication()

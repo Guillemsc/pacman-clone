@@ -13,12 +13,20 @@ namespace GEngine
 	class EditorWindow
 	{
 	public:
-		explicit EditorWindow(const std::weak_ptr<GEngineCoreApplication>& app);
+		explicit EditorWindow(const std::weak_ptr<GEngineCoreApplication>& app, const std::string& windowTitle);
 
-		virtual void Draw() = 0;
+		virtual void Draw();
+
+		std::string GetTitle() const;
+
+	protected:
+		virtual void DrawWindowContent() = 0;
 
 	public:
-		bool visible = true;
+		bool Visible = true;
+
+	private:
+		std::string _title;
 
 	protected:
 		std::weak_ptr<GEngineCoreApplication> _app;

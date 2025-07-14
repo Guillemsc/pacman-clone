@@ -18,7 +18,10 @@ namespace GEngine
 		void Draw();
 
 	private:
-		std::weak_ptr<GEngineCoreApplication> _app;
+		void DrawWindows(GEngineCoreApplication* app);
+
+	private:
+		std::weak_ptr<GEngineCoreApplication> _appPtr;
 	};
 }
 

@@ -23,12 +23,21 @@ namespace GEngine
 		void Tick();
 		void Dispose();
 
+		void SetReferenceScreenSize(const glm::vec2& size);
+		void RecalculateUiScaleAndRefreshUiTransforms();
+
+		glm::vec2 GetReferenceScreenSize() const;
+		float GetUiScale() const;
+
 	private:
 		void TickRaycastTargetsState();
 		std::shared_ptr<UiRaycastTarget> RaycastAtScreenPosition(const glm::vec2& mousePosition) const;
 
 	private:
 		std::weak_ptr<GEngineCoreApplication> _appPtr;
+
+		glm::vec2 _referenceScreenSize = glm::vec2(1280, 720);
+		float _uiScale = 1;
 
 		std::weak_ptr<UiRaycastTarget> _currentRaycastTargetPtr;
 		bool _mouseDown = false;

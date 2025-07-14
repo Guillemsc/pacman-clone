@@ -26,7 +26,7 @@ namespace GEngine
 
 	private:
 		void CheckWindowSizeChanged();
-		void OnWindowSizeChanged();
+		void OnWindowSizeChanged() const;
 
 	private:
 		std::weak_ptr<GEngineCoreApplication> _appPtr;

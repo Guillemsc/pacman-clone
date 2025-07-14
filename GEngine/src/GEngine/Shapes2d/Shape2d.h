@@ -11,7 +11,6 @@ namespace GEngine
 {
 	class Shape2d : public GEngineObject
 	{
-	public:
 
 	};
 }

@@ -21,7 +21,7 @@ namespace GEngine
 	public:
 		explicit InspectorEditorWindow(const std::weak_ptr<GEngineCoreApplication> &app);
 
-		void Draw() override;
+		void DrawWindowContent() override;
 
 	private:
 		std::shared_ptr<IGEngineObjectInspectorEditor> GetInspectorEditor(GEngineObjectType gEngineObjectType);

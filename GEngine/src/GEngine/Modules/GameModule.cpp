@@ -4,6 +4,10 @@
 
 #include "GameModule.h"
 
+#include "EntitiesModule.h"
+#include "SystemsModule.h"
+#include "TimeModule.h"
+#include "GEngine/Core/GEngineCoreApplication.h"
 #include "GEngine/Games/Game.h"
 
 namespace GEngine
@@ -18,22 +22,23 @@ namespace GEngine
 		_app = app;
 	}
 
-	void GameModule::Tick()
+	void GameModule::Tick() const
 	{
-		if (_currentGame == nullptr)
-		{
-			return;
-		}
+		if (!_currentGame) return;
 
-		_currentGame->Tick();
+		const std::shared_ptr<GEngineCoreApplication> app = _app.lock();
+		if (!app) return;
+
+		const std::shared_ptr<TimeModule> time = app->Time().lock();
+		if (!time) return;
+
+		float deltaTime = time->GetDeltaTime();
+		_currentGame->Tick(deltaTime);
 	}
 
 	void GameModule::Dispose()
 	{
-		if (_currentGame == nullptr)
-		{
-			return;
-		}
+		if (!_currentGame) return;
 
 		_currentGame->Dispose();
 		_currentGame = nullptr;
@@ -41,10 +46,22 @@ namespace GEngine
 
 	void GameModule::LoadGame(const std::shared_ptr<Game> &game)
 	{
+		const std::shared_ptr<GEngineCoreApplication> app = _app.lock();
+		if (!app) return;
+
+		const std::shared_ptr<EntitiesModule> entities = app->Entities().lock();
+		if (!entities) return;
+
+		const std::shared_ptr<SystemsModule> systems = app->Systems().lock();
+		if (!systems) return;
+
 		if (_currentGame != nullptr)
 		{
 			_currentGame->Dispose();
 		}
+
+		systems->RemoveAllSystemsNow();
+		entities->RemoveAllEntitiesNow();
 
 		_currentGame = game;
 

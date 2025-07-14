@@ -64,6 +64,11 @@ namespace GEngine
 			return SafeDivide(value - start, end - start);
 		}
 
+		static float GetNormalizedValue(const float value, const float max)
+		{
+			return GetNormalizedValue(value, 0.0f, max);
+		}
+
 		template <typename T>
 		static T Lerp(const T& start, const T& end, float time)
 		{

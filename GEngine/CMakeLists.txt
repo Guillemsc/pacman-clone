@@ -197,6 +197,24 @@ add_library(GEngineCore STATIC
         src/GEngine/Rendering/GuizmoUiRenderer.h
         src/GEngine/Data/CornersRect.cpp
         src/GEngine/Data/CornersRect.h
+        src/GEngine/Examples/UiTransform/AnchorsUiTransformExample.cpp
+        src/GEngine/Examples/UiTransform/AnchorsUiTransformExample.h
+        src/GEngine/Modules/ExamplesModule.cpp
+        src/GEngine/Modules/ExamplesModule.h
+        src/GEngine/Data/ExampleData.h
+        src/GEngine/Editor/Windows/ExamplesEditorWindow.cpp
+        src/GEngine/Editor/Windows/ExamplesEditorWindow.h
+        src/GEngine/UiShapes2d/UiShape2d.h
+        src/GEngine/UiShapes2d/RectUiShape2d.cpp
+        src/GEngine/UiShapes2d/RectUiShape2d.h
+        src/GEngine/Editor/PropertyDrawers/Color01PropertyDrawerEditor.cpp
+        src/GEngine/Editor/PropertyDrawers/Color01PropertyDrawerEditor.h
+        src/GEngine/Modules/TimeModule.cpp
+        src/GEngine/Modules/TimeModule.h
+        src/GEngine/Editor/Windows/DemoEditorWindow.cpp
+        src/GEngine/Editor/Windows/DemoEditorWindow.h
+        src/GEngine/Editor/Windows/UiEditorWindow.cpp
+        src/GEngine/Editor/Windows/UiEditorWindow.h
 )
 
 # Link raylib

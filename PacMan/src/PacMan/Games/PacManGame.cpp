@@ -81,7 +81,7 @@ namespace PacMan
 		_uiEntity2.lock()->SetParent(_uiEntity);
 	}
 
-	void PacManGame::Tick()
+	void PacManGame::Tick(float deltaTime)
 	{
 
 	}

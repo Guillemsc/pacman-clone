@@ -4,12 +4,17 @@
 
 #ifndef UISHAPERENDERERCOMPONENT_H
 #define UISHAPERENDERERCOMPONENT_H
+
 #include "Component.h"
 #include "raylib.h"
 #include "GEngine/Colors/Color01.h"
+#include "glm/vec2.hpp"
 
 namespace GEngine
 {
+	class RectUiShape2d;
+	class UiShape2d;
+
 	class UiShapeRendererComponent final : public Component
 	{
 	public:
@@ -19,10 +24,20 @@ namespace GEngine
 
 		void OnTick() override;
 
-		void SetColor(const Color01& color);
+		void SetColor(const Color01& color) const;
 
 	private:
-		Color01 _color = Color01::White;
+		void RenderRectUiShape2d(
+			const glm::vec2& position,
+			float rotation,
+			const glm::vec2& size,
+			const glm::vec2 center,
+			const RectUiShape2d* rectShape
+		) const;
+
+	private:
+		std::shared_ptr<Property<std::shared_ptr<UiShape2d>>> _shape2d;
+		std::shared_ptr<Property<Color01>> _color;
 	};
 }
 

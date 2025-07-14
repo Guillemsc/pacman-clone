@@ -14,21 +14,20 @@
 
 namespace GEngine
 {
-	InspectorEditorWindow::InspectorEditorWindow(const std::weak_ptr<GEngineCoreApplication> &app): EditorWindow(app)
+	InspectorEditorWindow::InspectorEditorWindow(const std::weak_ptr<GEngineCoreApplication> &app)
+		: EditorWindow(app, "Inspector")
 	{
 		RegisterInspectorEditor<EntityInspectorEditor, Entity>();
 		RegisterInspectorEditor<ResourcesInspectorEditor, Resource>();
 	}
 
-	void InspectorEditorWindow::Draw()
+	void InspectorEditorWindow::DrawWindowContent()
 	{
 		const std::shared_ptr<GEngineCoreApplication> app = _app.lock();
 		if (!app) return;
 
 		const std::shared_ptr<EditorModule> editor = app->Editor().lock();
 		if (!editor) return;
-
-		ImGui::Begin("Inspector");
 
 		const std::shared_ptr<GEngineObject> selectedObject = editor->GetSelectedObject().lock();
 
@@ -49,8 +48,6 @@ namespace GEngine
 				inspector->Draw(selectedObject);
 			}
 		}
-
-		ImGui::End();
 	}
 
 	std::shared_ptr<IGEngineObjectInspectorEditor> InspectorEditorWindow::GetInspectorEditor(const GEngineObjectType gEngineObjectType)
