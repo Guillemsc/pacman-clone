@@ -9,7 +9,14 @@
 namespace GEngine
 {
 	template<typename... Args>
-	class Event
+	class SubscribeEvent
+	{
+	public:
+		virtual void Add(const std::function<void(Args...)>& handler) = 0;
+	};
+
+	template<typename... Args>
+	class Event : public SubscribeEvent<Args...>
 	{
 	public:
 		using Handler = std::function<void(Args...)>;
@@ -19,7 +26,7 @@ namespace GEngine
 			_handlers.clear();
 		}
 
-		void Add(const Handler& handler)
+		void Add(const std::function<void(Args...)>& handler) override
 		{
 			_handlers.push_back(handler);
 		}

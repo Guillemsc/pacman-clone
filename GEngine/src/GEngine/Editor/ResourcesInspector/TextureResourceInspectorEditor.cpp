@@ -6,6 +6,7 @@
 
 #include "imgui.h"
 #include "rlImGui.h"
+#include "GEngine/Editor/Extensions/EditorExtensions.h"
 
 namespace GEngine
 {
@@ -24,10 +25,7 @@ namespace GEngine
 
 		if (canDraw)
 		{
-			const float textureWidth = ImGui::GetWindowWidth() - 20;
-			const float ratio = static_cast<float>(rawTexture.height) / static_cast<float>(rawTexture.width);
-			const float textureHeight = textureWidth * ratio;
-			rlImGuiImageSize(&rawTexture, textureWidth, textureHeight);
+			EditorExtensions::DrawRawTexture(rawTexture);
 		}
 	}
 } // GEngineCore

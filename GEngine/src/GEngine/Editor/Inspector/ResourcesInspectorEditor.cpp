@@ -7,6 +7,8 @@
 #include <format>
 
 #include "imgui.h"
+#include "GEngine/Editor/ResourcesInspector/FontResourceInspectorEditor.h"
+#include "GEngine/Editor/ResourcesInspector/JsonResourceInspectorEditor.h"
 #include "GEngine/Editor/ResourcesInspector/TextureResourceInspectorEditor.h"
 #include "GEngine/Editor/ResourcesInspector/TiledMapResourceInspectorEditor.h"
 #include "GEngine/Resources/Resource.h"
@@ -16,6 +18,8 @@ namespace GEngine
 	ResourcesInspectorEditor::ResourcesInspectorEditor(const std::weak_ptr<GEngineCoreApplication>& app): GEngineObjectInspectorEditor(app)
 	{
 		RegisterInspector<TextureResourceInspectorEditor, TextureResource>();
+		RegisterInspector<JsonResourceInspectorEditor, JsonResource>();
+		RegisterInspector<FontResourceInspectorEditor, FontResource>();
 		RegisterInspector<TiledMapResourceInspectorEditor, TiledMapResource>();
 	}
 

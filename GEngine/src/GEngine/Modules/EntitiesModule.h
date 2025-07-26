@@ -28,7 +28,9 @@ namespace GEngine
 		void Dispose();
 
 		std::weak_ptr<Entity> AddWorldEntity();
+		std::weak_ptr<Entity> AddWorldEntity(const std::weak_ptr<Entity> &parent);
 		std::weak_ptr<Entity> AddUiEntity();
+		std::weak_ptr<Entity> AddUiEntity(const std::weak_ptr<Entity> &parent);
 		bool RemoveEntity(const std::weak_ptr<Entity> &entityPtr);
 		bool RemoveEntityNow(const std::weak_ptr<Entity> &entityPtr);
 		void RemoveAllEntitiesNow();

@@ -10,6 +10,8 @@ namespace GEngine
 	enum ResourceType
 	{
 		TEXTURE,
+		JSON,
+		FONT,
 		TILED_MAP,
 	};
 }

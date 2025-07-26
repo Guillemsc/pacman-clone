@@ -20,6 +20,8 @@ add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Contexts/ContextsStack.h
         src/PacMan/Systems/PlayerInputSystem.cpp
         src/PacMan/Systems/PlayerInputSystem.h
+        src/PacMan/Contexts/MetaContext.cpp
+        src/PacMan/Contexts/MetaContext.h
 )
 
 target_link_libraries(PacMan PRIVATE GEngineCore)

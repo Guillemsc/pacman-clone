@@ -74,6 +74,7 @@ namespace GEngine
 
 	private:
 		std::weak_ptr<GEngineCoreApplication> _appPtr;
+
 		std::uint32_t _id = 0;
 		std::string _name;
 

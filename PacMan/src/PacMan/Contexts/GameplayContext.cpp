@@ -24,13 +24,19 @@ namespace PacMan
 		const auto app = GEngine::ServiceLocator::Get<GEngine::GEngineCoreApplication>();
 		if (!app) return nullptr;
 
-		std::shared_ptr<GEngine::EntitiesModule> entities = app->Entities().lock();
-		std::shared_ptr<GEngine::GameModule> game = app->Game().lock();
-		std::shared_ptr<GEngine::ResourcesModule> resources = app->Resources().lock();
-		std::shared_ptr<GEngine::SystemsModule> systems = app->Systems().lock();
-		std::shared_ptr<GEngine::CoroutinesModule> coroutines = app->Coroutines().lock();
+		const std::shared_ptr<GEngine::EntitiesModule> entities = app->Entities().lock();
+		const std::shared_ptr<GEngine::GameModule> game = app->Game().lock();
+		const std::shared_ptr<GEngine::ResourcesModule> resources = app->Resources().lock();
+		const std::shared_ptr<GEngine::SystemsModule> systems = app->Systems().lock();
+		const std::shared_ptr<GEngine::CoroutinesModule> coroutines = app->Coroutines().lock();
 
-		const auto tilemapEntity = entities->AddWorldEntity();
+		_rootUiEntity = entities->AddUiEntity();
+		_rootUiEntity.lock()->SetName("Gameplay Ui");
+
+		_rootWorldEntity = entities->AddWorldEntity();
+		_rootWorldEntity.lock()->SetName("Gameplay");
+
+		const auto tilemapEntity = entities->AddWorldEntity(_rootWorldEntity);
 		tilemapEntity.lock()->SetName("Tilemap");
 		auto _tilemap = tilemapEntity.lock()->AddComponent<GEngine::TiledMap2dRendererComponent>();
 
@@ -38,7 +44,7 @@ namespace PacMan
 
 		_tilemap.lock()->SetTiledMap(tilemapResource);
 
-		auto _playerEntity = entities->AddWorldEntity();
+		auto _playerEntity = entities->AddWorldEntity(_rootWorldEntity);
 		_playerEntity.lock()->SetName("Player");
 		_playerEntity.lock()->AddComponent<GEngine::Shape2dRendererComponent>();
 		_playerEntity.lock()->GetComponent<GEngine::Shape2dRendererComponent>().lock()->SetLayer(1);

@@ -23,7 +23,7 @@ namespace GEngine
 	{
 		Texture2D rawTexture = LoadTexture(fullPath.c_str());
 
-		if (rawTexture.height == 0 || rawTexture.width == 0)
+		if (rawTexture.id == 0)
 		{
 			return nullptr;
 		}

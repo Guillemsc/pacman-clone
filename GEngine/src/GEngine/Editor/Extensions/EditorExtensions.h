@@ -7,6 +7,8 @@
 
 #include <memory>
 
+#include "raylib.h"
+
 namespace GEngine
 {
 	class EditorModule;
@@ -20,6 +22,7 @@ namespace GEngine
 			const char* resourceName,
 			const std::weak_ptr<Resource> &resourcePtr
 			);
+		static void DrawRawTexture(const Texture& texture);
 	};
 }
 

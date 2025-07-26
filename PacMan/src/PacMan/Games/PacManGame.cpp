@@ -11,17 +11,20 @@
 #include "GEngine/Components/TransformComponent.h"
 #include "GEngine/Components/UiShapeButtonComponent.h"
 #include "GEngine/Components/UiShapeRendererComponent.h"
+#include "GEngine/Components/UiTextRendererComponent.h"
 #include "GEngine/Components/UiTransformComponent.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
 #include "GEngine/Coroutines/CoroutineBuilder.h"
 #include "GEngine/Coroutines/NestedCoroutine.h"
 #include "GEngine/Coroutines/WaitFramesCoroutine.h"
 #include "GEngine/Coroutines/WaitSecondsCoroutine.h"
+#include "GEngine/Data/JsonData.h"
 #include "GEngine/Modules/CoroutinesModule.h"
 #include "GEngine/Modules/EntitiesModule.h"
 #include "GEngine/Modules/GameModule.h"
 #include "GEngine/Modules/ResourcesModule.h"
 #include "GEngine/Modules/SystemsModule.h"
+#include "GEngine/Resources/JsonResource.h"
 #include "GEngine/Resources/TextureResource.h"
 #include "GEngine/Resources/TiledMapResource.h"
 #include "GEngine/ServiceLocators/ServiceLocator.h"
@@ -30,6 +33,7 @@
 #include "PacMan/Components/GridMovementComponent.h"
 #include "PacMan/Contexts/ContextsStack.h"
 #include "PacMan/Contexts/GameplayContext.h"
+#include "PacMan/Contexts/MetaContext.h"
 #include "PacMan/Systems/GridMovementSystem.h"
 #include "spdlog/spdlog.h"
 
@@ -48,12 +52,12 @@ namespace PacMan
 		// Cursed maybe???
 		GEngine::ServiceLocator::Register(app);
 
-		std::shared_ptr<GEngine::EntitiesModule> entities = app->Entities().lock();
+		const std::shared_ptr<GEngine::EntitiesModule> entities = app->Entities().lock();
 
 		const std::shared_ptr<ContextsStack> contextsStack = std::make_shared<ContextsStack>(app->Coroutines());
 		GEngine::ServiceLocator::Register(contextsStack);
 
-		contextsStack->Push(std::make_shared<GameplayContext>());
+		contextsStack->Push(std::make_shared<MetaContext>());
 
 		const auto cameraEntity = entities->AddWorldEntity();
 		cameraEntity.lock()->SetName("Camera");
@@ -62,15 +66,15 @@ namespace PacMan
 
 		// ======================================================
 
-		auto _uiEntity2 = entities->AddUiEntity();
-		_uiEntity2.lock()->AddComponent<GEngine::UiShapeRendererComponent>();
-		_uiEntity2.lock()->AddComponent<GEngine::UiShapeButtonComponent>();
-		_uiEntity2.lock()->GetComponent<GEngine::UiShapeRendererComponent>().lock()->SetColor( {1, 0, 0, 1} );
+		// auto _uiEntity2 = entities->AddUiEntity();
+		// _uiEntity2.lock()->AddComponent<GEngine::UiShapeRendererComponent>();
+		// _uiEntity2.lock()->AddComponent<GEngine::UiShapeButtonComponent>();
+		// _uiEntity2.lock()->GetComponent<GEngine::UiShapeRendererComponent>().lock()->SetColor( {1, 0, 0, 1} );
 		//_uiEntity2.lock()->GetUiTransform().lock()->SetSizeDelta({0, 0});
-		_uiEntity2.lock()->GetUiTransform().lock()->SetPivot({0, 0});
+		// _uiEntity2.lock()->GetUiTransform().lock()->SetPivot({0, 0});
 
-		auto _uiEntity = entities->AddUiEntity();
-		_uiEntity.lock()->AddComponent<GEngine::UiShapeRendererComponent>();
+		// auto _uiEntity = entities->AddUiEntity();
+		// _uiEntity.lock()->AddComponent<GEngine::UiShapeRendererComponent>();
 		// _uiEntity.lock()->AddComponent<GEngine::UiShapeButtonComponent>();
 		// _uiEntity.lock()->GetUiTransform().lock()->SetAnchoredPosition({0, 0});
 		// _uiEntity.lock()->GetUiTransform().lock()->SetSizeDelta({0, 0});
@@ -78,7 +82,12 @@ namespace PacMan
 		//
 		// _uiEntity2.lock()->GetUiTransform().lock()->SetAnchors({0.2, 0.2, 0.8, 0.8});
 		//
-		_uiEntity2.lock()->SetParent(_uiEntity);
+		// _uiEntity2.lock()->SetParent(_uiEntity);
+
+		// auto _textEntity = entities->AddUiEntity();
+		// _textEntity.lock()->AddComponent<GEngine::UiTextRendererComponent>();
+
+		// const std::shared_ptr<GEngine::ResourcesModule> resources = app->Resources().lock();
 	}
 
 	void PacManGame::Tick(float deltaTime)

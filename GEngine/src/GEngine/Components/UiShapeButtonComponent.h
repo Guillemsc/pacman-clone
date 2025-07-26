@@ -23,8 +23,12 @@ namespace GEngine
 		void OnMouseUp() override;
 		void OnMouseClick() override;
 
+		SubscribeEvent<>& OnClick();
+
 	private:
 		void SetState();
+
+		Event<> _onClickEvent;
 	};
 }
 

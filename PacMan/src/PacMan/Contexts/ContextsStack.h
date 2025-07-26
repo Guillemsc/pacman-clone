@@ -23,6 +23,7 @@ namespace PacMan
 		explicit ContextsStack(const std::weak_ptr<GEngine::CoroutinesModule> &coroutinesModule);
 
 		void Push(const std::shared_ptr<Context> &context);
+		void Pop();
 
 	private:
 		std::weak_ptr<GEngine::CoroutinesModule> _coroutinesPtr;

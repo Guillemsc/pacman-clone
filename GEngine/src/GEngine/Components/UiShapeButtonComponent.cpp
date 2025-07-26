@@ -36,6 +36,13 @@ namespace GEngine
 	void UiShapeButtonComponent::OnMouseClick()
 	{
 		SetState();
+
+		_onClickEvent.Invoke();
+	}
+
+	SubscribeEvent<> & UiShapeButtonComponent::OnClick()
+	{
+		return _onClickEvent;
 	}
 
 	void UiShapeButtonComponent::SetState()

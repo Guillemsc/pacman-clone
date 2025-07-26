@@ -5,6 +5,7 @@
 #include "EditorExtensions.h"
 
 #include "imgui.h"
+#include "rlImGui.h"
 #include "GEngine/Modules/EditorModule.h"
 #include "GEngine/Resources/Resource.h"
 
@@ -33,5 +34,13 @@ namespace GEngine
 				editor->SetSelectedObject(resource);
 			}
 		}
+	}
+
+	void EditorExtensions::DrawRawTexture(const Texture& texture)
+	{
+		const float textureWidth = ImGui::GetWindowWidth() - 20;
+		const float ratio = static_cast<float>(texture.height) / static_cast<float>(texture.width);
+		const float textureHeight = textureWidth * ratio;
+		rlImGuiImageSize(&texture, textureWidth, textureHeight);
 	}
 } // GEngineCore

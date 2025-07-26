@@ -31,8 +31,6 @@ add_library(GEngineCore STATIC
         src/GEngine/Components/TransformComponent.h
         src/GEngine/Extensions/UnorderedMapExtensions.h
         src/GEngine/Events/EventBus.h
-        src/GEngine/Events/ModuleEvent.h
-        src/GEngine/Events/EntityDestroyedEvent.h
         src/GEngine/Events/EventBuses.h
         src/GEngine/Modules/GameModule.cpp
         src/GEngine/Modules/GameModule.h
@@ -215,6 +213,22 @@ add_library(GEngineCore STATIC
         src/GEngine/Editor/Windows/DemoEditorWindow.h
         src/GEngine/Editor/Windows/UiEditorWindow.cpp
         src/GEngine/Editor/Windows/UiEditorWindow.h
+        src/GEngine/Resources/JsonResource.cpp
+        src/GEngine/Resources/JsonResource.h
+        src/GEngine/ResourceImporters/JsonResourceImporter.cpp
+        src/GEngine/ResourceImporters/JsonResourceImporter.h
+        src/GEngine/Data/JsonData.cpp
+        src/GEngine/Data/JsonData.h
+        src/GEngine/Resources/FontResource.cpp
+        src/GEngine/Resources/FontResource.h
+        src/GEngine/ResourceImporters/FontResourceImporter.cpp
+        src/GEngine/ResourceImporters/FontResourceImporter.h
+        src/GEngine/Editor/ResourcesInspector/JsonResourceInspectorEditor.cpp
+        src/GEngine/Editor/ResourcesInspector/JsonResourceInspectorEditor.h
+        src/GEngine/Editor/ResourcesInspector/FontResourceInspectorEditor.cpp
+        src/GEngine/Editor/ResourcesInspector/FontResourceInspectorEditor.h
+        src/GEngine/Components/UiTextRendererComponent.cpp
+        src/GEngine/Components/UiTextRendererComponent.h
 )
 
 # Link raylib
@@ -234,5 +248,8 @@ target_link_libraries(GEngineCore PUBLIC tmxlite)
 
 # Include spdlog
 target_include_directories(GEngineCore PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/vendor/")
+
+# Include json
+target_include_directories(GEngineCore PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/vendor/json/")
 
 target_include_directories(GEngineCore PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/")

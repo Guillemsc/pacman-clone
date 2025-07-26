@@ -45,12 +45,32 @@ namespace GEngine
 		return entity;
 	}
 
+	std::weak_ptr<Entity> EntitiesModule::AddWorldEntity(const std::weak_ptr<Entity> &parent)
+	{
+		const std::shared_ptr<Entity> entity = AddWorldEntity().lock();
+		if (!entity) return std::weak_ptr<Entity>();
+
+		entity->SetParent(parent);
+
+		return entity;
+	}
+
 	std::weak_ptr<Entity> EntitiesModule::AddUiEntity()
 	{
 		std::shared_ptr<Entity> entity = AddEntity();
 		if (!entity) return std::weak_ptr<Entity>();
 
 		entity->AddComponent<UiTransformComponent>();
+
+		return entity;
+	}
+
+	std::weak_ptr<Entity> EntitiesModule::AddUiEntity(const std::weak_ptr<Entity> &parent)
+	{
+		const std::shared_ptr<Entity> entity = AddUiEntity().lock();
+		if (!entity) return std::weak_ptr<Entity>();
+
+		entity->SetParent(parent);
 
 		return entity;
 	}

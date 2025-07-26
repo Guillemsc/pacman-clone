@@ -7,6 +7,8 @@
 #include "raylib.h"
 #include "GEngine/Extensions/StringExtensions.h"
 #include "GEngine/Extensions/UnorderedMapExtensions.h"
+#include "GEngine/ResourceImporters/FontResourceImporter.h"
+#include "GEngine/ResourceImporters/JsonResourceImporter.h"
 #include "GEngine/ResourceImporters/TextureResourceImporter.h"
 #include "GEngine/ResourceImporters/TiledMapResourceImporter.h"
 #include "GEngine/Resources/TextureResource.h"
@@ -24,6 +26,8 @@ namespace GEngine
 		_app = app;
 
 		RegisterResourceImporter<TextureResourceImporter>();
+		RegisterResourceImporter<JsonResourceImporter>();
+		RegisterResourceImporter<FontResourceImporter>();
 		RegisterResourceImporter<TiledMapResourceImporter>();
 
 		ImportAllResources();
