@@ -4,6 +4,8 @@
 
 #include "PacManGame.h"
 
+#include <iostream>
+
 #include "GEngine/Components/CameraComponent.h"
 #include "GEngine/Components/Shape2dRendererComponent.h"
 #include "GEngine/Components/Texture2dRendererComponent.h"
@@ -15,6 +17,7 @@
 #include "GEngine/Components/UiTransformComponent.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
 #include "GEngine/Coroutines/CoroutineBuilder.h"
+#include "GEngine/Coroutines/Coroutines.h"
 #include "GEngine/Coroutines/NestedCoroutine.h"
 #include "GEngine/Coroutines/WaitFramesCoroutine.h"
 #include "GEngine/Coroutines/WaitSecondsCoroutine.h"
@@ -34,16 +37,12 @@
 #include "PacMan/Contexts/ContextsStack.h"
 #include "PacMan/Contexts/GameplayContext.h"
 #include "PacMan/Contexts/MetaContext.h"
+#include "PacMan/Contexts/SharedContext.h"
 #include "PacMan/Systems/GridMovementSystem.h"
 #include "spdlog/spdlog.h"
 
 namespace PacMan
 {
-	PacManGame::~PacManGame()
-	{
-
-	}
-
 	void PacManGame::Init()
 	{
 		const auto app = _app.lock();
@@ -53,16 +52,17 @@ namespace PacMan
 		GEngine::ServiceLocator::Register(app);
 
 		const std::shared_ptr<GEngine::EntitiesModule> entities = app->Entities().lock();
+		const std::shared_ptr<GEngine::CoroutinesModule> coroutines = app->Coroutines().lock();
 
-		const std::shared_ptr<ContextsStack> contextsStack = std::make_shared<ContextsStack>(app->Coroutines());
+		const std::shared_ptr<ContextsStack> contextsStack = std::make_shared<ContextsStack>(app->Coroutines().lock()->AddSequencer());
 		GEngine::ServiceLocator::Register(contextsStack);
-
-		contextsStack->Push(std::make_shared<MetaContext>());
 
 		const auto cameraEntity = entities->AddWorldEntity();
 		cameraEntity.lock()->SetName("Camera");
 		cameraEntity.lock()->AddComponent<GEngine::CameraComponent>();
 		cameraEntity.lock()->GetTransform().lock()->SetPosition({0, 0, -320});
+
+		GEngine::Coroutines::Start(&PacManGame::LaunchGameAsync, this).Forget();
 
 		// ======================================================
 
@@ -98,6 +98,14 @@ namespace PacMan
 	void PacManGame::Dispose()
 	{
 		GEngine::ServiceLocator::Clear();
+	}
+
+	tokoro::Async<void> PacManGame::LaunchGameAsync()
+	{
+		const std::shared_ptr<ContextsStack> contextsStack = GEngine::ServiceLocator::Get<ContextsStack>();
+
+		co_await contextsStack->PushAsync(std::make_shared<SharedContext>());
+		co_await contextsStack->PushAsync(std::make_shared<MetaContext>());
 	}
 }
 

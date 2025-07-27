@@ -229,6 +229,10 @@ add_library(GEngineCore STATIC
         src/GEngine/Editor/ResourcesInspector/FontResourceInspectorEditor.h
         src/GEngine/Components/UiTextRendererComponent.cpp
         src/GEngine/Components/UiTextRendererComponent.h
+        src/GEngine/Coroutines/CoroutineSequencer.cpp
+        src/GEngine/Coroutines/CoroutineSequencer.h
+        src/GEngine/Coroutines/Coroutines.h
+        src/GEngine/Coroutines/Coroutines.cpp
 )
 
 # Link raylib
@@ -243,7 +247,7 @@ target_link_libraries(GEngineCore PUBLIC imgui)
 # Link gml
 target_link_libraries(GEngineCore PUBLIC glm::glm-header-only)
 
-# Link imgui
+# Link tmxlite
 target_link_libraries(GEngineCore PUBLIC tmxlite)
 
 # Include spdlog
@@ -252,4 +256,8 @@ target_include_directories(GEngineCore PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/vendo
 # Include json
 target_include_directories(GEngineCore PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/vendor/json/")
 
+# Include tokoro
+target_include_directories(GEngineCore PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/vendor/tokoro")
+
+# Include our source
 target_include_directories(GEngineCore PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/")

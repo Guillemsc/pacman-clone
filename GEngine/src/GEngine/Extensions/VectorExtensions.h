@@ -30,6 +30,25 @@ namespace GEngine
 		}
 
 		template <typename T>
+		static void Remove(std::vector<std::shared_ptr<T>>& vec, const std::weak_ptr<T>& valuePtr)
+		{
+			const std::shared_ptr<T> value = valuePtr.lock();
+			if (!value) return;
+
+			vec.erase(
+				std::remove_if(
+					vec.begin(),
+					vec.end(),
+					[&value](const std::shared_ptr<T>& elem)
+					{
+						return elem.get() == value.get();
+					}
+				),
+			vec.end()
+			);
+		}
+
+		template <typename T>
 		static void Remove(std::vector<std::weak_ptr<T>>& vec, const std::shared_ptr<T>& value)
 		{
 			vec.erase(

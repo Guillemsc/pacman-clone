@@ -7,26 +7,45 @@
 
 #include <memory>
 
+#include "tokoro.h"
 #include "GEngine/Coroutines/Coroutine.h"
+
+namespace GEngine
+{
+	class EntitiesModule;
+	class Entity;
+}
 
 namespace PacMan
 {
 	class Context
 	{
 	public:
-		std::shared_ptr<GEngine::Coroutine> Load();
+		explicit Context(const std::string& name);
+
+		tokoro::Async<void> LoadAsync();
 		void Start();
 		void Dispose();
 
+		std::weak_ptr<GEngine::Entity> AddWorldEntity() const;
+		std::weak_ptr<GEngine::Entity> AddUiEntity() const;
+
 	protected:
-		virtual std::shared_ptr<GEngine::Coroutine> OnLoad();
+		virtual tokoro::Async<void> OnLoadAsync();
 		virtual void OnStart();
 		virtual void OnDispose();
 
 	private:
-		bool _loaded;
-		bool _started;
-		bool _disposed;
+		std::string _name;
+		bool _loaded = false;
+		bool _started = false;
+		bool _disposed = false;
+
+	private:
+		std::weak_ptr<GEngine::EntitiesModule> _entities;
+
+		std::weak_ptr<GEngine::Entity> _rootUiEntity;
+		std::weak_ptr<GEngine::Entity> _rootWorldEntity;
 	};
 }
 

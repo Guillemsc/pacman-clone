@@ -17,14 +17,13 @@ namespace PacMan
 	class MetaContext : public Context
 	{
 	public:
-		std::shared_ptr<GEngine::Coroutine> OnLoad() override;
+		MetaContext();
+
+		tokoro::Async<void> OnLoadAsync() override;
 		void OnDispose() override;
 
 	private:
 		void WhenPlayButtonClicked();
-
-	private:
-		std::weak_ptr<GEngine::Entity> _rootUiEntity;
 	};
 }
 

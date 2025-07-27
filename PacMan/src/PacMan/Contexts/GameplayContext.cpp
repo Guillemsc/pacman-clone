@@ -19,10 +19,14 @@
 
 namespace PacMan
 {
-	std::shared_ptr<GEngine::Coroutine> GameplayContext::OnLoad()
+	GameplayContext::GameplayContext(): Context("Gameplay")
+	{
+	}
+
+	tokoro::Async<void> GameplayContext::OnLoadAsync()
 	{
 		const auto app = GEngine::ServiceLocator::Get<GEngine::GEngineCoreApplication>();
-		if (!app) return nullptr;
+		if (!app) co_return;
 
 		const std::shared_ptr<GEngine::EntitiesModule> entities = app->Entities().lock();
 		const std::shared_ptr<GEngine::GameModule> game = app->Game().lock();
@@ -30,13 +34,7 @@ namespace PacMan
 		const std::shared_ptr<GEngine::SystemsModule> systems = app->Systems().lock();
 		const std::shared_ptr<GEngine::CoroutinesModule> coroutines = app->Coroutines().lock();
 
-		_rootUiEntity = entities->AddUiEntity();
-		_rootUiEntity.lock()->SetName("Gameplay Ui");
-
-		_rootWorldEntity = entities->AddWorldEntity();
-		_rootWorldEntity.lock()->SetName("Gameplay");
-
-		const auto tilemapEntity = entities->AddWorldEntity(_rootWorldEntity);
+		const auto tilemapEntity = AddWorldEntity();
 		tilemapEntity.lock()->SetName("Tilemap");
 		auto _tilemap = tilemapEntity.lock()->AddComponent<GEngine::TiledMap2dRendererComponent>();
 
@@ -44,7 +42,7 @@ namespace PacMan
 
 		_tilemap.lock()->SetTiledMap(tilemapResource);
 
-		auto _playerEntity = entities->AddWorldEntity(_rootWorldEntity);
+		auto _playerEntity = AddWorldEntity();
 		_playerEntity.lock()->SetName("Player");
 		_playerEntity.lock()->AddComponent<GEngine::Shape2dRendererComponent>();
 		_playerEntity.lock()->GetComponent<GEngine::Shape2dRendererComponent>().lock()->SetLayer(1);
@@ -63,6 +61,6 @@ namespace PacMan
 		);
 		systems->AddSystem(playerInputSystem);
 
-		return Context::OnLoad();
+		co_await Context::OnLoadAsync();
 	}
 } // PacMan

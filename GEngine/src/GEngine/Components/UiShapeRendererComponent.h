@@ -15,7 +15,7 @@ namespace GEngine
 	class RectUiShape2d;
 	class UiShape2d;
 
-	class UiShapeRendererComponent final : public Component
+	class UiShapeRendererComponent final : public Component, public std::enable_shared_from_this<UiShapeRendererComponent>
 	{
 	public:
 		explicit UiShapeRendererComponent(const std::weak_ptr<Entity> &entity);

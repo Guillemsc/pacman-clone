@@ -29,10 +29,17 @@ namespace GEngine
 		}
 	}
 
-	std::weak_ptr<CoroutineTask>  CoroutineRunner::Run(const std::shared_ptr<Coroutine>& coroutine)
+	std::weak_ptr<CoroutineTask> CoroutineRunner::Run(const std::shared_ptr<Coroutine>& coroutine)
 	{
 		std::shared_ptr<CoroutineTask> handler = std::make_shared<CoroutineTask>();
-		_newCoroutines.push_back({handler, coroutine});
+
+		handler->_isFinished = coroutine->MoveNext();
+
+		if (!handler->_isFinished)
+		{
+			_newCoroutines.push_back({handler, coroutine});
+		}
+
 		return handler;
 	}
 } // GengineCore

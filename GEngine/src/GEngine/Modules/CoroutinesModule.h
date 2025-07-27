@@ -7,8 +7,11 @@
 #include <memory>
 #include <vector>
 
+#include "tokoro.h"
+
 namespace GEngine
 {
+	class CoroutineSequencer;
 	class Coroutine;
 	class CoroutineTask;
 	class CoroutineRunner;
@@ -25,8 +28,12 @@ namespace GEngine
 
 		std::weak_ptr<CoroutineTask> Run(const std::shared_ptr<Coroutine>& coroutine) const;
 
+		std::weak_ptr<CoroutineSequencer> AddSequencer();
+		void RemoveSequencer(const std::weak_ptr<CoroutineSequencer> &sequencerPtr);
+
 	private:
 		std::shared_ptr<CoroutineRunner> _coroutineRunner;
+		std::vector<std::shared_ptr<CoroutineSequencer>> _coroutineSequencers;
 	};
 }
 

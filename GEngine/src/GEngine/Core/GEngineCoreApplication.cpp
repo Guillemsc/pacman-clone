@@ -77,9 +77,9 @@ namespace GEngine
 
 		_ui->Tick();
 		_game->Tick();
-		_entities->Tick();
 		_systems->Tick();
 		_coroutines->Tick();
+		_entities->Tick();
 		_editor->Tick();
 		_camera->Tick(deltaTime);
 		_rendering->Tick();

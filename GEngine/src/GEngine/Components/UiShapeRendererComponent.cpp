@@ -40,7 +40,7 @@ namespace GEngine
 
 		glm::vec2 position = uiRect.position;
 		glm::vec2 size = uiRect.size;
-		float rotation = glm::degrees(uiRect.rotation);
+		const float rotation = glm::degrees(uiRect.rotation);
 
 		glm::vec2 pivot = uiRect.pivot;
 		pivot.y = 1 - pivot.y;
@@ -52,11 +52,16 @@ namespace GEngine
 
 		position = rendering->UiRender().lock()->PositionToRenderPosition(position);
 
-		rendering->UiRender().lock()->Add(0, [this, size, rotation, center, position]()
+		auto selfPtr = weak_from_this();
+
+		rendering->UiRender().lock()->Add(0, [selfPtr, size, rotation, center, position]()
 		{
-			if (const auto rectShape = std::dynamic_pointer_cast<RectUiShape2d>(_shape2d->GetValue()))
+			const auto self = selfPtr.lock();
+			if (!self) return;
+
+			if (const auto rectShape = std::dynamic_pointer_cast<RectUiShape2d>(self->_shape2d->GetValue()))
 			{
-				RenderRectUiShape2d(position, rotation, size, center, rectShape.get());
+				self->RenderRectUiShape2d(position, rotation, size, center, rectShape.get());
 			}
 		});
 	}

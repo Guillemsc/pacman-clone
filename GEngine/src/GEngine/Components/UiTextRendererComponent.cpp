@@ -41,7 +41,7 @@ namespace GEngine
 
 		if (fontResource)
 		{
-			rawFont = fontResource->_font;
+			rawFont = fontResource->_rawFont;
 		}
 		else
 		{

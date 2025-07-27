@@ -8,8 +8,11 @@
 #include <memory>
 #include <vector>
 
+#include "tokoro.h"
+
 namespace GEngine
 {
+	class CoroutineSequencer;
 	class CoroutinesModule;
 }
 
@@ -20,16 +23,17 @@ namespace PacMan
 	class ContextsStack
 	{
 	public:
-		explicit ContextsStack(const std::weak_ptr<GEngine::CoroutinesModule> &coroutinesModule);
+		explicit ContextsStack(const std::weak_ptr<GEngine::CoroutineSequencer>& coroutineSequencer);
 
-		void Push(const std::shared_ptr<Context> &context);
+		tokoro::Async<void> PushAsync(const std::shared_ptr<Context> &context);
 		void Pop();
 
 	private:
-		std::weak_ptr<GEngine::CoroutinesModule> _coroutinesPtr;
+		std::weak_ptr<GEngine::CoroutineSequencer> _coroutineSequencer;
 		std::vector<std::shared_ptr<Context>> _contextsStack;
 
 		bool _loading = false;
+		std::shared_ptr<Context> _pushingContext;
 	};
 }
 

@@ -13,11 +13,16 @@ namespace GEngine
 		)
 	: Resource(fullPath, resourcesPath)
 	{
-		_font = font;
+		_rawFont = font;
 	}
 
 	Texture2D FontResource::GetRawTexture() const
 	{
-		return _font.texture;
+		return _rawFont.texture;
+	}
+
+	void FontResource::Dispose()
+	{
+		UnloadFont(_rawFont);
 	}
 }

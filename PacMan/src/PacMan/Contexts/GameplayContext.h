@@ -16,11 +16,10 @@ namespace PacMan
 {
 	class GameplayContext : public Context
 	{
-		std::shared_ptr<GEngine::Coroutine> OnLoad() override;
+	public:
+		GameplayContext();
 
-	private:
-		std::weak_ptr<GEngine::Entity> _rootUiEntity;
-		std::weak_ptr<GEngine::Entity> _rootWorldEntity;
+		tokoro::Async<void> OnLoadAsync() override;
 	};
 }
 

@@ -6,38 +6,35 @@
 
 #include "Context.h"
 #include "GEngine/Coroutines/CoroutineBuilder.h"
+#include "GEngine/Coroutines/CoroutineSequencer.h"
 #include "GEngine/Extensions/VectorExtensions.h"
-#include "GEngine/Modules/CoroutinesModule.h"
 
 namespace PacMan
 {
-	ContextsStack::ContextsStack(const std::weak_ptr<GEngine::CoroutinesModule> &coroutinesModule)
+	ContextsStack::ContextsStack(const std::weak_ptr<GEngine::CoroutineSequencer>& coroutineSequencer)
 	{
-		_coroutinesPtr = coroutinesModule;
+		_coroutineSequencer = coroutineSequencer;
 	}
 
-	void ContextsStack::Push(const std::shared_ptr<Context> &context)
+	tokoro::Async<void> ContextsStack::PushAsync(const std::shared_ptr<Context> &context)
 	{
-		const std::shared_ptr<GEngine::CoroutinesModule> coroutines = _coroutinesPtr.lock();
-		if (!coroutines) return;;
+		if (_loading) co_return;
 
-		if (_loading) return;
+		_pushingContext = context;
 
-		const std::shared_ptr<GEngine::Coroutine> loadCoroutine = context->Load();
+		const std::shared_ptr<GEngine::CoroutineSequencer> sequencer = _coroutineSequencer.lock();
+		if (!sequencer) co_return;;
 
 		_loading = true;
 
-		const GEngine::CoroutineBuilder builder;
+		co_await _pushingContext->LoadAsync();
 
-		builder
-			.Add(loadCoroutine)
-			.Add([this, context]()
-			{
-				_loading = false;
-				_contextsStack.push_back(context);
-			});
+		_contextsStack.push_back(_pushingContext);
 
-		coroutines->Run(builder.Build());
+		_pushingContext = nullptr;
+		_loading = false;
+
+		co_return;
 	}
 
 	void ContextsStack::Pop()

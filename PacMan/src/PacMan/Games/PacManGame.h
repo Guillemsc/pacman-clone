@@ -5,6 +5,7 @@
 #ifndef TESTGAME_H
 #define TESTGAME_H
 
+#include "tokoro.h"
 #include "GEngine/Coroutines/CoroutineRunner.h"
 #include "GEngine/Games/Game.h"
 #include "glm/fwd.hpp"
@@ -18,14 +19,15 @@ namespace GEngine
 
 namespace PacMan
 {
-	class PacManGame : public GEngine::Game
+	class PacManGame final : public GEngine::Game
 	{
 	public:
-		~PacManGame() override;
-
 		void Init() override;
 		void Tick(float deltaTime) override;
 		void Dispose() override;
+
+	private:
+		tokoro::Async<void> LaunchGameAsync();
 	};
 }
 

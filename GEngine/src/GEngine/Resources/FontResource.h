@@ -30,8 +30,11 @@ namespace GEngine
 
 		[[nodiscard]] Texture2D GetRawTexture() const;
 
+	protected:
+		void Dispose() override;
+
 	private:
-		Font _font;
+		Font _rawFont;
 	};
 }
 
