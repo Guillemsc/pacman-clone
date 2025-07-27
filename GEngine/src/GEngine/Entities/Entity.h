@@ -41,6 +41,8 @@ namespace GEngine
 		void SetName(const std::string& name);
 		std::string GetName() const;
 
+		bool IsAlive() const;
+
 		bool IsActiveSelf() const;
 		bool IsActiveInHierarchy() const;
 		void SetActive(bool active);

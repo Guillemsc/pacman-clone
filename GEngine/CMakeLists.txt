@@ -233,6 +233,17 @@ add_library(GEngineCore STATIC
         src/GEngine/Coroutines/CoroutineSequencer.h
         src/GEngine/Coroutines/Coroutines.h
         src/GEngine/Coroutines/Coroutines.cpp
+        src/GEngine/Tweens/Tween.cpp
+        src/GEngine/Tweens/Tween.h
+        src/GEngine/Tweens/ChildrenTweenTickMode.h
+        src/GEngine/Tweens/InterpolationTween.h
+        src/GEngine/Examples/Tweens/DevelopmentTweensExample.cpp
+        src/GEngine/Examples/Tweens/DevelopmentTweensExample.h
+        src/GEngine/Tweens/Easing.cpp
+        src/GEngine/Tweens/Easing.h
+        src/GEngine/Tweens/EasingType.h
+        src/GEngine/Tweens/CallbackTween.cpp
+        src/GEngine/Tweens/CallbackTween.h
 )
 
 # Link raylib

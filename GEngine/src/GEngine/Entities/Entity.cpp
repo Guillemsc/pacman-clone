@@ -45,6 +45,11 @@ namespace GEngine
 		return _name;
 	}
 
+	bool Entity::IsAlive() const
+	{
+		return _isAlive;
+	}
+
 	bool Entity::IsActiveSelf() const
 	{
 		return _isActiveSelf;

@@ -28,6 +28,9 @@ namespace GEngine
 		void SetPosition(const glm::vec3 &position);
 		void SetPositionXY(const glm::vec2 &position);
 		void SetLocalPosition(const glm::vec3 &position);
+		void SetLocalPositionXY(const glm::vec2 &position);
+		void SetLocalPositionX(float value);
+		void SetLocalPositionY(float value);
 
 		void SetRotation(const glm::quat &rotation);
 		void SetLocalRotation(const glm::quat &rotation);
@@ -36,10 +39,12 @@ namespace GEngine
 		void SetLocalRotationEulerDegreesZ(float rotationZ);
 
 		void SetLocalScale(const glm::vec3 &scale);
+		void SetLocalScaleXY(const glm::vec2 &scale);
 
 		glm::vec3 GetPosition() const;
 		glm::vec2 GetPositionXY() const;
 		glm::vec3 GetLocalPosition() const;
+		glm::vec2 GetLocalPositionXY() const;
 
 		glm::quat GetRotation() const;
 		glm::vec3 GetRotationEuler() const;

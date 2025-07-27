@@ -70,9 +70,9 @@ namespace GEngine
 		}
 
 		template <typename T>
-		static T Lerp(const T& start, const T& end, float time)
+		static T Lerp(const T& start, const T& end, float normalizedTime)
 		{
-			return start * (1.0f - time) + end * time;
+			return start * (1.0f - normalizedTime) + end * normalizedTime;
 		}
 	};
 }

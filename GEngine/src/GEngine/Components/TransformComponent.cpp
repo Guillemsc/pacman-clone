@@ -53,6 +53,21 @@ namespace GEngine
 		RecalculateChildrenHierarchyWorldMatrices();
 	}
 
+	void TransformComponent::SetLocalPositionXY(const glm::vec2 &position)
+	{
+		SetLocalPosition({ position.x, position.y, _localPosition.z });
+	}
+
+	void TransformComponent::SetLocalPositionX(float value)
+	{
+		SetLocalPosition({ value, _localPosition.y, _localPosition.z });
+	}
+
+	void TransformComponent::SetLocalPositionY(float value)
+	{
+		SetLocalPosition({ _localPosition.x, value, _localPosition.z });
+	}
+
 	void TransformComponent::SetRotation(const glm::quat &rotation)
 	{
 		if (_worldRotation == rotation)
@@ -121,6 +136,11 @@ namespace GEngine
 		RecalculateChildrenHierarchyWorldMatrices();
 	}
 
+	void TransformComponent::SetLocalScaleXY(const glm::vec2 &scale)
+	{
+		SetLocalScale({ scale.x, scale.y, _localScale.z });
+	}
+
 	glm::vec3 TransformComponent::GetPosition() const
 	{
 		return _worldPosition;
@@ -134,6 +154,11 @@ namespace GEngine
 	glm::vec3 TransformComponent::GetLocalPosition() const
 	{
 		return _localPosition;
+	}
+
+	glm::vec2 TransformComponent::GetLocalPositionXY() const
+	{
+		return { _localPosition.x,  _localPosition.y };
 	}
 
 	glm::quat TransformComponent::GetRotation() const
