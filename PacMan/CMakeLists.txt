@@ -25,6 +25,8 @@ add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Gameplay/Data/GameplayEntities.h
         src/PacMan/Contexts/SharedContext.cpp
         src/PacMan/Contexts/SharedContext.h
+        src/PacMan/Gameplay/Managers/MapMovementManager.cpp
+        src/PacMan/Gameplay/Managers/MapMovementManager.h
 )
 
 target_link_libraries(PacMan PRIVATE GEngineCore)

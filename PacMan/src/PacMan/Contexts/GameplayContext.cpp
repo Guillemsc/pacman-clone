@@ -14,6 +14,7 @@
 #include "GEngine/ServiceLocators/ServiceLocator.h"
 #include "GEngine/Resources/TiledMapResource.h"
 #include "PacMan/Components/GridMovementComponent.h"
+#include "PacMan/Gameplay/Managers/MapMovementManager.h"
 #include "PacMan/Systems/GridMovementSystem.h"
 #include "PacMan/Systems/PlayerInputSystem.h"
 
@@ -41,6 +42,8 @@ namespace PacMan
 		auto tilemapResource = resources->GetResource<GEngine::TiledMapResource>("Tiled/maps/test-map.tmx");
 
 		_tilemap.lock()->SetTiledMap(tilemapResource);
+
+		_mapMovementManager = std::make_shared<MapMovementManager>();
 
 		auto _playerEntity = AddWorldEntity();
 		_playerEntity.lock()->SetName("Player");

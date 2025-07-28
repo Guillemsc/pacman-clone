@@ -14,12 +14,17 @@ namespace GEngine
 
 namespace PacMan
 {
+	class MapMovementManager;
+
 	class GameplayContext : public Context
 	{
 	public:
 		GameplayContext();
 
 		tokoro::Async<void> OnLoadAsync() override;
+
+	private:
+		std::shared_ptr<MapMovementManager> _mapMovementManager;
 	};
 }
 
