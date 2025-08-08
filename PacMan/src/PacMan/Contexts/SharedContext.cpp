@@ -16,12 +16,7 @@ namespace PacMan
 
 	tokoro::Async<void> SharedContext::OnLoadAsync()
 	{
-		const auto app = GEngine::ServiceLocator::Get<GEngine::GEngineCoreApplication>();
-		if (!app) co_return;
-
-		//const std::shared_ptr<GEngine::CoroutinesModule> coroutines = app->Coroutines().lock();
-
-		//patrolTask = coroutines->Scheduler().Start(&SharedContext::awkwardHello, this, "what", 1);
+		const std::shared_ptr<GEngine::GEngineCoreApplication> app = GEngine::ServiceLocator::Get<GEngine::GEngineCoreApplication>();
 
 		co_await Context::OnLoadAsync();
 	}

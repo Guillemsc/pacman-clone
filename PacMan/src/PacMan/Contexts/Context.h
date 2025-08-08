@@ -9,6 +9,7 @@
 
 #include "tokoro.h"
 #include "GEngine/Coroutines/Coroutine.h"
+#include "GEngine/Scenes/Scene.h"
 
 namespace GEngine
 {
@@ -27,8 +28,7 @@ namespace PacMan
 		void Start();
 		void Dispose();
 
-		std::weak_ptr<GEngine::Entity> AddWorldEntity() const;
-		std::weak_ptr<GEngine::Entity> AddUiEntity() const;
+		GEngine::Scene GetScene() const;
 
 	protected:
 		virtual tokoro::Async<void> OnLoadAsync();
@@ -41,11 +41,7 @@ namespace PacMan
 		bool _started = false;
 		bool _disposed = false;
 
-	private:
-		std::weak_ptr<GEngine::EntitiesModule> _entities;
-
-		std::weak_ptr<GEngine::Entity> _rootUiEntity;
-		std::weak_ptr<GEngine::Entity> _rootWorldEntity;
+		GEngine::Scene _scene;
 	};
 }
 

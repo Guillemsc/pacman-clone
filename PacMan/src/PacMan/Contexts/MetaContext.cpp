@@ -23,14 +23,12 @@ namespace PacMan
 
 	tokoro::Async<void> MetaContext::OnLoadAsync()
 	{
-		const auto app = GEngine::ServiceLocator::Get<GEngine::GEngineCoreApplication>();
-		if (!app) co_return;
-
+		const std::shared_ptr<GEngine::GEngineCoreApplication> app = GEngine::ServiceLocator::Get<GEngine::GEngineCoreApplication>();
 		const std::shared_ptr<GEngine::EntitiesModule> entities = app->Entities().lock();
 
-		auto uiEntity2 = AddUiEntity();
-		uiEntity2.lock()->AddComponent<GEngine::UiShapeRendererComponent>();
-		std::shared_ptr<GEngine::UiShapeButtonComponent> button = uiEntity2.lock()->AddComponent<GEngine::UiShapeButtonComponent>().lock();
+		const std::shared_ptr<GEngine::Entity> uiEntity2 = GetScene().AddUiEntity().lock();
+		uiEntity2->AddComponent<GEngine::UiShapeRendererComponent>();
+		const std::shared_ptr<GEngine::UiShapeButtonComponent> button = uiEntity2->AddComponent<GEngine::UiShapeButtonComponent>().lock();
 
 		button->OnClick().Add(std::bind(&MetaContext::WhenPlayButtonClicked, this));
 

@@ -27,28 +27,12 @@ namespace PacMan
 		_started = false;
 		_loaded = true;
 
-		const auto app = GEngine::ServiceLocator::Get<GEngine::GEngineCoreApplication>();
+		const std::shared_ptr<GEngine::GEngineCoreApplication> app = GEngine::ServiceLocator::Get<GEngine::GEngineCoreApplication>();
 		if (!app) co_return;
 
-		_entities = app->Entities();
-
-		_rootUiEntity = _entities.lock()->AddUiEntity();
-		_rootUiEntity.lock()->SetName(std::format("{0} Ui", _name));
-
-		_rootWorldEntity = _entities.lock()->AddWorldEntity();
-		_rootWorldEntity.lock()->SetName(std::format("{0} World", _name));
+		_scene.Init(app->Entities(), _name);
 
 		co_await OnLoadAsync();
-	}
-
-	std::weak_ptr<GEngine::Entity> Context::AddWorldEntity() const
-	{
-		return _entities.lock()->AddWorldEntity(_rootWorldEntity);
-	}
-
-	std::weak_ptr<GEngine::Entity> Context::AddUiEntity() const
-	{
-		return _entities.lock()->AddUiEntity(_rootUiEntity);
 	}
 
 	void Context::Start()
@@ -71,12 +55,12 @@ namespace PacMan
 
 		OnDispose();
 
-		const auto app = GEngine::ServiceLocator::Get<GEngine::GEngineCoreApplication>();
-		if (!app) return;
+		_scene.Dispose();
+	}
 
-		const std::shared_ptr<GEngine::EntitiesModule> entities = app->Entities().lock();
-		entities->RemoveEntity(_rootUiEntity);
-		entities->RemoveEntity(_rootWorldEntity);
+	GEngine::Scene Context::GetScene() const
+	{
+		return _scene;
 	}
 
 	tokoro::Async<void> Context::OnLoadAsync()

@@ -5,7 +5,7 @@
 #include "PlayerInputSystem.h"
 
 #include "raylib.h"
-#include "PacMan/Components/GridMovementComponent.h"
+#include "PacMan/Gameplay/Components/GridMovementComponent.h"
 
 namespace PacMan
 {

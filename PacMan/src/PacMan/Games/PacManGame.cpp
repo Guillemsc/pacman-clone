@@ -33,12 +33,11 @@
 #include "GEngine/ServiceLocators/ServiceLocator.h"
 #include "GEngine/Systems/System.h"
 #include "GEngine/Timers/ChronoTimer.h"
-#include "PacMan/Components/GridMovementComponent.h"
+#include "PacMan/Gameplay/Components/GridMovementComponent.h"
 #include "PacMan/Contexts/ContextsStack.h"
 #include "PacMan/Contexts/GameplayContext.h"
 #include "PacMan/Contexts/MetaContext.h"
 #include "PacMan/Contexts/SharedContext.h"
-#include "PacMan/Systems/GridMovementSystem.h"
 #include "spdlog/spdlog.h"
 
 namespace PacMan

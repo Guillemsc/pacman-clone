@@ -7,7 +7,7 @@
 #include "GEngine/Components/TiledMap2dRendererComponent.h"
 #include "GEngine/Components/TransformComponent.h"
 #include "GEngine/Extensions/CardinalDirectionExtensions.h"
-#include "PacMan/Components/GridMovementComponent.h"
+#include "PacMan/Gameplay/Components/GridMovementComponent.h"
 
 namespace PacMan
 {

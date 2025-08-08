@@ -6,10 +6,10 @@ set(CMAKE_CXX_STANDARD 20)
 add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Games/PacManGame.h
         src/PacMan/Games/PacManGame.cpp
-        src/PacMan/Systems/GridMovementSystem.cpp
-        src/PacMan/Systems/GridMovementSystem.h
-        src/PacMan/Components/GridMovementComponent.cpp
-        src/PacMan/Components/GridMovementComponent.h
+        src/PacMan/Gameplay/Systems/GridMovementSystem.cpp
+        src/PacMan/Gameplay/Systems/GridMovementSystem.h
+        src/PacMan/Gameplay/Components/GridMovementComponent.cpp
+        src/PacMan/Gameplay/Components/GridMovementComponent.h
         src/PacMan/Flow/FlowManager.cpp
         src/PacMan/Flow/FlowManager.h
         src/PacMan/Contexts/GameplayContext.cpp
@@ -18,8 +18,8 @@ add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Contexts/Context.h
         src/PacMan/Contexts/ContextsStack.cpp
         src/PacMan/Contexts/ContextsStack.h
-        src/PacMan/Systems/PlayerInputSystem.cpp
-        src/PacMan/Systems/PlayerInputSystem.h
+        src/PacMan/Gameplay/Systems/PlayerInputSystem.cpp
+        src/PacMan/Gameplay/Systems/PlayerInputSystem.h
         src/PacMan/Contexts/MetaContext.cpp
         src/PacMan/Contexts/MetaContext.h
         src/PacMan/Gameplay/Data/GameplayEntities.h
