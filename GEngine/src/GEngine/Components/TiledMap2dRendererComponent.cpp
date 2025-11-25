@@ -249,25 +249,12 @@ namespace GEngine
 		return localNormalisedPosition;
 	}
 
-	std::int32_t TiledMap2dRendererComponent::LayerNameToLayerIndex(const std::string &layerName) const
+	std::int32_t TiledMap2dRendererComponent::GetLayerNameFromLayerIndex(const std::string &layerName) const
 	{
 		const std::shared_ptr<TiledMapResource> tiledMap = _tiledMapPtr.lock();
 		if (!tiledMap) return -1;
 
-		const std::shared_ptr<tmx::Map> mapData = tiledMap->GetRawMap().lock();
-		if (!mapData) return -1;
-
-		const std::vector<tmx::Layer::Ptr>& layers = mapData->getLayers();
-
-		for (std::int32_t i = 0; i < layers.size(); ++i)
-		{
-			if (layers[i]->getName() == layerName)
-			{
-				return i;
-			}
-		}
-
-		return -1;
+		return tiledMap->GetLayerIndexFromLayerName(layerName);
 	}
 
 	void TiledMap2dRendererComponent::SetLayerVisible(const std::int32_t layerIndex, const bool visible)
@@ -324,20 +311,7 @@ namespace GEngine
 		const std::shared_ptr<TiledMapResource> tiledMap = _tiledMapPtr.lock();
 		if (!tiledMap) return std::nullopt;
 
-		const std::shared_ptr<tmx::Map> mapData = tiledMap->GetRawMap().lock();
-		if (!mapData) return std::nullopt;
-
-		const std::vector<tmx::Layer::Ptr>& layers = mapData->getLayers();
-
-		if (VectorExtensions::IsIndexOutsideBounds(layers, layerIndex)) return std::nullopt;
-
-		const tmx::Layer::Ptr& layer = layers[layerIndex];
-
-		if (layer->getType() != tmx::Layer::Type::Tile) return std::nullopt;
-
-		const tmx::TileLayer& tileLayer = layer->getLayerAs<tmx::TileLayer>();
-
-		return std::cref(tileLayer);
+		return tiledMap->GetTileLayer(layerIndex);
 	}
 
 	glm::vec2 TiledMap2dRendererComponent::GridPositionToWorldPosition(
@@ -397,15 +371,11 @@ namespace GEngine
 				const std::int32_t tileIdIndex = y * layerGridSize.x + x;
 
 				const bool outsideTileIdsBounds = tileIdIndex >= layerTileIds.size();
-
-				if (outsideTileIdsBounds)
-				{
-					continue;
-				}
+				if (outsideTileIdsBounds) continue;
 
 				const std::uint32_t tileId = layerTileIds[tileIdIndex].ID;
 
-				const int tileSetIndex = tiledMapResource->GetTileSetIndexForTileID(tileId);
+				const int tileSetIndex = tiledMapResource->GetTilesetIndexForTileId(tileId);
 
 				if (VectorExtensions::IsIndexOutsideBounds(tileSets, tileSetIndex)) continue;
 
@@ -423,7 +393,7 @@ namespace GEngine
 					continue;
 				}
 
-				const std::shared_ptr<TextureResource> tileSetTexture = tiledMapResource->GetTileSetTexture(tileSetIndex).lock();
+				const std::shared_ptr<TextureResource> tileSetTexture = tiledMapResource->GetTilesetTexture(tileSetIndex).lock();
 				if (!tileSetTexture) continue;
 
 				const Texture2D& rawTexture = tileSetTexture->GetRawTexture();

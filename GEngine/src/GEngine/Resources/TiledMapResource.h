@@ -5,7 +5,10 @@
 #ifndef TILEDMAPRESOURCE_H
 #define TILEDMAPRESOURCE_H
 
+#include <optional>
+
 #include "Resource.h"
+#include "glm/fwd.hpp"
 
 #include "tmxlite/Map.hpp"
 
@@ -31,8 +34,20 @@ namespace GEngine
 
 		std::weak_ptr<tmx::Map> GetRawMap() const;
 
-		std::int32_t GetTileSetIndexForTileID(uint32_t gid) const;
-		std::weak_ptr<TextureResource> GetTileSetTexture(int index) const;
+		glm::i32vec2 GetGridSize() const;
+
+		std::int32_t GetLayerIndexFromLayerName(const std::string& layerName) const;
+		std::optional<std::reference_wrapper<const tmx::TileLayer>> GetTileLayer(std::int32_t layerIndex) const;
+
+		std::int32_t GetTileIdFromGridPosition(const tmx::TileLayer& layer, const glm::i32vec2& gridPosition) const;
+		glm::i32vec2 GetGridPositionFromTileId(uint32_t gid) const;
+		std::int32_t GetTilesetIndexForTileId(uint32_t gid) const;
+		std::optional<std::reference_wrapper<const tmx::Tileset>> GetTilesetForTileID(const uint32_t gid) const;
+
+		std::weak_ptr<TextureResource> GetTilesetTexture(int index) const;
+
+		static std::int32_t GetLocalTilesetIndexForTileID(const tmx::Tileset& tileset, uint32_t gid);
+		static std::string GetTilesetTileStringProperty(const tmx::Tileset::Tile* tile, const std::string& name, const std::string& defaultValue);
 
 	private:
 		std::shared_ptr<tmx::Map> _tiledMapPtr;

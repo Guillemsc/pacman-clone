@@ -16,6 +16,7 @@
 #include "../Gameplay/MapMovement/Systems/MapMovementSystem.h"
 #include "../Gameplay/MapMovement/Components/MapMovementComponent.h"
 #include "PacMan/Gameplay/Input/Systems/PlayerInputSystem.h"
+#include "PacMan/Gameplay/MapLoading/Managers/MapLoadingManager.h"
 #include "PacMan/Gameplay/MapMovement/Managers/MapMovementManager.h"
 
 namespace PacMan
@@ -29,6 +30,9 @@ namespace PacMan
 		const std::shared_ptr<GEngine::Entity> tilemapEntity = GetScene().AddWorldEntity().lock();
 		tilemapEntity->SetName("Tilemap");
 		const std::shared_ptr<GEngine::TiledMap2dRendererComponent> tilemap = tilemapEntity->AddComponent<GEngine::TiledMap2dRendererComponent>().lock();
+
+		const std::shared_ptr<MapLoadingManager> mapLoadingManager = std::make_shared<MapLoadingManager>(_modules);
+		mapLoadingManager->LoadMap("test-map");
 
 		const std::weak_ptr<GEngine::TiledMapResource> tilemapResource = _modules->resources->GetResource<GEngine::TiledMapResource>(
 			"Tiled/maps/test-map.tmx"

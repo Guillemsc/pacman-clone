@@ -10,7 +10,9 @@
 #include "GEngine/Resources/TextureResource.h"
 #include "GEngine/Resources/TiledMapResource.h"
 #include "tmxlite/Map.hpp"
+#include "tmxlite/TileLayer.hpp"
 #include "tmxlite/Tileset.hpp"
+#include "glm/vec2.hpp"
 
 namespace GEngine
 {
