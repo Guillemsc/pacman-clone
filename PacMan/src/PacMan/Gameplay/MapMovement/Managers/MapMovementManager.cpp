@@ -6,25 +6,31 @@
 
 #include "GEngine/Components/TiledMap2dRendererComponent.h"
 #include "GEngine/Components/TransformComponent.h"
-#include "PacMan/Gameplay/Components/GridMovementComponent.h"
+#include "../Components/MapMovementComponent.h"
 
 namespace PacMan
 {
 	MapMovementManager::MapMovementManager(
 		const std::weak_ptr<GEngine::TiledMap2dRendererComponent> &tiledMap,
-		const std::int32_t walkabilityLayerIndex
+		const std::string& walkablityLayerName
 		)
 	{
 		_tiledMap = tiledMap;
-		_walkabilityLayerIndex = walkabilityLayerIndex;
+
+		const std::shared_ptr<GEngine::TiledMap2dRendererComponent> lTiledMap = _tiledMap.lock();
+
+		if (lTiledMap)
+		{
+			_walkabilityLayerIndex = lTiledMap->LayerNameToLayerIndex(walkablityLayerName);
+		}
 	}
 
 	void MapMovementManager::SetGridPosition(
-		const std::weak_ptr<GridMovementComponent> &gridMovementComponentPtr,
+		const std::weak_ptr<MapMovementComponent> &gridMovementComponentPtr,
 		const glm::ivec2 &gridPosition
 		) const
 	{
-		const std::shared_ptr<GridMovementComponent> gridMovementComponent = gridMovementComponentPtr.lock();
+		const std::shared_ptr<MapMovementComponent> gridMovementComponent = gridMovementComponentPtr.lock();
 		if (!gridMovementComponent) return;
 
 		const std::shared_ptr<GEngine::Entity> entity = gridMovementComponent->GetEntity().lock();

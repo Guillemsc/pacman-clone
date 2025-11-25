@@ -47,6 +47,8 @@ namespace GEngine
 		glm::vec2 GridPositionToWorldPosition(const glm::i32vec2& gridPosition, CellPosition cellPosition = CellPosition::BOTTOM_LEFT) const;
 		glm::i32vec2 WorldPositionToGridPosition(const glm::vec2& worldPosition) const;
 
+		std::int32_t LayerNameToLayerIndex(const std::string& layerName) const;
+
 		void SetLayerVisible(std::int32_t layerIndex, bool visible);
 		bool GetIsLayerVisible(std::int32_t layerIndex) const;
 

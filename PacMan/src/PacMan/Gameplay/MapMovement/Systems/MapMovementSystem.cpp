@@ -2,27 +2,28 @@
 // Created by guillem on 6/28/25.
 //
 
-#include "GridMovementSystem.h"
+#include "MapMovementSystem.h"
 
 #include "GEngine/Components/TiledMap2dRendererComponent.h"
 #include "GEngine/Components/TransformComponent.h"
 #include "GEngine/Extensions/CardinalDirectionExtensions.h"
-#include "PacMan/Gameplay/Components/GridMovementComponent.h"
+#include "../Components/MapMovementComponent.h"
+#include "PacMan/Gameplay/MapMovement/Managers/MapMovementManager.h"
 
 namespace PacMan
 {
-	GridMovementSystem::GridMovementSystem(const std::weak_ptr<MapMovementManager> &mapMovementManager)
+	MapMovementSystem::MapMovementSystem(const std::weak_ptr<MapMovementManager> &mapMovementManager)
 	{
 		_mapMovementManagerPtr = mapMovementManager;
 	}
 
-	void GridMovementSystem::Tick()
+	void MapMovementSystem::Tick()
 	{
 		const std::shared_ptr<MapMovementManager> tileMapComponent = _mapMovementManagerPtr.lock();
 
 		for (auto it = _components.begin(); it != _components.end();)
 		{
-			const std::shared_ptr<GridMovementComponent> component = it->lock();
+			const std::shared_ptr<MapMovementComponent> component = it->lock();
 
 			if (!component)
 			{
@@ -80,14 +81,14 @@ namespace PacMan
 		}
 	}
 
-	void GridMovementSystem::Add(const std::weak_ptr<GridMovementComponent> &component)
+	void MapMovementSystem::Add(const std::weak_ptr<MapMovementComponent> &component)
 	{
 		_components.push_back(component);
 	}
 
-	bool GridMovementSystem::TryApplyNextDirection(
+	bool MapMovementSystem::TryApplyNextDirection(
 		const MapMovementManager* mapMovementManager,
-		GridMovementComponent *movementComponent,
+		MapMovementComponent *movementComponent,
 		const GEngine::CardinalDirection direction
 
 		)
@@ -106,9 +107,9 @@ namespace PacMan
 		return isValidNextDirection;
 	}
 
-	bool GridMovementSystem::IsValidNextDirection(
+	bool MapMovementSystem::IsValidNextDirection(
 		const MapMovementManager* mapMovementManager,
-		const GridMovementComponent *movementComponent,
+		const MapMovementComponent *movementComponent,
 		const GEngine::CardinalDirection direction
 		)
 	{

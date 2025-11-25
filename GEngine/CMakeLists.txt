@@ -249,6 +249,10 @@ add_library(GEngineCore STATIC
         src/GEngine/Core/GEngineCoreModules.h
         src/GEngine/Modules/TweensModule.cpp
         src/GEngine/Modules/TweensModule.h
+        src/GEngine/Cameras/Camera2d.cpp
+        src/GEngine/Cameras/Camera2d.h
+        src/GEngine/Components/Camera2dComponent.cpp
+        src/GEngine/Components/Camera2dComponent.h
 )
 
 # Link raylib

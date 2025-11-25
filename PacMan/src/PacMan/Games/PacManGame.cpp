@@ -6,6 +6,7 @@
 
 #include <iostream>
 
+#include "GEngine/Components/Camera2dComponent.h"
 #include "GEngine/Components/CameraComponent.h"
 #include "GEngine/Components/Shape2dRendererComponent.h"
 #include "GEngine/Components/Texture2dRendererComponent.h"
@@ -33,7 +34,7 @@
 #include "GEngine/ServiceLocators/ServiceLocator.h"
 #include "GEngine/Systems/System.h"
 #include "GEngine/Timers/ChronoTimer.h"
-#include "PacMan/Gameplay/Components/GridMovementComponent.h"
+#include "../Gameplay/MapMovement/Components/MapMovementComponent.h"
 #include "PacMan/Contexts/ContextsStack.h"
 #include "PacMan/Contexts/GameplayContext.h"
 #include "PacMan/Contexts/MetaContext.h"
@@ -49,8 +50,8 @@ namespace PacMan
 
 		const auto cameraEntity = _modules->entities->AddWorldEntity();
 		cameraEntity.lock()->SetName("Camera");
-		cameraEntity.lock()->AddComponent<GEngine::CameraComponent>();
-		cameraEntity.lock()->GetTransform().lock()->SetPosition({0, 0, -320});
+		cameraEntity.lock()->AddComponent<GEngine::Camera2dComponent>().lock()->SetHorizontalFov(350);
+		cameraEntity.lock()->GetTransform().lock()->SetPosition({0, 0, 0});
 
 		GEngine::Coroutines::Start(&PacManGame::LaunchGameAsync, this).Forget();
 

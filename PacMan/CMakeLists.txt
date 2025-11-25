@@ -6,10 +6,10 @@ set(CMAKE_CXX_STANDARD 20)
 add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Games/PacManGame.h
         src/PacMan/Games/PacManGame.cpp
-        src/PacMan/Gameplay/Systems/GridMovementSystem.cpp
-        src/PacMan/Gameplay/Systems/GridMovementSystem.h
-        src/PacMan/Gameplay/Components/GridMovementComponent.cpp
-        src/PacMan/Gameplay/Components/GridMovementComponent.h
+        src/PacMan/Gameplay/MapMovement/Systems/MapMovementSystem.cpp
+        src/PacMan/Gameplay/MapMovement/Systems/MapMovementSystem.h
+        src/PacMan/Gameplay/MapMovement/Components/MapMovementComponent.cpp
+        src/PacMan/Gameplay/MapMovement/Components/MapMovementComponent.h
         src/PacMan/Flow/FlowManager.cpp
         src/PacMan/Flow/FlowManager.h
         src/PacMan/Contexts/GameplayContext.cpp
@@ -18,15 +18,15 @@ add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Contexts/Context.h
         src/PacMan/Contexts/ContextsStack.cpp
         src/PacMan/Contexts/ContextsStack.h
-        src/PacMan/Gameplay/Systems/PlayerInputSystem.cpp
-        src/PacMan/Gameplay/Systems/PlayerInputSystem.h
+        src/PacMan/Gameplay/Input/Systems/PlayerInputSystem.cpp
+        src/PacMan/Gameplay/Input/Systems/PlayerInputSystem.h
         src/PacMan/Contexts/MetaContext.cpp
         src/PacMan/Contexts/MetaContext.h
         src/PacMan/Gameplay/Data/GameplayEntities.h
         src/PacMan/Contexts/SharedContext.cpp
         src/PacMan/Contexts/SharedContext.h
-        src/PacMan/Gameplay/Managers/MapMovementManager.cpp
-        src/PacMan/Gameplay/Managers/MapMovementManager.h
+        src/PacMan/Gameplay/MapMovement/Managers/MapMovementManager.cpp
+        src/PacMan/Gameplay/MapMovement/Managers/MapMovementManager.h
 )
 
 target_link_libraries(PacMan PRIVATE GEngineCore)

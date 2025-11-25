@@ -38,7 +38,6 @@ namespace GEngine
 
 	private:
 		void RenderOnCurrentCamera() const;
-		void Render(const std::weak_ptr<Camera>& cameraPtr) const;
 
 	private:
 		GEngineCoreModules* _modules = nullptr;

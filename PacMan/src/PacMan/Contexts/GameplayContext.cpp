@@ -13,10 +13,10 @@
 #include "GEngine/Modules/SystemsModule.h"
 #include "GEngine/ServiceLocators/ServiceLocator.h"
 #include "GEngine/Resources/TiledMapResource.h"
-#include "PacMan/Gameplay/Managers/MapMovementManager.h"
-#include "PacMan/Gameplay/Systems/GridMovementSystem.h"
-#include "PacMan/Gameplay/Systems/PlayerInputSystem.h"
-#include "PacMan/Gameplay/Components/GridMovementComponent.h"
+#include "../Gameplay/MapMovement/Systems/MapMovementSystem.h"
+#include "../Gameplay/MapMovement/Components/MapMovementComponent.h"
+#include "PacMan/Gameplay/Input/Systems/PlayerInputSystem.h"
+#include "PacMan/Gameplay/MapMovement/Managers/MapMovementManager.h"
 
 namespace PacMan
 {
@@ -30,26 +30,28 @@ namespace PacMan
 		tilemapEntity->SetName("Tilemap");
 		const std::shared_ptr<GEngine::TiledMap2dRendererComponent> tilemap = tilemapEntity->AddComponent<GEngine::TiledMap2dRendererComponent>().lock();
 
-		const std::weak_ptr<GEngine::TiledMapResource> tilemapResource = _modules->resources->GetResource<GEngine::TiledMapResource>("Tiled/maps/test-map.tmx");
+		const std::weak_ptr<GEngine::TiledMapResource> tilemapResource = _modules->resources->GetResource<GEngine::TiledMapResource>(
+			"Tiled/maps/test-map.tmx"
+			);
 
 		tilemap->SetTiledMap(tilemapResource);
 
-		_mapMovementManager = std::make_shared<MapMovementManager>(tilemap, 0);
+		_mapMovementManager = std::make_shared<MapMovementManager>(tilemap, "Walkability");
 		GEngine::ServiceLocator::Register(_mapMovementManager);
 
 		const std::shared_ptr<GEngine::Entity> playerEntity = GetScene().AddWorldEntity().lock();
 		playerEntity->SetName("Player");
 		playerEntity->AddComponent<GEngine::Shape2dRendererComponent>();
 		playerEntity->GetComponent<GEngine::Shape2dRendererComponent>().lock()->SetLayer(1);
-		playerEntity->AddComponent<GridMovementComponent>();
+		playerEntity->AddComponent<MapMovementComponent>();
 
 		playerEntity->GetTransform().lock()->SetPosition({0, 0, 0});
 
-		const std::shared_ptr<GridMovementSystem> mapMovementSystem = std::make_shared<GridMovementSystem>(
+		const std::shared_ptr<MapMovementSystem> mapMovementSystem = std::make_shared<MapMovementSystem>(
 			_mapMovementManager
 		);
 
-		const std::weak_ptr<GridMovementComponent> playerGridMovement = playerEntity->GetComponent<GridMovementComponent>();
+		const std::weak_ptr<MapMovementComponent> playerGridMovement = playerEntity->GetComponent<MapMovementComponent>();
 		_mapMovementManager->SetGridPosition(playerGridMovement, {10, 10});
 
 		mapMovementSystem->Add(playerGridMovement);
@@ -57,7 +59,7 @@ namespace PacMan
 		_modules->systems->AddSystem(mapMovementSystem);
 
 		const std::shared_ptr<PlayerInputSystem> playerInputSystem = std::make_shared<PlayerInputSystem>(
-			playerEntity->GetComponent<GridMovementComponent>()
+			playerEntity->GetComponent<MapMovementComponent>()
 		);
 		_modules->systems->AddSystem(playerInputSystem);
 

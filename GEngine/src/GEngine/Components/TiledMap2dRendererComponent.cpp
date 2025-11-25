@@ -17,6 +17,7 @@
 #include "GEngine/Modules/ResourcesModule.h"
 #include "GEngine/Rendering/GuizmoUiRenderer.h"
 #include "GEngine/Rendering/Renderer2d.h"
+#include "GEngine/Rendering/UiRenderer.h"
 #include "GEngine/Resources/TextureResource.h"
 #include "GEngine/Resources/TiledMapResource.h"
 #include "tmxlite/TileLayer.hpp"
@@ -46,6 +47,8 @@ namespace GEngine
 		float rotation = transform->GetRotationEulerZ();
 		glm::vec2 scale = transform->GetScaleXY();
 
+		position = modules->rendering->Renderer2D().lock()->PositionToRenderPosition(position);
+
 		modules->rendering->Renderer2D().lock()->Add(0, [rawMap, position, scale, rotation, this, tiledMap]
 		{
 			const tmx::Vector2u pixelSizeOfTile = rawMap->getTileSize();
@@ -57,20 +60,19 @@ namespace GEngine
 				return;
 			}
 
-			std::int32_t layerIndex = 0;
-
-			for (const auto& layer : layers)
+			for (int i = 0; i < layers.size(); ++i)
 			{
+				const auto& layer = layers[i];
+
 				if (layer->getType() != tmx::Layer::Type::Tile)
 				{
 					continue;
 				}
 
-				const bool isVisible = GetIsLayerVisible(layerIndex);
+				const bool isVisible = GetIsLayerVisible(i);
 
 				if (!isVisible)
 				{
-					++layerIndex;
 					continue;
 				}
 
@@ -89,8 +91,6 @@ namespace GEngine
 					rotation,
 					scale
 				);
-
-				++layerIndex;
 			}
 		});
 	}
@@ -247,6 +247,27 @@ namespace GEngine
 		const glm::vec2 localNormalisedPosition = {layerGridSize.x * normalizedPosition.x, layerGridSize.y * normalizedPosition.y};
 
 		return localNormalisedPosition;
+	}
+
+	std::int32_t TiledMap2dRendererComponent::LayerNameToLayerIndex(const std::string &layerName) const
+	{
+		const std::shared_ptr<TiledMapResource> tiledMap = _tiledMapPtr.lock();
+		if (!tiledMap) return -1;
+
+		const std::shared_ptr<tmx::Map> mapData = tiledMap->GetRawMap().lock();
+		if (!mapData) return -1;
+
+		const std::vector<tmx::Layer::Ptr>& layers = mapData->getLayers();
+
+		for (std::int32_t i = 0; i < layers.size(); ++i)
+		{
+			if (layers[i]->getName() == layerName)
+			{
+				return i;
+			}
+		}
+
+		return -1;
 	}
 
 	void TiledMap2dRendererComponent::SetLayerVisible(const std::int32_t layerIndex, const bool visible)

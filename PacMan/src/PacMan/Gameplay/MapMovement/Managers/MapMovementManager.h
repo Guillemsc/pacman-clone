@@ -16,17 +16,17 @@ namespace GEngine
 
 namespace PacMan
 {
-	class GridMovementComponent;
+	class MapMovementComponent;
 
 	class MapMovementManager
 	{
 	public:
 		MapMovementManager(
 			const std::weak_ptr<GEngine::TiledMap2dRendererComponent>& tiledMap,
-			std::int32_t walkabilityLayerIndex
+			const std::string& walkablityLayerName
 			);
 
-		void SetGridPosition(const std::weak_ptr<GridMovementComponent> &gridMovementComponentPtr, const glm::ivec2& gridPosition) const;
+		void SetGridPosition(const std::weak_ptr<MapMovementComponent> &gridMovementComponentPtr, const glm::ivec2& gridPosition) const;
 		glm::vec2 GridPositionToWorldPosition(const glm::ivec2& gridPosition) const;
 		bool IsWalkable(const glm::ivec2& gridPosition) const;
 

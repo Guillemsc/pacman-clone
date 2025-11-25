@@ -10,10 +10,7 @@
 namespace GEngine
 {
 	class Camera;
-}
 
-namespace GEngine
-{
 	class CameraComponent final : public Component
 	{
 	public:

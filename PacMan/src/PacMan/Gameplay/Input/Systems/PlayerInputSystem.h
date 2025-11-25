@@ -11,16 +11,16 @@
 
 namespace PacMan
 {
-	class GridMovementComponent;
+	class MapMovementComponent;
 
 	class PlayerInputSystem : public GEngine::System
 	{
 	public:
-		explicit PlayerInputSystem(const std::weak_ptr<GridMovementComponent>& component);
+		explicit PlayerInputSystem(const std::weak_ptr<MapMovementComponent>& component);
 
 		void Tick() override;
 
-		std::weak_ptr<GridMovementComponent> _component;
+		std::weak_ptr<MapMovementComponent> _component;
 	};
 }
 

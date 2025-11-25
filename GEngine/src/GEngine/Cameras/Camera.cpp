@@ -5,10 +5,13 @@
 #include "Camera.h"
 
 #include "GEngine/Constants/MathConstants.h"
+#include "GEngine/Core/GEngineCoreModules.h"
+#include "GEngine/Modules/WindowModule.h"
 
 namespace GEngine
 {
-    Camera::Camera()
+    Camera::Camera(GEngineCoreModules* modules)
+        : _modules(modules)
     {
         SetProjection(_projection);
     }

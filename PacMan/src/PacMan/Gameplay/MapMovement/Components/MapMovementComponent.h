@@ -12,10 +12,10 @@
 
 namespace PacMan
 {
-	class GridMovementComponent final : public GEngine::Component
+	class MapMovementComponent final : public GEngine::Component
 	{
 	public:
-		explicit GridMovementComponent(GEngine::GEngineCoreModules* modules, const std::weak_ptr<GEngine::Entity> &entity);
+		explicit MapMovementComponent(GEngine::GEngineCoreModules* modules, const std::weak_ptr<GEngine::Entity> &entity);
 
 		constexpr const char* GetTypeName() override { return "Grid Movement"; }
 

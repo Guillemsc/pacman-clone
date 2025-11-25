@@ -13,12 +13,14 @@
 
 namespace GEngine
 {
+    class GEngineCoreModules;
+
     class Camera
     {
         friend class CameraModule;
 
     public:
-        Camera();
+        explicit Camera(GEngineCoreModules* modules);
 
         void SetProjection(CameraProjection projection);
         void SetPosition(const glm::vec3& position);
@@ -33,10 +35,11 @@ namespace GEngine
         glm::vec3 GetUpDirection() const;
         glm::vec3 GetRightDirection() const;
 
-    public:
         ::Camera GetRawCamera() const;
 
     private:
+        GEngineCoreModules* const _modules = nullptr;
+
         glm::vec3 _position = glm::vec3(0, 0, -100);
         glm::quat _rotation = glm::identity<glm::quat>();
         CameraProjection _projection = CameraProjection::CAMERA_PERSPECTIVE;

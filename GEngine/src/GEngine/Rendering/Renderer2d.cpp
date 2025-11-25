@@ -6,9 +6,16 @@
 
 #include "raylib.h"
 #include "GEngine/Cameras/Camera.h"
+#include "GEngine/Core/GEngineCoreModules.h"
+#include "GEngine/Modules/WindowModule.h"
 
 namespace GEngine
 {
+	Renderer2d::Renderer2d(GEngineCoreModules *modules)
+		: _modules(modules)
+	{
+	}
+
 	void Renderer2d::Add(const std::int32_t layer, const std::function<void()> &func)
 	{
 		_renderQueue.Add(layer, func);
@@ -27,5 +34,15 @@ namespace GEngine
 		});
 
 		_renderQueue.Execute();
+	}
+
+	glm::vec2 Renderer2d::PositionToRenderPosition(const glm::vec2 &position) const
+	{
+		const glm::vec2 windowSize = _modules->window->GetWindowSize();
+		const glm::vec2 halfWindowSize = windowSize * 0.5f;
+
+		const glm::vec2 newPosition = {position.x, -position.y};
+
+		return newPosition;
 	}
 } // GEngineCore

@@ -10,7 +10,7 @@
 
 #include "GEngine/Directions/CardinalDirection.h"
 #include "GEngine/Systems/System.h"
-#include "PacMan/Gameplay/Managers/MapMovementManager.h"
+#include "PacMan/Gameplay/MapMovement/Managers/MapMovementManager.h"
 
 namespace GEngine
 {
@@ -19,33 +19,33 @@ namespace GEngine
 
 namespace PacMan
 {
-	class GridMovementComponent;
+	class MapMovementComponent;
 
-	class GridMovementSystem : public GEngine::System
+	class MapMovementSystem : public GEngine::System
 	{
 	public:
-		GridMovementSystem(const std::weak_ptr<MapMovementManager> &mapMovementManager);
+		explicit MapMovementSystem(const std::weak_ptr<MapMovementManager> &mapMovementManager);
 
 		void Tick() override;
 
-		void Add(const std::weak_ptr<GridMovementComponent> &component);
+		void Add(const std::weak_ptr<MapMovementComponent> &component);
 
 	private:
 		static bool TryApplyNextDirection(
 			const MapMovementManager* mapMovementManager,
-			GridMovementComponent *movementComponent,
+			MapMovementComponent *movementComponent,
 			const GEngine::CardinalDirection direction
 		);
 
 		static bool IsValidNextDirection(
 			const MapMovementManager* mapMovementManager,
-			const GridMovementComponent* movementComponent,
+			const MapMovementComponent* movementComponent,
 			GEngine::CardinalDirection direction
 			);
 
 	private:
 		std::weak_ptr<MapMovementManager> _mapMovementManagerPtr;
-		std::vector<std::weak_ptr<GridMovementComponent>> _components;
+		std::vector<std::weak_ptr<MapMovementComponent>> _components;
 	};
 }
 

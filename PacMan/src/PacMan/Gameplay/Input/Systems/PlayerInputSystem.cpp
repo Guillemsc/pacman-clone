@@ -5,11 +5,11 @@
 #include "PlayerInputSystem.h"
 
 #include "raylib.h"
-#include "PacMan/Gameplay/Components/GridMovementComponent.h"
+#include "PacMan/Gameplay/MapMovement/Components/MapMovementComponent.h"
 
 namespace PacMan
 {
-	PlayerInputSystem::PlayerInputSystem(const std::weak_ptr<GridMovementComponent> &component)
+	PlayerInputSystem::PlayerInputSystem(const std::weak_ptr<MapMovementComponent> &component)
 	{
 		_component = component;
 	}

@@ -14,6 +14,7 @@
 
 namespace GEngine
 {
+    class Camera2d;
     class Camera;
 }
 
@@ -27,11 +28,19 @@ namespace GEngine
         void Init(GEngineCoreModules* modules);
         void Tick(float deltaTime);
 
+        bool IsUsing2dMode() const;
+
         std::weak_ptr<Camera> CreateCamera();
-        void RemoveCamera(const std::weak_ptr<Camera>& cameraPtr);
+        void RemoveCamera(const std::weak_ptr<Camera>& removing);
+
+        std::weak_ptr<Camera2d> CreateCamera2d();
+        void RemoveCamera2d(const std::weak_ptr<Camera2d>& removing);
 
         std::weak_ptr<Camera> GetCurrentCamera();
         std::weak_ptr<Camera> GetCurrentRenderingCamera();
+
+        std::weak_ptr<Camera2d> GetCurrentCamera2d();
+        std::weak_ptr<Camera2d> GetCurrentRenderingCamera2d();
 
         bool GetIsUsingEditorCamera() const;
         void SetIsUsingEditorCamera(bool value);
@@ -42,11 +51,17 @@ namespace GEngine
     private:
         GEngineCoreModules* _modules = nullptr;
 
+        bool _isUsing2dMode = true;
+
         std::vector<std::shared_ptr<Camera>> _cameras;
         std::shared_ptr<Camera> _editorCamera;
 
+        std::vector<std::shared_ptr<Camera2d>> _cameras2d;
+        std::shared_ptr<Camera2d> _editorCamera2d;
+
         std::weak_ptr<Camera> _currentCamera;
-        std::weak_ptr<Camera> _currentRenderingCamera;
+
+        std::weak_ptr<Camera2d> _currentCamera2d;
 
         bool _isUsingEditorCamera = false;
         glm::vec2 _lastMousePos = Vec2Extensions::Zero;

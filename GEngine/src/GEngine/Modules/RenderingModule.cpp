@@ -8,6 +8,7 @@
 #include "raylib.h"
 #include "rlgl.h"
 #include "GEngine/Cameras/Camera.h"
+#include "GEngine/Cameras/Camera2d.h"
 #include "GEngine/Rendering/ImGuiRenderer.h"
 #include "GEngine/Rendering/Renderer2d.h"
 #include "GEngine/Rendering/UiRenderer.h"
@@ -24,7 +25,7 @@ namespace GEngine
 	{
 		_modules = modules;
 
-		_renderer2d = std::make_shared<Renderer2d>();
+		_renderer2d = std::make_shared<Renderer2d>(modules);
 		_uiRenderer = std::make_shared<UiRenderer>(modules);
 		_guizmoUiRenderer = std::make_shared<GuizmoUiRenderer>(modules);
 		_imGuiRenderer = std::make_shared<ImGuiRenderer>();
@@ -44,36 +45,30 @@ namespace GEngine
 
 	void RenderingModule::RenderOnCurrentCamera() const
 	{
-		const std::weak_ptr<Camera> currentCameraPtr = _modules->camera->GetCurrentRenderingCamera();
-
-		Render(currentCameraPtr);
-	}
-
-	void RenderingModule::Render(const std::weak_ptr<Camera>& cameraPtr) const
-	{
-		const std::shared_ptr<Camera> camera = cameraPtr.lock();
+		const bool isUsing2dMode = _modules->camera->IsUsing2dMode();
 
 		BeginDrawing();
 
-		Color clearColor = BLANK;
-
-		if (camera != nullptr)
-		{
-
-		}
-
+		constexpr Color clearColor = BLANK;
 		ClearBackground(clearColor);
 
-		if (camera != nullptr)
+		if (isUsing2dMode)
 		{
-			BeginMode3D(camera->GetRawCamera());
+			const std::shared_ptr<Camera2d> currentCameraPtr = _modules->camera->GetCurrentRenderingCamera2d().lock();
 
-			rlSetClipPlanes(0.01, 9999);
+			if (currentCameraPtr)
+			{
+				BeginMode2D(currentCameraPtr->GetRawCamera());
 
-			_renderer2d->Render();
+				_renderer2d->Render();
+
+				EndMode2D();
+			}
 		}
-
-		EndMode3D();
+		else
+		{
+			const std::weak_ptr<Camera> currentCameraPtr = _modules->camera->GetCurrentRenderingCamera();
+		}
 
 		// Temp UI
 		Camera2D uiCamera = { 0 };
