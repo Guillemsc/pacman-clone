@@ -5,6 +5,7 @@
 #include "TiledMapResourceImporter.h"
 
 #include "GEngine/Core/GEngineCoreApplication.h"
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Modules/ResourcesModule.h"
 #include "GEngine/Resources/TextureResource.h"
 #include "GEngine/Resources/TiledMapResource.h"
@@ -13,8 +14,8 @@
 
 namespace GEngine
 {
-	TiledMapResourceImporter::TiledMapResourceImporter(const std::weak_ptr<GEngineCoreApplication> &app)
-		: ResourceImporter(app)
+	TiledMapResourceImporter::TiledMapResourceImporter(GEngineCoreModules* modules)
+		: ResourceImporter(modules)
 	{
 		AddSupportedExtension(".tmx");
 	}
@@ -56,12 +57,6 @@ namespace GEngine
 
 	void TiledMapResourceImporter::AfterImport(const Resource *resource)
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _app.lock();
-		if (app == nullptr) return;
-
-		const std::shared_ptr<ResourcesModule> resources = app->Resources().lock();
-		if (resources == nullptr) return;
-
 		TiledMapResource* tiledMapResource = (TiledMapResource*)resource;
 
 		const std::shared_ptr<tmx::Map> mapData = tiledMapResource->GetRawMap().lock();
@@ -74,8 +69,8 @@ namespace GEngine
 			const tmx::Tileset& tileSet = tileSets[i];
 
 			const std::string& imagePath = tileSet.getImagePath();
-			std::string resourcesImagePath = resources->FullPathToRelativeResourcesPath(imagePath);
-			const std::weak_ptr<TextureResource> tilesetTexture = resources->GetResource<TextureResource>(resourcesImagePath);
+			std::string resourcesImagePath = _modules->resources->FullPathToRelativeResourcesPath(imagePath);
+			const std::weak_ptr<TextureResource> tilesetTexture = _modules->resources->GetResource<TextureResource>(resourcesImagePath);
 
 			tiledMapResource->_tileSetTextures.push_back(tilesetTexture);
 		}

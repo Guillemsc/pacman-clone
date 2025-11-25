@@ -11,7 +11,8 @@
 
 namespace GEngine
 {
-	JsonResourceImporter::JsonResourceImporter(const std::weak_ptr<GEngineCoreApplication> &app) : ResourceImporter(app)
+	JsonResourceImporter::JsonResourceImporter(GEngineCoreModules* modules)
+		: ResourceImporter(modules)
 	{
 		AddSupportedExtension(".json");
 	}

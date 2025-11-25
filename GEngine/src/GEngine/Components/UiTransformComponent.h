@@ -15,7 +15,7 @@ namespace GEngine
 		friend class EntitiesModule;
 
 	public:
-		explicit UiTransformComponent(const std::weak_ptr<Entity> &entity);
+		explicit UiTransformComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);
 
 		constexpr const char* GetTypeName() override { return "Ui Transform"; }
 

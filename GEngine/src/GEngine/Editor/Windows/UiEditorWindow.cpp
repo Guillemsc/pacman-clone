@@ -12,24 +12,18 @@
 
 namespace GEngine
 {
-	UiEditorWindow::UiEditorWindow(const std::weak_ptr<GEngineCoreApplication> &app): EditorWindow(app, "Ui")
+	UiEditorWindow::UiEditorWindow(GEngineCoreModules* modules): EditorWindow(modules, "Ui")
 	{
 	}
 
 	void UiEditorWindow::DrawWindowContent()
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _app.lock();
-		if (!app) return;
-
-		const std::shared_ptr<UiModule> ui = app->Ui().lock();
-		if (!ui) return;
-
-		glm::vec2 referenceScreenSize = ui->GetReferenceScreenSize();
+		glm::vec2 referenceScreenSize = _modules->ui->GetReferenceScreenSize();
 		if (ImGui::DragFloat2("Reference Screen Size", &referenceScreenSize.x, 1))
 		{
-			ui->SetReferenceScreenSize(referenceScreenSize);
+			_modules->ui->SetReferenceScreenSize(referenceScreenSize);
 		}
 
-		ImGui::Text(std::format("Scale: {:.2f}", ui->GetUiScale()).c_str());
+		ImGui::Text(std::format("Scale: {:.2f}", _modules->ui->GetUiScale()).c_str());
 	}
 }

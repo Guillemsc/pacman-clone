@@ -17,15 +17,13 @@
 
 namespace PacMan
 {
-	MetaContext::MetaContext(): Context("Meta")
+	MetaContext::MetaContext(GEngine::GEngineCoreModules* modules)
+		: Context(modules, "Meta")
 	{
 	}
 
 	tokoro::Async<void> MetaContext::OnLoadAsync()
 	{
-		const std::shared_ptr<GEngine::GEngineCoreApplication> app = GEngine::ServiceLocator::Get<GEngine::GEngineCoreApplication>();
-		const std::shared_ptr<GEngine::EntitiesModule> entities = app->Entities().lock();
-
 		const std::shared_ptr<GEngine::Entity> uiEntity2 = GetScene().AddUiEntity().lock();
 		uiEntity2->AddComponent<GEngine::UiShapeRendererComponent>();
 		const std::shared_ptr<GEngine::UiShapeButtonComponent> button = uiEntity2->AddComponent<GEngine::UiShapeButtonComponent>().lock();
@@ -46,6 +44,6 @@ namespace PacMan
 		if (!contextsStack) return;
 
 		contextsStack->Pop();
-		GEngine::Coroutines::Start(&ContextsStack::PushAsync, contextsStack, std::make_shared<GameplayContext>()).Forget();
+		GEngine::Coroutines::Start(&ContextsStack::PushAsync, contextsStack, std::make_shared<GameplayContext>(_modules)).Forget();
 	}
 }

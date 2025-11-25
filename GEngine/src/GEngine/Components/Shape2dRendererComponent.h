@@ -18,7 +18,7 @@ namespace GEngine
 	class Shape2dRendererComponent final : public Component
 	{
 	public:
-		explicit Shape2dRendererComponent(const std::weak_ptr<Entity> &entity);
+		explicit Shape2dRendererComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);
 
 		constexpr const char* GetTypeName() override { return "Shape2dRenderer"; }
 

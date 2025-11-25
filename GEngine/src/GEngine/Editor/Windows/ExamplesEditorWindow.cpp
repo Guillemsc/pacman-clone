@@ -12,23 +12,14 @@
 
 namespace GEngine
 {
-	ExamplesEditorWindow::ExamplesEditorWindow(const std::weak_ptr<GEngineCoreApplication> &app)
-		: EditorWindow(app, "Examples")
+	ExamplesEditorWindow::ExamplesEditorWindow(GEngineCoreModules* modules)
+		: EditorWindow(modules, "Examples")
 	{
 	}
 
 	void ExamplesEditorWindow::DrawWindowContent()
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _app.lock();
-		if (!app) return;
-
-		const std::shared_ptr<ExamplesModule> examples = app->Examples().lock();
-		if (!examples) return;
-
-		const std::shared_ptr<GameModule> game = app->Game().lock();
-		if (!game) return;
-
-		const std::vector<ExampleData>& examplesList = examples->GetExamples();
+		const std::vector<ExampleData>& examplesList = _modules->examples->GetExamples();
 
 		for (auto it = examplesList.begin(); it != examplesList.end(); ++it)
 		{
@@ -36,7 +27,7 @@ namespace GEngine
 
 			if (ImGui::Button("Run"))
 			{
-				game->LoadGame(it->example);
+				_modules->game->LoadGame(it->example);
 			}
 
 			ImGui::SameLine();

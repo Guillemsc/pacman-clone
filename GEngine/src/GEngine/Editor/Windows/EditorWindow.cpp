@@ -8,10 +8,10 @@
 
 namespace GEngine
 {
-	EditorWindow::EditorWindow(const std::weak_ptr<GEngineCoreApplication> &app, const std::string& windowTitle)
+	EditorWindow::EditorWindow(GEngineCoreModules* modules, const std::string& windowTitle)
+		: _modules(modules), _title(windowTitle)
 	{
-		_app = app;
-		_title = windowTitle;
+
 	}
 
 	void EditorWindow::Draw()

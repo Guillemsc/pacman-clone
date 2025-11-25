@@ -44,19 +44,10 @@ namespace PacMan
 {
 	void PacManGame::Init()
 	{
-		const auto app = _app.lock();
-		if (!app) return;
-
-		// Cursed maybe???
-		GEngine::ServiceLocator::Register(app);
-
-		const std::shared_ptr<GEngine::EntitiesModule> entities = app->Entities().lock();
-		const std::shared_ptr<GEngine::CoroutinesModule> coroutines = app->Coroutines().lock();
-
-		const std::shared_ptr<ContextsStack> contextsStack = std::make_shared<ContextsStack>(app->Coroutines().lock()->AddSequencer());
+		const std::shared_ptr<ContextsStack> contextsStack = std::make_shared<ContextsStack>(_modules->coroutines->AddSequencer());
 		GEngine::ServiceLocator::Register(contextsStack);
 
-		const auto cameraEntity = entities->AddWorldEntity();
+		const auto cameraEntity = _modules->entities->AddWorldEntity();
 		cameraEntity.lock()->SetName("Camera");
 		cameraEntity.lock()->AddComponent<GEngine::CameraComponent>();
 		cameraEntity.lock()->GetTransform().lock()->SetPosition({0, 0, -320});
@@ -103,8 +94,8 @@ namespace PacMan
 	{
 		const std::shared_ptr<ContextsStack> contextsStack = GEngine::ServiceLocator::Get<ContextsStack>();
 
-		co_await contextsStack->PushAsync(std::make_shared<SharedContext>());
-		co_await contextsStack->PushAsync(std::make_shared<MetaContext>());
+		co_await contextsStack->PushAsync(std::make_shared<SharedContext>(_modules));
+		co_await contextsStack->PushAsync(std::make_shared<MetaContext>(_modules));
 	}
 }
 

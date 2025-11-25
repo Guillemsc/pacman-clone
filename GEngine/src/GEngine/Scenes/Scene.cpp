@@ -11,46 +11,34 @@
 
 namespace GEngine
 {
-	void Scene::Init(const std::weak_ptr<EntitiesModule> &entitiesPtr, const std::string& name)
+	void Scene::Init(EntitiesModule* entitiesPtr, const std::string& name)
 	{
 		_entitiesPtr = entitiesPtr;
 
-		const std::shared_ptr<EntitiesModule> entities = _entitiesPtr.lock();
-		if (!entities) return;
-
-		_rootUiEntity = entities->AddUiEntity();
+		_rootUiEntity = _entitiesPtr->AddUiEntity();
 		_rootUiEntity.lock()->SetName(std::format("{0} Ui", name));
 
-		_rootWorldEntity = entities->AddWorldEntity();
+		_rootWorldEntity = _entitiesPtr->AddWorldEntity();
 		_rootWorldEntity.lock()->SetName(std::format("{0} World", name));
 	}
 
 	void Scene::Dispose() const
 	{
-		const std::shared_ptr<EntitiesModule> entities = _entitiesPtr.lock();
-		if (!entities) return;
-
-		entities->RemoveEntity(_rootUiEntity);
-		entities->RemoveEntity(_rootWorldEntity);
+		_entitiesPtr->RemoveEntity(_rootUiEntity);
+		_entitiesPtr->RemoveEntity(_rootWorldEntity);
 	}
 
 	std::weak_ptr<Entity> Scene::AddWorldEntity() const
 	{
-		const std::shared_ptr<EntitiesModule> entities = _entitiesPtr.lock();
-		if (!entities) return std::weak_ptr<Entity>();
-
 		if (_rootWorldEntity.expired()) return std::weak_ptr<Entity>();
 
-		return entities->AddWorldEntity(_rootWorldEntity);
+		return _entitiesPtr->AddWorldEntity(_rootWorldEntity);
 	}
 
 	std::weak_ptr<Entity> Scene::AddUiEntity() const
 	{
-		const std::shared_ptr<EntitiesModule> entities = _entitiesPtr.lock();
-		if (!entities) return std::weak_ptr<Entity>();
-
 		if (_rootUiEntity.expired()) return std::weak_ptr<Entity>();
 
-		return entities->AddUiEntity(_rootWorldEntity);
+		return _entitiesPtr->AddUiEntity(_rootWorldEntity);
 	}
 } // GEngine

@@ -10,8 +10,8 @@
 
 namespace GEngine
 {
-	TextureResourceInspectorEditor::TextureResourceInspectorEditor(const std::weak_ptr<GEngineCoreApplication> &app)
-		: ResourceInspectorEditor(app)
+	TextureResourceInspectorEditor::TextureResourceInspectorEditor(GEngineCoreModules* modules)
+		: ResourceInspectorEditor(modules)
 	{
 	}
 

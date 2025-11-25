@@ -8,8 +8,11 @@
 #include "GEngine/Components/Shape2dRendererComponent.h"
 #include "GEngine/Components/TransformComponent.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
+#include "GEngine/Coroutines/Coroutines.h"
 #include "GEngine/Entities/Entity.h"
+#include "GEngine/Modules/CoroutinesModule.h"
 #include "GEngine/Modules/EntitiesModule.h"
+#include "GEngine/Modules/TweensModule.h"
 #include "GEngine/Tweens/CallbackTween.h"
 #include "GEngine/Tweens/Easing.h"
 #include "GEngine/Tweens/InterpolationTween.h"
@@ -21,18 +24,12 @@ namespace GEngine
 
 	void DevelopmentTweensExample::Init()
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _app.lock();
-		if (!app) return;
-
-		const std::shared_ptr<EntitiesModule> entities = app->Entities().lock();
-		if (!entities) return;
-
-		const std::shared_ptr<Entity> cameraEntity = entities->AddWorldEntity().lock();
+		const std::shared_ptr<Entity> cameraEntity = _modules->entities->AddWorldEntity().lock();
 		cameraEntity->SetName("Camera");
 		cameraEntity->AddComponent<CameraComponent>();
 		cameraEntity->GetTransform().lock()->SetPosition({0, 0, -320});
 
-		const std::shared_ptr<Entity> entity = entities->AddWorldEntity().lock();
+		const std::shared_ptr<Entity> entity = _modules->entities->AddWorldEntity().lock();
 		entity->AddComponent<Shape2dRendererComponent>();
 		std::shared_ptr<TransformComponent> transform = entity->GetTransform().lock();
 
@@ -73,12 +70,13 @@ namespace GEngine
 		);
 
 		_tween->SetEasing(EasingType::OUT_QUAD);
-		_tween->Start();
+
+		_modules->tweens->Play(_tween);
 	}
 
 	void DevelopmentTweensExample::Tick(const float deltaTime)
 	{
-		_tween->Tick(deltaTime);
+
 	}
 
 	void DevelopmentTweensExample::Dispose()

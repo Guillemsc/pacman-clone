@@ -12,7 +12,7 @@ namespace GEngine
 	class ExamplesEditorWindow : public EditorWindow
 	{
 	public:
-		explicit ExamplesEditorWindow(const std::weak_ptr<GEngineCoreApplication> &app);
+		explicit ExamplesEditorWindow(GEngineCoreModules* modules);
 
 		void DrawWindowContent() override;
 	};

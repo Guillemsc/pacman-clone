@@ -15,25 +15,16 @@
 
 namespace GEngine
 {
-	ResourcesEditorWindow::ResourcesEditorWindow(const std::weak_ptr<GEngineCoreApplication>& app)
-		: EditorWindow(app, "Resources")
+	ResourcesEditorWindow::ResourcesEditorWindow(GEngineCoreModules* modules)
+		: EditorWindow(modules, "Resources")
 	{
 	}
 
 	void ResourcesEditorWindow::DrawWindowContent()
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _app.lock();
-		if (!app) return;
+		const std::shared_ptr<GEngineObject> selectedObject = _modules->editor->GetSelectedObject().lock();
 
-		const std::shared_ptr<ResourcesModule> resources = app->Resources().lock();
-		if (!resources) return;
-
-		const std::shared_ptr<EditorModule> editor = app->Editor().lock();
-		if (!editor) return;
-
-		const std::shared_ptr<GEngineObject> selectedObject = editor->GetSelectedObject().lock();
-
-		const std::vector<std::shared_ptr<Resource>>& resourcesList = resources->GetResources();
+		const std::vector<std::shared_ptr<Resource>>& resourcesList = _modules->resources->GetResources();
 
 		for (auto it = resourcesList.begin(); it != resourcesList.end(); ++it)
 		{
@@ -53,7 +44,7 @@ namespace GEngine
 
 			if (ImGui::TreeNodeEx(displayString.c_str(), flags))
 			{
-				DrawLeftClickContextMenu(editor, *it);
+				DrawLeftClickContextMenu(_modules->editor, *it);
 
 				ImGui::TreePop();
 			}
@@ -61,7 +52,7 @@ namespace GEngine
 	}
 
 	void ResourcesEditorWindow::DrawLeftClickContextMenu(
-		const std::shared_ptr<EditorModule> &editor,
+		EditorModule* editor,
 		const std::shared_ptr<Resource> &resource
 		)
 	{

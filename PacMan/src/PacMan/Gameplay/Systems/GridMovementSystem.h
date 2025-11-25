@@ -10,6 +10,7 @@
 
 #include "GEngine/Directions/CardinalDirection.h"
 #include "GEngine/Systems/System.h"
+#include "PacMan/Gameplay/Managers/MapMovementManager.h"
 
 namespace GEngine
 {
@@ -23,7 +24,7 @@ namespace PacMan
 	class GridMovementSystem : public GEngine::System
 	{
 	public:
-		GridMovementSystem(const std::weak_ptr<GEngine::TiledMap2dRendererComponent> &tileMapComponent);
+		GridMovementSystem(const std::weak_ptr<MapMovementManager> &mapMovementManager);
 
 		void Tick() override;
 
@@ -31,19 +32,19 @@ namespace PacMan
 
 	private:
 		static bool TryApplyNextDirection(
-			const GEngine::TiledMap2dRendererComponent* mapComponent,
+			const MapMovementManager* mapMovementManager,
 			GridMovementComponent *movementComponent,
 			const GEngine::CardinalDirection direction
 		);
 
 		static bool IsValidNextDirection(
-			const GEngine::TiledMap2dRendererComponent* mapComponent,
+			const MapMovementManager* mapMovementManager,
 			const GridMovementComponent* movementComponent,
 			GEngine::CardinalDirection direction
 			);
 
 	private:
-		std::weak_ptr<GEngine::TiledMap2dRendererComponent> _tileMapComponentPtr;
+		std::weak_ptr<MapMovementManager> _mapMovementManagerPtr;
 		std::vector<std::weak_ptr<GridMovementComponent>> _components;
 	};
 }

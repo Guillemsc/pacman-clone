@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/ResourceImporters/ResourceImporter.h"
 #include "GEngine/Resources/ResourceType.h"
 
@@ -21,7 +22,7 @@ namespace GEngine
 	public:
 		ResourcesModule();
 
-		void Init(const std::weak_ptr<GEngineCoreApplication>& app);
+		void Init(GEngineCoreModules* modules);
 		void Dispose();
 
 		const std::vector<std::shared_ptr<Resource>>& GetResources();
@@ -45,7 +46,7 @@ namespace GEngine
 		void RegisterResourceImporter();
 
 	private:
-		std::weak_ptr<GEngineCoreApplication> _app;
+		GEngineCoreModules* _modules = nullptr;
 
 		std::filesystem::path _resourcesPath;
 
@@ -78,7 +79,7 @@ namespace GEngine
 	{
 		static_assert(std::is_base_of_v<ResourceImporter, TImporter>, "TImporter is not derived from ResourceImporter");
 
-		std::shared_ptr<TImporter> importer = std::make_shared<TImporter>(_app);
+		std::shared_ptr<TImporter> importer = std::make_shared<TImporter>(_modules);
 		_resourceImporters.push_back(importer);
 
 		std::vector<std::string> supportedExtensions = importer->GetSupportedExtensions();

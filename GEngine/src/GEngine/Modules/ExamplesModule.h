@@ -8,6 +8,7 @@
 #include <memory>
 #include <vector>
 
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Data/ExampleData.h"
 
 namespace GEngine
@@ -19,12 +20,12 @@ namespace GEngine
 	public:
 		ExamplesModule();
 
-		void Init(const std::weak_ptr<GEngineCoreApplication> &app);
+		void Init(GEngineCoreModules* modules);
 
 		const std::vector<ExampleData>& GetExamples() const;
 
 	private:
-		std::weak_ptr<GEngineCoreApplication> _app;
+		GEngineCoreModules* _modules = nullptr;
 
 		std::vector<ExampleData> _examples;
 	};

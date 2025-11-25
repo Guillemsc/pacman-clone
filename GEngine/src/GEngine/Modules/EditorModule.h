@@ -10,6 +10,8 @@
 #include <vector>
 #include <typeindex>
 
+#include "GEngine/Core/GEngineCoreModules.h"
+
 namespace GEngine
 {
 	class IPropertyDrawerEditor;
@@ -23,7 +25,7 @@ namespace GEngine
 	class EditorModule
 	{
 	public:
-		void Init(const std::weak_ptr<GEngineCoreApplication>& app);
+		void Init(GEngineCoreModules* modules);
 		void Tick();
 		void Dispose();
 
@@ -48,7 +50,7 @@ namespace GEngine
 		void RegisterWindow();
 
 	private:
-		std::weak_ptr<GEngineCoreApplication> _app;
+		GEngineCoreModules* _modules = nullptr;
 
 		bool _editorRenderingEnabled = true;
 
@@ -93,7 +95,7 @@ namespace GEngine
 	{
 		static_assert(std::is_base_of_v<EditorWindow, T>, "T is not derived from EditorWindow");
 
-		std::shared_ptr<T> window = std::make_shared<T>(_app);
+		std::shared_ptr<T> window = std::make_shared<T>(_modules);
 
 		_windows.push_back(window);
 	}

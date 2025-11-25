@@ -10,6 +10,7 @@
 
 #include "LayeredRenderQueue.h"
 #include "GEngine/Colors/Color01.h"
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "glm/vec2.hpp"
 #include "glm/vec4.hpp"
 
@@ -21,7 +22,7 @@ namespace GEngine
 	class GuizmoUiRenderer
 	{
 	public:
-		explicit GuizmoUiRenderer(const std::weak_ptr<GEngineCoreApplication> &appPtr);
+		explicit GuizmoUiRenderer(GEngineCoreModules* modules);
 
 		void Add(std::int32_t layer, const std::function<void()> &func);
 		void Render();
@@ -33,7 +34,7 @@ namespace GEngine
 		glm::vec2 PositionToRenderPosition(const glm::vec2& position) const;
 
 	private:
-		std::weak_ptr<GEngineCoreApplication> _appPtr;
+		GEngineCoreModules* const _modules;
 
 		LayeredRenderQueue _renderQueue;
 	};

@@ -12,7 +12,8 @@
 
 namespace GEngine
 {
-	UiTransformComponent::UiTransformComponent(const std::weak_ptr<Entity> &entity) : Component(entity)
+	UiTransformComponent::UiTransformComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity)
+	: Component(modules, entity)
 	{
 		_localPosition = _properties.Register("Position", Vec2Extensions::Zero);
 		_localSize = _properties.Register("Size", glm::vec2(100, 100));
@@ -181,13 +182,7 @@ namespace GEngine
 			}
 		}
 
-		const std::shared_ptr<GEngineCoreApplication> app = entity->GetApp().lock();
-		if (!app) return {};
-
-		const std::shared_ptr<WindowModule> window = app->Window().lock();
-		if (!window) return {};
-
-		const glm::vec2 screenSize = window->GetWindowSize();
+		const glm::vec2 screenSize = modules->window->GetWindowSize();
 		const glm::vec2 screenPosition = screenSize * 0.5f;
 
 		return { screenPosition, 0, Vec2Extensions::One, screenSize, {0.5f, 0.5f } };
@@ -206,13 +201,7 @@ namespace GEngine
 		const std::shared_ptr<Entity> entity = GetEntity().lock();
 		if (!entity) return;
 
-		const std::shared_ptr<GEngineCoreApplication> app = entity->GetApp().lock();
-		if (!app) return;
-
-		const std::shared_ptr<UiModule> ui = app->Ui().lock();
-		if (!ui) return;
-
-		const float uiScale = ui->GetUiScale();
+		const float uiScale = modules->ui->GetUiScale();
 
 		const UiRect parentUiRect = GetParentWorldUiRect();
 		const CornersRect anchorsScreenRect = GetAnchorsScreenPosition(parentUiRect);

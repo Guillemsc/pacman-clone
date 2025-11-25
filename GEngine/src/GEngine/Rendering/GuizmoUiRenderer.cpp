@@ -12,9 +12,9 @@
 
 namespace GEngine
 {
-	GuizmoUiRenderer::GuizmoUiRenderer(const std::weak_ptr<GEngineCoreApplication> &appPtr)
+	GuizmoUiRenderer::GuizmoUiRenderer(GEngineCoreModules* modules) : _modules(modules)
 	{
-		_appPtr = appPtr;
+
 	}
 
 	void GuizmoUiRenderer::Add(const std::int32_t layer, const std::function<void()> &func)
@@ -58,13 +58,7 @@ namespace GEngine
 
 	glm::vec2 GuizmoUiRenderer::PositionToRenderPosition(const glm::vec2 &position) const
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
-		if (!app) return position;
-
-		const std::shared_ptr<WindowModule> window = app->Window().lock();
-		if (!window) return position;
-
-		const glm::vec2 windowSize = window->GetWindowSize();
+		const glm::vec2 windowSize = _modules->window->GetWindowSize();
 
 		const float newPositionY = windowSize.y - position.y;
 

@@ -15,7 +15,8 @@
 
 namespace GEngine
 {
-	ResourcesInspectorEditor::ResourcesInspectorEditor(const std::weak_ptr<GEngineCoreApplication>& app): GEngineObjectInspectorEditor(app)
+	ResourcesInspectorEditor::ResourcesInspectorEditor(GEngineCoreModules* modules)
+		: GEngineObjectInspectorEditor(modules)
 	{
 		RegisterInspector<TextureResourceInspectorEditor, TextureResource>();
 		RegisterInspector<JsonResourceInspectorEditor, JsonResource>();

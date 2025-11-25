@@ -6,9 +6,12 @@
 
 namespace GEngine
 {
-	ResourceImporter::ResourceImporter(const std::weak_ptr<GEngineCoreApplication> &app)
+	struct GEngineCoreModules;
+
+	ResourceImporter::ResourceImporter(GEngineCoreModules* modules)
+		: _modules(modules)
 	{
-		_app = app;
+
 	}
 
 	const std::vector<std::string>& ResourceImporter::GetSupportedExtensions() const

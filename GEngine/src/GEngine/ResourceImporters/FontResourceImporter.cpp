@@ -9,7 +9,8 @@
 
 namespace GEngine
 {
-	FontResourceImporter::FontResourceImporter(const std::weak_ptr<GEngineCoreApplication> &app) : ResourceImporter(app)
+	FontResourceImporter::FontResourceImporter(GEngineCoreModules* modules)
+		: ResourceImporter(modules)
 	{
 		AddSupportedExtension(".ttf");
 	}

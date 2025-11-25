@@ -17,7 +17,7 @@ namespace PacMan
 	class MetaContext : public Context
 	{
 	public:
-		MetaContext();
+		explicit MetaContext(GEngine::GEngineCoreModules* modules);
 
 		tokoro::Async<void> OnLoadAsync() override;
 		void OnDispose() override;

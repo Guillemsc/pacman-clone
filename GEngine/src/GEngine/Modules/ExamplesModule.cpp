@@ -16,9 +16,9 @@ namespace GEngine
 		_examples.push_back({"Development Tweens", std::make_shared<DevelopmentTweensExample>()});
 	}
 
-	void ExamplesModule::Init(const std::weak_ptr<GEngineCoreApplication> &app)
+	void ExamplesModule::Init(GEngineCoreModules* modules)
 	{
-		_app = app;
+		_modules = modules;
 	}
 
 	const std::vector<ExampleData>& ExamplesModule::GetExamples() const

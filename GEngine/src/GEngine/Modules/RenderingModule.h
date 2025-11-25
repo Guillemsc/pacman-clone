@@ -7,6 +7,8 @@
 
 #include <memory>
 
+#include "GEngine/Core/GEngineCoreModules.h"
+
 namespace GEngine
 {
 	class GEngineCoreApplication;
@@ -25,7 +27,7 @@ namespace GEngine
 	public:
 		explicit RenderingModule();
 
-		void Init(const std::weak_ptr<GEngineCoreApplication> &appPtr);
+		void Init(GEngineCoreModules* modules);
 		void Tick();
 		void Dispose();
 
@@ -39,7 +41,7 @@ namespace GEngine
 		void Render(const std::weak_ptr<Camera>& cameraPtr) const;
 
 	private:
-		std::weak_ptr<GEngineCoreApplication> _appPtr;
+		GEngineCoreModules* _modules = nullptr;
 
 		std::shared_ptr<Renderer2d> _renderer2d;
 		std::shared_ptr<UiRenderer> _uiRenderer;

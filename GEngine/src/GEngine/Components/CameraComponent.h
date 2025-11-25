@@ -17,7 +17,7 @@ namespace GEngine
 	class CameraComponent final : public Component
 	{
 	public:
-		explicit CameraComponent(const std::weak_ptr<Entity> &entity);
+		explicit CameraComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);
 
 		constexpr const char* GetTypeName() override { return "Camera"; }
 

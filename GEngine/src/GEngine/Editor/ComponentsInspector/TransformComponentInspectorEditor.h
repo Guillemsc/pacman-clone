@@ -13,7 +13,7 @@ namespace GEngine
 	class TransformComponentInspectorEditor final : public ComponentInspectorEditor<TransformComponent>
 	{
 	public:
-		explicit TransformComponentInspectorEditor(const std::weak_ptr<GEngineCoreApplication>& app);
+		explicit TransformComponentInspectorEditor(GEngineCoreModules* modules);
 
 		void DrawSpecific(const std::shared_ptr<TransformComponent>& inspect) override;
 	};

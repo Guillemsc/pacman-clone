@@ -29,11 +29,11 @@
 
 namespace GEngine
 {
-	void EditorModule::Init(const std::weak_ptr<GEngineCoreApplication> &app)
+	void EditorModule::Init(GEngineCoreModules* modules)
 	{
-		_app = app;
+		_modules = modules;
 
-		_menuBar = std::make_shared<MenuBarEditor>(app);
+		_menuBar = std::make_shared<MenuBarEditor>(_modules);
 
 		RegisterPropertyDrawer<IntPropertyDrawerEditor, Property<int>>();
 		RegisterPropertyDrawer<FloatPropertyDrawerEditor, Property<float>>();
@@ -121,13 +121,7 @@ namespace GEngine
 			return;
 		}
 
-		const std::shared_ptr<GEngineCoreApplication> app = _app.lock();
-		if (app == nullptr) return;
-
-		const std::shared_ptr<RenderingModule> rendering = app->Rendering().lock();
-		if (rendering == nullptr) return;
-
-		const std::shared_ptr<ImGuiRenderer> imGuiRenderer = rendering->ImGuiRender().lock();
+		const std::shared_ptr<ImGuiRenderer> imGuiRenderer = _modules->rendering->ImGuiRender().lock();
 		if (imGuiRenderer == nullptr) return;
 
 		imGuiRenderer->Add([this]()

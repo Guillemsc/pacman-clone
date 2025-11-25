@@ -12,7 +12,8 @@
 
 namespace GEngine
 {
-	Texture2dRendererComponent::Texture2dRendererComponent(const std::weak_ptr<Entity> &entity) : Component(entity)
+	Texture2dRendererComponent::Texture2dRendererComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity)
+	: Component(modules, entity)
 	{
 	}
 
@@ -20,12 +21,6 @@ namespace GEngine
 	{
 		const std::shared_ptr<TextureResource> texture = _texturePtr.lock();
 		if (!texture) return;
-
-		const std::shared_ptr<GEngineCoreApplication> app = GetApp().lock();
-		if (app == nullptr) return;
-
-		const std::shared_ptr<RenderingModule> rendering = app->Rendering().lock();
-		if (rendering == nullptr) return;
 
 		const std::shared_ptr<Entity> entity = GetEntity().lock();
 		if (entity == nullptr) return;
@@ -42,7 +37,7 @@ namespace GEngine
 		position.x -= rawTexture.width * 0.5f * scale.x;
 		position.y -= rawTexture.height * 0.5f * scale.y;
 
-		rendering->Renderer2D().lock()->Add(0, [position, rotation, scale, rawTexture]()
+		modules->rendering->Renderer2D().lock()->Add(0, [position, rotation, scale, rawTexture]()
 		{
 			RayLibExtensions::DrawTextureEx(rawTexture, {position.x, position.y}, rotation, {scale.x, scale.y}, WHITE);
 		});

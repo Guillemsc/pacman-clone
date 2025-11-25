@@ -21,9 +21,9 @@ namespace GEngine
 		_resourcesPath = std::filesystem::current_path() / "resources";
 	}
 
-	void ResourcesModule::Init(const std::weak_ptr<GEngineCoreApplication> &app)
+	void ResourcesModule::Init(GEngineCoreModules* modules)
 	{
-		_app = app;
+		_modules = modules;
 
 		RegisterResourceImporter<TextureResourceImporter>();
 		RegisterResourceImporter<JsonResourceImporter>();

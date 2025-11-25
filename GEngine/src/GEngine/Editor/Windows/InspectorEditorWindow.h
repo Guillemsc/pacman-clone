@@ -19,7 +19,7 @@ namespace GEngine
 	class InspectorEditorWindow : public EditorWindow
 	{
 	public:
-		explicit InspectorEditorWindow(const std::weak_ptr<GEngineCoreApplication> &app);
+		explicit InspectorEditorWindow(GEngineCoreModules* modules);
 
 		void DrawWindowContent() override;
 
@@ -50,7 +50,7 @@ namespace GEngine
 			_inspectorEditors.push_back(nullptr);
 		}
 
-		_inspectorEditors[objectIndex] = std::make_shared<TEditor>(_app);
+		_inspectorEditors[objectIndex] = std::make_shared<TEditor>(_modules);
 	}
 }
 

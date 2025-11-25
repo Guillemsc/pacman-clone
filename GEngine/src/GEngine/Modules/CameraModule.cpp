@@ -22,9 +22,9 @@ namespace GEngine
 		_currentRenderingCamera = _editorCamera;
 	}
 
-	void CameraModule::Init(const std::weak_ptr<GEngineCoreApplication> &appPtr)
+	void CameraModule::Init(GEngineCoreModules* modules)
 	{
-		_appPtr = appPtr;
+		_modules = modules;
 	}
 
 	void CameraModule::Tick(const float deltaTime)
@@ -77,12 +77,6 @@ namespace GEngine
 
 	void CameraModule::TickEditorCamera(float deltaTime)
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
-		if (!app) return;
-
-		const std::shared_ptr<InputModule> input = app->Input().lock();
-		if (!input) return;
-
 		if (!_isUsingEditorCamera)
 		{
 			return;
@@ -104,7 +98,7 @@ namespace GEngine
 
 		_editorCamera->SetPosition(position);
 
-		glm::vec2 mousePos = input->GetMousePosition();
+		glm::vec2 mousePos = _modules->input->GetMousePosition();
 		glm::vec2 delta = mousePos - _lastMousePos;
 		_lastMousePos = mousePos;
 

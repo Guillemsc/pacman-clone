@@ -6,6 +6,8 @@
 #define GAMEMODULE_H
 #include <memory>
 
+#include "GEngine/Core/GEngineCoreModules.h"
+
 namespace GEngine
 {
 	class GEngineCoreApplication;
@@ -16,14 +18,14 @@ namespace GEngine
 	public:
 		GameModule();
 
-		void Init(const std::weak_ptr<GEngineCoreApplication> &app);
+		void Init(GEngineCoreModules* modules);
 		void Tick() const;
 		void Dispose();
 
 		void LoadGame(const std::shared_ptr<Game> &game);
 
 	private:
-		std::weak_ptr<GEngineCoreApplication> _app;
+		GEngineCoreModules* _modules = nullptr;
 
 		std::shared_ptr<Game> _currentGame = nullptr;
 	};

@@ -18,7 +18,8 @@
 
 namespace GEngine
 {
-	EntityInspectorEditor::EntityInspectorEditor(const std::weak_ptr<GEngineCoreApplication>& app): GEngineObjectInspectorEditor(app)
+	EntityInspectorEditor::EntityInspectorEditor(GEngineCoreModules* modules)
+		: GEngineObjectInspectorEditor(modules)
 	{
 		RegisterInspector<TransformComponentInspectorEditor, TransformComponent>();
 		RegisterInspector<TiledMap2dRendererComponentInspectorEditor, TiledMap2dRendererComponent>();
@@ -47,16 +48,7 @@ namespace GEngine
 
 	void EntityInspectorEditor::DrawComponents(const std::shared_ptr<Entity> &inspect)
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _app.lock();
-		if (!app) return;
-
-		const std::shared_ptr<EditorModule> editor = app->Editor().lock();
-		if (!editor) return;
-
-		const std::shared_ptr<RenderingModule> rendering = app->Rendering().lock();
-		if (!rendering) return;
-
-		const std::shared_ptr<GuizmoUiRenderer> guizomUiRenderer = rendering->GuizmoUiRender().lock();
+		const std::shared_ptr<GuizmoUiRenderer> guizomUiRenderer = _modules->rendering->GuizmoUiRender().lock();
 		if (!guizomUiRenderer) return;
 
 		const std::vector<std::shared_ptr<Component>>& components = inspect->GetComponents();
@@ -82,7 +74,7 @@ namespace GEngine
 
 				for (auto it = properties.begin(); it != properties.end(); ++it)
 				{
-					editor->DrawProperty(it->get());
+					_modules->editor->DrawProperty(it->get());
 				}
 			}
 		}

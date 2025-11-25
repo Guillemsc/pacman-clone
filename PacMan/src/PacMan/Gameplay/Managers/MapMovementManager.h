@@ -28,6 +28,7 @@ namespace PacMan
 
 		void SetGridPosition(const std::weak_ptr<GridMovementComponent> &gridMovementComponentPtr, const glm::ivec2& gridPosition) const;
 		glm::vec2 GridPositionToWorldPosition(const glm::ivec2& gridPosition) const;
+		bool IsWalkable(const glm::ivec2& gridPosition) const;
 
 	private:
 		std::weak_ptr<GEngine::TiledMap2dRendererComponent> _tiledMap;

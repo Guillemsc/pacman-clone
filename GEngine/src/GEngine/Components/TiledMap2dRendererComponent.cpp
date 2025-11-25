@@ -15,6 +15,7 @@
 #include "glm/vec2.hpp"
 #include "GEngine/Modules/RenderingModule.h"
 #include "GEngine/Modules/ResourcesModule.h"
+#include "GEngine/Rendering/GuizmoUiRenderer.h"
 #include "GEngine/Rendering/Renderer2d.h"
 #include "GEngine/Resources/TextureResource.h"
 #include "GEngine/Resources/TiledMapResource.h"
@@ -22,7 +23,8 @@
 
 namespace GEngine
 {
-	TiledMap2dRendererComponent::TiledMap2dRendererComponent(const std::weak_ptr<Entity> &entity) : Component(entity)
+	TiledMap2dRendererComponent::TiledMap2dRendererComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity)
+	: Component(modules, entity)
 	{
 	}
 
@@ -30,12 +32,6 @@ namespace GEngine
 	{
 		const std::shared_ptr<TiledMapResource> tiledMap = _tiledMapPtr.lock();
 		if (!tiledMap) return;
-
-		const std::shared_ptr<GEngineCoreApplication> app = GetApp().lock();
-		if (app == nullptr) return;
-
-		const std::shared_ptr<RenderingModule> rendering = app->Rendering().lock();
-		if (rendering == nullptr) return;
 
 		const std::shared_ptr<Entity> entity = GetEntity().lock();
 		if (entity == nullptr) return;
@@ -50,10 +46,10 @@ namespace GEngine
 		float rotation = transform->GetRotationEulerZ();
 		glm::vec2 scale = transform->GetScaleXY();
 
-		rendering->Renderer2D().lock()->Add(0, [rawMap, position, scale, rotation, this, tiledMap]
+		modules->rendering->Renderer2D().lock()->Add(0, [rawMap, position, scale, rotation, this, tiledMap]
 		{
 			const tmx::Vector2u pixelSizeOfTile = rawMap->getTileSize();
-			const std::vector<tmx::Tileset>& tileSets = rawMap->getTilesets();
+			const tmx::Vector2u mapGridSize = rawMap->getTileCount();
 			const std::vector<tmx::Layer::Ptr>& layers = rawMap->getLayers();
 
 			if (pixelSizeOfTile.x == 0 || pixelSizeOfTile.y == 0)
@@ -79,7 +75,6 @@ namespace GEngine
 				}
 
 				const tmx::TileLayer& tileLayer = layer->getLayerAs<tmx::TileLayer>();
-				const tmx::Vector2u layerGridSize = tileLayer.getSize();
 
 				const std::vector<tmx::TileLayer::Tile>& tileIds = tileLayer.getTiles();
 
@@ -89,7 +84,7 @@ namespace GEngine
 					tileIds,
 					pixelSizeOfTile,
 					tileLayer,
-					layerGridSize,
+					mapGridSize,
 					position,
 					rotation,
 					scale
@@ -98,6 +93,27 @@ namespace GEngine
 				++layerIndex;
 			}
 		});
+	}
+
+	void TiledMap2dRendererComponent::OnDrawSelectedGuizmo(GuizmoUiRenderer *guizmoUiRenderer)
+	{
+		const std::shared_ptr<TiledMapResource> tiledMap = _tiledMapPtr.lock();
+		if (!tiledMap) return;
+
+		const std::shared_ptr<tmx::Map> rawMap = tiledMap->GetRawMap().lock();
+		if (!rawMap) return;
+
+		const tmx::Vector2u mapGridSize = rawMap->getTileCount();
+
+		for (int x = 0; x < mapGridSize.x; x++)
+		{
+			for (int y = 0; y < mapGridSize.y; y++)
+			{
+				glm::vec2 worldPosition = GridPositionToWorldPosition({ x, y }, CellPosition::CENTER);
+
+				guizmoUiRenderer->AddCircle(worldPosition, 10, Color01::Green);
+			}
+		}
 	}
 
 	void TiledMap2dRendererComponent::SetTiledMap(const std::weak_ptr<TiledMapResource> &resource)
@@ -123,15 +139,17 @@ namespace GEngine
 		return mapData->getLayers().size();
 	}
 
-	glm::i32vec2 TiledMap2dRendererComponent::GetLayerGridSize(const std::int32_t layerIndex) const
+	glm::i32vec2 TiledMap2dRendererComponent::GetMapGridSize() const
 	{
-		const auto optionalLayer = GetTileLayer(layerIndex);
-		if (!optionalLayer) return Vec2Extensions::Int32Zero;
-		const tmx::TileLayer& tileLayer = optionalLayer->get();
+		const std::shared_ptr<TiledMapResource> tiledMap = _tiledMapPtr.lock();
+		if (!tiledMap) return Vec2Extensions::Int32Zero;
 
-		const tmx::Vector2u layerTileSize = tileLayer.getSize();
+		const std::shared_ptr<tmx::Map> rawMap = tiledMap->GetRawMap().lock();
+		if (!rawMap) return Vec2Extensions::Int32Zero;
 
-		return { layerTileSize.x, layerTileSize.y };
+		const tmx::Vector2u mapGridSize = rawMap->getTileCount();
+
+		return { mapGridSize.x, mapGridSize.y };
 	}
 
 	bool TiledMap2dRendererComponent::HasTileAtGridPosition(const std::int32_t layerIndex, const glm::i32vec2 &gridPosition) const
@@ -157,14 +175,15 @@ namespace GEngine
 	}
 
 	glm::vec2 TiledMap2dRendererComponent::GridPositionToWorldPosition(
-		const std::int32_t layerIndex,
 		const glm::i32vec2& gridPosition,
 		const CellPosition cellPosition
 		) const
 	{
-		const auto optionalLayer = GetTileLayer(layerIndex);
-		if (!optionalLayer) return Vec2Extensions::Zero;
-		const tmx::TileLayer& tileLayer = optionalLayer->get();
+		const std::shared_ptr<TiledMapResource> tiledMap = _tiledMapPtr.lock();
+		if (!tiledMap) return Vec2Extensions::Zero;
+
+		const std::shared_ptr<tmx::Map> mapData = tiledMap->GetRawMap().lock();
+		if (!mapData) return Vec2Extensions::Zero;
 
 		const std::shared_ptr<Entity> entity = GetEntity().lock();
 		if (entity == nullptr) return Vec2Extensions::Zero;
@@ -174,12 +193,14 @@ namespace GEngine
 
 		if (_tilePixelSize.x == 0 || _tilePixelSize.y == 0) return Vec2Extensions::Zero;
 
+		const glm::i32vec2 mapGridSize = { mapData->getTileCount().x, mapData->getTileCount().y };
+
 		const glm::vec2 position = transform->GetPositionXY();
 		const float rotation = transform->GetRotationEulerZ();
 		const glm::vec2 scale = transform->GetScaleXY();
 
 		return GridPositionToWorldPosition(
-			tileLayer,
+			mapGridSize,
 			position,
 			rotation,
 			scale,
@@ -189,13 +210,14 @@ namespace GEngine
 	}
 
 	glm::i32vec2 TiledMap2dRendererComponent::WorldPositionToGridPosition(
-		const std::int32_t layerIndex,
 		const glm::vec2 &worldPosition
 		) const
 	{
-		const auto optionalLayer = GetTileLayer(layerIndex);
-		if (!optionalLayer) return Vec2Extensions::Int32Zero;
-		const tmx::TileLayer& tileLayer = optionalLayer->get();
+		const std::shared_ptr<TiledMapResource> tiledMap = _tiledMapPtr.lock();
+		if (!tiledMap) return Vec2Extensions::Int32Zero;
+
+		const std::shared_ptr<tmx::Map> mapData = tiledMap->GetRawMap().lock();
+		if (!mapData) return Vec2Extensions::Int32Zero;
 
 		const std::shared_ptr<Entity> entity = GetEntity().lock();
 		if (entity == nullptr) return Vec2Extensions::Int32Zero;
@@ -207,7 +229,7 @@ namespace GEngine
 		const float rotation = transform->GetRotationEulerZ();
 		const glm::vec2 scale = transform->GetScaleXY();
 
-		const glm::vec2 layerGridSize = { tileLayer.getSize().x, tileLayer.getSize().y };
+		const glm::vec2 layerGridSize = { mapData->getTileCount().x, mapData->getTileCount().y };
 		const glm::vec2 layerPixelSize = layerGridSize * _tilePixelSize;
 		const glm::vec2 layerPixelSizeScaled = { layerPixelSize.x * scale.x, layerPixelSize.y * scale.y };
 
@@ -298,7 +320,7 @@ namespace GEngine
 	}
 
 	glm::vec2 TiledMap2dRendererComponent::GridPositionToWorldPosition(
-		const tmx::TileLayer &tileLayer,
+		const glm::i32vec2& mapGridSize,
 		const glm::vec2 tilemapPosition,
 		const float tilemapRotation,
 		const glm::vec2 tilemapScale,
@@ -308,7 +330,7 @@ namespace GEngine
 	{
 		if (_tilePixelSize.x == 0 || _tilePixelSize.y == 0) return Vec2Extensions::Zero;
 
-		const glm::vec2 layerGridSize = { tileLayer.getSize().x, tileLayer.getSize().y };
+		const glm::vec2 layerGridSize = { mapGridSize.x, mapGridSize.y };
 		const glm::vec2 layerPixelSize = layerGridSize * _tilePixelSize;
 		const glm::vec2 layerPixelSizeScaled = { layerPixelSize.x * tilemapScale.x, layerPixelSize.y * tilemapScale.y };
 
@@ -400,7 +422,7 @@ namespace GEngine
 				const float tileStartOnTileSetTextureY = tileSetMargin + tileNormalizedPositionOnTileSetY * (pixelSizeOfTile.y + tileSetSpacing);
 
 				const glm::vec2 finalPosition = GridPositionToWorldPosition(
-					tileLayer,
+					{ layerGridSize.x, layerGridSize.y },
 					position,
 					-rotation,
 					scale,

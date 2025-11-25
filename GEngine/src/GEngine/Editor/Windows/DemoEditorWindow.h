@@ -11,7 +11,7 @@ namespace GEngine
 	class DemoEditorWindow : public EditorWindow
 	{
 	public:
-		explicit DemoEditorWindow(const std::weak_ptr<GEngineCoreApplication> &app);
+		explicit DemoEditorWindow(GEngineCoreModules* modules);
 
 		void Draw() override;
 		void DrawWindowContent() override;

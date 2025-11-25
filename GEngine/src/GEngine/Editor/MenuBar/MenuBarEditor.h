@@ -6,6 +6,8 @@
 #define MENUBAREDITOR_H
 #include <memory>
 
+#include "GEngine/Core/GEngineCoreModules.h"
+
 namespace GEngine
 {
 	class GEngineCoreApplication;
@@ -13,15 +15,15 @@ namespace GEngine
 	class MenuBarEditor
 	{
 	public:
-		explicit MenuBarEditor(const std::weak_ptr<GEngineCoreApplication>& app);
+		explicit MenuBarEditor(GEngineCoreModules* modules);
 
-		void Draw();
-
-	private:
-		void DrawWindows(GEngineCoreApplication* app);
+		void Draw() const;
 
 	private:
-		std::weak_ptr<GEngineCoreApplication> _appPtr;
+		void DrawWindows() const;
+
+	private:
+		GEngineCoreModules* const _modules = nullptr;
 	};
 }
 

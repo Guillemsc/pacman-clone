@@ -30,21 +30,22 @@ namespace GEngine
 	class TiledMap2dRendererComponent final : public Component
 	{
 	public:
-		explicit TiledMap2dRendererComponent(const std::weak_ptr<Entity> &entity);
+		explicit TiledMap2dRendererComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);
 
 		constexpr const char* GetTypeName() override { return "TiledMap2dRenderer"; }
 
 		void OnTick() override;
+		void OnDrawSelectedGuizmo(GuizmoUiRenderer *guizmoUiRenderer) override;
 
 		void SetTiledMap(const std::weak_ptr<TiledMapResource> &resource);
 		std::weak_ptr<TiledMapResource> GetTiledMap() const;
 
+		glm::i32vec2 GetMapGridSize() const;
 		int GetLayersCount() const;
-		glm::i32vec2 GetLayerGridSize(std::int32_t layerIndex) const;
 		bool HasTileAtGridPosition(std::int32_t layerIndex, const glm::i32vec2& gridPosition) const;
 
-		glm::vec2 GridPositionToWorldPosition(std::int32_t layerIndex, const glm::i32vec2& gridPosition, CellPosition cellPosition = CellPosition::BOTTOM_LEFT) const;
-		glm::i32vec2 WorldPositionToGridPosition(std::int32_t layerIndex, const glm::vec2& worldPosition) const;
+		glm::vec2 GridPositionToWorldPosition(const glm::i32vec2& gridPosition, CellPosition cellPosition = CellPosition::BOTTOM_LEFT) const;
+		glm::i32vec2 WorldPositionToGridPosition(const glm::vec2& worldPosition) const;
 
 		void SetLayerVisible(std::int32_t layerIndex, bool visible);
 		bool GetIsLayerVisible(std::int32_t layerIndex) const;
@@ -57,7 +58,7 @@ namespace GEngine
 		std::optional<std::reference_wrapper<const tmx::TileLayer>> GetTileLayer(std::int32_t layerIndex) const;
 
 		glm::vec2 GridPositionToWorldPosition(
-			const tmx::TileLayer& tileLayer,
+			const glm::i32vec2& mapGridSize,
 			glm::vec2 tilemapPosition,
 			float tilemapRotation,
 			glm::vec2 tilemapScale,

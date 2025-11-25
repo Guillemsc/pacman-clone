@@ -10,19 +10,14 @@
 
 namespace GEngine
 {
-	Entity::Entity(const std::weak_ptr<GEngineCoreApplication> &appPtr, const std::uint32_t id)
+	Entity::Entity(GEngineCoreModules* modules, const std::uint32_t id)
+		: modules(modules), _id(id)
 	{
-		_appPtr = appPtr;
-		_id = id;
+
 	}
 
 	Entity::~Entity()
 	{
-	}
-
-	std::weak_ptr<GEngineCoreApplication> Entity::GetApp() const
-	{
-		return _appPtr;
 	}
 
 	std::uint32_t Entity::GetId() const
@@ -86,24 +81,12 @@ namespace GEngine
 
 	void Entity::SetParent(const std::weak_ptr<Entity> &parentPtr, const bool worldPositionStays)
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
-		if (app == nullptr) return;
-
-		const std::shared_ptr<EntitiesModule> entities = app->Entities().lock();
-		if (entities == nullptr) return;
-
-		entities->SetEntityParent(weak_from_this(), parentPtr, worldPositionStays);
+		modules->entities->SetEntityParent(weak_from_this(), parentPtr, worldPositionStays);
 	}
 
 	void Entity::RemoveParent(const bool worldPositionStays)
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
-		if (app == nullptr) return;
-
-		const std::shared_ptr<EntitiesModule> entities = app->Entities().lock();
-		if (entities == nullptr) return;
-
-		entities->RemoveEntityParent(weak_from_this(), worldPositionStays);
+		modules->entities->RemoveEntityParent(weak_from_this(), worldPositionStays);
 	}
 
 	void Entity::ForEachEntityInChildHierarchy(

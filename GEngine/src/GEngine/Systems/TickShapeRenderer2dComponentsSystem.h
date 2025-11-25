@@ -7,6 +7,7 @@
 #include <memory>
 
 #include "System.h"
+#include "GEngine/Core/GEngineCoreModules.h"
 
 namespace GEngine
 {
@@ -15,12 +16,12 @@ namespace GEngine
 	class TickShapeRenderer2dComponentsSystem : public System
 	{
 	public:
-		explicit TickShapeRenderer2dComponentsSystem(const std::weak_ptr<GEngineCoreApplication>& app);
+		explicit TickShapeRenderer2dComponentsSystem(GEngineCoreModules* modules);
 
 		void Tick() override;
 
 	private:
-		std::weak_ptr<GEngineCoreApplication> _app;
+		GEngineCoreModules* const _modules;
 	};
 }
 

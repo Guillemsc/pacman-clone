@@ -11,22 +11,16 @@
 
 namespace GEngine
 {
-	TiledMap2dRendererComponentInspectorEditor::TiledMap2dRendererComponentInspectorEditor(const std::weak_ptr<GEngineCoreApplication> &app)
-		: ComponentInspectorEditor(app)
+	TiledMap2dRendererComponentInspectorEditor::TiledMap2dRendererComponentInspectorEditor(GEngineCoreModules* modules)
+		: ComponentInspectorEditor(modules)
 	{
 	}
 
 	void TiledMap2dRendererComponentInspectorEditor::DrawSpecific(const std::shared_ptr<TiledMap2dRendererComponent> &inspect)
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _app.lock();
-		if (!app) return;
-
-		const std::shared_ptr<EditorModule> editor = app->Editor().lock();
-		if (!editor) return;
-
 		const std::shared_ptr<TiledMapResource> tiledMapResource = inspect->GetTiledMap().lock();
 
-		EditorExtensions::DrawResource(editor.get(), "Tiled Map", tiledMapResource);
+		EditorExtensions::DrawResource(_modules->editor, "Tiled Map", tiledMapResource);
 
 		if (tiledMapResource)
 		{

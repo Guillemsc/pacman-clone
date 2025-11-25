@@ -14,7 +14,7 @@ namespace GEngine
 	class UiTextRendererComponent final : public Component
 	{
 	public:
-		explicit UiTextRendererComponent(const std::weak_ptr<Entity> &entity);
+		explicit UiTextRendererComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);
 
 		constexpr const char* GetTypeName() override { return "Ui Text Renderer"; }
 

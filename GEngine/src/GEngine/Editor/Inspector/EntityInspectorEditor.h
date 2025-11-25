@@ -10,17 +10,19 @@
 #include <typeindex>
 
 #include "GEngineObjectInspectorEditor.h"
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Editor/ComponentsInspector/ComponentInspectorEditor.h"
 
 namespace GEngine
 {
+	struct GEngineCoreModules;
 	class IComponentInspectorEditor;
 	class Entity;
 
 	class EntityInspectorEditor final : public GEngineObjectInspectorEditor<Entity>
 	{
 	public:
-		explicit EntityInspectorEditor(const std::weak_ptr<GEngineCoreApplication>& app);
+		explicit EntityInspectorEditor(GEngineCoreModules* modules);
 
 		template<class TEditor, class TObject>
 		void RegisterInspector();
@@ -47,7 +49,7 @@ namespace GEngine
 
 		const std::type_index typeIndex = typeid(TComponent);
 
-		_inspectorEditors[typeIndex] = std::make_shared<TEditor>(_app);
+		_inspectorEditors[typeIndex] = std::make_shared<TEditor>(_modules);
 	}
 }
 

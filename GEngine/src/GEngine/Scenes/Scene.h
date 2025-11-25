@@ -14,14 +14,14 @@ namespace GEngine
 	class Scene
 	{
 	public:
-		void Init(const std::weak_ptr<EntitiesModule> &entities, const std::string& name);
+		void Init(EntitiesModule* entitiesPtr, const std::string& name);
 		void Dispose() const;
 
 		std::weak_ptr<Entity> AddWorldEntity() const;
 		std::weak_ptr<Entity> AddUiEntity() const;
 
 	private:
-		std::weak_ptr<EntitiesModule> _entitiesPtr;
+		EntitiesModule* _entitiesPtr;
 
 		std::weak_ptr<Entity> _rootUiEntity;
 		std::weak_ptr<Entity> _rootWorldEntity;

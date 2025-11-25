@@ -20,13 +20,13 @@ namespace GEngine
 
 	}
 
-	void RenderingModule::Init(const std::weak_ptr<GEngineCoreApplication> &appPtr)
+	void RenderingModule::Init(GEngineCoreModules* modules)
 	{
-		_appPtr = appPtr;
+		_modules = modules;
 
 		_renderer2d = std::make_shared<Renderer2d>();
-		_uiRenderer = std::make_shared<UiRenderer>(appPtr);
-		_guizmoUiRenderer = std::make_shared<GuizmoUiRenderer>(appPtr);
+		_uiRenderer = std::make_shared<UiRenderer>(modules);
+		_guizmoUiRenderer = std::make_shared<GuizmoUiRenderer>(modules);
 		_imGuiRenderer = std::make_shared<ImGuiRenderer>();
 
 		_imGuiRenderer->Init();
@@ -44,13 +44,7 @@ namespace GEngine
 
 	void RenderingModule::RenderOnCurrentCamera() const
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
-		if (!app) return;
-
-		const std::shared_ptr<CameraModule> cameraModule = app->Camera().lock();
-		if (!cameraModule) return;
-
-		const std::weak_ptr<Camera> currentCameraPtr = cameraModule->GetCurrentRenderingCamera();
+		const std::weak_ptr<Camera> currentCameraPtr = _modules->camera->GetCurrentRenderingCamera();
 
 		Render(currentCameraPtr);
 	}

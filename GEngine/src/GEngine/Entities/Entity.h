@@ -29,13 +29,12 @@ namespace GEngine
 		friend class ComponentsModule;
 
 	public:
-		explicit Entity(const std::weak_ptr<GEngineCoreApplication>& appPtr, std::uint32_t id);
+		explicit Entity(GEngineCoreModules* modules, std::uint32_t id);
 		~Entity() override;
 
 		static GEngineObjectType GetObjectTypeStatic() { return GEngineObjectType::ENTITY; }
 		GEngineObjectType GetObjectType() override { return GetObjectTypeStatic(); }
 
-		std::weak_ptr<GEngineCoreApplication> GetApp() const;
 		std::uint32_t GetId() const;
 
 		void SetName(const std::string& name);
@@ -74,10 +73,12 @@ namespace GEngine
 		void RefreshChildrenHierarchyActiveState();
 		bool RefreshActiveState();
 
-	private:
-		std::weak_ptr<GEngineCoreApplication> _appPtr;
+	public:
+		GEngineCoreModules* const modules;
 
+	private:
 		std::uint32_t _id = 0;
+
 		std::string _name;
 
 		bool _isAlive = true;
@@ -111,10 +112,7 @@ namespace GEngine
 	{
 		static_assert(std::is_base_of_v<Component, T>, "T is not derived from Component");
 
-		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
-		if (app == nullptr) return std::weak_ptr<T>();
-
-		const std::shared_ptr<T> component = std::make_shared<T>(weak_from_this());
+		const std::shared_ptr<T> component = std::make_shared<T>(modules, weak_from_this());
 
 		if (_transformPtr.expired())
 		{

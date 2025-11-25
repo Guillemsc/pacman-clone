@@ -7,6 +7,8 @@
 #include <memory>
 #include <vector>
 
+#include "GEngine/Core/GEngineCoreModules.h"
+
 namespace GEngine
 {
 	class GEngineCoreApplication;
@@ -17,7 +19,7 @@ namespace GEngine
 	public:
 		SystemsModule();
 
-		void Init(const std::weak_ptr<GEngineCoreApplication>& app);
+		void Init(GEngineCoreModules* modules);
 		void Tick();
 		void Dispose();
 

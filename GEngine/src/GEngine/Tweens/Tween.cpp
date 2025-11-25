@@ -46,6 +46,11 @@ namespace GEngine
 		OnSetEasing(easing);
 	}
 
+	bool Tween::IsPlaying() const
+	{
+		return _started && !_completed;
+	}
+
 	void Tween::CompleteMain()
 	{
 		_mainCompleted = true;
@@ -54,6 +59,11 @@ namespace GEngine
 		{
 			_completed = true;
 		}
+	}
+
+	void Tween::OnTick(float deltaTime)
+	{
+		CompleteMain();
 	}
 
 	void Tween::StartChildren()
@@ -151,4 +161,6 @@ namespace GEngine
 			_completed = true;
 		}
 	}
+
+
 }

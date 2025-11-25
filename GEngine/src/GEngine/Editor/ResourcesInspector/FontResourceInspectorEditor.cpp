@@ -8,8 +8,8 @@
 
 namespace GEngine
 {
-	FontResourceInspectorEditor::FontResourceInspectorEditor(const std::weak_ptr<GEngineCoreApplication> &app)
-		: ResourceInspectorEditor(app)
+	FontResourceInspectorEditor::FontResourceInspectorEditor(GEngineCoreModules* modules)
+		: ResourceInspectorEditor(modules)
 	{
 	}
 

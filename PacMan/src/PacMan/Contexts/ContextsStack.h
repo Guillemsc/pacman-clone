@@ -29,7 +29,7 @@ namespace PacMan
 		void Pop();
 
 	private:
-		std::weak_ptr<GEngine::CoroutineSequencer> _coroutineSequencer;
+		const std::weak_ptr<GEngine::CoroutineSequencer> _coroutineSequencer;
 		std::vector<std::shared_ptr<Context>> _contextsStack;
 
 		bool _loading = false;

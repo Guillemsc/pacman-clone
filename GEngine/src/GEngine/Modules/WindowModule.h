@@ -7,6 +7,7 @@
 
 #include <memory>
 
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Extensions/Vec2Extensions.h"
 #include "glm/vec2.hpp"
 
@@ -17,7 +18,7 @@ namespace GEngine
 	class WindowModule
 	{
 	public:
-		void Init(const std::weak_ptr<GEngineCoreApplication>& appPtr);
+		void Init(GEngineCoreModules* modules);
 		bool CanRun();
 		void Tick();
 		void Dispose();
@@ -29,7 +30,7 @@ namespace GEngine
 		void OnWindowSizeChanged() const;
 
 	private:
-		std::weak_ptr<GEngineCoreApplication> _appPtr;
+		GEngineCoreModules* _modules = nullptr;
 
 		glm::i32vec2 _previousWindowSize = Vec2Extensions::Int32Zero;
 	};

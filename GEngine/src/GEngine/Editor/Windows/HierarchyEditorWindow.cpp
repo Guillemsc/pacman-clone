@@ -14,25 +14,16 @@
 
 namespace GEngine
 {
-	HierarchyEditorWindow::HierarchyEditorWindow(const std::weak_ptr<GEngineCoreApplication> &app)
-		: EditorWindow(app, "Hierarchy")
+	HierarchyEditorWindow::HierarchyEditorWindow(GEngineCoreModules* modules)
+		: EditorWindow(modules, "Hierarchy")
 	{
 	}
 
 	void HierarchyEditorWindow::DrawWindowContent()
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _app.lock();
-		if (!app) return;
+		const std::shared_ptr<GEngineObject> selectedObject = _modules->editor->GetSelectedObject().lock();
 
-		const std::shared_ptr<EntitiesModule> entities = app->Entities().lock();
-		if (!entities) return;
-
-		const std::shared_ptr<EditorModule> editor = app->Editor().lock();
-		if (!editor) return;
-
-		const std::shared_ptr<GEngineObject> selectedObject = editor->GetSelectedObject().lock();
-
-		const std::vector<std::weak_ptr<Entity>>& rootEntities = entities->GetRootEntities();
+		const std::vector<std::weak_ptr<Entity>>& rootEntities = _modules->entities->GetRootEntities();
 
 		_stack.clear();
 
@@ -46,7 +37,7 @@ namespace GEngine
 
 		if (ImGui::Button("Add Entity"))
 		{
-			entities->AddWorldEntity();
+			_modules->entities->AddWorldEntity();
 		}
 
 		int currentDepth = 0;
@@ -112,8 +103,8 @@ namespace GEngine
 				ImGui::PopStyleColor();
 			}
 
-			DrawRightClickContextMenu(entities, node);
-			DrawLeftClickContextMenu(editor, node);
+			DrawRightClickContextMenu(_modules->entities, node);
+			DrawLeftClickContextMenu(_modules->editor, node);
 
 			currentDepth = depth;
 
@@ -128,7 +119,7 @@ namespace GEngine
 	}
 
 	void HierarchyEditorWindow::DrawRightClickContextMenu(
-		const std::shared_ptr<EntitiesModule>& entities,
+		EntitiesModule* entities,
 		const std::shared_ptr<Entity>& entity
 		)
 	{
@@ -154,7 +145,7 @@ namespace GEngine
 	}
 
 	void HierarchyEditorWindow::DrawLeftClickContextMenu(
-		const std::shared_ptr<EditorModule> &editor,
+		EditorModule* editor,
 		const std::shared_ptr<Entity> &entity)
 	{
 		if (ImGui::IsItemClicked(ImGuiMouseButton_Left))

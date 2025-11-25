@@ -8,6 +8,7 @@
 #include <memory>
 
 #include "raylib.h"
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "glm/vec2.hpp"
 
 namespace GEngine
@@ -17,7 +18,7 @@ namespace GEngine
     class InputModule
     {
     public:
-        void Init(const std::weak_ptr<GEngineCoreApplication> &appPtr);
+        void Init(GEngineCoreModules* modules);
 
         static bool IsKeyPressed(KeyboardKey keyboardKey);
         static bool IsKeyDown(KeyboardKey keyboardKey);
@@ -28,7 +29,7 @@ namespace GEngine
         glm::vec2 GetMousePosition() const;
 
     private:
-        std::weak_ptr<GEngineCoreApplication> _appPtr;
+        GEngineCoreModules* _modules = nullptr;
     };
 }
 

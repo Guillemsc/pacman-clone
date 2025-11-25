@@ -11,9 +11,9 @@
 
 namespace GEngine
 {
-    void InputModule::Init(const std::weak_ptr<GEngineCoreApplication> &appPtr)
+    void InputModule::Init(GEngineCoreModules* modules)
     {
-        _appPtr = appPtr;
+        _modules = modules;
     }
 
     bool InputModule::IsKeyPressed(const KeyboardKey keyboardKey)
@@ -48,13 +48,7 @@ namespace GEngine
 
     glm::vec2 InputModule::GetMousePosition() const
     {
-        const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
-        if (!app) return Vec2Extensions::Zero;
-
-        const std::shared_ptr<WindowModule> window = app->Window().lock();
-        if (!window) return Vec2Extensions::Zero;
-
-        const glm::vec2 windowSize = window->GetWindowSize();
+        const glm::vec2 windowSize = _modules->window->GetWindowSize();
 
         Vector2 mousePos = ::GetMousePosition();
         mousePos.y = windowSize.y - mousePos.y;

@@ -15,9 +15,9 @@
 
 namespace GEngine
 {
-	void UiModule::Init(const std::weak_ptr<GEngineCoreApplication> &app)
+	void UiModule::Init(GEngineCoreModules* modules)
 	{
-		_appPtr = app;
+		_modules = modules;
 	}
 
 	void UiModule::Tick()
@@ -42,13 +42,7 @@ namespace GEngine
 
 	void UiModule::TickRaycastTargetsState()
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
-		if (!app) return;
-
-		const std::shared_ptr<InputModule> input = app->Input().lock();
-		if (!input) return;
-
-		const glm::vec2 mousePosition = input->GetMousePosition();
+		const glm::vec2 mousePosition = _modules->input->GetMousePosition();
 		const std::shared_ptr<UiRaycastTarget> targetPtr = RaycastAtScreenPosition(mousePosition);
 
 		if (_currentRaycastTargetPtr.lock() != targetPtr)
@@ -77,7 +71,7 @@ namespace GEngine
 
 		_currentRaycastTargetPtr = targetPtr;
 
-		if (input->IsMouseButtonPressed(MouseButton::MOUSE_BUTTON_LEFT))
+		if (_modules->input->IsMouseButtonPressed(MouseButton::MOUSE_BUTTON_LEFT))
 		{
 			if (const std::shared_ptr<UiRaycastTarget> currentRaycastTarget = _currentRaycastTargetPtr.lock())
 			{
@@ -89,7 +83,7 @@ namespace GEngine
 			}
 		}
 
-		if (input->IsMouseButtonReleased(MouseButton::MOUSE_BUTTON_LEFT))
+		if (_modules->input->IsMouseButtonReleased(MouseButton::MOUSE_BUTTON_LEFT))
 		{
 			if (_canClick)
 			{
@@ -111,16 +105,10 @@ namespace GEngine
 
 	std::shared_ptr<UiRaycastTarget> UiModule::RaycastAtScreenPosition(const glm::vec2& mousePosition) const
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
-		if (!app) return std::shared_ptr<UiRaycastTarget>();
-
-		const std::shared_ptr<EntitiesModule> entities = app->Entities().lock();
-		if (!entities) return std::shared_ptr<UiRaycastTarget>();
-
 		std::shared_ptr<UiRaycastTarget> target;
 
 		// We are going to be very naive and not optimize for now
-		entities->ForEachEntityInHierarchy([&target, mousePosition](const std::shared_ptr<Entity> &entity)
+		_modules->entities->ForEachEntityInHierarchy([&target, mousePosition](const std::shared_ptr<Entity> &entity)
 		{
 			const std::shared_ptr<UiTransformComponent> transform = entity->GetUiTransform().lock();
 			if (!transform) return;
@@ -139,20 +127,11 @@ namespace GEngine
 
 	void UiModule::RecalculateUiScaleAndRefreshUiTransforms()
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
-		if (!app) return;
-
-		const std::shared_ptr<WindowModule> window = app->Window().lock();
-		if (!window) return;
-
-		const std::shared_ptr<EntitiesModule> entities = app->Entities().lock();
-		if (!entities) return;
-
-		const glm::vec2 windowSize = window->GetWindowSize();
+		const glm::vec2 windowSize = _modules->window->GetWindowSize();
 
 		_uiScale = MathExtensions::GetNormalizedValue(windowSize.x, _referenceScreenSize.x);
 
-		entities->RefreshUiTransforms();
+		_modules->entities->RefreshUiTransforms();
 	}
 
 	glm::vec2 UiModule::GetReferenceScreenSize() const

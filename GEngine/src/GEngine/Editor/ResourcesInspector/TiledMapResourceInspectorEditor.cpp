@@ -12,19 +12,13 @@
 
 namespace GEngine
 {
-	TiledMapResourceInspectorEditor::TiledMapResourceInspectorEditor(const std::weak_ptr<GEngineCoreApplication> &app)
-		: ResourceInspectorEditor(app)
+	TiledMapResourceInspectorEditor::TiledMapResourceInspectorEditor(GEngineCoreModules* modules)
+		: ResourceInspectorEditor(modules)
 	{
 	}
 
 	void TiledMapResourceInspectorEditor::DrawSpecific(const std::shared_ptr<TiledMapResource> &inspect)
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _app.lock();
-		if (!app) return;
-
-		const std::shared_ptr<ResourcesModule> resources = app->Resources().lock();
-		if (!resources) return;
-
 		const std::shared_ptr<tmx::Map> rawMap = inspect->GetRawMap().lock();
 
 		const std::vector<tmx::Tileset>& tilesets = rawMap->getTilesets();
@@ -36,7 +30,7 @@ namespace GEngine
 		{
 			if (ImGui::CollapsingHeader(tileset.getName().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 			{
-				std::filesystem::path resourcesPath = resources->FullPathToRelativeResourcesPath(tileset.getImagePath());
+				std::filesystem::path resourcesPath = _modules->resources->FullPathToRelativeResourcesPath(tileset.getImagePath());
 
 				ImGui::Text(std::format("Tile Size: X:{0} Y:{1}", tileset.getTileSize().x, tileset.getTileSize().y).c_str());
 				ImGui::TextWrapped(std::format("Image Path: {0}", resourcesPath.c_str()).c_str());

@@ -40,7 +40,6 @@ namespace PacMan
 		if (!hasTile) return;
 
 		const glm::vec2 worldPosition = tiledMapComponent->GridPositionToWorldPosition(
-			_walkabilityLayerIndex,
 			gridPosition,
 			GEngine::CENTER
 			);
@@ -55,6 +54,17 @@ namespace PacMan
 		if (!tiledMapComponent) return glm::vec2(0);
 
 		return tiledMapComponent->GridPositionToWorldPosition(
+			gridPosition,
+			GEngine::CENTER
+			);
+	}
+
+	bool MapMovementManager::IsWalkable(const glm::ivec2 &gridPosition) const
+	{
+		const std::shared_ptr<GEngine::TiledMap2dRendererComponent> tiledMapComponent = _tiledMap.lock();
+		if (!tiledMapComponent) return false;
+
+		return tiledMapComponent->HasTileAtGridPosition(
 			_walkabilityLayerIndex,
 			gridPosition
 			);

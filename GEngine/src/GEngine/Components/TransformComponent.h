@@ -20,7 +20,7 @@ namespace GEngine
 		friend class EntitiesModule;
 
 	public:
-		explicit TransformComponent(const std::weak_ptr<Entity> &entity);
+		explicit TransformComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);
 		~TransformComponent() override;
 
 		constexpr const char* GetTypeName() override { return "Transform"; }

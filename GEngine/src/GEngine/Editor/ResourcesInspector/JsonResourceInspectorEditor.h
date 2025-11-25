@@ -13,7 +13,7 @@ namespace GEngine
 	class JsonResourceInspectorEditor final : public ResourceInspectorEditor<JsonResource>
 	{
 	public:
-		explicit JsonResourceInspectorEditor(const std::weak_ptr<GEngineCoreApplication> &app);
+		explicit JsonResourceInspectorEditor(GEngineCoreModules* modules);
 
 		void DrawSpecific(const std::shared_ptr<JsonResource> &inspect) override;
 	};

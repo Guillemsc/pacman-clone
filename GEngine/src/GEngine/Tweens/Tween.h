@@ -22,12 +22,14 @@ namespace GEngine
 		void AddChildren(const std::shared_ptr<Tween>& tween, ChildrenTweenTickMode tickMode = ChildrenTweenTickMode::APPEND);
 		void SetEasing(EasingType easing);
 
+		bool IsPlaying() const;
+
 	protected:
 		void CompleteMain();
 
 		virtual void OnSetEasing(EasingType easing) {}
 		virtual void OnStart() {};
-		virtual void OnTick(float deltaTime) {};
+		virtual void OnTick(float deltaTime);
 
 	private:
 		void StartChildren();

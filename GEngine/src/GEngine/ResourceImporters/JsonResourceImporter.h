@@ -12,7 +12,7 @@ namespace GEngine
 	class JsonResourceImporter final : public ResourceImporter
 	{
 	public:
-		explicit JsonResourceImporter(const std::weak_ptr<GEngineCoreApplication> &app);
+		explicit JsonResourceImporter(GEngineCoreModules* modules);
 
 		std::shared_ptr<Resource> Import(const std::filesystem::path& fullPath, const std::filesystem::path& resourcesPath) override;
 	};

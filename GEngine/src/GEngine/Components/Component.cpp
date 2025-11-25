@@ -6,22 +6,15 @@
 
 namespace GEngine
 {
-	Component::Component(const std::weak_ptr<Entity> &entity)
+	Component::Component(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity)
+		: modules(modules), _entity(entity)
 	{
-		_entity = entity;
+
 	}
 
 	std::weak_ptr<Entity> Component::GetEntity() const
 	{
 		return _entity;
-	}
-
-	std::weak_ptr<GEngineCoreApplication> Component::GetApp() const
-	{
-		const std::shared_ptr<Entity> entity = _entity.lock();
-		if (!entity) return std::weak_ptr<GEngineCoreApplication>();
-
-		return entity->GetApp();
 	}
 
 	bool Component::IsEnanbled() const

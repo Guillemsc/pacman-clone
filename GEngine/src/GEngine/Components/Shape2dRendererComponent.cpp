@@ -14,7 +14,8 @@
 
 namespace GEngine
 {
-	Shape2dRendererComponent::Shape2dRendererComponent(const std::weak_ptr<Entity> &entity) : Component(entity)
+	Shape2dRendererComponent::Shape2dRendererComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity)
+	: Component(modules, entity)
 	{
 		_layer = _properties.Register("Layer", 0);
 		_shape2d = _properties.RegisterObject<Shape2d>("Shape", std::make_shared<RectShape2d>());
@@ -24,12 +25,6 @@ namespace GEngine
 	void Shape2dRendererComponent::OnTick()
 	{
 		if (!_shape2d) return;
-
-		const std::shared_ptr<GEngineCoreApplication> app = GetApp().lock();
-		if (app == nullptr) return;
-
-		const std::shared_ptr<RenderingModule> rendering = app->Rendering().lock();
-		if (rendering == nullptr) return;
 
 		const std::shared_ptr<Entity> entity = GetEntity().lock();
 		if (entity == nullptr) return;
@@ -42,7 +37,7 @@ namespace GEngine
 		float rotation = -transform->GetRotationEulerDegreesZ();
 		glm::vec2 scale = transform->GetScaleXY();
 
-		rendering->Renderer2D().lock()->Add(_layer->GetValue(), [position, rotation, scale, this]()
+		modules->rendering->Renderer2D().lock()->Add(_layer->GetValue(), [position, rotation, scale, this]()
 		{
 			if (const auto rectShape = std::dynamic_pointer_cast<RectShape2d>(_shape2d->GetValue()))
 			{

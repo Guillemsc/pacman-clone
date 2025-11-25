@@ -14,7 +14,7 @@ namespace GEngine
 	class TextureResourceImporter final : public ResourceImporter
 	{
 	public:
-		explicit TextureResourceImporter(const std::weak_ptr<GEngineCoreApplication> &app);
+		explicit TextureResourceImporter(GEngineCoreModules* modules);
 
 		std::shared_ptr<Resource> Import(const std::filesystem::path& fullPath, const std::filesystem::path& resourcesPath) override;
 	};

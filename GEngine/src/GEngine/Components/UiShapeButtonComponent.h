@@ -13,7 +13,7 @@ namespace GEngine
 	class UiShapeButtonComponent final : public Component, public UiRaycastTarget
 	{
 	public:
-		explicit UiShapeButtonComponent(const std::weak_ptr<Entity> &entity);
+		explicit UiShapeButtonComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);
 
 		constexpr const char* GetTypeName() override { return "Ui Shape Button"; }
 

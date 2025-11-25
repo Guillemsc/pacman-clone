@@ -9,8 +9,8 @@
 
 namespace GEngine
 {
-	TextureResourceImporter::TextureResourceImporter(const std::weak_ptr<GEngineCoreApplication> &app)
-		: ResourceImporter(app)
+	TextureResourceImporter::TextureResourceImporter(GEngineCoreModules* modules)
+		: ResourceImporter(modules)
 	{
 		AddSupportedExtension(".png");
 		AddSupportedExtension(".jpg");

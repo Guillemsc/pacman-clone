@@ -6,7 +6,8 @@
 
 namespace PacMan
 {
-	GridMovementComponent::GridMovementComponent(const std::weak_ptr<GEngine::Entity> &entity): Component(entity)
+	GridMovementComponent::GridMovementComponent(GEngine::GEngineCoreModules* modules, const std::weak_ptr<GEngine::Entity> &entity)
+		: Component(modules, entity)
 	{
 	}
 }

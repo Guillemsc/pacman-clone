@@ -19,10 +19,9 @@ namespace GEngine
 		friend class EntityInspectorEditor;
 
 	public:
-		explicit Component(const std::weak_ptr<Entity> &entity);
+		explicit Component(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);
 
 		std::weak_ptr<Entity> GetEntity() const;
-		std::weak_ptr<GEngineCoreApplication> GetApp() const;
 
 		bool IsEnanbled() const;
 		void SetEnabled(bool enabled);
@@ -40,9 +39,13 @@ namespace GEngine
 	private:
 		void RefreshEnabledState();
 
-	private:
-		std::weak_ptr<Entity> _entity;
+	public:
+		GEngineCoreModules* const modules = nullptr;
 
+	protected:
+		const std::weak_ptr<Entity> _entity;
+
+	private:
 		bool _isEnabledSelf = false;
 		bool _isEnabledInHierarchy = false;
 	};

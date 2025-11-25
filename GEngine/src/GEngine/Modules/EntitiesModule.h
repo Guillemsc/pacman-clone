@@ -9,6 +9,8 @@
 #include <memory>
 #include <vector>
 
+#include "GEngine/Core/GEngineCoreModules.h"
+
 namespace GEngine
 {
 	class GEngineCoreApplication;
@@ -23,7 +25,7 @@ namespace GEngine
 	public:
 		EntitiesModule();
 
-		void Init(const std::weak_ptr<GEngineCoreApplication>& app);
+		void Init(GEngineCoreModules* modules);
 		void Tick();
 		void Dispose();
 
@@ -50,7 +52,7 @@ namespace GEngine
 		void ActuallyRemoveEntities();
 
 	private:
-		std::weak_ptr<GEngineCoreApplication> _appPtr;
+		GEngineCoreModules* _modules = nullptr;
 
 		std::vector<std::shared_ptr<Entity>> _entities;
 		std::vector<std::weak_ptr<Entity>> _rootEntities;

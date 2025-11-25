@@ -20,24 +20,17 @@
 
 namespace PacMan
 {
-	GameplayContext::GameplayContext() : Context("Gameplay")
+	GameplayContext::GameplayContext(GEngine::GEngineCoreModules* modules) : Context(modules, "Gameplay")
 	{
 	}
 
 	tokoro::Async<void> GameplayContext::OnLoadAsync()
 	{
-		const std::shared_ptr<GEngine::GEngineCoreApplication> app = GEngine::ServiceLocator::Get<GEngine::GEngineCoreApplication>();
-		const std::shared_ptr<GEngine::EntitiesModule> entities = app->Entities().lock();
-		const std::shared_ptr<GEngine::GameModule> game = app->Game().lock();
-		const std::shared_ptr<GEngine::ResourcesModule> resources = app->Resources().lock();
-		const std::shared_ptr<GEngine::SystemsModule> systems = app->Systems().lock();
-		const std::shared_ptr<GEngine::CoroutinesModule> coroutines = app->Coroutines().lock();
-
 		const std::shared_ptr<GEngine::Entity> tilemapEntity = GetScene().AddWorldEntity().lock();
 		tilemapEntity->SetName("Tilemap");
 		const std::shared_ptr<GEngine::TiledMap2dRendererComponent> tilemap = tilemapEntity->AddComponent<GEngine::TiledMap2dRendererComponent>().lock();
 
-		const std::weak_ptr<GEngine::TiledMapResource> tilemapResource = resources->GetResource<GEngine::TiledMapResource>("Tiled/maps/test-map.tmx");
+		const std::weak_ptr<GEngine::TiledMapResource> tilemapResource = _modules->resources->GetResource<GEngine::TiledMapResource>("Tiled/maps/test-map.tmx");
 
 		tilemap->SetTiledMap(tilemapResource);
 
@@ -53,15 +46,20 @@ namespace PacMan
 		playerEntity->GetTransform().lock()->SetPosition({0, 0, 0});
 
 		const std::shared_ptr<GridMovementSystem> mapMovementSystem = std::make_shared<GridMovementSystem>(
-			tilemapEntity->GetComponent<GEngine::TiledMap2dRendererComponent>()
+			_mapMovementManager
 		);
-		mapMovementSystem->Add(playerEntity->GetComponent<GridMovementComponent>());
-		systems->AddSystem(mapMovementSystem);
+
+		const std::weak_ptr<GridMovementComponent> playerGridMovement = playerEntity->GetComponent<GridMovementComponent>();
+		_mapMovementManager->SetGridPosition(playerGridMovement, {10, 10});
+
+		mapMovementSystem->Add(playerGridMovement);
+
+		_modules->systems->AddSystem(mapMovementSystem);
 
 		const std::shared_ptr<PlayerInputSystem> playerInputSystem = std::make_shared<PlayerInputSystem>(
 			playerEntity->GetComponent<GridMovementComponent>()
 		);
-		systems->AddSystem(playerInputSystem);
+		_modules->systems->AddSystem(playerInputSystem);
 
 		co_await Context::OnLoadAsync();
 	}

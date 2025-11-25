@@ -19,7 +19,7 @@ namespace PacMan
 	class GameplayContext : public Context
 	{
 	public:
-		GameplayContext();
+		explicit GameplayContext(GEngine::GEngineCoreModules* modules);
 
 		tokoro::Async<void> OnLoadAsync() override;
 

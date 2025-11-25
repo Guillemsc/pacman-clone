@@ -19,9 +19,9 @@ namespace GEngine
 
 	}
 
-	void EntitiesModule::Init(const std::weak_ptr<GEngineCoreApplication> &app)
+	void EntitiesModule::Init(GEngineCoreModules* modules)
 	{
-		_appPtr = app;
+		_modules = modules;
 	}
 
 	void EntitiesModule::Tick()
@@ -98,9 +98,6 @@ namespace GEngine
 
 	bool EntitiesModule::RemoveEntityNow(const std::weak_ptr<Entity> &entityPtr)
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
-		if (app == nullptr) return false;
-
 		const std::shared_ptr<Entity> entity = entityPtr.lock();
 		if (entity == nullptr) return false;
 
@@ -160,9 +157,6 @@ namespace GEngine
 		const bool worldPositionStays
 		)
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
-		if (app == nullptr) return;
-
 		const std::shared_ptr<Entity> target = targetPtr.lock();
 		if (target == nullptr) return;
 
@@ -211,9 +205,6 @@ namespace GEngine
 
 	void EntitiesModule::RemoveEntityParent(const std::weak_ptr<Entity> &targetPtr, const bool worldPositionStays)
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
-		if (app == nullptr) return;
-
 		const std::shared_ptr<Entity> target = targetPtr.lock();
 		if (target == nullptr) return;
 
@@ -298,10 +289,7 @@ namespace GEngine
 
 	std::shared_ptr<Entity> EntitiesModule::AddEntity()
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
-		if (app == nullptr) return std::shared_ptr<Entity>();
-
-		std::shared_ptr<Entity> entity = std::make_shared<Entity>(_appPtr, _nextEntityId);
+		std::shared_ptr<Entity> entity = std::make_shared<Entity>(_modules, _nextEntityId);
 
 		entity->SetName(std::format("Entity: {}", _nextEntityId));
 		entity->SetActive(true);
@@ -316,9 +304,6 @@ namespace GEngine
 
 	void EntitiesModule::TickEntities()
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
-		if (app == nullptr) return;
-
 		ForEachEntityInHierarchy([](const std::shared_ptr<Entity>& entity)
 		{
 			if (!entity->IsActiveInHierarchy())

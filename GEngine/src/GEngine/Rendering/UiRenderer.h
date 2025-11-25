@@ -17,7 +17,7 @@ namespace GEngine
 	class UiRenderer
 	{
 	public:
-		explicit UiRenderer(const std::weak_ptr<GEngineCoreApplication> &appPtr);
+		explicit UiRenderer(GEngineCoreModules* modules);
 
 		void Add(std::int32_t layer, const std::function<void()> &func);
 		void Render();
@@ -26,7 +26,7 @@ namespace GEngine
 		glm::vec4 RectToRenderRect(const glm::vec4& rect) const;
 
 	private:
-		std::weak_ptr<GEngineCoreApplication> _appPtr;
+		GEngineCoreModules* const _modules;
 
 		LayeredRenderQueue _renderQueue;
 	};

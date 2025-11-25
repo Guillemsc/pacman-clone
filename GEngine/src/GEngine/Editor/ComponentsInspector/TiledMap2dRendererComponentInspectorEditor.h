@@ -13,7 +13,7 @@ namespace GEngine
 	class TiledMap2dRendererComponentInspectorEditor final : public ComponentInspectorEditor<TiledMap2dRendererComponent>
 	{
 	public:
-		explicit TiledMap2dRendererComponentInspectorEditor(const std::weak_ptr<GEngineCoreApplication>& app);
+		explicit TiledMap2dRendererComponentInspectorEditor(GEngineCoreModules* modules);
 
 		void DrawSpecific(const std::shared_ptr<TiledMap2dRendererComponent>& inspect) override;
 	};

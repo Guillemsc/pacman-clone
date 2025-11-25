@@ -10,19 +10,13 @@
 
 namespace GEngine
 {
-	CameraComponent::CameraComponent(const std::weak_ptr<Entity> &entity): Component(entity)
+	CameraComponent::CameraComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity) : Component(modules, entity)
 	{
 	}
 
 	void CameraComponent::OnEnable()
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = GetApp().lock();
-		if (!app) return;
-
-		const std::shared_ptr<CameraModule> camera = app->Camera().lock();
-		if (!camera) return;
-
-		_camera = camera->CreateCamera();
+		_camera = modules->camera->CreateCamera();
 	}
 
 	void CameraComponent::OnTick()
@@ -45,13 +39,7 @@ namespace GEngine
 
 	void CameraComponent::OnDisable()
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = GetApp().lock();
-		if (!app) return;
-
-		const std::shared_ptr<CameraModule> camera = app->Camera().lock();
-		if (!camera) return;
-
-		camera->RemoveCamera(_camera);
+		modules->camera->RemoveCamera(_camera);
 		_camera.reset();
 	}
 } // GEngineCore

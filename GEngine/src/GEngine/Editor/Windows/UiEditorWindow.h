@@ -11,7 +11,7 @@ namespace GEngine
 	class UiEditorWindow : public EditorWindow
 	{
 	public:
-		explicit UiEditorWindow(const std::weak_ptr<GEngineCoreApplication> &app);
+		explicit UiEditorWindow(GEngineCoreModules* modules);
 
 		void DrawWindowContent() override;
 	};

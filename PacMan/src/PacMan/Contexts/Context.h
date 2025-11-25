@@ -8,6 +8,7 @@
 #include <memory>
 
 #include "tokoro.h"
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Coroutines/Coroutine.h"
 #include "GEngine/Scenes/Scene.h"
 
@@ -22,7 +23,7 @@ namespace PacMan
 	class Context
 	{
 	public:
-		explicit Context(const std::string& name);
+		explicit Context(GEngine::GEngineCoreModules* modules, const std::string& name);
 
 		tokoro::Async<void> LoadAsync();
 		void Start();
@@ -36,12 +37,16 @@ namespace PacMan
 		virtual void OnDispose();
 
 	private:
-		std::string _name;
+		const std::string _name;
+
 		bool _loaded = false;
 		bool _started = false;
 		bool _disposed = false;
 
 		GEngine::Scene _scene;
+
+	protected:
+		GEngine::GEngineCoreModules* const _modules;
 	};
 }
 

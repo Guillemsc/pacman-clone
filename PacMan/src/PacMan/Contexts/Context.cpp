@@ -14,9 +14,10 @@
 
 namespace PacMan
 {
-	Context::Context(const std::string &name)
+	Context::Context(GEngine::GEngineCoreModules* modules, const std::string &name)
+		: _name(name), _modules(modules)
 	{
-		_name = name;
+
 	}
 
 	tokoro::Async<void> Context::LoadAsync()
@@ -27,10 +28,7 @@ namespace PacMan
 		_started = false;
 		_loaded = true;
 
-		const std::shared_ptr<GEngine::GEngineCoreApplication> app = GEngine::ServiceLocator::Get<GEngine::GEngineCoreApplication>();
-		if (!app) co_return;
-
-		_scene.Init(app->Entities(), _name);
+		_scene.Init(_modules->entities, _name);
 
 		co_await OnLoadAsync();
 	}

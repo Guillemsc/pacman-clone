@@ -11,9 +11,9 @@
 
 namespace GEngine
 {
-	void WindowModule::Init(const std::weak_ptr<GEngineCoreApplication>& appPtr)
+	void WindowModule::Init(GEngineCoreModules* modules)
 	{
-		_appPtr = appPtr;
+		_modules = modules;
 
 		const int screenWidth = 1200;
 		const int screenHeight = 850;
@@ -62,15 +62,6 @@ namespace GEngine
 
 	void WindowModule::OnWindowSizeChanged() const
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _appPtr.lock();
-		if (!app) return;
-
-		const std::shared_ptr<UiModule> ui = app->Ui().lock();
-		if (!ui) return;
-
-		const std::shared_ptr<EntitiesModule> entities = app->Entities().lock();
-		if (!entities) return;
-
-		ui->RecalculateUiScaleAndRefreshUiTransforms();
+		_modules->ui->RecalculateUiScaleAndRefreshUiTransforms();
 	}
 } // GEngineCore

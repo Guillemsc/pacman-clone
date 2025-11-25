@@ -16,7 +16,8 @@
 
 namespace GEngine
 {
-	UiShapeRendererComponent::UiShapeRendererComponent(const std::weak_ptr<Entity> &entity) : Component(entity)
+	UiShapeRendererComponent::UiShapeRendererComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity)
+	: Component(modules, entity)
 	{
 		_shape2d = _properties.RegisterObject<UiShape2d>("Shape", std::make_shared<RectUiShape2d>());
 		_color = _properties.Register<Color01>("Color", Color01::White);
@@ -24,12 +25,6 @@ namespace GEngine
 
 	void UiShapeRendererComponent::OnTick()
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = GetApp().lock();
-		if (app == nullptr) return;
-
-		const std::shared_ptr<RenderingModule> rendering = app->Rendering().lock();
-		if (rendering == nullptr) return;
-
 		const std::shared_ptr<Entity> entity = GetEntity().lock();
 		if (entity == nullptr) return;
 
@@ -50,11 +45,11 @@ namespace GEngine
 		const glm::vec2 offset = uiRect.GetPivotOffset();
 		position += offset;
 
-		position = rendering->UiRender().lock()->PositionToRenderPosition(position);
+		position = modules->rendering->UiRender().lock()->PositionToRenderPosition(position);
 
 		auto selfPtr = weak_from_this();
 
-		rendering->UiRender().lock()->Add(0, [selfPtr, size, rotation, center, position]()
+		modules->rendering->UiRender().lock()->Add(0, [selfPtr, size, rotation, center, position]()
 		{
 			const auto self = selfPtr.lock();
 			if (!self) return;

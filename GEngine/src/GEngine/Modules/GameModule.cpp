@@ -17,22 +17,16 @@ namespace GEngine
 
 	}
 
-	void GameModule::Init(const std::weak_ptr<GEngineCoreApplication> &app)
+	void GameModule::Init(GEngineCoreModules* modules)
 	{
-		_app = app;
+		_modules = modules;
 	}
 
 	void GameModule::Tick() const
 	{
 		if (!_currentGame) return;
 
-		const std::shared_ptr<GEngineCoreApplication> app = _app.lock();
-		if (!app) return;
-
-		const std::shared_ptr<TimeModule> time = app->Time().lock();
-		if (!time) return;
-
-		float deltaTime = time->GetDeltaTime();
+		const float deltaTime = _modules->time->GetDeltaTime();
 		_currentGame->Tick(deltaTime);
 	}
 
@@ -46,26 +40,17 @@ namespace GEngine
 
 	void GameModule::LoadGame(const std::shared_ptr<Game> &game)
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _app.lock();
-		if (!app) return;
-
-		const std::shared_ptr<EntitiesModule> entities = app->Entities().lock();
-		if (!entities) return;
-
-		const std::shared_ptr<SystemsModule> systems = app->Systems().lock();
-		if (!systems) return;
-
 		if (_currentGame != nullptr)
 		{
 			_currentGame->Dispose();
 		}
 
-		systems->RemoveAllSystemsNow();
-		entities->RemoveAllEntitiesNow();
+		_modules->systems->RemoveAllSystemsNow();
+		_modules->entities->RemoveAllEntitiesNow();
 
 		_currentGame = game;
 
-		_currentGame->Setup(_app);
+		_currentGame->Setup(_modules);
 		_currentGame->Init();
 	}
 } // GEngineCore

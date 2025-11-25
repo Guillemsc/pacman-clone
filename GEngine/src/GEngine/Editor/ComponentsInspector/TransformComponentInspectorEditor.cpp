@@ -10,8 +10,8 @@
 
 namespace GEngine
 {
-	TransformComponentInspectorEditor::TransformComponentInspectorEditor(const std::weak_ptr<GEngineCoreApplication> &app)
-		: ComponentInspectorEditor(app)
+	TransformComponentInspectorEditor::TransformComponentInspectorEditor(GEngineCoreModules* modules)
+		: ComponentInspectorEditor(modules)
 	{
 	}
 

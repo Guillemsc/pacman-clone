@@ -17,18 +17,18 @@ namespace GEngine
 	class HierarchyEditorWindow : public EditorWindow
 	{
 	public:
-		explicit HierarchyEditorWindow(const std::weak_ptr<GEngineCoreApplication> &app);
+		explicit HierarchyEditorWindow(GEngineCoreModules* modules);
 
 		void DrawWindowContent() override;
 
 	private:
 		void DrawRightClickContextMenu(
-			const std::shared_ptr<EntitiesModule>& entities,
+			EntitiesModule* entities,
 			const std::shared_ptr<Entity>& entity
 			);
 
 		void DrawLeftClickContextMenu(
-			const std::shared_ptr<EditorModule>& editor,
+			EditorModule* editor,
 			const std::shared_ptr<Entity>& entity
 			);
 

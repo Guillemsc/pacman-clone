@@ -8,7 +8,8 @@
 
 namespace GEngine
 {
-	DemoEditorWindow::DemoEditorWindow(const std::weak_ptr<GEngineCoreApplication> &app): EditorWindow(app, "Demo")
+	DemoEditorWindow::DemoEditorWindow(GEngineCoreModules* modules)
+		: EditorWindow(modules, "Demo")
 	{
 	}
 

@@ -8,9 +8,10 @@
 
 namespace GEngine
 {
-	TickShapeRenderer2dComponentsSystem::TickShapeRenderer2dComponentsSystem(const std::weak_ptr<GEngineCoreApplication> &app)
+	TickShapeRenderer2dComponentsSystem::TickShapeRenderer2dComponentsSystem(GEngineCoreModules* modules)
+		: _modules(modules)
 	{
-		_app = app;
+
 	}
 
 	void TickShapeRenderer2dComponentsSystem::Tick()

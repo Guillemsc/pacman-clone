@@ -6,6 +6,8 @@
 #define EDITORWINDOW_H
 #include <memory>
 
+#include "GEngine/Core/GEngineCoreModules.h"
+
 namespace GEngine
 {
 	class GEngineCoreApplication;
@@ -13,7 +15,7 @@ namespace GEngine
 	class EditorWindow
 	{
 	public:
-		explicit EditorWindow(const std::weak_ptr<GEngineCoreApplication>& app, const std::string& windowTitle);
+		explicit EditorWindow(GEngineCoreModules* modules, const std::string& windowTitle);
 
 		virtual void Draw();
 
@@ -25,11 +27,11 @@ namespace GEngine
 	public:
 		bool Visible = true;
 
+	protected:
+		GEngineCoreModules* const _modules;
+
 	private:
 		std::string _title;
-
-	protected:
-		std::weak_ptr<GEngineCoreApplication> _app;
 	};
 }
 

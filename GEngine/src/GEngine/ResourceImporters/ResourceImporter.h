@@ -9,6 +9,8 @@
 #include <memory>
 #include <vector>
 
+#include "GEngine/Core/GEngineCoreModules.h"
+
 namespace GEngine
 {
 	class GEngineCoreApplication;
@@ -30,7 +32,7 @@ namespace GEngine
 	class ResourceImporter : public IResourceImporter
 	{
 	public:
-		ResourceImporter(const std::weak_ptr<GEngineCoreApplication>& app);
+		explicit ResourceImporter(GEngineCoreModules* modules);
 
 		[[nodiscard]] const std::vector<std::string>& GetSupportedExtensions() const override;
 
@@ -38,7 +40,7 @@ namespace GEngine
 		void AddSupportedExtension(const std::string& extension);
 
 	protected:
-		std::weak_ptr<GEngineCoreApplication> _app;;
+		GEngineCoreModules* const _modules;
 
 	private:
 		std::vector<std::string> _supportedExtensions;

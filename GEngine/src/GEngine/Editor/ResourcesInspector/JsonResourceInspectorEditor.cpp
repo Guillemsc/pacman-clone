@@ -10,8 +10,8 @@
 namespace GEngine
 {
 
-	JsonResourceInspectorEditor::JsonResourceInspectorEditor(const std::weak_ptr<GEngineCoreApplication> &app)
-	: ResourceInspectorEditor(app)
+	JsonResourceInspectorEditor::JsonResourceInspectorEditor(GEngineCoreModules* modules)
+	: ResourceInspectorEditor(modules)
 	{
 	}
 

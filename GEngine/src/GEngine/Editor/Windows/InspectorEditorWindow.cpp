@@ -14,8 +14,8 @@
 
 namespace GEngine
 {
-	InspectorEditorWindow::InspectorEditorWindow(const std::weak_ptr<GEngineCoreApplication> &app)
-		: EditorWindow(app, "Inspector")
+	InspectorEditorWindow::InspectorEditorWindow(GEngineCoreModules* modules)
+		: EditorWindow(modules, "Inspector")
 	{
 		RegisterInspectorEditor<EntityInspectorEditor, Entity>();
 		RegisterInspectorEditor<ResourcesInspectorEditor, Resource>();
@@ -23,13 +23,7 @@ namespace GEngine
 
 	void InspectorEditorWindow::DrawWindowContent()
 	{
-		const std::shared_ptr<GEngineCoreApplication> app = _app.lock();
-		if (!app) return;
-
-		const std::shared_ptr<EditorModule> editor = app->Editor().lock();
-		if (!editor) return;
-
-		const std::shared_ptr<GEngineObject> selectedObject = editor->GetSelectedObject().lock();
+		const std::shared_ptr<GEngineObject> selectedObject = _modules->editor->GetSelectedObject().lock();
 
 		if (!selectedObject)
 		{

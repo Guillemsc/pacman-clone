@@ -11,14 +11,14 @@
 
 namespace PacMan
 {
-	GridMovementSystem::GridMovementSystem(const std::weak_ptr<GEngine::TiledMap2dRendererComponent> &tileMapComponent)
+	GridMovementSystem::GridMovementSystem(const std::weak_ptr<MapMovementManager> &mapMovementManager)
 	{
-		_tileMapComponentPtr = tileMapComponent;
+		_mapMovementManagerPtr = mapMovementManager;
 	}
 
 	void GridMovementSystem::Tick()
 	{
-		const std::shared_ptr<GEngine::TiledMap2dRendererComponent> tileMapComponent = _tileMapComponentPtr.lock();
+		const std::shared_ptr<MapMovementManager> tileMapComponent = _mapMovementManagerPtr.lock();
 
 		for (auto it = _components.begin(); it != _components.end();)
 		{
@@ -40,12 +40,12 @@ namespace PacMan
 			glm::i32vec2 directionVector = GEngine::CardinalDirectionExtensions::GetDirectionVector(component->Direction);
 			glm::i32vec2 targetGridPosition = component->GridPosition + directionVector;
 
-			const bool canMove = tileMapComponent->HasTileAtGridPosition(0, targetGridPosition);
+			const bool canMove = tileMapComponent->IsWalkable(targetGridPosition);
 
 			if (canMove)
 			{
-				glm::vec2 startWorldPosition = tileMapComponent->GridPositionToWorldPosition(0, component->GridPosition, GEngine::CellPosition::CENTER);
-				glm::vec2 endWorldPosition = tileMapComponent->GridPositionToWorldPosition(0, targetGridPosition, GEngine::CellPosition::CENTER);
+				glm::vec2 startWorldPosition = tileMapComponent->GridPositionToWorldPosition(component->GridPosition);
+				glm::vec2 endWorldPosition = tileMapComponent->GridPositionToWorldPosition(targetGridPosition);
 
 				component->ProgressToTarget += component->Speed;
 
@@ -86,14 +86,14 @@ namespace PacMan
 	}
 
 	bool GridMovementSystem::TryApplyNextDirection(
-		const GEngine::TiledMap2dRendererComponent* mapComponent,
+		const MapMovementManager* mapMovementManager,
 		GridMovementComponent *movementComponent,
 		const GEngine::CardinalDirection direction
 
 		)
 	{
 		const bool isValidNextDirection = IsValidNextDirection(
-			mapComponent,
+			mapMovementManager,
 			movementComponent,
 			direction
 			);
@@ -107,7 +107,7 @@ namespace PacMan
 	}
 
 	bool GridMovementSystem::IsValidNextDirection(
-		const GEngine::TiledMap2dRendererComponent* mapComponent,
+		const MapMovementManager* mapMovementManager,
 		const GridMovementComponent *movementComponent,
 		const GEngine::CardinalDirection direction
 		)
@@ -115,7 +115,7 @@ namespace PacMan
 		const glm::i32vec2 directionVector = GEngine::CardinalDirectionExtensions::GetDirectionVector(direction);
 		const glm::i32vec2 testingPosition = movementComponent->GridPosition + directionVector;
 
-		const bool hasTile = mapComponent->HasTileAtGridPosition(0, testingPosition);
+		const bool hasTile = mapMovementManager->IsWalkable(testingPosition);
 
 		return hasTile;
 	}

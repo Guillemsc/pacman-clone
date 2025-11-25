@@ -15,7 +15,7 @@ namespace GEngine
 	class TextureResourceInspectorEditor final : public ResourceInspectorEditor<TextureResource>
 	{
 	public:
-		explicit TextureResourceInspectorEditor(const std::weak_ptr<GEngineCoreApplication> &app);
+		explicit TextureResourceInspectorEditor(GEngineCoreModules* modules);
 
 		void DrawSpecific(const std::shared_ptr<TextureResource> &inspect) override;
 	};

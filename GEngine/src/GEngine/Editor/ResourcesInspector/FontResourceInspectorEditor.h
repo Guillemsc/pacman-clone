@@ -13,7 +13,7 @@ namespace GEngine
 	class FontResourceInspectorEditor final : public ResourceInspectorEditor<FontResource>
 	{
 	public:
-		explicit FontResourceInspectorEditor(const std::weak_ptr<GEngineCoreApplication> &app);
+		explicit FontResourceInspectorEditor(GEngineCoreModules* modules);
 
 		void DrawSpecific(const std::shared_ptr<FontResource> &inspect) override;
 	};

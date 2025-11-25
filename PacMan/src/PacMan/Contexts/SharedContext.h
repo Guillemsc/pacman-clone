@@ -14,7 +14,7 @@ namespace PacMan
 	class SharedContext : public Context
 	{
 	public:
-		SharedContext();
+		explicit SharedContext(GEngine::GEngineCoreModules* modules);
 
 		tokoro::Async<void> OnLoadAsync() override;
 

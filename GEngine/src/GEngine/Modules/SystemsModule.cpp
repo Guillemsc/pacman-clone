@@ -14,9 +14,9 @@ namespace GEngine
 
 	}
 
-	void SystemsModule::Init(const std::weak_ptr<GEngineCoreApplication>& app)
+	void SystemsModule::Init(GEngineCoreModules* modules)
 	{
-		AddSystem(std::make_shared<TickShapeRenderer2dComponentsSystem>(app));
+		AddSystem(std::make_shared<TickShapeRenderer2dComponentsSystem>(modules));
 	}
 
 	void SystemsModule::Tick()

@@ -7,10 +7,7 @@
 
 #include <memory>
 
-namespace GEngine
-{
-	class GEngineCoreApplication;
-}
+#include "GEngine/Core/GEngineCoreModules.h"
 
 namespace GEngine
 {
@@ -31,7 +28,7 @@ namespace GEngine
 	class ComponentInspectorEditor : public IComponentInspectorEditor
 	{
 	public:
-		ComponentInspectorEditor(const std::weak_ptr<GEngineCoreApplication>& app);
+		ComponentInspectorEditor(GEngineCoreModules* modules);
 
 		void Draw(const std::shared_ptr<Component>& inspect) override;
 
@@ -39,16 +36,17 @@ namespace GEngine
 		virtual void DrawSpecific(const std::shared_ptr<T>& inspect) = 0;
 
 	protected:
-		std::weak_ptr<GEngineCoreApplication> _app;
+		GEngineCoreModules* const _modules;
 	};
 
 	// -------------------------------------------------------
 	// -------------------------------------------------------
 
 	template<class T>
-	ComponentInspectorEditor<T>::ComponentInspectorEditor(const std::weak_ptr<GEngineCoreApplication>& app)
+	ComponentInspectorEditor<T>::ComponentInspectorEditor(GEngineCoreModules* modules)
+		: _modules(modules)
 	{
-		_app = app;
+
 	}
 
 	template<class T>

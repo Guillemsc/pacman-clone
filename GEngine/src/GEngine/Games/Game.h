@@ -7,6 +7,8 @@
 
 #include <memory>
 
+#include "GEngine/Core/GEngineCoreModules.h"
+
 namespace GEngine
 {
 	class GEngineCoreApplication;
@@ -15,14 +17,14 @@ namespace GEngine
 	{
 	public:
 		virtual ~Game() = default;
-		void Setup(const std::weak_ptr<GEngineCoreApplication> &app) { _app = app; }
+		void Setup(GEngineCoreModules* modules) { _modules = modules; }
 
 		virtual void Init() = 0;
 		virtual void Tick(float deltaTime) = 0;
 		virtual void Dispose() = 0;
 
 	protected:
-		std::weak_ptr<GEngineCoreApplication> _app;
+		GEngineCoreModules* _modules;
 	};
 }
 

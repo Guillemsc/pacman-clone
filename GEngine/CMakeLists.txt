@@ -246,6 +246,9 @@ add_library(GEngineCore STATIC
         src/GEngine/Tweens/CallbackTween.h
         src/GEngine/Scenes/Scene.cpp
         src/GEngine/Scenes/Scene.h
+        src/GEngine/Core/GEngineCoreModules.h
+        src/GEngine/Modules/TweensModule.cpp
+        src/GEngine/Modules/TweensModule.h
 )
 
 # Link raylib

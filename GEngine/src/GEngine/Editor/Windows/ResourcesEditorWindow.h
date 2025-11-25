@@ -14,13 +14,13 @@ namespace GEngine
 	class ResourcesEditorWindow : public EditorWindow
 	{
 	public:
-		explicit ResourcesEditorWindow(const std::weak_ptr<GEngineCoreApplication> &app);
+		explicit ResourcesEditorWindow(GEngineCoreModules* modules);
 
 		void DrawWindowContent() override;
 
 	private:
 		void DrawLeftClickContextMenu(
-			const std::shared_ptr<EditorModule> &editor,
+			EditorModule* editor,
 			const std::shared_ptr<Resource> &resource
 		);
 	};

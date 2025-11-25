@@ -10,14 +10,13 @@
 
 namespace PacMan
 {
-	SharedContext::SharedContext() : Context("Shared")
+	SharedContext::SharedContext(GEngine::GEngineCoreModules* modules)
+		: Context(modules, "Shared")
 	{
 	}
 
 	tokoro::Async<void> SharedContext::OnLoadAsync()
 	{
-		const std::shared_ptr<GEngine::GEngineCoreApplication> app = GEngine::ServiceLocator::Get<GEngine::GEngineCoreApplication>();
-
 		co_await Context::OnLoadAsync();
 	}
 }

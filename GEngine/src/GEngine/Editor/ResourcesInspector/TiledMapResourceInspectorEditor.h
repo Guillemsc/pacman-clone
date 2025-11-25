@@ -15,7 +15,7 @@ namespace GEngine
 	class TiledMapResourceInspectorEditor final : public ResourceInspectorEditor<TiledMapResource>
 	{
 	public:
-		explicit TiledMapResourceInspectorEditor(const std::weak_ptr<GEngineCoreApplication>& app);
+		explicit TiledMapResourceInspectorEditor(GEngineCoreModules* modules);
 
 		void DrawSpecific(const std::shared_ptr<TiledMapResource> &inspect) override;
 	};

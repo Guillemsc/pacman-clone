@@ -7,6 +7,7 @@
 
 #include <memory>
 
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "glm/vec2.hpp"
 
 namespace GEngine
@@ -18,7 +19,7 @@ namespace GEngine
 	class UiModule
 	{
 	public:
-		void Init(const std::weak_ptr<GEngineCoreApplication>& app);
+		void Init(GEngineCoreModules* modules);
 
 		void Tick();
 		void Dispose();
@@ -34,7 +35,7 @@ namespace GEngine
 		std::shared_ptr<UiRaycastTarget> RaycastAtScreenPosition(const glm::vec2& mousePosition) const;
 
 	private:
-		std::weak_ptr<GEngineCoreApplication> _appPtr;
+		GEngineCoreModules* _modules = nullptr;
 
 		glm::vec2 _referenceScreenSize = glm::vec2(1280, 720);
 		float _uiScale = 1;

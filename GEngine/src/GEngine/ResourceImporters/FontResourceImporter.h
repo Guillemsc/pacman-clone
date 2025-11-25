@@ -12,7 +12,7 @@ namespace GEngine
 	class FontResourceImporter  final : public ResourceImporter
 	{
 	public:
-		explicit FontResourceImporter(const std::weak_ptr<GEngineCoreApplication> &app);
+		explicit FontResourceImporter(GEngineCoreModules* modules);
 
 		std::shared_ptr<Resource> Import(const std::filesystem::path& fullPath, const std::filesystem::path& resourcesPath) override;
 	};
