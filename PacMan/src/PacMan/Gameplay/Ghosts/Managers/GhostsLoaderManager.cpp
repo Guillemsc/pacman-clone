@@ -1,0 +1,100 @@
+//
+// Created by guillem on 11/27/25.
+//
+
+#include "GhostsLoaderManager.h"
+
+#include "GEngine/Components/Shape2dRendererComponent.h"
+#include "GEngine/Components/TransformComponent.h"
+#include "GEngine/Entities/Entity.h"
+#include "GEngine/Scenes/Scene.h"
+#include "PacMan/Gameplay/Entities/Data/GameplayEntities.h"
+#include "PacMan/Gameplay/MapLoading/Data/LoadedMapData.h"
+#include "PacMan/Gameplay/MapMovement/Components/MapMovementComponent.h"
+#include "PacMan/Gameplay/MapMovement/Components/OldMapMovementComponent.h"
+#include "PacMan/Gameplay/MapMovement/Systems/MapMovementSystem.h"
+
+namespace PacMan
+{
+	GhostsLoaderManager::GhostsLoaderManager(
+		GEngine::GEngineCoreModules *modules,
+		GEngine::Scene *scene,
+		MapMovementManager *mapMovementManager,
+		MapMovementSystem *mapMovementSystem,
+		GameplayEntities *gameplayEntities
+		): _modules(modules),
+		_scene(scene),
+		_mapMovementManager(mapMovementManager),
+		_mapMovementSystem(mapMovementSystem),
+		_gameplayEntities(gameplayEntities)
+	{
+	}
+
+	void GhostsLoaderManager::LoadGhosts(const LoadedMapData &loadedMapData)
+	{
+		LoadGhost(RED_GHOST_TYPE, loadedMapData.RedGhostPosition, false);
+		LoadGhost(CIAN_GHOST_TYPE, loadedMapData.GhostPrision1Position, true);
+		LoadGhost(PINK_GHOST_TYPE, loadedMapData.GhostPrision2Position, true);
+		LoadGhost(ORANGE_GHOST_TYPE, loadedMapData.GhostPrision3Position, true);
+	}
+
+	void GhostsLoaderManager::LoadGhost(const GhostType ghostType, const glm::i32vec2 &gridPosition, const bool isPrision)
+	{
+		const std::string ghostName = GetGhostName(ghostType);
+		const GEngine::Color01 ghostColor = GetGhostColor(ghostType);
+
+		const std::shared_ptr<GEngine::Entity> ghostEntity = _scene->AddWorldEntity().lock();
+		ghostEntity->SetName("Player" + ghostName);
+
+		const std::shared_ptr<GEngine::Shape2dRendererComponent> shape = ghostEntity->AddComponent<GEngine::Shape2dRendererComponent>().lock();
+		shape->SetLayer(1);
+		shape->SetColor(ghostColor);
+
+		if (isPrision)
+		{
+			const glm::vec2 worldPosition = _mapMovementManager->GridPositionToWorldPosition(gridPosition, GEngine::CellPosition::CENTER_RIGHT);
+			ghostEntity->GetTransform().lock()->SetPositionXY(worldPosition);
+		}
+		else
+		{
+			const std::shared_ptr<MapMovementComponent> mapMovement = ghostEntity->AddComponent<MapMovementComponent>().lock();
+			mapMovement->SetGridPosition(gridPosition);
+		}
+
+		_gameplayEntities->Ghosts.push_back(ghostEntity);
+	}
+
+	std::string GhostsLoaderManager::GetGhostName(const GhostType ghostType)
+	{
+		switch (ghostType)
+		{
+			case RED_GHOST_TYPE:
+				return "Red";
+			case ORANGE_GHOST_TYPE:
+				return "Orange";
+			case CIAN_GHOST_TYPE:
+				return "Cian";
+			case PINK_GHOST_TYPE:
+				return "Pink";
+		}
+
+		return "Unknown";
+	}
+
+	GEngine::Color01 GhostsLoaderManager::GetGhostColor(const GhostType ghostType)
+	{
+		switch (ghostType)
+		{
+			case RED_GHOST_TYPE:
+				return GEngine::Color01(1, 0, 0);
+			case ORANGE_GHOST_TYPE:
+				return GEngine::Color01(1, 0.3f, 0);
+			case CIAN_GHOST_TYPE:
+				return GEngine::Color01(0, 0.9f, 0.9f);
+			case PINK_GHOST_TYPE:
+				return GEngine::Color01(0.8, 0.3f, 0.7f);
+		}
+
+		return GEngine::Color01(0, 0, 0);;
+	}
+}

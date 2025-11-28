@@ -13,11 +13,18 @@
 #include "GEngine/Modules/SystemsModule.h"
 #include "GEngine/ServiceLocators/ServiceLocator.h"
 #include "GEngine/Resources/TiledMapResource.h"
-#include "../Gameplay/MapMovement/Systems/MapMovementSystem.h"
-#include "../Gameplay/MapMovement/Components/MapMovementComponent.h"
+#include "PacMan/Gameplay/MapMovement/Systems/MapMovementSystem.h"
+#include "PacMan/Gameplay/MapMovement/Components/OldMapMovementComponent.h"
+#include "PacMan/Gameplay/Entities/Data/GameplayEntities.h"
+#include "PacMan/Gameplay/Ghosts/Managers/GhostsLoaderManager.h"
 #include "PacMan/Gameplay/Input/Systems/PlayerInputSystem.h"
 #include "PacMan/Gameplay/MapLoading/Managers/MapLoadingManager.h"
+#include "PacMan/Gameplay/MapMovement/Components/MapMovementComponent.h"
+#include "PacMan/Gameplay/MapMovement/Components/MapPathfindingComponent.h"
 #include "PacMan/Gameplay/MapMovement/Managers/MapMovementManager.h"
+#include "PacMan/Gameplay/MapMovement/Managers/MapPathfindingManager.h"
+#include "PacMan/Gameplay/MapMovement/Systems/MapPathfindingSystem.h"
+#include "PacMan/Gameplay/Player/Managers/PlayerLoaderManager.h"
 
 namespace PacMan
 {
@@ -27,46 +34,52 @@ namespace PacMan
 
 	tokoro::Async<void> GameplayContext::OnLoadAsync()
 	{
-		const std::shared_ptr<GEngine::Entity> tilemapEntity = GetScene().AddWorldEntity().lock();
-		tilemapEntity->SetName("Tilemap");
-		const std::shared_ptr<GEngine::TiledMap2dRendererComponent> tilemap = tilemapEntity->AddComponent<GEngine::TiledMap2dRendererComponent>().lock();
-
-		const std::shared_ptr<MapLoadingManager> mapLoadingManager = std::make_shared<MapLoadingManager>(_modules);
+		const std::shared_ptr<MapLoadingManager> mapLoadingManager = std::make_shared<MapLoadingManager>(_modules, _scene.get());
 		mapLoadingManager->LoadMap("test-map");
+		const LoadedMapData loadedMapData = mapLoadingManager->GetLoadedMapData();
 
-		const std::weak_ptr<GEngine::TiledMapResource> tilemapResource = _modules->resources->GetResource<GEngine::TiledMapResource>(
-			"Tiled/maps/test-map.tmx"
-			);
-
-		tilemap->SetTiledMap(tilemapResource);
-
-		_mapMovementManager = std::make_shared<MapMovementManager>(tilemap, "Walkability");
+		_mapMovementManager = std::make_shared<MapMovementManager>(loadedMapData.Tilemap);
 		GEngine::ServiceLocator::Register(_mapMovementManager);
 
-		const std::shared_ptr<GEngine::Entity> playerEntity = GetScene().AddWorldEntity().lock();
-		playerEntity->SetName("Player");
-		playerEntity->AddComponent<GEngine::Shape2dRendererComponent>();
-		playerEntity->GetComponent<GEngine::Shape2dRendererComponent>().lock()->SetLayer(1);
-		playerEntity->AddComponent<MapMovementComponent>();
+		_mapPathfindingManager = std::make_shared<MapPathfindingManager>(_mapMovementManager.get());
+		GEngine::ServiceLocator::Register(_mapPathfindingManager);
 
-		playerEntity->GetTransform().lock()->SetPosition({0, 0, 0});
+		_mapMovementSystem = std::make_shared<MapMovementSystem>(_mapMovementManager.get());
+		_modules->systems->AddSystem(_mapMovementSystem);
 
-		const std::shared_ptr<MapMovementSystem> mapMovementSystem = std::make_shared<MapMovementSystem>(
-			_mapMovementManager
-		);
+		_mapPathfindingSystem = std::make_shared<MapPathfindingSystem>(_mapPathfindingManager.get(), _mapMovementManager.get());
+		_modules->systems->AddSystem(_mapPathfindingSystem);
 
-		const std::weak_ptr<MapMovementComponent> playerGridMovement = playerEntity->GetComponent<MapMovementComponent>();
-		_mapMovementManager->SetGridPosition(playerGridMovement, {10, 10});
+		_playerInputSystem = std::make_shared<PlayerInputSystem>();
+		_modules->systems->AddSystem(_playerInputSystem);
 
-		mapMovementSystem->Add(playerGridMovement);
+		_gameplayEntities = std::make_shared<GameplayEntities>();
 
-		_modules->systems->AddSystem(mapMovementSystem);
+		_playerLoaderManager = std::make_shared<PlayerLoaderManager>(
+			_modules,
+			_scene.get(),
+			_mapMovementManager.get(),
+			_mapMovementSystem.get(),
+			_playerInputSystem.get(),
+			_gameplayEntities.get()
+			);
+		_playerLoaderManager->LoadPlayer(loadedMapData.PlayerPosition);
 
-		const std::shared_ptr<PlayerInputSystem> playerInputSystem = std::make_shared<PlayerInputSystem>(
-			playerEntity->GetComponent<MapMovementComponent>()
-		);
-		_modules->systems->AddSystem(playerInputSystem);
+		_ghostsLoaderManager = std::make_shared<GhostsLoaderManager>(
+			_modules,
+			_scene.get(),
+			_mapMovementManager.get(),
+			_mapMovementSystem.get(),
+			_gameplayEntities.get()
+			);
+		_ghostsLoaderManager->LoadGhosts(loadedMapData);
 
-		co_await Context::OnLoadAsync();
+		// Test ======
+		const std::shared_ptr<GEngine::Entity> red = _gameplayEntities->Ghosts[0].lock();
+		const std::shared_ptr<MapMovementComponent> mapMovement = red->GetComponent<MapMovementComponent>().lock();
+		mapMovement->PathfindToGridPosition({1, 1});
+		// ===========
+
+		co_return;
 	}
 } // PacMan

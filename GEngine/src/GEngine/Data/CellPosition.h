@@ -11,6 +11,7 @@ enum CellPosition
 {
 	BOTTOM_LEFT,
 	CENTER,
+	CENTER_RIGHT,
 };
 
 } // GEngineCore

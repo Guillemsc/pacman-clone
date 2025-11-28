@@ -5,18 +5,12 @@
 #include "SystemsModule.h"
 
 #include "GEngine/Systems/System.h"
-#include "GEngine/Systems/TickShapeRenderer2dComponentsSystem.h"
 
 namespace GEngine
 {
 	SystemsModule::SystemsModule()
 	{
 
-	}
-
-	void SystemsModule::Init(GEngineCoreModules* modules)
-	{
-		AddSystem(std::make_shared<TickShapeRenderer2dComponentsSystem>(modules));
 	}
 
 	void SystemsModule::Tick()

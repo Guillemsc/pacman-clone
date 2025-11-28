@@ -15,9 +15,9 @@
 namespace PacMan
 {
 	Context::Context(GEngine::GEngineCoreModules* modules, const std::string &name)
-		: _name(name), _modules(modules)
+		: _modules(modules), _name(name)
 	{
-
+		_scene = std::make_unique<GEngine::Scene>(modules->entities, name);
 	}
 
 	tokoro::Async<void> Context::LoadAsync()
@@ -27,8 +27,6 @@ namespace PacMan
 		_disposed = false;
 		_started = false;
 		_loaded = true;
-
-		_scene.Init(_modules->entities, _name);
 
 		co_await OnLoadAsync();
 	}
@@ -53,12 +51,7 @@ namespace PacMan
 
 		OnDispose();
 
-		_scene.Dispose();
-	}
-
-	GEngine::Scene Context::GetScene() const
-	{
-		return _scene;
+		_scene->Dispose();
 	}
 
 	tokoro::Async<void> Context::OnLoadAsync()

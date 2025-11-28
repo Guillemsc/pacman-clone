@@ -17,25 +17,20 @@ namespace PacMan
 
 	}
 
-	tokoro::Async<void> ContextsStack::PushAsync(const std::shared_ptr<Context> &context)
+	tokoro::Async<void> ContextsStack::PushAsync(const std::shared_ptr<Context> context)
 	{
 		if (_loading) co_return;
-
-		_pushingContext = context;
 
 		const std::shared_ptr<GEngine::CoroutineSequencer> sequencer = _coroutineSequencer.lock();
 		if (!sequencer) co_return;;
 
 		_loading = true;
 
-		co_await _pushingContext->LoadAsync();
+		co_await context->LoadAsync();
 
-		_contextsStack.push_back(_pushingContext);
+		_contextsStack.push_back(context);
 
-		_pushingContext = nullptr;
 		_loading = false;
-
-		co_return;
 	}
 
 	void ContextsStack::Pop()

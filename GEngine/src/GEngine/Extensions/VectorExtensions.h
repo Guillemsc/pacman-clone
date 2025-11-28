@@ -49,6 +49,22 @@ namespace GEngine
 		}
 
 		template <typename T>
+		static void Remove(std::vector<std::unique_ptr<T>>& vec, const std::unique_ptr<T>& value)
+		{
+			vec.erase(
+				std::remove_if(
+					vec.begin(),
+					vec.end(),
+					[&value](const std::unique_ptr<T>& elem)
+					{
+						return elem.get() == value.get();
+					}
+				),
+			vec.end()
+			);
+		}
+
+		template <typename T>
 		static void Remove(std::vector<std::weak_ptr<T>>& vec, const std::shared_ptr<T>& value)
 		{
 			vec.erase(

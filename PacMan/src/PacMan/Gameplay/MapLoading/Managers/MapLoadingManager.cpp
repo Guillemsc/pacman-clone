@@ -4,7 +4,9 @@
 
 #include "MapLoadingManager.h"
 
+#include "GEngine/Components/TiledMap2dRendererComponent.h"
 #include "GEngine/Core/GEngineCoreModules.h"
+#include "GEngine/Entities/Entity.h"
 #include "GEngine/Modules/ResourcesModule.h"
 #include "GEngine/Resources/TiledMapResource.h"
 #include "PacMan/Gameplay/MapLoading/Data/LoadedMapData.h"
@@ -13,22 +15,60 @@
 
 namespace PacMan
 {
-	MapLoadingManager::MapLoadingManager(GEngine::GEngineCoreModules *modules) : _modules(modules)
+	MapLoadingManager::MapLoadingManager(GEngine::GEngineCoreModules *modules, GEngine::Scene* scene)
+		: _modules(modules), _scene(scene)
 	{
 	}
 
 	void MapLoadingManager::LoadMap(const std::string &mapFileName)
 	{
-		const std::string entitiesLayer = "Entities";
 		const std::filesystem::path mapsBasePath = "Tiled/maps";
-
-		LoadedMapData loadedMapData;
 
 		const std::filesystem::path mapPath = mapsBasePath / (mapFileName + ".tmx");
 
 		const std::shared_ptr<GEngine::TiledMapResource> tilemapResource
 			= _modules->resources->GetResource<GEngine::TiledMapResource>(mapPath).lock();
 		if (!tilemapResource) return;
+
+		LoadTilemapGameObject(_loadedMapData, tilemapResource);
+		LoadMapEntities(_loadedMapData, tilemapResource);
+
+		spdlog::info("Map data loaded [Player:x{0} y{1}] [RedGhost:x{2} y{3}] [CianGhost:x{4} y{5}] [PinkGhost:x{6} y{7}] [OrangeGhost:x{8} y{9}]",
+			_loadedMapData.PlayerPosition.x,
+			_loadedMapData.PlayerPosition.y,
+			_loadedMapData.RedGhostPosition.x,
+			_loadedMapData.RedGhostPosition.y,
+			_loadedMapData.GhostPrision1Position.x,
+			_loadedMapData.GhostPrision1Position.y,
+			_loadedMapData.GhostPrision2Position.x,
+			_loadedMapData.GhostPrision2Position.y,
+			_loadedMapData.GhostPrision3Position.x,
+			_loadedMapData.GhostPrision3Position.y
+			);
+	}
+
+	const LoadedMapData & MapLoadingManager::GetLoadedMapData() const
+	{
+		return _loadedMapData;
+	}
+
+	void MapLoadingManager::LoadTilemapGameObject(LoadedMapData& loadedMapData, const std::shared_ptr<GEngine::TiledMapResource> &tilemapResource)
+	{
+		const std::shared_ptr<GEngine::Entity> tilemapEntity = _scene->AddWorldEntity().lock();
+		tilemapEntity->SetName("Tilemap");
+		const std::shared_ptr<GEngine::TiledMap2dRendererComponent> tilemap = tilemapEntity->AddComponent<GEngine::TiledMap2dRendererComponent>().lock();
+
+		tilemap->SetTiledMap(tilemapResource);
+
+		loadedMapData.Tilemap = tilemap;
+	}
+
+	void MapLoadingManager::LoadMapEntities(
+		LoadedMapData& loadedMapData,
+		const std::shared_ptr<GEngine::TiledMapResource>& tilemapResource
+	)
+	{
+		const std::string entitiesLayer = "Entities";
 
 		const std::int32_t entitiesLayerIndex = tilemapResource->GetLayerIndexFromLayerName(entitiesLayer);
 		if (entitiesLayerIndex < 0) return;
@@ -44,7 +84,7 @@ namespace PacMan
 			for (std::int32_t x = 0; x < gridSize.x; ++x)
 			{
 				const glm::i32vec2 gridPosition = { x, y };
-				std::int32_t tileId = tilemapResource->GetTileIdFromGridPosition(tileLayer, gridPosition);
+				const std::int32_t tileId = tilemapResource->GetTileIdFromGridPosition(tileLayer, gridPosition);
 				if (tileId == 0) continue;
 
 				auto optionalTileset = tilemapResource->GetTilesetForTileID(tileId);
@@ -57,13 +97,6 @@ namespace PacMan
 				LoadTileData(loadedMapData, gridPosition, localTile);
 			}
 		}
-
-		spdlog::info("Map data loaded [Player:x{0} y{1}] [RedGhost:x{2} y{3}]",
-			loadedMapData.PlayerPosition.x,
-			loadedMapData.PlayerPosition.y,
-			loadedMapData.RedGhostPosition.x,
-			loadedMapData.RedGhostPosition.y
-			);
 	}
 
 	void MapLoadingManager::LoadTileData(LoadedMapData& loadedMapData, const glm::i32vec2& gridPosition, const tmx::Tileset::Tile *localTile)
@@ -80,19 +113,19 @@ namespace PacMan
 			loadedMapData.RedGhostPosition = gridPosition;
 		}
 
-		if (typeProperty == "cianGhost")
+		if (typeProperty == "ghostPrision1")
 		{
-			loadedMapData.CianGhostPosition = gridPosition;
+			loadedMapData.GhostPrision1Position = gridPosition;
 		}
 
-		if (typeProperty == "pinkGhost")
+		if (typeProperty == "ghostPrision2")
 		{
-			loadedMapData.PinkGhostPosition = gridPosition;
+			loadedMapData.GhostPrision2Position = gridPosition;
 		}
 
-		if (typeProperty == "orangeGhost")
+		if (typeProperty == "ghostPrision3")
 		{
-			loadedMapData.OrangeGhostPosition = gridPosition;
+			loadedMapData.GhostPrision3Position = gridPosition;
 		}
 	}
 } // PacMan

@@ -26,6 +26,7 @@ namespace GEngine
 		void OnDestroy() override;
 
 		void SetLayer(int layer) const;
+		void SetColor(const Color01& color) const;
 
 	private:
 		void RenderRectShape2d(

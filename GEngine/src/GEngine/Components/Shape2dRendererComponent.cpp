@@ -56,6 +56,11 @@ namespace GEngine
 		_layer->SetValue(layer);
 	}
 
+	void Shape2dRendererComponent::SetColor(const Color01 &color) const
+	{
+		_color->SetValue(color);
+	}
+
 	void Shape2dRendererComponent::RenderRectShape2d(
 		const glm::vec2& position,
 		const float rotation,

@@ -11,10 +11,9 @@
 
 namespace GEngine
 {
-	void Scene::Init(EntitiesModule* entitiesPtr, const std::string& name)
+	Scene::Scene(EntitiesModule *entitiesPtr, const std::string &name)
+		: _entitiesPtr(entitiesPtr)
 	{
-		_entitiesPtr = entitiesPtr;
-
 		_rootUiEntity = _entitiesPtr->AddUiEntity();
 		_rootUiEntity.lock()->SetName(std::format("{0} Ui", name));
 

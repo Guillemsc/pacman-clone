@@ -7,6 +7,7 @@
 
 #include "glm/vec2.hpp"
 #include "GEngine/Extensions/MathExtensions.h"
+#include "glm/ext/quaternion_geometric.hpp"
 
 namespace GEngine
 {
@@ -46,6 +47,18 @@ namespace GEngine
 				MathExtensions::Lerp(v1.x, v2.x, time.x),
 				MathExtensions::Lerp(v1.y, v2.y, time.y)
 			);
+		}
+
+		static float Distance(const glm::i32vec2 v1, const glm::i32vec2 v2)
+		{
+			const glm::i32vec2 delta = v2 - v1;
+			return std::sqrt(delta.x * delta.x + delta.y * delta.y);
+		}
+
+		static glm::vec2 SafeNormalize(const glm::vec2& v)
+		{
+			if (v == Zero) return Zero;
+			return glm::normalize(v);
 		}
 	};
 }

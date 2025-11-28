@@ -24,7 +24,7 @@ namespace PacMan
 
 	tokoro::Async<void> MetaContext::OnLoadAsync()
 	{
-		const std::shared_ptr<GEngine::Entity> uiEntity2 = GetScene().AddUiEntity().lock();
+		const std::shared_ptr<GEngine::Entity> uiEntity2 = _scene->AddUiEntity().lock();
 		uiEntity2->AddComponent<GEngine::UiShapeRendererComponent>();
 		const std::shared_ptr<GEngine::UiShapeButtonComponent> button = uiEntity2->AddComponent<GEngine::UiShapeButtonComponent>().lock();
 

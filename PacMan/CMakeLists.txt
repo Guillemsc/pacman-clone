@@ -8,8 +8,8 @@ add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Games/PacManGame.cpp
         src/PacMan/Gameplay/MapMovement/Systems/MapMovementSystem.cpp
         src/PacMan/Gameplay/MapMovement/Systems/MapMovementSystem.h
-        src/PacMan/Gameplay/MapMovement/Components/MapMovementComponent.cpp
-        src/PacMan/Gameplay/MapMovement/Components/MapMovementComponent.h
+        src/PacMan/Gameplay/MapMovement/Components/OldMapMovementComponent.cpp
+        src/PacMan/Gameplay/MapMovement/Components/OldMapMovementComponent.h
         src/PacMan/Flow/FlowManager.cpp
         src/PacMan/Flow/FlowManager.h
         src/PacMan/Contexts/GameplayContext.cpp
@@ -22,7 +22,7 @@ add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Gameplay/Input/Systems/PlayerInputSystem.h
         src/PacMan/Contexts/MetaContext.cpp
         src/PacMan/Contexts/MetaContext.h
-        src/PacMan/Gameplay/Data/GameplayEntities.h
+        src/PacMan/Gameplay/Entities/Data/GameplayEntities.h
         src/PacMan/Contexts/SharedContext.cpp
         src/PacMan/Contexts/SharedContext.h
         src/PacMan/Gameplay/MapMovement/Managers/MapMovementManager.cpp
@@ -30,6 +30,23 @@ add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Gameplay/MapLoading/Data/LoadedMapData.h
         src/PacMan/Gameplay/MapLoading/Managers/MapLoadingManager.cpp
         src/PacMan/Gameplay/MapLoading/Managers/MapLoadingManager.h
+        src/PacMan/Gameplay/Player/Managers/PlayerLoaderManager.cpp
+        src/PacMan/Gameplay/Player/Managers/PlayerLoaderManager.h
+        src/PacMan/Gameplay/Ghosts/Managers/GhostsLoaderManager.cpp
+        src/PacMan/Gameplay/Ghosts/Managers/GhostsLoaderManager.h
+        src/PacMan/Gameplay/Ghosts/Enums/GhostType.h
+        src/PacMan/Gameplay/Player/Components/PlayerComponent.cpp
+        src/PacMan/Gameplay/Player/Components/PlayerComponent.h
+        src/PacMan/Gameplay/MapMovement/Components/MapPathfindingComponent.cpp
+        src/PacMan/Gameplay/MapMovement/Components/MapPathfindingComponent.h
+        src/PacMan/Gameplay/MapMovement/Managers/MapPathfindingManager.cpp
+        src/PacMan/Gameplay/MapMovement/Managers/MapPathfindingManager.h
+        src/PacMan/Gameplay/MapMovement/Data/PathfindingNode.h
+        src/PacMan/Gameplay/MapMovement/Comparers/PathfindingComparer.h
+        src/PacMan/Gameplay/MapMovement/Systems/MapPathfindingSystem.cpp
+        src/PacMan/Gameplay/MapMovement/Systems/MapPathfindingSystem.h
+        src/PacMan/Gameplay/MapMovement/Components/MapMovementComponent.cpp
+        src/PacMan/Gameplay/MapMovement/Components/MapMovementComponent.h
 )
 
 target_link_libraries(PacMan PRIVATE GEngineCore)

@@ -7,23 +7,22 @@
 #include "GEngine/Components/TiledMap2dRendererComponent.h"
 #include "GEngine/Components/TransformComponent.h"
 #include "GEngine/Extensions/CardinalDirectionExtensions.h"
-#include "../Components/MapMovementComponent.h"
+#include "PacMan/Gameplay/MapMovement/Components/OldMapMovementComponent.h"
 #include "PacMan/Gameplay/MapMovement/Managers/MapMovementManager.h"
 
 namespace PacMan
 {
-	MapMovementSystem::MapMovementSystem(const std::weak_ptr<MapMovementManager> &mapMovementManager)
+	MapMovementSystem::MapMovementSystem(MapMovementManager* mapMovementManager)
+		: _mapMovementManager(mapMovementManager)
 	{
-		_mapMovementManagerPtr = mapMovementManager;
+
 	}
 
 	void MapMovementSystem::Tick()
 	{
-		const std::shared_ptr<MapMovementManager> tileMapComponent = _mapMovementManagerPtr.lock();
-
 		for (auto it = _components.begin(); it != _components.end();)
 		{
-			const std::shared_ptr<MapMovementComponent> component = it->lock();
+			const std::shared_ptr<OldMapMovementComponent> component = it->lock();
 
 			if (!component)
 			{
@@ -31,64 +30,71 @@ namespace PacMan
 				continue;
 			}
 
-			if(GEngine::CardinalDirectionExtensions::AreInverseDirections(component->Direction, component->NextDirection))
-			{
-				component->GridPosition = component->GridPosition + GEngine::CardinalDirectionExtensions::GetDirectionVector(component->Direction);
-				component->Direction = component->NextDirection;
-				component->ProgressToTarget = 1 - component->ProgressToTarget;
-			}
-
-			glm::i32vec2 directionVector = GEngine::CardinalDirectionExtensions::GetDirectionVector(component->Direction);
-			glm::i32vec2 targetGridPosition = component->GridPosition + directionVector;
-
-			const bool canMove = tileMapComponent->IsWalkable(targetGridPosition);
-
-			if (canMove)
-			{
-				glm::vec2 startWorldPosition = tileMapComponent->GridPositionToWorldPosition(component->GridPosition);
-				glm::vec2 endWorldPosition = tileMapComponent->GridPositionToWorldPosition(targetGridPosition);
-
-				component->ProgressToTarget += component->Speed;
-
-				glm::vec2 finalWorldPosition = GEngine::MathExtensions::Lerp(startWorldPosition, endWorldPosition, component->ProgressToTarget);
-
-				component->GetEntity().lock()->GetTransform().lock()->SetPositionXY(finalWorldPosition);
-
-				if (component->ProgressToTarget >= 1)
-				{
-					component->ProgressToTarget = component->ProgressToTarget - 1;
-					component->GridPosition = targetGridPosition;
-
-					TryApplyNextDirection(
-						tileMapComponent.get(),
-						component.get(),
-						component->NextDirection
-					);
-
-					component->GetEntity().lock()->GetTransform().lock()->SetPositionXY(endWorldPosition);
-				}
-			}
-			else
-			{
-				TryApplyNextDirection(
-					tileMapComponent.get(),
-					component.get(),
-					component->NextDirection
-				);
-			}
+			TickComponent(component);
 
 			++it;
 		}
 	}
 
-	void MapMovementSystem::Add(const std::weak_ptr<MapMovementComponent> &component)
+	void MapMovementSystem::Add(const std::weak_ptr<OldMapMovementComponent> &component)
 	{
 		_components.push_back(component);
 	}
 
+	void MapMovementSystem::TickComponent(const std::shared_ptr<OldMapMovementComponent>& component)
+	{
+		if(GEngine::CardinalDirectionExtensions::AreInverseDirections(component->Direction, component->NextDirection))
+		{
+			component->GridPosition = component->GridPosition + GEngine::CardinalDirectionExtensions::GetDirectionVector(component->Direction);
+			component->Direction = component->NextDirection;
+			component->ProgressToTarget = 1 - component->ProgressToTarget;
+		}
+
+		const glm::i32vec2 directionVector = GEngine::CardinalDirectionExtensions::GetDirectionVector(component->Direction);
+		const glm::i32vec2 targetGridPosition = component->GridPosition + directionVector;
+
+		const bool canMove = _mapMovementManager->IsWalkable(targetGridPosition);
+
+		if (canMove)
+		{
+			component->TargetGridPosition = targetGridPosition;
+
+			const glm::vec2 startWorldPosition = _mapMovementManager->GridPositionToWorldPosition(component->GridPosition);
+			const glm::vec2 endWorldPosition = _mapMovementManager->GridPositionToWorldPosition(component->TargetGridPosition);
+
+			component->ProgressToTarget += component->Speed;
+
+			const glm::vec2 finalWorldPosition = GEngine::MathExtensions::Lerp(startWorldPosition, endWorldPosition, component->ProgressToTarget);
+
+			component->GetEntity().lock()->GetTransform().lock()->SetPositionXY(finalWorldPosition);
+
+			if (component->ProgressToTarget >= 1)
+			{
+				component->ProgressToTarget = component->ProgressToTarget - 1;
+				component->GridPosition = component->TargetGridPosition;
+
+				TryApplyNextDirection(
+					_mapMovementManager,
+					component.get(),
+					component->NextDirection
+				);
+
+				component->GetEntity().lock()->GetTransform().lock()->SetPositionXY(endWorldPosition);
+			}
+		}
+		else
+		{
+			TryApplyNextDirection(
+				_mapMovementManager,
+				component.get(),
+				component->NextDirection
+			);
+		}
+	}
+
 	bool MapMovementSystem::TryApplyNextDirection(
 		const MapMovementManager* mapMovementManager,
-		MapMovementComponent *movementComponent,
+		OldMapMovementComponent *movementComponent,
 		const GEngine::CardinalDirection direction
 
 		)
@@ -109,7 +115,7 @@ namespace PacMan
 
 	bool MapMovementSystem::IsValidNextDirection(
 		const MapMovementManager* mapMovementManager,
-		const MapMovementComponent *movementComponent,
+		const OldMapMovementComponent *movementComponent,
 		const GEngine::CardinalDirection direction
 		)
 	{

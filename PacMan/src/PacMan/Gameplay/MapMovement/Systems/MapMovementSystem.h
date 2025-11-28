@@ -19,33 +19,35 @@ namespace GEngine
 
 namespace PacMan
 {
-	class MapMovementComponent;
+	class OldMapMovementComponent;
 
-	class MapMovementSystem : public GEngine::System
+	class MapMovementSystem final : public GEngine::System
 	{
 	public:
-		explicit MapMovementSystem(const std::weak_ptr<MapMovementManager> &mapMovementManager);
+		explicit MapMovementSystem(MapMovementManager* mapMovementManager);
 
 		void Tick() override;
 
-		void Add(const std::weak_ptr<MapMovementComponent> &component);
+		void Add(const std::weak_ptr<OldMapMovementComponent> &component);
 
 	private:
+		void TickComponent(const std::shared_ptr<OldMapMovementComponent>& component);
+
 		static bool TryApplyNextDirection(
 			const MapMovementManager* mapMovementManager,
-			MapMovementComponent *movementComponent,
-			const GEngine::CardinalDirection direction
+			OldMapMovementComponent *movementComponent,
+			GEngine::CardinalDirection direction
 		);
 
 		static bool IsValidNextDirection(
 			const MapMovementManager* mapMovementManager,
-			const MapMovementComponent* movementComponent,
+			const OldMapMovementComponent* movementComponent,
 			GEngine::CardinalDirection direction
 			);
 
 	private:
-		std::weak_ptr<MapMovementManager> _mapMovementManagerPtr;
-		std::vector<std::weak_ptr<MapMovementComponent>> _components;
+		MapMovementManager* const _mapMovementManager;
+		std::vector<std::weak_ptr<OldMapMovementComponent>> _components;
 	};
 }
 

@@ -42,7 +42,6 @@ namespace GEngine
 		_examples = std::make_unique<ExamplesModule>();
 
 		_modules = std::make_unique<GEngineCoreModules>(
-
 			_entities.get(),
 			_game.get(),
 			_camera.get(),
@@ -78,7 +77,6 @@ namespace GEngine
 		_camera->Init(_modules.get());
 		_tweens->Init(_modules.get());
 		_ui->Init(_modules.get());
-		_systems->Init(_modules.get());
 		_game->Init(_modules.get());
 	}
 

@@ -41,6 +41,31 @@ namespace GEngine
 			return { 0, 0 };
 		}
 
+		static CardinalDirection GetCardinalDirection(const glm::i32vec2& direction)
+		{
+			if (direction.x < 0)
+			{
+				return CardinalDirection::LEFT;
+			}
+
+			if (direction.x > 0)
+			{
+				return CardinalDirection::RIGHT;
+			}
+
+			if (direction.y < 0)
+			{
+				return CardinalDirection::DOWN;
+			}
+
+			if (direction.y > 0)
+			{
+				return CardinalDirection::UP;
+			}
+
+			return CardinalDirection::LEFT;
+		}
+
 		static bool AreInverseDirections(const CardinalDirection direction1, const CardinalDirection direction2)
 		{
 			switch (direction1)

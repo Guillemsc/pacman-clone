@@ -35,12 +35,12 @@ namespace GEngine
 		std::weak_ptr<tmx::Map> GetRawMap() const;
 
 		glm::i32vec2 GetGridSize() const;
+		glm::i32vec2 TiledGridPositionToEngineGridPosition(glm::i32vec2 gridPosition) const;
 
 		std::int32_t GetLayerIndexFromLayerName(const std::string& layerName) const;
 		std::optional<std::reference_wrapper<const tmx::TileLayer>> GetTileLayer(std::int32_t layerIndex) const;
 
 		std::int32_t GetTileIdFromGridPosition(const tmx::TileLayer& layer, const glm::i32vec2& gridPosition) const;
-		glm::i32vec2 GetGridPositionFromTileId(uint32_t gid) const;
 		std::int32_t GetTilesetIndexForTileId(uint32_t gid) const;
 		std::optional<std::reference_wrapper<const tmx::Tileset>> GetTilesetForTileID(const uint32_t gid) const;
 

@@ -49,8 +49,6 @@ add_library(GEngineCore STATIC
         src/GEngine/Systems/System.h
         src/GEngine/Components/Shape2dRendererComponent.cpp
         src/GEngine/Components/Shape2dRendererComponent.h
-        src/GEngine/Systems/TickShapeRenderer2dComponentsSystem.cpp
-        src/GEngine/Systems/TickShapeRenderer2dComponentsSystem.h
         src/GEngine/Entities/Entity.cpp
         src/GEngine/Events/Event.h
         src/GEngine/Rendering/ImGuiRenderer.cpp
@@ -253,6 +251,7 @@ add_library(GEngineCore STATIC
         src/GEngine/Cameras/Camera2d.h
         src/GEngine/Components/Camera2dComponent.cpp
         src/GEngine/Components/Camera2dComponent.h
+        src/GEngine/Hashes/Vec2IntHash.h
 )
 
 # Link raylib

@@ -7,6 +7,7 @@
 
 #include <memory>
 
+#include "GEngine/Data/CellPosition.h"
 #include "glm/vec2.hpp"
 
 namespace GEngine
@@ -16,18 +17,15 @@ namespace GEngine
 
 namespace PacMan
 {
-	class MapMovementComponent;
+	class OldMapMovementComponent;
 
 	class MapMovementManager
 	{
 	public:
-		MapMovementManager(
-			const std::weak_ptr<GEngine::TiledMap2dRendererComponent>& tiledMap,
-			const std::string& walkablityLayerName
-			);
+		explicit MapMovementManager(const std::weak_ptr<GEngine::TiledMap2dRendererComponent>& tiledMap);
 
-		void SetGridPosition(const std::weak_ptr<MapMovementComponent> &gridMovementComponentPtr, const glm::ivec2& gridPosition) const;
-		glm::vec2 GridPositionToWorldPosition(const glm::ivec2& gridPosition) const;
+		void SetGridPosition(const std::weak_ptr<OldMapMovementComponent> &gridMovementComponentPtr, const glm::ivec2& gridPosition) const;
+		glm::vec2 GridPositionToWorldPosition(const glm::ivec2& gridPosition, const GEngine::CellPosition& cellPosition = GEngine::CellPosition::CENTER) const;
 		bool IsWalkable(const glm::ivec2& gridPosition) const;
 
 	private:

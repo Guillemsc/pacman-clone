@@ -37,6 +37,13 @@ namespace GEngine
 		return { gridSize.x, gridSize.y };
 	}
 
+	glm::i32vec2 TiledMapResource::TiledGridPositionToEngineGridPosition(glm::i32vec2 gridPosition) const
+	{
+		const glm::i32vec2 gridSize = GetGridSize();
+		const std::int32_t gridPositionY = gridSize.y - gridPosition.y - 1;
+		return { gridPosition.x, gridPositionY };
+	}
+
 	std::int32_t TiledMapResource::GetLayerIndexFromLayerName(const std::string &layerName) const
 	{
 		if (!_tiledMapPtr) return -1;
@@ -76,24 +83,14 @@ namespace GEngine
 		if (!_tiledMapPtr) return 0;
 		const tmx::Vector2u mapGridSize = _tiledMapPtr->getTileCount();
 
-		const std::int32_t tileIdIndex = gridPosition.y * mapGridSize.x + gridPosition.x;
+		const glm::i32vec2 engineGridPosition = TiledGridPositionToEngineGridPosition(gridPosition);
+		const std::int32_t tileIdIndex = engineGridPosition.y * mapGridSize.x + engineGridPosition.x;
 		const std::vector<tmx::TileLayer::Tile>& tiles = layer.getTiles();
 
 		const bool outsideTileIdsBounds = tileIdIndex >= tiles.size();
 		if (outsideTileIdsBounds) return 0;
 
 		return tiles[tileIdIndex].ID;
-	}
-
-	glm::i32vec2 TiledMapResource::GetGridPositionFromTileId(const uint32_t gid) const
-	{
-		if (!_tiledMapPtr) return { 0, 0 };
-		const tmx::Vector2u mapGridSize = _tiledMapPtr->getTileCount();
-
-		std::int32_t x = gid % mapGridSize.x;
-		std::int32_t y = gid / mapGridSize.x;
-
-		return { x, y };
 	}
 
 	std::int32_t TiledMapResource::GetTilesetIndexForTileId(const uint32_t gid) const

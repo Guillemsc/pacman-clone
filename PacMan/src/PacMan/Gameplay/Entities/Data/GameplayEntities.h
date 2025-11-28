@@ -17,6 +17,7 @@ namespace PacMan
 {
 	class GameplayEntities
 	{
+	public:
 		std::weak_ptr<GEngine::Entity> Player;
 		std::vector<std::weak_ptr<GEngine::Entity>> Ghosts;
 		std::vector<std::weak_ptr<GEngine::Entity>> Collectables;

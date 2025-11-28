@@ -341,6 +341,12 @@ namespace GEngine
 			tilePositionY += _tilePixelSize.y * 0.5f;
 		}
 
+		if (cellPosition == CellPosition::CENTER_RIGHT)
+		{
+			tilePositionX += _tilePixelSize.x;
+			tilePositionY += _tilePixelSize.y * 0.5f;
+		}
+
 		const glm::vec2 point = { tilePositionX, tilePositionY };
 		const glm::vec2 pivot = tilemapPosition;
 		const glm::vec2 finalPosition = MathExtensions::RotatePointAroundPivot(point, pivot, -tilemapRotation);

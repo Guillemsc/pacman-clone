@@ -14,7 +14,7 @@ namespace GEngine
 	struct Color01
 	{
 		Color01(float r, float g, float b, float a = 1);
-		Color01(char scalar);
+		explicit Color01(char scalar);
 		Color01();
 
 		static Color01 FromHex(const std::string& hex);

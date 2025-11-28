@@ -19,7 +19,6 @@ namespace GEngine
 	public:
 		SystemsModule();
 
-		void Init(GEngineCoreModules* modules);
 		void Tick();
 		void Dispose();
 

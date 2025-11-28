@@ -29,12 +29,14 @@ namespace PacMan
 		void Start();
 		void Dispose();
 
-		GEngine::Scene GetScene() const;
-
 	protected:
 		virtual tokoro::Async<void> OnLoadAsync();
 		virtual void OnStart();
 		virtual void OnDispose();
+
+	protected:
+		GEngine::GEngineCoreModules* const _modules;
+		std::unique_ptr<GEngine::Scene> _scene;
 
 	private:
 		const std::string _name;
@@ -42,11 +44,6 @@ namespace PacMan
 		bool _loaded = false;
 		bool _started = false;
 		bool _disposed = false;
-
-		GEngine::Scene _scene;
-
-	protected:
-		GEngine::GEngineCoreModules* const _modules;
 	};
 }
 
