@@ -11,9 +11,7 @@
 #include "PacMan/Gameplay/Entities/Data/GameplayEntities.h"
 #include "PacMan/Gameplay/Input/Systems/PlayerInputSystem.h"
 #include "PacMan/Gameplay/MapMovement/Components/MapMovementComponent.h"
-#include "PacMan/Gameplay/MapMovement/Components/OldMapMovementComponent.h"
 #include "PacMan/Gameplay/MapMovement/Managers/MapMovementManager.h"
-#include "PacMan/Gameplay/MapMovement/Systems/MapMovementSystem.h"
 
 namespace PacMan
 {

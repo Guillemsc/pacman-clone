@@ -34,7 +34,6 @@
 #include "GEngine/ServiceLocators/ServiceLocator.h"
 #include "GEngine/Systems/System.h"
 #include "GEngine/Timers/ChronoTimer.h"
-#include "../Gameplay/MapMovement/Components/OldMapMovementComponent.h"
 #include "PacMan/Contexts/ContextsStack.h"
 #include "PacMan/Contexts/GameplayContext.h"
 #include "PacMan/Contexts/MetaContext.h"

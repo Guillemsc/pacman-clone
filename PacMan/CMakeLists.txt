@@ -6,10 +6,6 @@ set(CMAKE_CXX_STANDARD 20)
 add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Games/PacManGame.h
         src/PacMan/Games/PacManGame.cpp
-        src/PacMan/Gameplay/MapMovement/Systems/MapMovementSystem.cpp
-        src/PacMan/Gameplay/MapMovement/Systems/MapMovementSystem.h
-        src/PacMan/Gameplay/MapMovement/Components/OldMapMovementComponent.cpp
-        src/PacMan/Gameplay/MapMovement/Components/OldMapMovementComponent.h
         src/PacMan/Flow/FlowManager.cpp
         src/PacMan/Flow/FlowManager.h
         src/PacMan/Contexts/GameplayContext.cpp
@@ -37,16 +33,16 @@ add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Gameplay/Ghosts/Enums/GhostType.h
         src/PacMan/Gameplay/Player/Components/PlayerComponent.cpp
         src/PacMan/Gameplay/Player/Components/PlayerComponent.h
-        src/PacMan/Gameplay/MapMovement/Components/MapPathfindingComponent.cpp
-        src/PacMan/Gameplay/MapMovement/Components/MapPathfindingComponent.h
         src/PacMan/Gameplay/MapMovement/Managers/MapPathfindingManager.cpp
         src/PacMan/Gameplay/MapMovement/Managers/MapPathfindingManager.h
         src/PacMan/Gameplay/MapMovement/Data/PathfindingNode.h
         src/PacMan/Gameplay/MapMovement/Comparers/PathfindingComparer.h
-        src/PacMan/Gameplay/MapMovement/Systems/MapPathfindingSystem.cpp
-        src/PacMan/Gameplay/MapMovement/Systems/MapPathfindingSystem.h
         src/PacMan/Gameplay/MapMovement/Components/MapMovementComponent.cpp
         src/PacMan/Gameplay/MapMovement/Components/MapMovementComponent.h
+        src/PacMan/Gameplay/Ghosts/Components/GhostAiComponent.cpp
+        src/PacMan/Gameplay/Ghosts/Components/GhostAiComponent.h
+        src/PacMan/Gameplay/Ghosts/Components/RedGhostAiComponent.cpp
+        src/PacMan/Gameplay/Ghosts/Components/RedGhostAiComponent.h
 )
 
 target_link_libraries(PacMan PRIVATE GEngineCore)

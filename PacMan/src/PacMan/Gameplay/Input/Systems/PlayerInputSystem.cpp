@@ -6,7 +6,6 @@
 
 #include "raylib.h"
 #include "PacMan/Gameplay/MapMovement/Components/MapMovementComponent.h"
-#include "PacMan/Gameplay/MapMovement/Components/OldMapMovementComponent.h"
 
 namespace PacMan
 {

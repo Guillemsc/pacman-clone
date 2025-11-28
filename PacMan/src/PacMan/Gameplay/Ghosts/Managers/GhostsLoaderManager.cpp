@@ -9,10 +9,10 @@
 #include "GEngine/Entities/Entity.h"
 #include "GEngine/Scenes/Scene.h"
 #include "PacMan/Gameplay/Entities/Data/GameplayEntities.h"
+#include "PacMan/Gameplay/Ghosts/Components/RedGhostAiComponent.h"
 #include "PacMan/Gameplay/MapLoading/Data/LoadedMapData.h"
 #include "PacMan/Gameplay/MapMovement/Components/MapMovementComponent.h"
-#include "PacMan/Gameplay/MapMovement/Components/OldMapMovementComponent.h"
-#include "PacMan/Gameplay/MapMovement/Systems/MapMovementSystem.h"
+#include "PacMan/Gameplay/MapMovement/Managers/MapMovementManager.h"
 
 namespace PacMan
 {
@@ -59,6 +59,11 @@ namespace PacMan
 		{
 			const std::shared_ptr<MapMovementComponent> mapMovement = ghostEntity->AddComponent<MapMovementComponent>().lock();
 			mapMovement->SetGridPosition(gridPosition);
+
+			SetupGhostAi(ghostEntity.get(), ghostType);
+
+			const std::shared_ptr<GhostAiComponent> ai = ghostEntity->GetComponent<GhostAiComponent>().lock();
+			ai->Init(mapMovement);
 		}
 
 		_gameplayEntities->Ghosts.push_back(ghostEntity);
@@ -96,5 +101,29 @@ namespace PacMan
 		}
 
 		return GEngine::Color01(0, 0, 0);;
+	}
+
+	void GhostsLoaderManager::SetupGhostAi(GEngine::Entity *ghostEntity, const GhostType ghostType)
+	{
+		switch (ghostType)
+		{
+			case RED_GHOST_TYPE:
+			{
+				ghostEntity->AddComponent<RedGhostAiComponent>();
+				break;
+			}
+			case ORANGE_GHOST_TYPE:
+			{
+				break;
+			}
+			case CIAN_GHOST_TYPE:
+			{
+				break;
+			}
+			case PINK_GHOST_TYPE:
+			{
+				break;
+			}
+		}
 	}
 }

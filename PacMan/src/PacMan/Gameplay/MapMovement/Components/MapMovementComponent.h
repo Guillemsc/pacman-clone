@@ -5,6 +5,8 @@
 #ifndef MAPMOVEMENTCOMPONENT_H
 #define MAPMOVEMENTCOMPONENT_H
 
+#include <optional>
+
 #include "GEngine/Components/Component.h"
 #include "GEngine/Data/CellPosition.h"
 #include "GEngine/Directions/CardinalDirection.h"
@@ -34,6 +36,7 @@ namespace PacMan
 		bool MoveTowardsPosition(GEngine::TransformComponent* transform, glm::vec2 targetPosition, float speed);
 
 		void TryGenerateNextPathIfEmpty();
+		void ClearPath();
 
 		bool IsValidNextDirection(
 			const glm::i32vec2& originGridPosition,
@@ -46,12 +49,11 @@ namespace PacMan
 
 		std::vector<glm::i32vec2> _pathToFollow;
 		float _distanceCarriedFromLastPathPoint = 0;
-		glm::vec2 _currentDirectionVector = glm::i32vec2(0);
-		glm::i32vec2 _lastPathDirectionVector = glm::i32vec2(0);
-		bool _hasValidLastPathPoint = false;
+		glm::i32vec2 _currentDirectionVector = glm::i32vec2(0);
+		glm::i32vec2 _lastPathPointDirectionVector = glm::i32vec2(0);
+		bool _hasValidLastPathPointData = false;
 
-		GEngine::CardinalDirection _nextDirectionWhenPathEmpty = GEngine::CardinalDirection::RIGHT;
-		bool _hasValidNextDirectionWhenPathEmpty = false;
+		std::optional<GEngine::CardinalDirection> _nextDirectionWhenPathEmpty;
 	};
 }
 

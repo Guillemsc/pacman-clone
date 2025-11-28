@@ -6,7 +6,6 @@
 
 #include "GEngine/Components/TiledMap2dRendererComponent.h"
 #include "GEngine/Components/TransformComponent.h"
-#include "PacMan/Gameplay/MapMovement/Components/OldMapMovementComponent.h"
 
 namespace PacMan
 {
@@ -20,35 +19,6 @@ namespace PacMan
 		{
 			_walkabilityLayerIndex = lTiledMap->GetLayerNameFromLayerIndex("Walkability");
 		}
-	}
-
-	void MapMovementManager::SetGridPosition(
-		const std::weak_ptr<OldMapMovementComponent> &gridMovementComponentPtr,
-		const glm::ivec2 &gridPosition
-		) const
-	{
-		const std::shared_ptr<OldMapMovementComponent> gridMovementComponent = gridMovementComponentPtr.lock();
-		if (!gridMovementComponent) return;
-
-		const std::shared_ptr<GEngine::Entity> entity = gridMovementComponent->GetEntity().lock();
-		if (!entity) return;
-
-		const std::shared_ptr<GEngine::TransformComponent> transform = entity->GetTransform().lock();
-		if (!transform) return;
-
-		const std::shared_ptr<GEngine::TiledMap2dRendererComponent> tiledMapComponent = _tiledMap.lock();
-		if (!tiledMapComponent) return;
-
-		const bool hasTile = tiledMapComponent->HasTileAtGridPosition(_walkabilityLayerIndex, gridPosition);
-		if (!hasTile) return;
-
-		const glm::vec2 worldPosition = tiledMapComponent->GridPositionToWorldPosition(
-			gridPosition,
-			GEngine::CENTER
-			);
-
-		gridMovementComponent->GridPosition = gridPosition;
-		transform->SetPositionXY(worldPosition);
 	}
 
 	glm::vec2 MapMovementManager::GridPositionToWorldPosition(const glm::ivec2 &gridPosition, const GEngine::CellPosition& cellPosition) const

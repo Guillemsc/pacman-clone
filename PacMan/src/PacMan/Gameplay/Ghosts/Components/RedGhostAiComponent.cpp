@@ -1,0 +1,30 @@
+//
+// Created by guillem on 11/28/25.
+//
+
+#include "RedGhostAiComponent.h"
+
+#include "GEngine/ServiceLocators/ServiceLocator.h"
+#include "PacMan/Gameplay/Entities/Data/GameplayEntities.h"
+
+namespace PacMan
+{
+	RedGhostAiComponent::RedGhostAiComponent(GEngine::GEngineCoreModules *modules, const std::weak_ptr<GEngine::Entity> &entity)
+		: GhostAiComponent(modules, entity)
+	{
+	}
+
+	glm::i32vec2 RedGhostAiComponent::GetChaseTargetGridPosition() const
+	{
+		const std::shared_ptr<GameplayEntities> gameplayEntities = GEngine::ServiceLocator::Get<GameplayEntities>();
+		const std::shared_ptr<GEngine::Entity> player = gameplayEntities->Player.lock();
+		const std::shared_ptr<MapMovementComponent> mapMovement = player->GetComponent<MapMovementComponent>().lock();
+
+		return mapMovement->GetGridPosition();
+	}
+
+	glm::i32vec2 RedGhostAiComponent::GetHideTargetGridPosition() const
+	{
+		return { 0, 0 };
+	}
+}

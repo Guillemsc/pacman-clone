@@ -36,6 +36,7 @@ namespace PacMan
 
 		transform->SetPositionXY(positionToSet);
 
+		ClearPath();
 		TryGenerateNextPathIfEmpty();
 	}
 
@@ -46,29 +47,25 @@ namespace PacMan
 
 	void MapMovementComponent::SetNextDirection(const GEngine::CardinalDirection &nextDirection)
 	{
-		_nextDirectionWhenPathEmpty = nextDirection;
-		_hasValidNextDirectionWhenPathEmpty = true;
-
 		const glm::i32vec2 nextDirectionVector = GEngine::CardinalDirectionExtensions::GetDirectionVector(nextDirection);
 		const bool isSameMovementDirection = _currentDirectionVector.x == nextDirectionVector.x || _currentDirectionVector.y == nextDirectionVector.y;
 
-		if (!isSameMovementDirection)
+		if (isSameMovementDirection)
 		{
-			TryGenerateNextPathIfEmpty();
-			return;
+			const glm::i32vec2 nextPosition = _currentGridPosition + nextDirectionVector;
+
+			const bool nextDirectionWhenPathEmptyIsValid = IsValidNextDirection(_currentGridPosition, nextDirection);
+
+			if (nextDirectionWhenPathEmptyIsValid)
+			{
+				ClearPath();
+				_pathToFollow.push_back(nextPosition);
+				return;
+			}
 		}
 
-		const glm::i32vec2 nextPosition = _currentGridPosition + nextDirectionVector;
-
-		const bool nextDirectionWhenPathEmptyIsValid = IsValidNextDirection(_currentGridPosition, _nextDirectionWhenPathEmpty);
-
-		if (nextDirectionWhenPathEmptyIsValid)
-		{
-			_pathToFollow.clear();
-			_pathToFollow.push_back(nextPosition);
-			_hasValidLastPathPoint = false;
-			_hasValidNextDirectionWhenPathEmpty = false;
-		}
+		_nextDirectionWhenPathEmpty = nextDirection;
+		TryGenerateNextPathIfEmpty();
 	}
 
 	void MapMovementComponent::PathfindToGridPosition(const glm::i32vec2& targetGridPosition)
@@ -77,11 +74,9 @@ namespace PacMan
 
 		const std::shared_ptr<MapPathfindingManager> mapPathfinding = GEngine::ServiceLocator::Get<MapPathfindingManager>();
 
-		_pathToFollow.clear();
+		ClearPath();
 
 		mapPathfinding->GeneratePath(_currentGridPosition, targetGridPosition, _pathToFollow);
-
-		_hasValidLastPathPoint = false;
 	}
 
 	void MapMovementComponent::MoveThroughPath()
@@ -92,7 +87,7 @@ namespace PacMan
 		const std::shared_ptr<GEngine::Entity> entity = GetEntity().lock();
 		const std::shared_ptr<GEngine::TransformComponent> transform = entity->GetTransform().lock();
 
-		glm::i32vec2 nextPathGridPosition = _pathToFollow[0];
+		const glm::i32vec2 nextPathGridPosition = _pathToFollow[0];
 		_currentDirectionVector = GEngine::Vec2Extensions::SafeNormalize(nextPathGridPosition - _currentGridPosition);
 
 		const glm::vec2 currentTargetPosition = mapMovement->GridPositionToWorldPosition(nextPathGridPosition);
@@ -101,10 +96,10 @@ namespace PacMan
 
 		if (hasReachedTarget)
 		{
-			_lastPathDirectionVector = nextPathGridPosition - _currentGridPosition;
+			_lastPathPointDirectionVector = nextPathGridPosition - _currentGridPosition;
 			_currentGridPosition = nextPathGridPosition;
 			_hasValidGridPosition = true;
-			_hasValidLastPathPoint = true;
+			_hasValidLastPathPointData = true;
 
 			_pathToFollow.erase(_pathToFollow.begin());
 
@@ -150,33 +145,34 @@ namespace PacMan
 	{
 		if(!_pathToFollow.empty()) return;
 
-		const std::shared_ptr<MapMovementManager> mapMovement = GEngine::ServiceLocator::Get<MapMovementManager>();
-
-		if (_hasValidNextDirectionWhenPathEmpty)
+		if (_nextDirectionWhenPathEmpty.has_value())
 		{
-			const bool nextDirectionWhenPathEmptyIsValid = IsValidNextDirection(_currentGridPosition, _nextDirectionWhenPathEmpty);
+			const GEngine::CardinalDirection nextDirectionWhenPathEmpty = _nextDirectionWhenPathEmpty.value();
+			const bool isNextDirectionWhenPathEmptyValid = IsValidNextDirection(_currentGridPosition, nextDirectionWhenPathEmpty);
 
-			if (nextDirectionWhenPathEmptyIsValid)
+			if (isNextDirectionWhenPathEmptyValid)
 			{
-				const glm::i32vec2 directionVector = GEngine::CardinalDirectionExtensions::GetDirectionVector(_nextDirectionWhenPathEmpty);
+				const glm::i32vec2 directionVector = GEngine::CardinalDirectionExtensions::GetDirectionVector(nextDirectionWhenPathEmpty);
 				const glm::i32vec2 nextPosition = _currentGridPosition + directionVector;
 
+				ClearPath();
 				_pathToFollow.push_back(nextPosition);
-				_hasValidLastPathPoint = false;
-				_hasValidNextDirectionWhenPathEmpty = false;
+				_nextDirectionWhenPathEmpty.reset();
 				return;
 			}
 		}
 
-		if (_hasValidLastPathPoint)
+		if (_hasValidLastPathPointData)
 		{
-			const glm::i32vec2 nextPosition = _currentGridPosition + _lastPathDirectionVector;
+			const std::shared_ptr<MapMovementManager> mapMovement = GEngine::ServiceLocator::Get<MapMovementManager>();
+
+			const glm::i32vec2 nextPosition = _currentGridPosition + _lastPathPointDirectionVector;
 			const bool hasTile = mapMovement->IsWalkable(nextPosition);
 
 			if (hasTile)
 			{
+				ClearPath();
 				_pathToFollow.push_back(nextPosition);
-				_hasValidLastPathPoint = false;
 				return;
 			}
 		}
@@ -187,11 +183,17 @@ namespace PacMan
 			mapPathfinding->GenerateWalkableNeighbors(_currentGridPosition, neighbors);
 			if (!neighbors.empty())
 			{
+				ClearPath();
 				_pathToFollow.push_back(neighbors[0]);
-				_hasValidLastPathPoint = false;
 				return;
 			}
 		}
+	}
+
+	void MapMovementComponent::ClearPath()
+	{
+		_pathToFollow.clear();
+		_hasValidLastPathPointData = false;
 	}
 
 	bool MapMovementComponent::IsValidNextDirection(const glm::i32vec2& originGridPosition, const GEngine::CardinalDirection direction) const

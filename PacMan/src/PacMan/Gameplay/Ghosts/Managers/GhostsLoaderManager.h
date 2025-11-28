@@ -44,6 +44,7 @@ namespace PacMan
 
 		std::string GetGhostName(GhostType ghostType);
 		GEngine::Color01 GetGhostColor(GhostType ghostType);
+		void SetupGhostAi(GEngine::Entity* ghostEntity, GhostType ghostType);
 
 	private:
 		GEngine::GEngineCoreModules* const _modules;

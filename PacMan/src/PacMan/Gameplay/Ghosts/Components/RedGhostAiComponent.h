@@ -1,0 +1,31 @@
+//
+// Created by guillem on 11/28/25.
+//
+
+#ifndef REDGHOSTAICOMPONENT_H
+#define REDGHOSTAICOMPONENT_H
+
+#include "GhostAiComponent.h"
+
+#include <memory>
+
+namespace GEngine
+{
+	class Entity;
+	class GEngineCoreModules;
+}
+
+namespace PacMan
+{
+	class RedGhostAiComponent final : public GhostAiComponent
+	{
+	public:
+		explicit RedGhostAiComponent(GEngine::GEngineCoreModules *modules, const std::weak_ptr<GEngine::Entity> &entity);
+
+	protected:
+		glm::i32vec2 GetChaseTargetGridPosition() const override;
+		glm::i32vec2 GetHideTargetGridPosition() const override;
+	};
+}
+
+#endif //REDGHOSTAICOMPONENT_H
