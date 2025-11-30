@@ -8,6 +8,10 @@ if (WIN32)
     add_compile_definitions(NOMINMAX)
 endif()
 
+if (MSVC)
+    add_compile_options(/utf-8)
+endif()
+
 # Add raylib
 add_subdirectory(vendor/raylib)
 
@@ -285,5 +289,3 @@ target_include_directories(GEngineCore PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/vendo
 
 # Include our source
 target_include_directories(GEngineCore PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/")
-
-target_compile_definitions(GEngineCore PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX)
