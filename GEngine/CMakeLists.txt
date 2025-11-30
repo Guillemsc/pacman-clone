@@ -3,6 +3,11 @@ project(GEngineCore)
 
 set(CMAKE_CXX_STANDARD 20)
 
+if (WIN32)
+    add_compile_definitions(WIN32_LEAN_AND_MEAN)
+    add_compile_definitions(NOMINMAX)
+endif()
+
 # Add raylib
 add_subdirectory(vendor/raylib)
 
@@ -281,7 +286,4 @@ target_include_directories(GEngineCore PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/vendo
 # Include our source
 target_include_directories(GEngineCore PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/")
 
-if (MSVC)
-    target_compile_options(GEngineCore PRIVATE /utf-8)
-    target_compile_definitions(GEngineCore PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX)
-endif()
+target_compile_definitions(GEngineCore PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX)
