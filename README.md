@@ -1,4 +1,4 @@
-# PacMan Clone
+# GPacMan
 
 A simple **Pac-Man** clone done as an example of the **C++** game engine framework: **GEngine**. 
 
