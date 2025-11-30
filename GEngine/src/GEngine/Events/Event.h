@@ -5,6 +5,7 @@
 #ifndef EVENT_H
 #define EVENT_H
 #include <functional>
+#include <algorithm>
 
 namespace GEngine
 {
