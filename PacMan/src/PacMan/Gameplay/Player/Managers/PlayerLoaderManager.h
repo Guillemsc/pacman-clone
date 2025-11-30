@@ -18,7 +18,6 @@ namespace PacMan
 {
 	class PlayerInputSystem;
 	class GameplayEntities;
-	class MapMovementSystem;
 	class MapMovementManager;
 
 	class PlayerLoaderManager
@@ -28,7 +27,6 @@ namespace PacMan
 			GEngine::GEngineCoreModules* modules,
 			GEngine::Scene* scene,
 			MapMovementManager* mapMovementManager,
-			MapMovementSystem* mapMovementSystem,
 			PlayerInputSystem* playerInputSystem,
 			GameplayEntities* gameplayEntities
 			);
@@ -39,7 +37,6 @@ namespace PacMan
 		GEngine::GEngineCoreModules* const _modules;
 		GEngine::Scene* const _scene;
 		MapMovementManager* const _mapMovementManager;
-		MapMovementSystem* const _mapMovementSystem;
 		PlayerInputSystem* const _playerInputSystem;
 		GameplayEntities* const _gameplayEntities;
 	};

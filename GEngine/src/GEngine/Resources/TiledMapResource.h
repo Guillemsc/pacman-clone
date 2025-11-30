@@ -43,6 +43,7 @@ namespace GEngine
 		std::int32_t GetTileIdFromGridPosition(const tmx::TileLayer& layer, const glm::i32vec2& gridPosition) const;
 		std::int32_t GetTilesetIndexForTileId(uint32_t gid) const;
 		std::optional<std::reference_wrapper<const tmx::Tileset>> GetTilesetForTileID(const uint32_t gid) const;
+		std::optional<const tmx::Tileset::Tile*> GetLocalTileForGridPosition(const tmx::TileLayer& tileLayer, const glm::i32vec2& gridPosition) const;
 
 		std::weak_ptr<TextureResource> GetTilesetTexture(int index) const;
 

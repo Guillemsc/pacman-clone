@@ -16,6 +16,7 @@ namespace GEngine
 
 namespace PacMan
 {
+	class GhostsPrisionManager;
 	class MapPathfindingManager;
 	class PlayerInputSystem;
 	class GhostsLoaderManager;
@@ -40,6 +41,7 @@ namespace PacMan
 		std::shared_ptr<GameplayEntities> _gameplayEntities;
 		std::shared_ptr<PlayerLoaderManager> _playerLoaderManager;
 		std::shared_ptr<GhostsLoaderManager> _ghostsLoaderManager;
+		std::shared_ptr<GhostsPrisionManager> _ghostsPrisionManager;
 		std::shared_ptr<PlayerInputSystem> _playerInputSystem;
 	};
 }

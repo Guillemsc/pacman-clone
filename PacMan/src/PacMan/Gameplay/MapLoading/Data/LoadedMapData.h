@@ -19,9 +19,10 @@ namespace PacMan
 		std::weak_ptr<GEngine::TiledMap2dRendererComponent> Tilemap;
 		glm::i32vec2 PlayerPosition = glm::i32vec2(0, 0);
 		glm::i32vec2 RedGhostPosition = glm::i32vec2(0, 0);
-		glm::i32vec2 GhostPrision1Position = glm::i32vec2(0, 0);
-		glm::i32vec2 GhostPrision2Position = glm::i32vec2(0, 0);
-		glm::i32vec2 GhostPrision3Position = glm::i32vec2(0, 0);
+		glm::i32vec2 GhostPrisionLeftSlotPosition = glm::i32vec2(0, 0);
+		glm::i32vec2 GhostPrisionCenterSlotPosition = glm::i32vec2(0, 0);
+		glm::i32vec2 GhostPrisionRightSlotPosition = glm::i32vec2(0, 0);
+		glm::i32vec2 PrisionExitPosition = glm::i32vec2(0, 0);
 	};
 }
 

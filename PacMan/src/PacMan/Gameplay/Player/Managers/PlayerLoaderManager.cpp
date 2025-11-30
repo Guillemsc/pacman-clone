@@ -19,14 +19,12 @@ namespace PacMan
 		GEngine::GEngineCoreModules *modules,
 		GEngine::Scene *scene,
 		MapMovementManager* mapMovementManager,
-		MapMovementSystem* mapMovementSystem,
 		PlayerInputSystem* playerInputSystem,
 		GameplayEntities* gameplayEntities
 		)
 		: _modules(modules),
 		_scene(scene),
 		_mapMovementManager(mapMovementManager),
-		_mapMovementSystem(mapMovementSystem),
 		_playerInputSystem(playerInputSystem),
 		_gameplayEntities(gameplayEntities)
 	{

@@ -10,6 +10,7 @@
 
 #include "GEngine/Colors/Color01.h"
 #include "glm/fwd.hpp"
+#include "PacMan/Gameplay/Ghosts/Data/LoadedGhostsData.h"
 #include "PacMan/Gameplay/Ghosts/Enums/GhostType.h"
 
 namespace GEngine
@@ -22,7 +23,6 @@ namespace GEngine
 namespace PacMan
 {
 	class GameplayEntities;
-	class MapMovementSystem;
 	class MapMovementManager;
 	struct LoadedMapData;
 
@@ -33,14 +33,14 @@ namespace PacMan
 			GEngine::GEngineCoreModules* modules,
 			GEngine::Scene* scene,
 			MapMovementManager* mapMovementManager,
-			MapMovementSystem* mapMovementSystem,
 			GameplayEntities* gameplayEntities
 			);
 
 		void LoadGhosts(const LoadedMapData& loadedMapData);
+		const LoadedGhostsData& GetLoadedGhostsData() const;
 
 	private:
-		void LoadGhost(GhostType ghostType, const glm::i32vec2& gridPosition, bool isPrision);
+		std::shared_ptr<GEngine::Entity> LoadGhost(GhostType ghostType, const glm::i32vec2& gridPosition, bool isPrision);
 
 		std::string GetGhostName(GhostType ghostType);
 		GEngine::Color01 GetGhostColor(GhostType ghostType);
@@ -50,8 +50,9 @@ namespace PacMan
 		GEngine::GEngineCoreModules* const _modules;
 		GEngine::Scene* const _scene;
 		MapMovementManager* const _mapMovementManager;
-		MapMovementSystem* const _mapMovementSystem;
 		GameplayEntities* const _gameplayEntities;
+
+		LoadedGhostsData _loadedGhostsData;
 	};
 }
 

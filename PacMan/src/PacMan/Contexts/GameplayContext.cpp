@@ -15,12 +15,16 @@
 #include "GEngine/Resources/TiledMapResource.h"
 #include "PacMan/Gameplay/Entities/Data/GameplayEntities.h"
 #include "PacMan/Gameplay/Ghosts/Managers/GhostsLoaderManager.h"
+#include "PacMan/Gameplay/Ghosts/Managers/GhostsPrisionManager.h"
 #include "PacMan/Gameplay/Input/Systems/PlayerInputSystem.h"
 #include "PacMan/Gameplay/MapLoading/Managers/MapLoadingManager.h"
 #include "PacMan/Gameplay/MapMovement/Components/MapMovementComponent.h"
 #include "PacMan/Gameplay/MapMovement/Managers/MapMovementManager.h"
 #include "PacMan/Gameplay/MapMovement/Managers/MapPathfindingManager.h"
 #include "PacMan/Gameplay/Player/Managers/PlayerLoaderManager.h"
+#include "PacMan/Gameplay/Ghosts/Managers/GhostsPrisionManager.h"
+#include "PacMan/Gameplay/Ghosts/Data/LoadedGhostsData.h"
+#include "PacMan/Gameplay/Ghosts/Data/GhostPrisionSlotData.h"
 
 namespace PacMan
 {
@@ -50,7 +54,6 @@ namespace PacMan
 			_modules,
 			_scene.get(),
 			_mapMovementManager.get(),
-			_mapMovementSystem.get(),
 			_playerInputSystem.get(),
 			_gameplayEntities.get()
 			);
@@ -60,10 +63,16 @@ namespace PacMan
 			_modules,
 			_scene.get(),
 			_mapMovementManager.get(),
-			_mapMovementSystem.get(),
 			_gameplayEntities.get()
 			);
 		_ghostsLoaderManager->LoadGhosts(loadedMapData);
+		const LoadedGhostsData loadedGhostsData = _ghostsLoaderManager->GetLoadedGhostsData();
+
+		_ghostsPrisionManager = std::make_shared<GhostsPrisionManager>(
+			_modules,
+			_mapMovementManager.get()
+			);
+		_ghostsPrisionManager->Setup(loadedMapData, loadedGhostsData);
 
 		co_return;
 	}

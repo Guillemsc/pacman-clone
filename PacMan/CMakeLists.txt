@@ -43,6 +43,10 @@ add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Gameplay/Ghosts/Components/GhostAiComponent.h
         src/PacMan/Gameplay/Ghosts/Components/RedGhostAiComponent.cpp
         src/PacMan/Gameplay/Ghosts/Components/RedGhostAiComponent.h
+        src/PacMan/Gameplay/Ghosts/Managers/GhostsPrisionManager.cpp
+        src/PacMan/Gameplay/Ghosts/Managers/GhostsPrisionManager.h
+        src/PacMan/Gameplay/Ghosts/Data/GhostPrisionSlotData.h
+        src/PacMan/Gameplay/Ghosts/Data/LoadedGhostsData.h
 )
 
 target_link_libraries(PacMan PRIVATE GEngineCore)

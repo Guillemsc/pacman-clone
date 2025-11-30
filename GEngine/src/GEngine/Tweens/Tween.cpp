@@ -35,7 +35,7 @@ namespace GEngine
 		}
 	}
 
-	void Tween::AddChildren(const std::shared_ptr<Tween> &tween, const ChildrenTweenTickMode tickMode)
+	void Tween::AddChildren(const std::shared_ptr<Tween> &tween, const ChildrenTweenSequenceMode tickMode)
 	{
 		if (_started) return;
 		_children.push_back(std::make_tuple(tween, tickMode));
@@ -84,13 +84,13 @@ namespace GEngine
 		{
 			const auto& child = _children[i];
 			const std::shared_ptr<Tween> tween = std::get<std::shared_ptr<Tween>>(child);
-			const ChildrenTweenTickMode mode = std::get<ChildrenTweenTickMode>(child);
+			const ChildrenTweenSequenceMode mode = std::get<ChildrenTweenSequenceMode>(child);
 
 			bool shouldBreak = false;
 
 			switch (mode)
 			{
-				case ChildrenTweenTickMode::APPEND:
+				case ChildrenTweenSequenceMode::APPEND:
 				{
 					if (_childrenRunning.size() > 0)
 					{
@@ -105,7 +105,7 @@ namespace GEngine
 					break;
 				}
 
-				case ChildrenTweenTickMode::JOIN:
+				case ChildrenTweenSequenceMode::JOIN:
 				{
 					tween->Start();
 					_childrenRunning.push_back(i);

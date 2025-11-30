@@ -76,7 +76,13 @@ namespace GEngine
 	{
 		_currentTime += deltaTime;
 
-		float progress = MathExtensions::SafeDivide(_currentTime, _duration);
+		float progress = 1.0f;
+
+		if (_duration > 0)
+		{
+			progress = MathExtensions::SafeDivide(_currentTime, _duration);
+		}
+
 		progress = Easing::GetEasingFunction(_easingType)(progress);
 		_currentValue = MathExtensions::Lerp(_startValue, _endValue, progress);
 

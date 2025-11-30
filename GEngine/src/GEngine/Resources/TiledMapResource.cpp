@@ -121,6 +121,24 @@ namespace GEngine
 		return std::cref(tileSet);
 	}
 
+	std::optional<const tmx::Tileset::Tile*> TiledMapResource::GetLocalTileForGridPosition(
+		const tmx::TileLayer &tileLayer,
+		const glm::i32vec2 &gridPosition
+		) const
+	{
+		const std::int32_t tileId = GetTileIdFromGridPosition(tileLayer, gridPosition);
+		if (tileId == 0) return std::nullopt;
+
+		const auto optionalTileset = GetTilesetForTileID(tileId);
+		if (!optionalTileset.has_value()) return std::nullopt;
+		const tmx::Tileset& tileset = optionalTileset.value();
+
+		const tmx::Tileset::Tile* localTile = tileset.getTile(tileId);
+		if (localTile == nullptr) return std::nullopt;
+
+		return localTile;
+	}
+
 	std::weak_ptr<TextureResource> TiledMapResource::GetTilesetTexture(const int index) const
 	{
 		return VectorExtensions::GetOrDefault(_tileSetTextures, index, std::weak_ptr<TextureResource>());

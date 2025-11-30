@@ -233,7 +233,7 @@ add_library(GEngineCore STATIC
         src/GEngine/Coroutines/Coroutines.cpp
         src/GEngine/Tweens/Tween.cpp
         src/GEngine/Tweens/Tween.h
-        src/GEngine/Tweens/ChildrenTweenTickMode.h
+        src/GEngine/Tweens/ChildrenTweenSequenceMode.h
         src/GEngine/Tweens/InterpolationTween.h
         src/GEngine/Examples/Tweens/DevelopmentTweensExample.cpp
         src/GEngine/Examples/Tweens/DevelopmentTweensExample.h
@@ -280,3 +280,8 @@ target_include_directories(GEngineCore PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/vendo
 
 # Include our source
 target_include_directories(GEngineCore PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/")
+
+if (MSVC)
+    target_compile_options(GEngineCore PRIVATE /utf-8)
+    target_compile_definitions(GEngineCore PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX)
+endif()

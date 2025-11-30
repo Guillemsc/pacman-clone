@@ -7,7 +7,7 @@
 
 namespace GEngine
 {
-	enum ChildrenTweenTickMode
+	enum ChildrenTweenSequenceMode
 	{
 		APPEND,
 		JOIN,

@@ -8,7 +8,7 @@
 #include <memory>
 #include <vector>
 
-#include "ChildrenTweenTickMode.h"
+#include "ChildrenTweenSequenceMode.h"
 #include "EasingType.h"
 
 namespace GEngine
@@ -19,7 +19,7 @@ namespace GEngine
 		void Start();
 		void Tick(float deltaTime);
 
-		void AddChildren(const std::shared_ptr<Tween>& tween, ChildrenTweenTickMode tickMode = ChildrenTweenTickMode::APPEND);
+		void AddChildren(const std::shared_ptr<Tween>& tween, ChildrenTweenSequenceMode tickMode = ChildrenTweenSequenceMode::APPEND);
 		void SetEasing(EasingType easing);
 
 		bool IsPlaying() const;
@@ -46,7 +46,7 @@ namespace GEngine
 		bool _mainCompleted = false;
 		bool _childrenCompleted = false;
 
-		std::vector<std::tuple<std::shared_ptr<Tween>, ChildrenTweenTickMode>> _children;
+		std::vector<std::tuple<std::shared_ptr<Tween>, ChildrenTweenSequenceMode>> _children;
 		std::vector<std::int32_t> _childrenRunning;
 		std::int32_t _biggestRunningIndex = 0;
 	};

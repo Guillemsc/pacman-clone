@@ -35,13 +35,13 @@ namespace PacMan
 			LoadedMapData& loadedMapData,
 			const std::shared_ptr<GEngine::TiledMapResource>& tilemapResource
 		);
-
-		void LoadMapEntities(
+		void LoadMapData(
 			LoadedMapData& loadedMapData,
 			const std::shared_ptr<GEngine::TiledMapResource>& tilemapResource
 			);
 
-		void LoadTileData(LoadedMapData& loadedMapData, const glm::i32vec2& gridPosition, const tmx::Tileset::Tile *localTile);
+		void LoadEntityTileData(LoadedMapData& loadedMapData, const glm::i32vec2& gridPosition, const tmx::Tileset::Tile *localTile);
+		void LoadWalkabilityTileData(LoadedMapData& loadedMapData, const glm::i32vec2& gridPosition, const tmx::Tileset::Tile *localTile);
 
 	private:
 		GEngine::GEngineCoreModules* const _modules;

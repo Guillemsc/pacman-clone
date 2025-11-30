@@ -31,19 +31,19 @@ namespace PacMan
 		if (!tilemapResource) return;
 
 		LoadTilemapGameObject(_loadedMapData, tilemapResource);
-		LoadMapEntities(_loadedMapData, tilemapResource);
+		LoadMapData(_loadedMapData, tilemapResource);
 
 		spdlog::info("Map data loaded [Player:x{0} y{1}] [RedGhost:x{2} y{3}] [CianGhost:x{4} y{5}] [PinkGhost:x{6} y{7}] [OrangeGhost:x{8} y{9}]",
 			_loadedMapData.PlayerPosition.x,
 			_loadedMapData.PlayerPosition.y,
 			_loadedMapData.RedGhostPosition.x,
 			_loadedMapData.RedGhostPosition.y,
-			_loadedMapData.GhostPrision1Position.x,
-			_loadedMapData.GhostPrision1Position.y,
-			_loadedMapData.GhostPrision2Position.x,
-			_loadedMapData.GhostPrision2Position.y,
-			_loadedMapData.GhostPrision3Position.x,
-			_loadedMapData.GhostPrision3Position.y
+			_loadedMapData.GhostPrisionLeftSlotPosition.x,
+			_loadedMapData.GhostPrisionLeftSlotPosition.y,
+			_loadedMapData.GhostPrisionCenterSlotPosition.x,
+			_loadedMapData.GhostPrisionCenterSlotPosition.y,
+			_loadedMapData.GhostPrisionRightSlotPosition.x,
+			_loadedMapData.GhostPrisionRightSlotPosition.y
 			);
 	}
 
@@ -52,7 +52,10 @@ namespace PacMan
 		return _loadedMapData;
 	}
 
-	void MapLoadingManager::LoadTilemapGameObject(LoadedMapData& loadedMapData, const std::shared_ptr<GEngine::TiledMapResource> &tilemapResource)
+	void MapLoadingManager::LoadTilemapGameObject(
+		LoadedMapData& loadedMapData,
+		const std::shared_ptr<GEngine::TiledMapResource> &tilemapResource
+		)
 	{
 		const std::shared_ptr<GEngine::Entity> tilemapEntity = _scene->AddWorldEntity().lock();
 		tilemapEntity->SetName("Tilemap");
@@ -63,43 +66,60 @@ namespace PacMan
 		loadedMapData.Tilemap = tilemap;
 	}
 
-	void MapLoadingManager::LoadMapEntities(
+	void MapLoadingManager::LoadMapData(
 		LoadedMapData& loadedMapData,
 		const std::shared_ptr<GEngine::TiledMapResource>& tilemapResource
 	)
 	{
 		const std::string entitiesLayer = "Entities";
+		const std::string walkabilityLayer = "Walkability";
+
+		const glm::i32vec2 gridSize = tilemapResource->GetGridSize();
 
 		const std::int32_t entitiesLayerIndex = tilemapResource->GetLayerIndexFromLayerName(entitiesLayer);
 		if (entitiesLayerIndex < 0) return;
 
-		const auto optionalLayer = tilemapResource->GetTileLayer(entitiesLayerIndex);
-		if (!optionalLayer) return;
-		const tmx::TileLayer& tileLayer = optionalLayer->get();
+		const std::int32_t walkabilityLayerIndex = tilemapResource->GetLayerIndexFromLayerName(walkabilityLayer);
+		if (walkabilityLayerIndex < 0) return;
 
-		const glm::i32vec2 gridSize = tilemapResource->GetGridSize();
+		const auto optionalEntitiesLayer = tilemapResource->GetTileLayer(entitiesLayerIndex);
+		if (!optionalEntitiesLayer) return;
+		const tmx::TileLayer& entitiesTileLayer = optionalEntitiesLayer->get();
+
+		const auto optionalWalkabilityLayer = tilemapResource->GetTileLayer(walkabilityLayerIndex);
+		if (!optionalWalkabilityLayer) return;
+		const tmx::TileLayer& walkabilityTileLayer = optionalWalkabilityLayer->get();
 
 		for (std::int32_t y = 0; y < gridSize.y; ++y)
 		{
 			for (std::int32_t x = 0; x < gridSize.x; ++x)
 			{
 				const glm::i32vec2 gridPosition = { x, y };
-				const std::int32_t tileId = tilemapResource->GetTileIdFromGridPosition(tileLayer, gridPosition);
-				if (tileId == 0) continue;
 
-				auto optionalTileset = tilemapResource->GetTilesetForTileID(tileId);
-				if (!optionalTileset.has_value()) continue;
-				const tmx::Tileset& tileset = optionalTileset.value();
+				auto optionalEntityLocalTile = tilemapResource->GetLocalTileForGridPosition(entitiesTileLayer, gridPosition);
 
-				const tmx::Tileset::Tile* localTile = tileset.getTile(tileId);
-				if (localTile == nullptr) continue;
+				if (optionalEntityLocalTile.has_value())
+				{
+					const tmx::Tileset::Tile* localTile  = optionalEntityLocalTile.value();
+					LoadEntityTileData(loadedMapData, gridPosition, localTile);
+				}
 
-				LoadTileData(loadedMapData, gridPosition, localTile);
+				auto optionalWalkabilityLocalTile = tilemapResource->GetLocalTileForGridPosition(walkabilityTileLayer, gridPosition);
+
+				if (optionalWalkabilityLocalTile.has_value())
+				{
+					const tmx::Tileset::Tile* walkabilityLocalTile  = optionalWalkabilityLocalTile.value();
+					LoadWalkabilityTileData(loadedMapData, gridPosition, walkabilityLocalTile);
+				}
 			}
 		}
 	}
 
-	void MapLoadingManager::LoadTileData(LoadedMapData& loadedMapData, const glm::i32vec2& gridPosition, const tmx::Tileset::Tile *localTile)
+	void MapLoadingManager::LoadEntityTileData(
+		LoadedMapData& loadedMapData,
+		const glm::i32vec2& gridPosition,
+		const tmx::Tileset::Tile *localTile
+		)
 	{
 		const std::string typeProperty = GEngine::TiledMapResource::GetTilesetTileStringProperty(localTile, "type", "");
 
@@ -115,17 +135,31 @@ namespace PacMan
 
 		if (typeProperty == "ghostPrision1")
 		{
-			loadedMapData.GhostPrision1Position = gridPosition;
+			loadedMapData.GhostPrisionLeftSlotPosition = gridPosition;
 		}
 
 		if (typeProperty == "ghostPrision2")
 		{
-			loadedMapData.GhostPrision2Position = gridPosition;
+			loadedMapData.GhostPrisionCenterSlotPosition = gridPosition;
 		}
 
 		if (typeProperty == "ghostPrision3")
 		{
-			loadedMapData.GhostPrision3Position = gridPosition;
+			loadedMapData.GhostPrisionRightSlotPosition = gridPosition;
+		}
+	}
+
+	void MapLoadingManager::LoadWalkabilityTileData(
+		LoadedMapData &loadedMapData,
+		const glm::i32vec2 &gridPosition,
+		const tmx::Tileset::Tile *localTile
+		)
+	{
+		const std::string typeProperty = GEngine::TiledMapResource::GetTilesetTileStringProperty(localTile, "type", "");
+
+		if (typeProperty == "prision_exit")
+		{
+			loadedMapData.PrisionExitPosition = gridPosition;
 		}
 	}
 } // PacMan

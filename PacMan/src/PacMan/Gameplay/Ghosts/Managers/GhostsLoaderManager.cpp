@@ -20,12 +20,10 @@ namespace PacMan
 		GEngine::GEngineCoreModules *modules,
 		GEngine::Scene *scene,
 		MapMovementManager *mapMovementManager,
-		MapMovementSystem *mapMovementSystem,
 		GameplayEntities *gameplayEntities
 		): _modules(modules),
 		_scene(scene),
 		_mapMovementManager(mapMovementManager),
-		_mapMovementSystem(mapMovementSystem),
 		_gameplayEntities(gameplayEntities)
 	{
 	}
@@ -33,12 +31,17 @@ namespace PacMan
 	void GhostsLoaderManager::LoadGhosts(const LoadedMapData &loadedMapData)
 	{
 		LoadGhost(RED_GHOST_TYPE, loadedMapData.RedGhostPosition, false);
-		LoadGhost(CIAN_GHOST_TYPE, loadedMapData.GhostPrision1Position, true);
-		LoadGhost(PINK_GHOST_TYPE, loadedMapData.GhostPrision2Position, true);
-		LoadGhost(ORANGE_GHOST_TYPE, loadedMapData.GhostPrision3Position, true);
+		_loadedGhostsData.LeftPrisionSlotGhostEntity = LoadGhost(CIAN_GHOST_TYPE, loadedMapData.GhostPrisionLeftSlotPosition, true);
+		_loadedGhostsData.CenterPrisionSlotGhostEntity = LoadGhost(PINK_GHOST_TYPE, loadedMapData.GhostPrisionCenterSlotPosition, true);
+		_loadedGhostsData.RightPrisionSlotGhostEntity = LoadGhost(ORANGE_GHOST_TYPE, loadedMapData.GhostPrisionRightSlotPosition, true);
 	}
 
-	void GhostsLoaderManager::LoadGhost(const GhostType ghostType, const glm::i32vec2 &gridPosition, const bool isPrision)
+	const LoadedGhostsData & GhostsLoaderManager::GetLoadedGhostsData() const
+	{
+		return _loadedGhostsData;
+	}
+
+	std::shared_ptr<GEngine::Entity> GhostsLoaderManager::LoadGhost(const GhostType ghostType, const glm::i32vec2 &gridPosition, const bool isPrision)
 	{
 		const std::string ghostName = GetGhostName(ghostType);
 		const GEngine::Color01 ghostColor = GetGhostColor(ghostType);
@@ -67,6 +70,8 @@ namespace PacMan
 		}
 
 		_gameplayEntities->Ghosts.push_back(ghostEntity);
+
+		return ghostEntity;
 	}
 
 	std::string GhostsLoaderManager::GetGhostName(const GhostType ghostType)

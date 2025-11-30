@@ -66,7 +66,7 @@ namespace GEngine
 			glm::vec2(2, 2),
 			1
 			),
-			ChildrenTweenTickMode::JOIN
+			ChildrenTweenSequenceMode::JOIN
 		);
 
 		_tween->SetEasing(EasingType::OUT_QUAD);
