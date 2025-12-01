@@ -4,7 +4,7 @@
 
 #include "InputModule.h"
 
-#include "raylib.h"
+#include "GEngine/Raylib/RaylibWrapper.h"
 #include "WindowModule.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
 #include "GEngine/Extensions/Vec2Extensions.h"

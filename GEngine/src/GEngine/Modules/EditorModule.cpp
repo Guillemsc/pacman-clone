@@ -5,7 +5,7 @@
 #include "EditorModule.h"
 
 #include "imgui.h"
-#include "raylib.h"
+#include "GEngine/Raylib/RaylibWrapper.h"
 #include "RenderingModule.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
 #include "GEngine/Editor/MenuBar/MenuBarEditor.h"

@@ -4,7 +4,7 @@
 
 #include "TextureResourceImporter.h"
 
-#include "raylib.h"
+#include "GEngine/Raylib/RaylibWrapper.h"
 #include "GEngine/Resources/TextureResource.h"
 
 namespace GEngine

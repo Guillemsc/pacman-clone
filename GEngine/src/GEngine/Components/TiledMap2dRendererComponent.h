@@ -9,7 +9,7 @@
 
 #include "Component.h"
 #include "GEngine/Data/TiledLayerData.h"
-#include "raylib.h"
+#include "GEngine/Raylib/RaylibWrapper.h"
 #include "GEngine/Data/CellPosition.h"
 #include "GEngine/Extensions/Vec2Extensions.h"
 #include "glm/vec2.hpp"

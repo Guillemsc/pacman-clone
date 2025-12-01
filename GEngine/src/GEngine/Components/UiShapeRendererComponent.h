@@ -6,7 +6,7 @@
 #define UISHAPERENDERERCOMPONENT_H
 
 #include "Component.h"
-#include "raylib.h"
+#include "GEngine/Raylib/RaylibWrapper.h"
 #include "GEngine/Colors/Color01.h"
 #include "glm/vec2.hpp"
 
@@ -31,7 +31,7 @@ namespace GEngine
 			const glm::vec2& position,
 			float rotation,
 			const glm::vec2& size,
-			const glm::vec2 center,
+			const glm::vec2& center,
 			const RectUiShape2d* rectShape
 		) const;
 

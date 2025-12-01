@@ -15,6 +15,8 @@ endif()
 # Add raylib
 add_subdirectory(vendor/raylib)
 
+target_compile_definitions(raylib PUBLIC RAYLIB_NO_WINDOWS_FUNCTIONS)
+
 # Add rlImGui
 add_subdirectory(vendor/rlImGui)
 
@@ -261,6 +263,7 @@ add_library(GEngineCore STATIC
         src/GEngine/Components/Camera2dComponent.cpp
         src/GEngine/Components/Camera2dComponent.h
         src/GEngine/Hashes/Vec2IntHash.h
+        src/GEngine/Raylib/RaylibWrapper.h
 )
 
 # Disable inclusion of Win32 API symbols that conflict with raylib

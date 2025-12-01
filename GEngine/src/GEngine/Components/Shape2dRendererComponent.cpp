@@ -4,7 +4,7 @@
 
 #include "Shape2dRendererComponent.h"
 
-#include "raylib.h"
+#include "GEngine/Raylib/RaylibWrapper.h"
 #include "TransformComponent.h"
 #include "GEngine/Colors/Color01.h"
 #include "GEngine/Extensions/Color01Extensions.h"

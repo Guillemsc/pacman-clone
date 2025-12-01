@@ -4,6 +4,7 @@
 
 #ifndef HIERARCHYEDITORWINDOW_H
 #define HIERARCHYEDITORWINDOW_H
+
 #include <vector>
 
 #include "EditorWindow.h"

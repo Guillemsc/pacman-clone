@@ -4,7 +4,7 @@
 
 #include "Renderer2d.h"
 
-#include "raylib.h"
+#include "GEngine/Raylib/RaylibWrapper.h"
 #include "GEngine/Cameras/Camera.h"
 #include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Modules/WindowModule.h"

@@ -6,7 +6,7 @@
 #define SHAPERENDERER2DCOMPONENT_H
 
 #include "Component.h"
-#include "raylib.h"
+#include "GEngine/Raylib/RaylibWrapper.h"
 #include "glm/vec2.hpp"
 
 namespace GEngine

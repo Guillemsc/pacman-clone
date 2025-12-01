@@ -5,7 +5,7 @@
 #ifndef CAMERA2D_H
 #define CAMERA2D_H
 
-#include "raylib.h"
+#include "GEngine/Raylib/RaylibWrapper.h"
 #include "glm/vec2.hpp"
 
 namespace GEngine

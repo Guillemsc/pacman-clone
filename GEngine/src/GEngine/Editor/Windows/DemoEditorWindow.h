@@ -4,6 +4,7 @@
 
 #ifndef DEMOEDITORWINDOW_H
 #define DEMOEDITORWINDOW_H
+
 #include "EditorWindow.h"
 
 namespace GEngine

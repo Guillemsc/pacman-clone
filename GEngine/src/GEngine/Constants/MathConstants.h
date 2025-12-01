@@ -4,6 +4,7 @@
 
 #ifndef MATHCONSTANTS_H
 #define MATHCONSTANTS_H
+
 #include "glm/vec3.hpp"
 
 namespace GEngine {

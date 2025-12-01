@@ -6,7 +6,7 @@
 #define TRANSFORMCOMPONENT_H
 
 #include "Component.h"
-#include "raylib.h"
+#include "GEngine/Raylib/RaylibWrapper.h"
 #include "raymath.h"
 #include "glm/vec3.hpp"
 #include "glm/vec2.hpp"
@@ -15,7 +15,7 @@
 
 namespace GEngine
 {
-	class TransformComponent : public Component, public std::enable_shared_from_this<TransformComponent>
+	class TransformComponent final : public Component, public std::enable_shared_from_this<TransformComponent>
 	{
 		friend class EntitiesModule;
 

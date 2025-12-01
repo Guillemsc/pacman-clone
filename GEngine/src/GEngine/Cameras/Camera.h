@@ -5,7 +5,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "raylib.h"
+#include "GEngine/Raylib/RaylibWrapper.h"
 
 #include "glm/fwd.hpp"
 #include "glm/vec3.hpp"

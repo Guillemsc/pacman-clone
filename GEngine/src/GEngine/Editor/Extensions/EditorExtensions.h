@@ -7,7 +7,7 @@
 
 #include <memory>
 
-#include "raylib.h"
+#include "GEngine/Raylib/RaylibWrapper.h"
 
 namespace GEngine
 {

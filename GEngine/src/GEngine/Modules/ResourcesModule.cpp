@@ -4,7 +4,7 @@
 
 #include "ResourcesModule.h"
 
-#include "raylib.h"
+#include "GEngine/Raylib/RaylibWrapper.h"
 #include "GEngine/Extensions/StringExtensions.h"
 #include "GEngine/Extensions/UnorderedMapExtensions.h"
 #include "GEngine/ResourceImporters/FontResourceImporter.h"

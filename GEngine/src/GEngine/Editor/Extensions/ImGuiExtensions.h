@@ -4,6 +4,7 @@
 
 #ifndef IMGUIEXTENSIONS_H
 #define IMGUIEXTENSIONS_H
+
 #include <string>
 
 #include "imgui.h"

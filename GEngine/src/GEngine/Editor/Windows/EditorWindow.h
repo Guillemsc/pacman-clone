@@ -4,6 +4,7 @@
 
 #ifndef EDITORWINDOW_H
 #define EDITORWINDOW_H
+
 #include <memory>
 
 #include "GEngine/Core/GEngineCoreModules.h"

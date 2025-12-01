@@ -70,7 +70,7 @@ namespace GEngine
 		const glm::vec2 &position,
 		const float rotation,
 		const glm::vec2 &size,
-		const glm::vec2 center,
+		const glm::vec2 &center,
 		const RectUiShape2d *rectShape
 		) const
 	{

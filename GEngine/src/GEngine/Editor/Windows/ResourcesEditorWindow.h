@@ -4,6 +4,7 @@
 
 #ifndef RESOURCESEDITORWINDOW_H
 #define RESOURCESEDITORWINDOW_H
+
 #include "EditorWindow.h"
 
 namespace GEngine

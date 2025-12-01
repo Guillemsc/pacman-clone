@@ -5,7 +5,7 @@
 #include "WindowModule.h"
 
 #include "EntitiesModule.h"
-#include "raylib.h"
+#include "GEngine/Raylib/RaylibWrapper.h"
 #include "UiModule.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
 

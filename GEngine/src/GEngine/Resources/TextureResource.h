@@ -5,7 +5,7 @@
 #ifndef TEXTURERESOURCE_H
 #define TEXTURERESOURCE_H
 
-#include "raylib.h"
+#include "GEngine/Raylib/RaylibWrapper.h"
 #include "Resource.h"
 
 namespace GEngine

@@ -4,6 +4,7 @@
 
 #ifndef UIEDITORWINDOW_H
 #define UIEDITORWINDOW_H
+
 #include "EditorWindow.h"
 
 namespace GEngine

@@ -4,7 +4,7 @@
 
 #include "TimeModule.h"
 
-#include "raylib.h"
+#include "GEngine/Raylib/RaylibWrapper.h"
 
 namespace GEngine
 {

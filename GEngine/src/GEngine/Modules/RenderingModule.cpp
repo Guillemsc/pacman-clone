@@ -5,7 +5,7 @@
 #include "RenderingModule.h"
 
 #include "CameraModule.h"
-#include "raylib.h"
+#include "GEngine/Raylib/RaylibWrapper.h"
 #include "rlgl.h"
 #include "GEngine/Cameras/Camera.h"
 #include "GEngine/Cameras/Camera2d.h"
