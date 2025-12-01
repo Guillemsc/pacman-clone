@@ -15,9 +15,6 @@ endif()
 # Add raylib
 add_subdirectory(vendor/raylib)
 
-# Disable inclusion of Win32 API symbols that conflict with raylib
-target_compile_definitions(raylib PUBLIC RAYLIB_NO_WINDOWS_FUNCTIONS)
-
 # Add rlImGui
 add_subdirectory(vendor/rlImGui)
 
@@ -29,6 +26,9 @@ add_subdirectory(vendor/glm)
 
 # Add tmxlite
 add_subdirectory(vendor/tmxlite)
+
+# Disable inclusion of Win32 API symbols that conflict with raylib
+target_compile_definitions(GEngineCore PUBLIC RAYLIB_NO_WINDOWS_FUNCTIONS)
 
 # Add ourselves
 add_library(GEngineCore STATIC
