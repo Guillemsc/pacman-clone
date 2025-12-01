@@ -15,6 +15,9 @@ endif()
 # Add raylib
 add_subdirectory(vendor/raylib)
 
+# Disable inclusion of Win32 API symbols that conflict with raylib
+target_compile_definitions(raylib PUBLIC RAYLIB_NO_WINDOWS_FUNCTIONS)
+
 # Add rlImGui
 add_subdirectory(vendor/rlImGui)
 
