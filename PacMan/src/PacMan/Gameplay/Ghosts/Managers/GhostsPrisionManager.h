@@ -7,6 +7,7 @@
 
 #include <vector>
 
+#include "tokoro.h"
 #include "GEngine/Timers/ChronoTimer.h"
 #include "glm/vec2.hpp"
 
@@ -41,7 +42,7 @@ namespace PacMan
 	private:
 		void ReleaseNextGhost();
 		GhostPrisionSlotData* GetNextSlotToReleaseOrNull() const;
-		void PlayReleaseGhost(const std::shared_ptr<GEngine::Entity> &ghostEntity);
+		tokoro::Async<void> PlayReleaseGhostAsync(const std::shared_ptr<GEngine::Entity> &ghostEntity);
 
 	private:
 		GEngine::GEngineCoreModules* const _modules;

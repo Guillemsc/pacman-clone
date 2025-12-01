@@ -5,25 +5,19 @@
 #ifndef RAYLIBWRAPPER_H
 #define RAYLIBWRAPPER_H
 
-#if defined(_WIN32) || defined(_WIN64)
-#define CloseWindow RaylibCloseWindow
-#define ShowCursor RaylibShowCursor
-#define HideCursor RaylibHideCursor
-#define IsCursorHidden RaylibIsCursorHidden
-#endif
+//#if defined(_WIN32) || defined(_WIN64)
+
+//#endif
 
 #include "raylib.h"
+#include "raymath.h"
 
-#if defined(_WIN32) || defined(_WIN64)
-#undef CloseWindow
-#undef ShowCursor
-#undef HideCursor
-#undef IsCursorHidden
+inline void Raylib_CloseWindow() { ::CloseWindow(); }
+inline void Raylib_ShowCursor() { ::ShowCursor(); }
+inline void Raylib_HideCursor() { ::HideCursor(); }
+inline bool Raylib_IsCursorHidden() { return ::IsCursorHidden(); }
 
-inline void CloseWindow() { RaylibCloseWindow(); }
-inline void ShowCursor() { RaylibShowCursor(); }
-inline void HideCursor() { RaylibHideCursor(); }
-inline bool IsCursorHidden() { return RaylibIsCursorHidden(); }
-#endif
+//#if defined(_WIN32) || defined(_WIN64)
+
 
 #endif //RAYLIBWRAPPER_H

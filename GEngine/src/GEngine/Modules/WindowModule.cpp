@@ -37,7 +37,7 @@ namespace GEngine
 
 	void WindowModule::Dispose()
 	{
-		CloseWindow();
+		Raylib_CloseWindow();
 	}
 
 	glm::i32vec2 WindowModule::GetWindowSize() const

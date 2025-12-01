@@ -22,7 +22,7 @@ namespace GEngine
 	class ResourcesInspectorEditor final : public GEngineObjectInspectorEditor<Resource>
 	{
 	public:
-		ResourcesInspectorEditor(GEngineCoreModules* modules);
+		explicit ResourcesInspectorEditor(GEngineCoreModules* modules);
 
 	protected:
 		void DrawSpecific(const std::shared_ptr<Resource>& inspect) override;

@@ -5,6 +5,7 @@
 #include "GhostsPrisionManager.h"
 
 #include "GEngine/Components/TransformComponent.h"
+#include "GEngine/Coroutines/Coroutines.h"
 #include "GEngine/Modules/TweensModule.h"
 #include "GEngine/Tweens/InterpolationTween.h"
 #include "GEngine/Tweens/Tween.h"
@@ -55,7 +56,7 @@ namespace PacMan
 		const std::shared_ptr<GEngine::Entity> ghostEntity = slot->ghostEntity.lock();
 		slot->ghostEntity.reset();
 
-		PlayReleaseGhost(ghostEntity);
+		GEngine::Coroutines::Start(&GhostsPrisionManager::PlayReleaseGhostAsync, this, ghostEntity).Forget();
 	}
 
 	GhostPrisionSlotData* GhostsPrisionManager::GetNextSlotToReleaseOrNull() const
@@ -78,7 +79,7 @@ namespace PacMan
 		return nullptr;
 	}
 
-	void GhostsPrisionManager::PlayReleaseGhost(const std::shared_ptr<GEngine::Entity> &ghostEntity)
+	tokoro::Async<void> GhostsPrisionManager::PlayReleaseGhostAsync(const std::shared_ptr<GEngine::Entity> &ghostEntity)
 	{
 		const std::shared_ptr<GEngine::TransformComponent> transform = ghostEntity->GetTransform().lock();
 		const glm::vec2 position = transform->GetPositionXY();
@@ -106,5 +107,7 @@ namespace PacMan
 			));
 
 		_modules->tweens->Play(tween);
+
+		co_return;
 	}
 } // PacMan
