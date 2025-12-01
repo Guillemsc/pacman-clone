@@ -9,10 +9,6 @@
 #include "rlgl.h"
 #include "GEngine/Cameras/Camera.h"
 #include "GEngine/Cameras/Camera2d.h"
-#include "GEngine/Rendering/ImGuiRenderer.h"
-#include "GEngine/Rendering/Renderer2d.h"
-#include "GEngine/Rendering/UiRenderer.h"
-#include "GEngine/Rendering/GuizmoUiRenderer.h"
 
 namespace GEngine
 {
@@ -25,10 +21,11 @@ namespace GEngine
 	{
 		_modules = modules;
 
-		_renderer2d = std::make_shared<Renderer2d>(modules);
-		_uiRenderer = std::make_shared<UiRenderer>(modules);
-		_guizmoUiRenderer = std::make_shared<GuizmoUiRenderer>(modules);
-		_imGuiRenderer = std::make_shared<ImGuiRenderer>();
+		_renderer2d = std::make_unique<Renderer2d>(modules);
+		_uiRenderer = std::make_unique<UiRenderer>(modules);
+		_guizmo2dRenderer = std::make_unique<Guizmo2dRenderer>(modules);
+		_guizmoUiRenderer = std::make_unique<GuizmoUiRenderer>(modules);
+		_imGuiRenderer = std::make_unique<ImGuiRenderer>();
 
 		_imGuiRenderer->Init();
 	}
@@ -61,6 +58,7 @@ namespace GEngine
 				BeginMode2D(currentCameraPtr->GetRawCamera());
 
 				_renderer2d->Render();
+				_guizmo2dRenderer->Render();
 
 				EndMode2D();
 			}

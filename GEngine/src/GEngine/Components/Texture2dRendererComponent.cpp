@@ -39,7 +39,7 @@ namespace GEngine
 		position.x -= rawTexture.width * 0.5f * scale.x;
 		position.y -= rawTexture.height * 0.5f * scale.y;
 
-		modules->rendering->Renderer2D().lock()->Add(0, [position, rotation, scale, rawTexture]()
+		modules->rendering->Render2d()->Add(0, [position, rotation, scale, rawTexture]()
 		{
 			RayLibExtensions::DrawTextureEx(rawTexture, {position.x, position.y}, rotation, {scale.x, scale.y}, WHITE);
 		});

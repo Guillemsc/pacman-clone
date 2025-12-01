@@ -19,7 +19,7 @@ namespace GEngine
 
 		constexpr const char* GetTypeName() override { return "Ui Transform"; }
 
-		void OnDrawSelectedGuizmo(GuizmoUiRenderer* guizmoUiRenderer) override;
+		void OnDrawSelectedGuizmo() override;
 
 		void SetAnchors(const glm::vec4& anchors) const;
 		void SetAnchoredPosition(const glm::vec2& anchoredPosition) const;

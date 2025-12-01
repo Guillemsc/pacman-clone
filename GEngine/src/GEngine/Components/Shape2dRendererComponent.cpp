@@ -37,7 +37,7 @@ namespace GEngine
 		float rotation = -transform->GetRotationEulerDegreesZ();
 		glm::vec2 scale = transform->GetScaleXY();
 
-		modules->rendering->Renderer2D().lock()->Add(_layer->GetValue(), [position, rotation, scale, this]()
+		modules->rendering->Render2d()->Add(_layer->GetValue(), [position, rotation, scale, this]()
 		{
 			if (const auto rectShape = std::dynamic_pointer_cast<RectShape2d>(_shape2d->GetValue()))
 			{

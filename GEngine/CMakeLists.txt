@@ -272,6 +272,12 @@ add_library(GEngineCore STATIC
         src/GEngine/Editor/ResourcesInspector/SpriteResourceInspectorEditor.h
         src/GEngine/Components/Sprite2dRendererComponent.cpp
         src/GEngine/Components/Sprite2dRendererComponent.h
+        src/GEngine/Components/Sprite2dAnimatorComponent.cpp
+        src/GEngine/Components/Sprite2dAnimatorComponent.h
+        src/GEngine/Sprite2dAnimator/Sprite2dAnimation.cpp
+        src/GEngine/Sprite2dAnimator/Sprite2dAnimation.h
+        src/GEngine/Rendering/Guizmo2dRenderer.cpp
+        src/GEngine/Rendering/Guizmo2dRenderer.h
 )
 
 # Disable inclusion of Win32 API symbols that conflict with raylib

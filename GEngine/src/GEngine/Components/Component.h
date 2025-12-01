@@ -34,7 +34,7 @@ namespace GEngine
 		virtual void OnTick() {};
 		virtual void OnDisable() {}
 		virtual void OnDestroy() {}
-		virtual void OnDrawSelectedGuizmo(GuizmoUiRenderer* guizmoUiRenderer) {}
+		virtual void OnDrawSelectedGuizmo() {}
 
 	private:
 		void RefreshEnabledState();

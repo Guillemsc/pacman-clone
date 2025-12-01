@@ -28,7 +28,7 @@ namespace GEngine
 		void Render();
 
 		void AddCircle(const glm::vec2& position, float radius, const Color01& color);
-		void AddLineRect(const CornersRect& rect, float thickness,const Color01& color);
+		void AddLineRect(const CornersRect& rect, float thickness, const Color01& color);
 		void AddLine(const glm::vec2& start, const glm::vec2& end, float thickness, const Color01& color);
 
 		glm::vec2 PositionToRenderPosition(const glm::vec2& position) const;

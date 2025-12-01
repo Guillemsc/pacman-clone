@@ -5,6 +5,7 @@
 #include "UiTransformComponent.h"
 
 #include "GEngine/Extensions/Vec4Extensions.h"
+#include "GEngine/Modules/RenderingModule.h"
 #include "GEngine/Modules/UiModule.h"
 #include "GEngine/Modules/WindowModule.h"
 #include "GEngine/Rendering/GuizmoUiRenderer.h"
@@ -38,8 +39,10 @@ namespace GEngine
 		RecalculateWorldUiRect();
 	}
 
-	void UiTransformComponent::OnDrawSelectedGuizmo(GuizmoUiRenderer* guizmoUiRenderer)
+	void UiTransformComponent::OnDrawSelectedGuizmo()
 	{
+		GuizmoUiRenderer* guizmoUiRenderer = modules->rendering->GuizmoUiRender();
+
 		const UiRect parentUiRect = GetParentWorldUiRect();
 		const CornersRect anchorsScreenPosition = GetAnchorsScreenPosition(parentUiRect);
 		guizmoUiRenderer->AddCircle(anchorsScreenPosition.topLeft, 5, Color01::Green);

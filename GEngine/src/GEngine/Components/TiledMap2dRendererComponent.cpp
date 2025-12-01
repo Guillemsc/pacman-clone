@@ -47,9 +47,9 @@ namespace GEngine
 		float rotation = transform->GetRotationEulerZ();
 		glm::vec2 scale = transform->GetScaleXY();
 
-		position = modules->rendering->Renderer2D().lock()->PositionToRenderPosition(position);
+		position = modules->rendering->Render2d()->PositionToRenderPosition(position);
 
-		modules->rendering->Renderer2D().lock()->Add(0, [rawMap, position, scale, rotation, this, tiledMap]
+		modules->rendering->Render2d()->Add(0, [rawMap, position, scale, rotation, this, tiledMap]
 		{
 			const tmx::Vector2u pixelSizeOfTile = rawMap->getTileSize();
 			const tmx::Vector2u mapGridSize = rawMap->getTileCount();
@@ -95,8 +95,10 @@ namespace GEngine
 		});
 	}
 
-	void TiledMap2dRendererComponent::OnDrawSelectedGuizmo(GuizmoUiRenderer *guizmoUiRenderer)
+	void TiledMap2dRendererComponent::OnDrawSelectedGuizmo()
 	{
+		Guizmo2dRenderer* guizmoRenderer = modules->rendering->Guizmo2dRender();
+
 		const std::shared_ptr<TiledMapResource> tiledMap = _tiledMapPtr.lock();
 		if (!tiledMap) return;
 
@@ -111,7 +113,7 @@ namespace GEngine
 			{
 				glm::vec2 worldPosition = GridPositionToWorldPosition({ x, y }, CellPosition::CENTER);
 
-				guizmoUiRenderer->AddCircle(worldPosition, 10, Color01::Green);
+				guizmoRenderer->AddRect(worldPosition, {4, 4}, Color01::Green);
 			}
 		}
 	}

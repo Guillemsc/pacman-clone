@@ -121,8 +121,7 @@ namespace GEngine
 			return;
 		}
 
-		const std::shared_ptr<ImGuiRenderer> imGuiRenderer = _modules->rendering->ImGuiRender().lock();
-		if (imGuiRenderer == nullptr) return;
+		ImGuiRenderer* imGuiRenderer = _modules->rendering->ImGuiRender();
 
 		imGuiRenderer->Add([this]()
 		{

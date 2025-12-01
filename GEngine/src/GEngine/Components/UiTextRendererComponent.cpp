@@ -28,7 +28,7 @@ namespace GEngine
 		const UiRect uiRect = transform->GetWorldUiRect();
 		glm::vec2 position = uiRect.position;
 
-		position = modules->rendering->UiRender().lock()->PositionToRenderPosition(position);
+		position = modules->rendering->UiRender()->PositionToRenderPosition(position);
 
 		const std::shared_ptr<FontResource> fontResource = _fontResource.lock();
 
@@ -43,7 +43,7 @@ namespace GEngine
 			rawFont = GetFontDefault();
 		}
 
-		modules->rendering->UiRender().lock()->Add(0, [this, position, rawFont]()
+		modules->rendering->UiRender()->Add(0, [this, position, rawFont]()
 		{
 			DrawTextEx(rawFont, _text.c_str(), (Vector2){ position.x, position.y }, static_cast<float>(rawFont.baseSize), 2, MAROON);
 		});

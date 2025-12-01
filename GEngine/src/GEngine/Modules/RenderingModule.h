@@ -8,14 +8,15 @@
 #include <memory>
 
 #include "GEngine/Core/GEngineCoreModules.h"
+#include "GEngine/Rendering/Guizmo2dRenderer.h"
+#include "GEngine/Rendering/GuizmoUiRenderer.h"
+#include "GEngine/Rendering/ImGuiRenderer.h"
+#include "GEngine/Rendering/Renderer2d.h"
+#include "GEngine/Rendering/UiRenderer.h"
 
 namespace GEngine
 {
 	class GEngineCoreApplication;
-	class UiRenderer;
-	class GuizmoUiRenderer;
-	class Renderer2d;
-	class ImGuiRenderer;
 	class CameraModule;
 	class Camera;
 }
@@ -31,10 +32,11 @@ namespace GEngine
 		void Tick();
 		void Dispose();
 
-		std::weak_ptr<Renderer2d> Renderer2D() { return _renderer2d; }
-		std::weak_ptr<UiRenderer> UiRender() { return _uiRenderer; }
-		std::weak_ptr<GuizmoUiRenderer> GuizmoUiRender() { return _guizmoUiRenderer; }
-		std::weak_ptr<ImGuiRenderer> ImGuiRender() { return _imGuiRenderer; }
+		Renderer2d* Render2d() const { return _renderer2d.get(); }
+		UiRenderer* UiRender() const { return _uiRenderer.get(); }
+		Guizmo2dRenderer* Guizmo2dRender() const { return _guizmo2dRenderer.get(); }
+		GuizmoUiRenderer* GuizmoUiRender() const { return _guizmoUiRenderer.get(); }
+		ImGuiRenderer* ImGuiRender() const { return _imGuiRenderer.get(); }
 
 	private:
 		void RenderOnCurrentCamera() const;
@@ -42,10 +44,11 @@ namespace GEngine
 	private:
 		GEngineCoreModules* _modules = nullptr;
 
-		std::shared_ptr<Renderer2d> _renderer2d;
-		std::shared_ptr<UiRenderer> _uiRenderer;
-		std::shared_ptr<GuizmoUiRenderer> _guizmoUiRenderer;
-		std::shared_ptr<ImGuiRenderer> _imGuiRenderer;
+		std::unique_ptr<Renderer2d> _renderer2d;
+		std::unique_ptr<UiRenderer> _uiRenderer;
+		std::unique_ptr<Guizmo2dRenderer> _guizmo2dRenderer;
+		std::unique_ptr<GuizmoUiRenderer> _guizmoUiRenderer;
+		std::unique_ptr<ImGuiRenderer> _imGuiRenderer;
 	};
 }
 

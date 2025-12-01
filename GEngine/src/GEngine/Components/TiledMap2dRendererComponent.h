@@ -35,7 +35,7 @@ namespace GEngine
 		constexpr const char* GetTypeName() override { return "TiledMap2dRenderer"; }
 
 		void OnTick() override;
-		void OnDrawSelectedGuizmo(GuizmoUiRenderer *guizmoUiRenderer) override;
+		void OnDrawSelectedGuizmo() override;
 
 		void SetTiledMap(const std::weak_ptr<TiledMapResource> &resource);
 		std::weak_ptr<TiledMapResource> GetTiledMap() const;

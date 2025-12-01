@@ -45,11 +45,11 @@ namespace GEngine
 		const glm::vec2 offset = uiRect.GetPivotOffset();
 		position += offset;
 
-		position = modules->rendering->UiRender().lock()->PositionToRenderPosition(position);
+		position = modules->rendering->UiRender()->PositionToRenderPosition(position);
 
 		auto selfPtr = weak_from_this();
 
-		modules->rendering->UiRender().lock()->Add(0, [selfPtr, size, rotation, center, position]()
+		modules->rendering->UiRender()->Add(0, [selfPtr, size, rotation, center, position]()
 		{
 			const auto self = selfPtr.lock();
 			if (!self) return;

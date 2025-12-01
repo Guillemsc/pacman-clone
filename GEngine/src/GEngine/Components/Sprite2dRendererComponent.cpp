@@ -57,7 +57,7 @@ namespace GEngine
 		position.x -= rectangle.width * 0.5f * scale.x;
 		position.y -= rectangle.height * 0.5f * scale.y;
 
-		modules->rendering->Renderer2D().lock()->Add(_layer->GetValue(), [position, rotation, scale, rawTexture, rectangle]()
+		modules->rendering->Render2d()->Add(_layer->GetValue(), [position, rotation, scale, rawTexture, rectangle]()
 		{
 			RayLibExtensions::DrawTextureEx(
 				rawTexture,

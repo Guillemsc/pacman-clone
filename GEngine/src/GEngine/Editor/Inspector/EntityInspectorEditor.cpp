@@ -48,14 +48,11 @@ namespace GEngine
 
 	void EntityInspectorEditor::DrawComponents(const std::shared_ptr<Entity> &inspect)
 	{
-		const std::shared_ptr<GuizmoUiRenderer> guizomUiRenderer = _modules->rendering->GuizmoUiRender().lock();
-		if (!guizomUiRenderer) return;
-
 		const std::vector<std::shared_ptr<Component>>& components = inspect->GetComponents();
 
 		for (auto it = components.begin(); it != components.end(); ++it)
 		{
-			(*it)->OnDrawSelectedGuizmo(guizomUiRenderer.get());
+			(*it)->OnDrawSelectedGuizmo();
 
 			const std::shared_ptr<IComponentInspectorEditor> inspector = GetInspectorEditor(it->get());
 
