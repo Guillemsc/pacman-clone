@@ -7,7 +7,7 @@
 
 #include <memory>
 
-#include "raylib.h"
+#include "GEngine/Raylib/RaylibWrapper.h"
 #include "GEngine/Core/GEngineCoreModules.h"
 #include "glm/vec2.hpp"
 
