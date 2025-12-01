@@ -27,9 +27,6 @@ add_subdirectory(vendor/glm)
 # Add tmxlite
 add_subdirectory(vendor/tmxlite)
 
-# Disable inclusion of Win32 API symbols that conflict with raylib
-target_compile_definitions(GEngineCore PUBLIC RAYLIB_NO_WINDOWS_FUNCTIONS)
-
 # Add ourselves
 add_library(GEngineCore STATIC
         src/GEngine/Core/GEngineCoreApplication.cpp
@@ -265,6 +262,9 @@ add_library(GEngineCore STATIC
         src/GEngine/Components/Camera2dComponent.h
         src/GEngine/Hashes/Vec2IntHash.h
 )
+
+# Disable inclusion of Win32 API symbols that conflict with raylib
+target_compile_definitions(GEngineCore PUBLIC RAYLIB_NO_WINDOWS_FUNCTIONS)
 
 # Link raylib
 target_link_libraries(GEngineCore PUBLIC raylib)
