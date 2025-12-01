@@ -58,16 +58,18 @@ namespace PacMan
 			const glm::vec2 worldPosition = _mapMovementManager->GridPositionToWorldPosition(gridPosition, GEngine::CellPosition::CENTER_RIGHT);
 			ghostEntity->GetTransform().lock()->SetPositionXY(worldPosition);
 		}
-		else
+
+		const std::shared_ptr<MapMovementComponent> mapMovement = ghostEntity->AddComponent<MapMovementComponent>().lock();
+
+		if (!isPrision)
 		{
-			const std::shared_ptr<MapMovementComponent> mapMovement = ghostEntity->AddComponent<MapMovementComponent>().lock();
 			mapMovement->SetGridPosition(gridPosition);
-
-			SetupGhostAi(ghostEntity.get(), ghostType);
-
-			const std::shared_ptr<GhostAiComponent> ai = ghostEntity->GetComponent<GhostAiComponent>().lock();
-			ai->Init(mapMovement);
 		}
+
+		SetupGhostAi(ghostEntity.get(), ghostType);
+
+		const std::shared_ptr<GhostAiComponent> ai = ghostEntity->GetComponent<GhostAiComponent>().lock();
+		ai->Init(mapMovement);
 
 		_gameplayEntities->Ghosts.push_back(ghostEntity);
 
@@ -119,14 +121,17 @@ namespace PacMan
 			}
 			case ORANGE_GHOST_TYPE:
 			{
+				ghostEntity->AddComponent<RedGhostAiComponent>();
 				break;
 			}
 			case CIAN_GHOST_TYPE:
 			{
+				ghostEntity->AddComponent<RedGhostAiComponent>();
 				break;
 			}
 			case PINK_GHOST_TYPE:
 			{
+				ghostEntity->AddComponent<RedGhostAiComponent>();
 				break;
 			}
 		}

@@ -28,7 +28,8 @@ namespace GEngine
 
 		for (auto it = resourcesList.begin(); it != resourcesList.end(); ++it)
 		{
-			std::string displayString = std::format("{} | {}", (*it)->GetTypeName(), (*it)->GetResourcesPath().c_str());
+			std::string resourcePath = (*it)->GetResourcesPath().string();
+			std::string displayString = std::format("{} | {}", (*it)->GetTypeName(), resourcePath);
 
 			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf;
 

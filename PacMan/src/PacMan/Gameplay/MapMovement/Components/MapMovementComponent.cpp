@@ -45,6 +45,11 @@ namespace PacMan
 		return _currentGridPosition;
 	}
 
+	void MapMovementComponent::SetCanMove(const bool set)
+	{
+		_canMove = set;
+	}
+
 	void MapMovementComponent::SetNextDirection(const GEngine::CardinalDirection &nextDirection)
 	{
 		const glm::i32vec2 nextDirectionVector = GEngine::CardinalDirectionExtensions::GetDirectionVector(nextDirection);

@@ -27,6 +27,8 @@ namespace PacMan
 		void SetGridPosition(glm::i32vec2 gridPosition, const GEngine::CellPosition& cellPosition = GEngine::CellPosition::CENTER);
 		glm::i32vec2 GetGridPosition() const;
 
+		void SetCanMove(bool set);
+
 		void SetNextDirection(const GEngine::CardinalDirection& nextDirection);
 
 		void PathfindToGridPosition(const glm::i32vec2& targetGridPosition);

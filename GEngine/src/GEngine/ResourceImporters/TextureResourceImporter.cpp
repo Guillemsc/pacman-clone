@@ -21,8 +21,8 @@ namespace GEngine
 		const std::filesystem::path& resourcesPath
 		)
 	{
-		const char* pathChar = fullPath.string().c_str();
-		Texture2D rawTexture = LoadTexture(pathChar);
+		const std::string pathString = fullPath.string();
+		Texture2D rawTexture = LoadTexture(pathString.c_str());
 
 		if (rawTexture.id == 0)
 		{
