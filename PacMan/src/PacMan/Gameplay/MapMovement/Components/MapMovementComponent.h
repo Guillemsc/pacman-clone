@@ -47,6 +47,8 @@ namespace PacMan
 		glm::i32vec2 _currentGridPosition = glm::i32vec2(0);
 		bool _hasValidGridPosition = false;
 
+		bool _canMove = true;
+
 		std::vector<glm::i32vec2> _pathToFollow;
 		float _distanceCarriedFromLastPathPoint = 0;
 		glm::i32vec2 _currentDirectionVector = glm::i32vec2(0);

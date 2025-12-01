@@ -81,6 +81,7 @@ namespace PacMan
 
 	void MapMovementComponent::MoveThroughPath()
 	{
+		if (!_canMove) return;
 		if (_pathToFollow.empty()) return;
 
 		const std::shared_ptr<MapMovementManager> mapMovement = GEngine::ServiceLocator::Get<MapMovementManager>();
