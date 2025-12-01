@@ -2,16 +2,16 @@
 // Created by guillem on 6/8/25.
 //
 
-#ifndef SYSTEM_H
-#define SYSTEM_H
+#ifndef TICKABLE_H
+#define TICKABLE_H
 
 namespace GEngine
 {
-	class System
+	class Tickable
 	{
 	public:
 		virtual void Tick() = 0;
 	};
 }
 
-#endif //SYSTEM_H
+#endif //TICKABLE_H

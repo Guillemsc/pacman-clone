@@ -9,6 +9,7 @@
 #include "imgui.h"
 #include "GEngine/Editor/ResourcesInspector/FontResourceInspectorEditor.h"
 #include "GEngine/Editor/ResourcesInspector/JsonResourceInspectorEditor.h"
+#include "GEngine/Editor/ResourcesInspector/SpriteResourceInspectorEditor.h"
 #include "GEngine/Editor/ResourcesInspector/TextureResourceInspectorEditor.h"
 #include "GEngine/Editor/ResourcesInspector/TiledMapResourceInspectorEditor.h"
 #include "GEngine/Resources/Resource.h"
@@ -21,6 +22,7 @@ namespace GEngine
 		RegisterInspector<TextureResourceInspectorEditor, TextureResource>();
 		RegisterInspector<JsonResourceInspectorEditor, JsonResource>();
 		RegisterInspector<FontResourceInspectorEditor, FontResource>();
+		RegisterInspector<SpriteResourceInspectorEditor, SpriteResource>();
 		RegisterInspector<TiledMapResourceInspectorEditor, TiledMapResource>();
 	}
 

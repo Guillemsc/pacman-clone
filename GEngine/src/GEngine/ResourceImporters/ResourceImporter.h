@@ -22,7 +22,7 @@ namespace GEngine
 		virtual ~IResourceImporter() = default;
 
 		virtual std::shared_ptr<Resource> Import(const std::filesystem::path& fullPath, const std::filesystem::path& resourcesPath) = 0;
-		virtual void AfterImport(const Resource* resource) {};
+		virtual void AfterImport(Resource* resource) {};
 		[[nodiscard]] virtual const std::vector<std::string>& GetSupportedExtensions() const = 0;
 	};
 

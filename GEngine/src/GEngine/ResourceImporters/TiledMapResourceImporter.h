@@ -17,7 +17,7 @@ namespace GEngine
 		explicit TiledMapResourceImporter(GEngineCoreModules* modules);
 
 		std::shared_ptr<Resource> Import(const std::filesystem::path& fullPath, const std::filesystem::path& resourcesPath) override;
-		void AfterImport(const Resource* resource) override;
+		void AfterImport(Resource* resource) override;
 	};
 }
 

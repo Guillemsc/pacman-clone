@@ -24,7 +24,10 @@ namespace PacMan
 
 		void OnTick() override;
 
-		void SetGridPosition(glm::i32vec2 gridPosition, const GEngine::CellPosition& cellPosition = GEngine::CellPosition::CENTER);
+		void SetGridPosition(
+			const glm::i32vec2& gridPosition,
+			const GEngine::CellPosition& cellPosition = GEngine::CellPosition::CENTER
+			);
 		glm::i32vec2 GetGridPosition() const;
 
 		void SetCanMove(bool set);

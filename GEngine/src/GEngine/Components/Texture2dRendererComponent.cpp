@@ -19,18 +19,20 @@ namespace GEngine
 
 	void Texture2dRendererComponent::OnTick()
 	{
-		const std::shared_ptr<TextureResource> texture = _texturePtr.lock();
+		const std::shared_ptr<TextureResource> texture = _textureResource.lock();
 		if (!texture) return;
 
 		const std::shared_ptr<Entity> entity = GetEntity().lock();
-		if (entity == nullptr) return;
+		if (!entity) return;
 
 		const std::shared_ptr<TransformComponent> transform = entity->GetTransform().lock();
-		if (transform == nullptr) return;
+		if (!transform) return;
 
 		const Texture2D& rawTexture = texture->GetRawTexture();
 
 		glm::vec2 position = transform->GetPositionXY();
+		position.y = -position.y;
+
 		float rotation = transform->GetRotationEulerDegreesZ();
 		glm::vec2 scale = transform->GetScaleXY();
 
@@ -45,6 +47,6 @@ namespace GEngine
 
 	void Texture2dRendererComponent::SetTexture(const std::weak_ptr<TextureResource> &texture)
 	{
-		_texturePtr = texture;
+		_textureResource = texture;
 	}
 } // GEngineCore

@@ -116,7 +116,7 @@ namespace GEngine
 		if (!_json.contains(name)) return JsonData();
 		const nlohmann::basic_json<>& array = _json[name];
 		if (!array.is_array()) return JsonData();
-		if (!array.size() <= index) return JsonData();
+		if (array.size() <= index) return JsonData();
 
 		const nlohmann::basic_json<>& value = array[index];
 		if (!value.is_object()) return JsonData();

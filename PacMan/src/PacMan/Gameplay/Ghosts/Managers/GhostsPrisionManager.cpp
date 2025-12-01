@@ -12,6 +12,7 @@
 #include "PacMan/Gameplay/Ghosts/Data/GhostPrisionSlotData.h"
 #include "PacMan/Gameplay/Ghosts/Data/LoadedGhostsData.h"
 #include "PacMan/Gameplay/MapLoading/Data/LoadedMapData.h"
+#include "PacMan/Gameplay/MapMovement/Components/MapMovementComponent.h"
 #include "PacMan/Gameplay/MapMovement/Managers/MapMovementManager.h"
 
 namespace PacMan
@@ -45,7 +46,17 @@ namespace PacMan
 		_prisionExitGridPosition = loadedMapData.PrisionExitPosition;
 		_prisionExitPosition = _mapMovementManager->GridPositionToWorldPosition(_prisionExitGridPosition, GEngine::CellPosition::CENTER_RIGHT);
 
-		ReleaseNextGhost();
+		_timeSinceLastGhostReleasedTimer.Start();
+	}
+
+	void GhostsPrisionManager::Tick()
+	{
+		if (_timeSinceLastGhostReleasedTimer.GetTimeSeconds() > 3)
+		{
+			ReleaseNextGhost();
+
+			_timeSinceLastGhostReleasedTimer.Restart();
+		}
 	}
 
 	void GhostsPrisionManager::ReleaseNextGhost()
@@ -79,7 +90,7 @@ namespace PacMan
 		return nullptr;
 	}
 
-	tokoro::Async<void> GhostsPrisionManager::PlayReleaseGhostAsync(const std::shared_ptr<GEngine::Entity> &ghostEntity)
+	tokoro::Async<void> GhostsPrisionManager::PlayReleaseGhostAsync(const std::shared_ptr<GEngine::Entity> ghostEntity)
 	{
 		const std::shared_ptr<GEngine::TransformComponent> transform = ghostEntity->GetTransform().lock();
 		const glm::vec2 position = transform->GetPositionXY();
@@ -106,7 +117,10 @@ namespace PacMan
 			timeToHeight
 			));
 
-		_modules->tweens->Play(tween);
+		co_await _modules->tweens->PlayAsync(tween);
+
+		const std::shared_ptr<MapMovementComponent> mapMovement = ghostEntity->GetComponent<MapMovementComponent>().lock();
+		mapMovement->SetGridPosition(_prisionExitGridPosition, GEngine::CellPosition::CENTER_RIGHT);
 
 		co_return;
 	}

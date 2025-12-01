@@ -10,7 +10,7 @@
 #include "GEngine/Core/GEngineCoreApplication.h"
 #include "GEngine/Modules/EntitiesModule.h"
 #include "GEngine/Modules/ResourcesModule.h"
-#include "GEngine/Modules/SystemsModule.h"
+#include "GEngine/Modules/TickablesModule.h"
 #include "GEngine/ServiceLocators/ServiceLocator.h"
 #include "GEngine/Resources/TiledMapResource.h"
 #include "PacMan/Gameplay/Entities/Data/GameplayEntities.h"
@@ -45,7 +45,7 @@ namespace PacMan
 		GEngine::ServiceLocator::Register(_mapPathfindingManager);
 
 		_playerInputSystem = std::make_shared<PlayerInputSystem>();
-		_modules->systems->AddSystem(_playerInputSystem);
+		_modules->tickables->AddTickable(_playerInputSystem);
 
 		_gameplayEntities = std::make_shared<GameplayEntities>();
 		GEngine::ServiceLocator::Register(_gameplayEntities);
@@ -73,6 +73,7 @@ namespace PacMan
 			_mapMovementManager.get()
 			);
 		_ghostsPrisionManager->Setup(loadedMapData, loadedGhostsData);
+		_modules->tickables->AddTickable(_ghostsPrisionManager);
 
 		co_return;
 	}

@@ -1,0 +1,41 @@
+//
+// Created by guillem on 12/1/25.
+//
+
+#ifndef SPRITE2DRENDERERCOMPONENT_H
+#define SPRITE2DRENDERERCOMPONENT_H
+
+#include <memory>
+
+#include "Component.h"
+
+namespace GEngine
+{
+	class Entity;
+	class SpriteResource;
+
+	class Sprite2dRendererComponent final : public Component
+	{
+	public:
+		explicit Sprite2dRendererComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);
+
+		constexpr const char* GetTypeName() override { return "Sprite2dRenderer"; }
+
+		void OnTick() override;
+
+		void SetLayer(int layer) const;
+		void SetSprite(const std::weak_ptr<SpriteResource> &sprite) const;
+		void SetSpriteIndex(int index) const;
+
+		std::weak_ptr<SpriteResource> GetSprite() const;
+		int GetSpriteIndex() const;
+
+	private:
+		std::shared_ptr<Property<std::int32_t>> _layer;
+		std::shared_ptr<Property<std::weak_ptr<SpriteResource>>> _spriteResource;
+		std::shared_ptr<Property<std::int32_t>> _spriteIndex;
+	};
+
+} // GEngine
+
+#endif //SPRITE2DRENDERERCOMPONENT_H

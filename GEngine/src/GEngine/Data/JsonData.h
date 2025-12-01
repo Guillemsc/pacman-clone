@@ -4,6 +4,7 @@
 
 #ifndef JSONDATA_H
 #define JSONDATA_H
+
 #include "json.hpp"
 
 namespace GEngine

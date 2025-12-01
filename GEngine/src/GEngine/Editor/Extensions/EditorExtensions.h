@@ -23,6 +23,7 @@ namespace GEngine
 			const std::weak_ptr<Resource> &resourcePtr
 			);
 		static void DrawRawTexture(const Texture& texture);
+		static void DrawRawTexture(const Texture& texture, const Rectangle& rectangle);
 	};
 }
 

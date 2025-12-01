@@ -26,7 +26,7 @@ namespace GEngine
 		void SetTexture(const std::weak_ptr<TextureResource> &texture);
 
 	private:
-		std::weak_ptr<TextureResource> _texturePtr;
+		std::weak_ptr<TextureResource> _textureResource;
 	};
 }
 

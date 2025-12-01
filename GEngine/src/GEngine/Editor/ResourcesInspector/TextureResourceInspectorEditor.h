@@ -10,8 +10,6 @@
 
 namespace GEngine
 {
-	class GEngineCoreApplication;
-
 	class TextureResourceInspectorEditor final : public ResourceInspectorEditor<TextureResource>
 	{
 	public:

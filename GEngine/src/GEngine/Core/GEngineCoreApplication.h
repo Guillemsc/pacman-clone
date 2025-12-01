@@ -23,7 +23,7 @@ namespace GEngine
 	class ComponentsModule;
 	class EntitiesModule;
 	class WindowModule;
-	class SystemsModule;
+	class TickablesModule;
 	class ResourcesModule;
 	class InputModule;
 	class EventBuses;
@@ -49,7 +49,7 @@ namespace GEngine
 		std::unique_ptr<RenderingModule> _rendering;
 		std::unique_ptr<ResourcesModule> _resources;
 		std::unique_ptr<TimeModule> _time;
-		std::unique_ptr<SystemsModule> _systems;
+		std::unique_ptr<TickablesModule> _tickables;
 		std::unique_ptr<InputModule> _input;
 		std::unique_ptr<UiModule> _ui;
 		std::unique_ptr<CoroutinesModule> _coroutines;

@@ -55,9 +55,9 @@ add_library(GEngineCore STATIC
         src/GEngine/Extensions/MapExtensions.h
         src/GEngine/Rendering/Renderer2d.cpp
         src/GEngine/Rendering/Renderer2d.h
-        src/GEngine/Modules/SystemsModule.cpp
-        src/GEngine/Modules/SystemsModule.h
-        src/GEngine/Systems/System.h
+        src/GEngine/Modules/TickablesModule.cpp
+        src/GEngine/Modules/TickablesModule.h
+        src/GEngine/Tickables/Tickable.h
         src/GEngine/Components/Shape2dRendererComponent.cpp
         src/GEngine/Components/Shape2dRendererComponent.h
         src/GEngine/Entities/Entity.cpp
@@ -264,6 +264,14 @@ add_library(GEngineCore STATIC
         src/GEngine/Components/Camera2dComponent.h
         src/GEngine/Hashes/Vec2IntHash.h
         src/GEngine/Raylib/RaylibWrapper.h
+        src/GEngine/Resources/SpriteResource.cpp
+        src/GEngine/Resources/SpriteResource.h
+        src/GEngine/ResourceImporters/SpriteResourceImporter.cpp
+        src/GEngine/ResourceImporters/SpriteResourceImporter.h
+        src/GEngine/Editor/ResourcesInspector/SpriteResourceInspectorEditor.cpp
+        src/GEngine/Editor/ResourcesInspector/SpriteResourceInspectorEditor.h
+        src/GEngine/Components/Sprite2dRendererComponent.cpp
+        src/GEngine/Components/Sprite2dRendererComponent.h
 )
 
 # Disable inclusion of Win32 API symbols that conflict with raylib

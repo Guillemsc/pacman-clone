@@ -165,4 +165,11 @@ namespace GEngine
 
 		return defaultValue;
 	}
+
+	void TiledMapResource::Dispose()
+	{
+		_tiledMapPtr.reset();
+		_tilesetFirstGuidByTilesetIndex.clear();
+		_tileSetTextures.clear();
+	}
 } // GEngineCore

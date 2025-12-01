@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "tokoro.h"
+#include "GEngine/Tickables/Tickable.h"
 #include "GEngine/Timers/ChronoTimer.h"
 #include "glm/vec2.hpp"
 
@@ -29,7 +30,7 @@ namespace PacMan
 	struct GhostPrisionSlotData;
 	struct GhostsPrisionData;
 
-	class GhostsPrisionManager
+	class GhostsPrisionManager : public GEngine::Tickable
 	{
 	public:
 		GhostsPrisionManager(
@@ -39,10 +40,12 @@ namespace PacMan
 
 		void Setup(const LoadedMapData& loadedMapData, const LoadedGhostsData& loadedGhostsData);
 
+		void Tick() override;
+
 	private:
 		void ReleaseNextGhost();
 		GhostPrisionSlotData* GetNextSlotToReleaseOrNull() const;
-		tokoro::Async<void> PlayReleaseGhostAsync(const std::shared_ptr<GEngine::Entity> &ghostEntity);
+		tokoro::Async<void> PlayReleaseGhostAsync(std::shared_ptr<GEngine::Entity> ghostEntity);
 
 	private:
 		GEngine::GEngineCoreModules* const _modules;

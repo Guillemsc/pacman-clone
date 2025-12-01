@@ -7,13 +7,13 @@
 
 #include <memory>
 
-#include "GEngine/Systems/System.h"
+#include "GEngine/Tickables/Tickable.h"
 
 namespace PacMan
 {
 	class MapMovementComponent;
 
-	class PlayerInputSystem : public GEngine::System
+	class PlayerInputSystem : public GEngine::Tickable
 	{
 	public:
 		void Tick() override;

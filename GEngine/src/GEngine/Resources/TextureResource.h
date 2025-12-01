@@ -29,7 +29,7 @@ namespace GEngine
 		void Dispose() override;
 
 	private:
-		Texture2D _rawTexture{};
+		Texture2D _rawTexture;
 	};
 }
 

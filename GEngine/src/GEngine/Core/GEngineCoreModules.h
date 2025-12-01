@@ -12,7 +12,7 @@ namespace GEngine
 	class CoroutinesModule;
 	class UiModule;
 	class InputModule;
-	class SystemsModule;
+	class TickablesModule;
 	class TimeModule;
 	class ResourcesModule;
 	class RenderingModule;
@@ -33,7 +33,7 @@ namespace GEngine
 			RenderingModule* rendering,
 			ResourcesModule* resources,
 			TimeModule* time,
-			SystemsModule* systems,
+			TickablesModule* systems,
 			InputModule* input,
 			UiModule* ui,
 			CoroutinesModule* coroutines,
@@ -47,7 +47,7 @@ namespace GEngine
 				rendering(rendering),
 				resources(resources),
 				time(time),
-				systems(systems),
+				tickables(systems),
 				input(input),
 				ui(ui),
 				coroutines(coroutines),
@@ -64,7 +64,7 @@ namespace GEngine
 		RenderingModule* const rendering;
 		ResourcesModule* const resources;
 		TimeModule* const time;
-		SystemsModule* const systems;
+		TickablesModule* const tickables;
 		InputModule* const input;
 		UiModule* const ui;
 		CoroutinesModule* const coroutines;

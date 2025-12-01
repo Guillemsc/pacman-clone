@@ -38,9 +38,6 @@ namespace GEngine
 
 	glm::vec2 Renderer2d::PositionToRenderPosition(const glm::vec2 &position) const
 	{
-		const glm::vec2 windowSize = _modules->window->GetWindowSize();
-		const glm::vec2 halfWindowSize = windowSize * 0.5f;
-
 		const glm::vec2 newPosition = {position.x, -position.y};
 
 		return newPosition;

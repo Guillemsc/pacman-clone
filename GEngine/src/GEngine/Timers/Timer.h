@@ -27,8 +27,8 @@ namespace GEngine
 	private:
 		std::shared_ptr<ITimeSource> _timeSource;
 
-		double _startSeconds;
-		bool _isStarted;
+		double _startSeconds = 0;
+		bool _isStarted = false;
 	};
 }
 

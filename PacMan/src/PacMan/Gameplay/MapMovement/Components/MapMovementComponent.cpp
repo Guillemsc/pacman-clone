@@ -23,7 +23,10 @@ namespace PacMan
 		MoveThroughPath();
 	}
 
-	void MapMovementComponent::SetGridPosition(const glm::i32vec2 gridPosition, const GEngine::CellPosition &cellPosition)
+	void MapMovementComponent::SetGridPosition(
+		const glm::i32vec2& gridPosition,
+		const GEngine::CellPosition &cellPosition
+		)
 	{
 		const std::shared_ptr<MapMovementManager> mapMovement = GEngine::ServiceLocator::Get<MapMovementManager>();
 		const std::shared_ptr<GEngine::Entity> entity = GetEntity().lock();

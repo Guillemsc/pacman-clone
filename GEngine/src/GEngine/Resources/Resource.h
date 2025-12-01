@@ -36,8 +36,8 @@ namespace GEngine
 		virtual void Dispose() {};
 
 	private:
-		std::filesystem::path _fullPath;
-		std::filesystem::path _resourcesPath;
+		const std::filesystem::path _fullPath;
+		const std::filesystem::path _resourcesPath;
 	};
 }
 

@@ -57,9 +57,9 @@ namespace GEngine
 		return resource;
 	}
 
-	void TiledMapResourceImporter::AfterImport(const Resource *resource)
+	void TiledMapResourceImporter::AfterImport(Resource *resource)
 	{
-		TiledMapResource* tiledMapResource = (TiledMapResource*)resource;
+		TiledMapResource* tiledMapResource = static_cast<TiledMapResource*>(resource);
 
 		const std::shared_ptr<tmx::Map> mapData = tiledMapResource->GetRawMap().lock();
 		if (!mapData) return;

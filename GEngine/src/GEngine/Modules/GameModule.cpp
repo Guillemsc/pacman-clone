@@ -5,7 +5,7 @@
 #include "GameModule.h"
 
 #include "EntitiesModule.h"
-#include "SystemsModule.h"
+#include "TickablesModule.h"
 #include "TimeModule.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
 #include "GEngine/Games/Game.h"
@@ -45,7 +45,7 @@ namespace GEngine
 			_currentGame->Dispose();
 		}
 
-		_modules->systems->RemoveAllSystemsNow();
+		_modules->tickables->RemoveAllTickablesNow();
 		_modules->entities->RemoveAllEntitiesNow();
 
 		_currentGame = game;

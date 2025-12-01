@@ -13,7 +13,7 @@
 #include "GEngine/Modules/InputModule.h"
 #include "GEngine/Modules/RenderingModule.h"
 #include "GEngine/Modules/ResourcesModule.h"
-#include "GEngine/Modules/SystemsModule.h"
+#include "GEngine/Modules/TickablesModule.h"
 #include "GEngine/Modules/TimeModule.h"
 #include "GEngine/Modules/TweensModule.h"
 #include "GEngine/Modules/UiModule.h"
@@ -34,7 +34,7 @@ namespace GEngine
 		_rendering = std::make_unique<RenderingModule>();
 		_resources = std::make_unique<ResourcesModule>();
 		_time = std::make_unique<TimeModule>();
-		_systems = std::make_unique<SystemsModule>();
+		_tickables = std::make_unique<TickablesModule>();
 		_input = std::make_unique<InputModule>();
 		_tweens = std::make_unique<TweensModule>();
 		_ui = std::make_unique<UiModule>();
@@ -49,7 +49,7 @@ namespace GEngine
 			_rendering.get(),
 			_resources.get(),
 			_time.get(),
-			_systems.get(),
+			_tickables.get(),
 			_input.get(),
 			_ui.get(),
 			_coroutines.get(),
@@ -97,7 +97,7 @@ namespace GEngine
 		_tweens->Tick();
 		_ui->Tick();
 		_game->Tick();
-		_systems->Tick();
+		_tickables->Tick();
 		_coroutines->Tick();
 		_entities->Tick();
 		_editor->Tick();
@@ -110,7 +110,7 @@ namespace GEngine
 	{
 		spdlog::info("GEngineCore Dispose");
 
-		_systems->Dispose();
+		_tickables->Dispose();
 		_game->Dispose();
 		_entities->Dispose();
 		_tweens->Dispose();
