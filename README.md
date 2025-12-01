@@ -5,7 +5,7 @@ A simple **Pac-Man** clone done as an example of the **C++** game engine framewo
 
 > ⚠️ **This project is a Work In Progress** — features and gameplay are still under active development.
 
-## Building
+## Building:
 
 ### Prerequisites
 
@@ -19,5 +19,6 @@ A simple **Pac-Man** clone done as an example of the **C++** game engine framewo
 - Spdlog (logging)
 - Tmxlite (tiled importing)
 
+## Structure:
 
 
