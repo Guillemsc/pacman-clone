@@ -85,7 +85,7 @@ namespace GEngine
 			if (!resource) continue;
 
 			_resources.push_back(resource);
-			_resourcesPathByResources[resourcesPath] = resource;
+			_resourcesPathByResources[resourcesPath.string()] = resource;
 			_resourcesByResourceImporters.push_back({resource, importer});
 		}
 	}
