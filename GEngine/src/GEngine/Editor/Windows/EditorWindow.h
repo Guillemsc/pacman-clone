@@ -6,6 +6,7 @@
 #define EDITORWINDOW_H
 
 #include <memory>
+#include <string>
 
 #include "GEngine/Core/GEngineCoreModules.h"
 
