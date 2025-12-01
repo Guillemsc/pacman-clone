@@ -38,7 +38,7 @@ namespace GEngine
 		_currentGame = nullptr;
 	}
 
-	void GameModule::LoadGame(const std::shared_ptr<Game> &game)
+	void GameModule::LoadGame(const std::shared_ptr<Game>& game)
 	{
 		if (_currentGame != nullptr)
 		{

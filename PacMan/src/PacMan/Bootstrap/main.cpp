@@ -6,6 +6,9 @@
 
 int main()
 {
+	// Main entry point.
+	// Initializes the core engine, loads the PacMan game, and runs the main loop.
+
     const auto app = std::make_shared<GEngine::GEngineCoreApplication>();
     app->Init();
 	app->Modules()->game->LoadGame(std::make_shared<PacMan::PacManGame>());

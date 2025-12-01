@@ -22,7 +22,12 @@ namespace GEngine
 		void Tick() const;
 		void Dispose();
 
-		void LoadGame(const std::shared_ptr<Game> &game);
+		// Fires up a new game.
+		// - First we unload the previous one, if there was one loaded.
+		// - Then we load and run the new one.
+		// This is the main way of running an external game loop.
+		// Note: should this be shared_ptr? will this be used from the outside?
+		void LoadGame(const std::shared_ptr<Game>& game);
 
 	private:
 		GEngineCoreModules* _modules = nullptr;
