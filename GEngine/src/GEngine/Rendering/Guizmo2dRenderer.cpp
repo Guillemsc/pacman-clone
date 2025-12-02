@@ -27,9 +27,6 @@ namespace GEngine
 
 	void Guizmo2dRenderer::AddCircle(const glm::vec2 &position, float radius, const Color01 &color)
 	{
-		const bool isEnabled = IsCurrentLayerEnabled();
-		if (!isEnabled) return;
-
 		Add(0, [this, position, radius, color]()
 		{
 			const glm::vec2 renderPosition = PositionToRenderPosition(position);
@@ -64,22 +61,5 @@ namespace GEngine
 	glm::vec2 Guizmo2dRenderer::PositionToRenderPosition(const glm::vec2 &position) const
 	{
 		return { position.x, -position.y };
-	}
-
-	void Guizmo2dRenderer::BeginLayer(const std::string &layer)
-	{
-		_currentLayer = layer;
-	}
-
-	void Guizmo2dRenderer::EndLayer()
-	{
-		_currentLayer = "";
-	}
-
-	bool Guizmo2dRenderer::IsCurrentLayerEnabled() const
-	{
-		if (_currentLayer.empty()) return true;
-
-		return _enabledLayers.contains(_currentLayer);
 	}
 }

@@ -16,10 +16,10 @@ namespace GEngine
 
 	class Sprite2dRendererComponent final : public Component
 	{
+		DECLARE_COMPONENT(Sprite2dRendererComponent)
+
 	public:
 		explicit Sprite2dRendererComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);
-
-		constexpr const char* GetTypeName() override { return "Sprite2dRenderer"; }
 
 		void OnTick() override;
 

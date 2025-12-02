@@ -19,11 +19,10 @@ namespace GEngine
 	{
 		friend class EntitiesModule;
 
+		DECLARE_COMPONENT(TransformComponent)
+
 	public:
 		explicit TransformComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);
-		~TransformComponent() override;
-
-		constexpr const char* GetTypeName() override { return "Transform"; }
 
 		void SetPosition(const glm::vec3 &position);
 		void SetPositionXY(const glm::vec2 &position);

@@ -17,10 +17,10 @@ namespace GEngine
 
 	class Camera2dComponent final : public Component
 	{
+		DECLARE_COMPONENT(Camera2dComponent)
+
 	public:
 		explicit Camera2dComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);
-
-		constexpr const char* GetTypeName() override { return "Camera2d"; }
 
 		void OnEnable() override;
 		void OnTick() override;

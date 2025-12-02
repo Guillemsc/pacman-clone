@@ -10,6 +10,7 @@
 #include "GEngine/Modules/EntitiesModule.h"
 #include "GEngine/Modules/ExamplesModule.h"
 #include "GEngine/Modules/GameModule.h"
+#include "GEngine/Modules/GuizmosModule.h"
 #include "GEngine/Modules/InputModule.h"
 #include "GEngine/Modules/RenderingModule.h"
 #include "GEngine/Modules/ResourcesModule.h"
@@ -40,6 +41,7 @@ namespace GEngine
 		_ui = std::make_unique<UiModule>();
 		_editor = std::make_unique<EditorModule>();
 		_examples = std::make_unique<ExamplesModule>();
+		_guizmos = std::make_unique<GuizmosModule>();
 
 		_modules = std::make_unique<GEngineCoreModules>(
 			_entities.get(),
@@ -55,7 +57,8 @@ namespace GEngine
 			_coroutines.get(),
 			_editor.get(),
 			_examples.get(),
-			_tweens.get()
+			_tweens.get(),
+			_guizmos.get()
 		);
 	}
 
@@ -74,6 +77,7 @@ namespace GEngine
 		_window->Init(_modules.get());
 		_rendering->Init(_modules.get());
 		_resources->Init(_modules.get());
+		_guizmos->Init(_modules.get());
 		_camera->Init(_modules.get());
 		_tweens->Init(_modules.get());
 		_ui->Init(_modules.get());

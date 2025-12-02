@@ -33,17 +33,10 @@ namespace GEngine
 
 		glm::vec2 PositionToRenderPosition(const glm::vec2& position) const;
 
-		void BeginLayer(const std::string& layer);
-		void EndLayer();
-		bool IsCurrentLayerEnabled() const;
-
 	private:
 		GEngineCoreModules* const _modules;
 
 		LayeredRenderQueue _renderQueue;
-
-		std::unordered_set<std::string> _enabledLayers;
-		std::string _currentLayer;
 	};
 }
 

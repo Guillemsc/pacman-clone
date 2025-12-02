@@ -17,10 +17,10 @@ namespace GEngine
 
 	class UiShapeRendererComponent final : public Component, public std::enable_shared_from_this<UiShapeRendererComponent>
 	{
+		DECLARE_COMPONENT(UiShapeRendererComponent)
+
 	public:
 		explicit UiShapeRendererComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);
-
-		constexpr const char* GetTypeName() override { return "Ui Shape Renderer"; }
 
 		void OnTick() override;
 

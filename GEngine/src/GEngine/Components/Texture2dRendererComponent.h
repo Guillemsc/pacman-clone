@@ -16,10 +16,10 @@ namespace GEngine
 
 	class Texture2dRendererComponent final : public Component
 	{
+		DECLARE_COMPONENT(Texture2dRendererComponent)
+
 	public:
 		explicit Texture2dRendererComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);
-
-		constexpr const char* GetTypeName() override { return "Texture2dRenderer"; }
 
 		void OnTick() override;
 

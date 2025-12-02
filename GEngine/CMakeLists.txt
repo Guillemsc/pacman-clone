@@ -278,6 +278,10 @@ add_library(GEngineCore STATIC
         src/GEngine/Sprite2dAnimator/Sprite2dAnimation.h
         src/GEngine/Rendering/Guizmo2dRenderer.cpp
         src/GEngine/Rendering/Guizmo2dRenderer.h
+        src/GEngine/ComponentsRegister/ComponentsRegister.cpp
+        src/GEngine/ComponentsRegister/ComponentsRegister.h
+        src/GEngine/Modules/GuizmosModule.cpp
+        src/GEngine/Modules/GuizmosModule.h
 )
 
 # Disable inclusion of Win32 API symbols that conflict with raylib

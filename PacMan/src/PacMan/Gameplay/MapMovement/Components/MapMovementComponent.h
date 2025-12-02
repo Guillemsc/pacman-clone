@@ -17,10 +17,10 @@ namespace PacMan
 {
 	class MapMovementComponent final : public GEngine::Component
 	{
+		DECLARE_COMPONENT(MapMovementComponent)
+
 	public:
 		explicit MapMovementComponent(GEngine::GEngineCoreModules* modules, const std::weak_ptr<GEngine::Entity> &entity);
-
-		constexpr const char* GetTypeName() override { return "Map Movement"; }
 
 		void OnTick() override;
 

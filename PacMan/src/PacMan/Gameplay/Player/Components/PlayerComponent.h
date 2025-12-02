@@ -11,9 +11,10 @@ namespace PacMan
 {
 	class PlayerComponent final : public GEngine::Component
 	{
-		explicit PlayerComponent(GEngine::GEngineCoreModules* modules, const std::weak_ptr<GEngine::Entity> &entity);
+		DECLARE_COMPONENT(PlayerComponent)
 
-		constexpr const char* GetTypeName() override { return "Player"; }
+	public:
+		explicit PlayerComponent(GEngine::GEngineCoreModules* modules, const std::weak_ptr<GEngine::Entity> &entity);
 	};
 }
 

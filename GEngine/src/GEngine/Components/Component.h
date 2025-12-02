@@ -7,6 +7,7 @@
 
 #include "GEngine/Entities/Entity.h"
 #include "GEngine/SerializedProperties/PropertiesContainer.h"
+#include "GEngine/ComponentsRegister/ComponentsRegister.h"
 
 namespace GEngine
 {
@@ -26,7 +27,7 @@ namespace GEngine
 		bool IsEnanbled() const;
 		void SetEnabled(bool enabled);
 
-		virtual constexpr const char* GetTypeName() = 0;
+		virtual constexpr const char* GetTypeName() const = 0;
 
 	protected:
 		virtual void OnAwake() {}
@@ -35,6 +36,7 @@ namespace GEngine
 		virtual void OnDisable() {}
 		virtual void OnDestroy() {}
 		virtual void OnDrawSelectedGuizmo() {}
+		virtual void OnDrawGuizmo() {}
 
 	private:
 		void RefreshEnabledState();
@@ -50,5 +52,12 @@ namespace GEngine
 		bool _isEnabledInHierarchy = false;
 	};
 }
+
+#define DECLARE_COMPONENT(TYPE)                                 \
+public:                                                         \
+	static constexpr const char* StaticTypeName() { return #TYPE; } \
+	constexpr const char* GetTypeName() const override { return TYPE::StaticTypeName(); } \
+private:                                                        \
+	inline static const GEngine::ComponentsRegister _reg_##TYPE{ TYPE::StaticTypeName() };
 
 #endif //COMPONENT_H

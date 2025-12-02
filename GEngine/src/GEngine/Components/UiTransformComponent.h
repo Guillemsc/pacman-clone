@@ -14,10 +14,10 @@ namespace GEngine
 	{
 		friend class EntitiesModule;
 
+		DECLARE_COMPONENT(UiTransformComponent)
+
 	public:
 		explicit UiTransformComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);
-
-		constexpr const char* GetTypeName() override { return "Ui Transform"; }
 
 		void OnDrawSelectedGuizmo() override;
 

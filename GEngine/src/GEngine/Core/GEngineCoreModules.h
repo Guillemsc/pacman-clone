@@ -7,6 +7,7 @@
 
 namespace GEngine
 {
+	class GuizmosModule;
 	class ExamplesModule;
 	class EditorModule;
 	class CoroutinesModule;
@@ -39,7 +40,8 @@ namespace GEngine
 			CoroutinesModule* coroutines,
 			EditorModule* editor,
 			ExamplesModule* examples,
-			TweensModule* tweens
+			TweensModule* tweens,
+			GuizmosModule* guizmos
 			) : entities(entities),
 				game(game),
 				camera(camera),
@@ -53,7 +55,8 @@ namespace GEngine
 				coroutines(coroutines),
 				editor(editor),
 				examples(examples),
-				tweens(tweens)
+				tweens(tweens),
+				guizmos(guizmos)
 		{}
 
 	public:
@@ -71,6 +74,7 @@ namespace GEngine
 		EditorModule* const editor;
 		ExamplesModule* const examples;
 		TweensModule* const tweens;
+		GuizmosModule* const guizmos;
 	};
 
 } // GEngine

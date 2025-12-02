@@ -17,10 +17,10 @@ namespace GEngine
 
 	class Shape2dRendererComponent final : public Component
 	{
+		DECLARE_COMPONENT(Shape2dRendererComponent)
+
 	public:
 		explicit Shape2dRendererComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);
-
-		constexpr const char* GetTypeName() override { return "Shape2dRenderer"; }
 
 		void OnTick() override;
 		void OnDestroy() override;

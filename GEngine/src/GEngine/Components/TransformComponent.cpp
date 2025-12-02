@@ -18,10 +18,6 @@ namespace GEngine
 		_localPositionProperty = _properties.Register("Position", Vec3Extensions::Zero);
 	}
 
-	TransformComponent::~TransformComponent()
-	{
-	}
-
 	void TransformComponent::SetPosition(const glm::vec3 &position)
 	{
 		if (_worldPosition == position)

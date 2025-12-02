@@ -29,10 +29,10 @@ namespace GEngine
 
 	class TiledMap2dRendererComponent final : public Component
 	{
+		DECLARE_COMPONENT(TiledMap2dRendererComponent)
+
 	public:
 		explicit TiledMap2dRendererComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);
-
-		constexpr const char* GetTypeName() override { return "TiledMap2dRenderer"; }
 
 		void OnTick() override;
 		void OnDrawSelectedGuizmo() override;
