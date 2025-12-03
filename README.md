@@ -20,5 +20,7 @@ A simple **Pac-Man** clone done as an example of the **C++** game engine framewo
 - Tmxlite (tiled importing)
 
 ## Structure:
-
+### Entry point:
+Main program entry point can be found [here](https://github.com/Guillemsc/pacman-clone/blob/main/PacMan/src/PacMan/Bootstrap/main.cpp).
+Here, GEngine is initialized, and PacMan is loaded and run.
 
