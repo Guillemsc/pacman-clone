@@ -6,6 +6,7 @@
 
 #include "GEngine/Components/Component.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
+#include "GEngine/Extensions/VectorExtensions.h"
 #include "GEngine/Modules/EntitiesModule.h"
 #include "GEngine/Modules/GuizmosModule.h"
 

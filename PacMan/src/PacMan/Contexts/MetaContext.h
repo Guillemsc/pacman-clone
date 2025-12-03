@@ -14,6 +14,7 @@ namespace PacMan
 {
 	class Coroutine;
 
+	// Contains all the Ui that's not part of the gameplay.
 	class MetaContext : public Context
 	{
 	public:

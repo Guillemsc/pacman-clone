@@ -10,6 +10,7 @@
 #include "GEngine/Entities/Entity.h"
 #include "GEngine/Scenes/Scene.h"
 #include "PacMan/Gameplay/Collisions/Enums/CollisionLayers.h"
+#include "PacMan/Gameplay/Entities/Components/EntityIdComponent.h"
 #include "PacMan/Gameplay/Entities/Data/GameplayEntities.h"
 #include "PacMan/Gameplay/Ghosts/Components/RedGhostAiComponent.h"
 #include "PacMan/Gameplay/MapLoading/Data/LoadedMapData.h"
@@ -32,10 +33,10 @@ namespace PacMan
 
 	void GhostsLoaderManager::LoadGhosts(const LoadedMapData &loadedMapData)
 	{
-		LoadGhost(RED_GHOST_TYPE, loadedMapData.RedGhostPosition, false);
-		_loadedGhostsData.LeftPrisionSlotGhostEntity = LoadGhost(CIAN_GHOST_TYPE, loadedMapData.GhostPrisionLeftSlotPosition, true);
-		_loadedGhostsData.CenterPrisionSlotGhostEntity = LoadGhost(PINK_GHOST_TYPE, loadedMapData.GhostPrisionCenterSlotPosition, true);
-		_loadedGhostsData.RightPrisionSlotGhostEntity = LoadGhost(ORANGE_GHOST_TYPE, loadedMapData.GhostPrisionRightSlotPosition, true);
+		LoadGhost(GhostType::RED_GHOST, loadedMapData.RedGhostPosition, false);
+		_loadedGhostsData.LeftPrisionSlotGhostEntity = LoadGhost(GhostType::CIAN_GHOST, loadedMapData.GhostPrisionLeftSlotPosition, true);
+		_loadedGhostsData.CenterPrisionSlotGhostEntity = LoadGhost(GhostType::PINK_GHOST, loadedMapData.GhostPrisionCenterSlotPosition, true);
+		_loadedGhostsData.RightPrisionSlotGhostEntity = LoadGhost(GhostType::ORANGE_GHOST, loadedMapData.GhostPrisionRightSlotPosition, true);
 	}
 
 	const LoadedGhostsData & GhostsLoaderManager::GetLoadedGhostsData() const
@@ -49,7 +50,9 @@ namespace PacMan
 		const GEngine::Color01 ghostColor = GetGhostColor(ghostType);
 
 		const std::shared_ptr<GEngine::Entity> ghostEntity = _scene->AddWorldEntity().lock();
-		ghostEntity->SetName("Player" + ghostName);
+		ghostEntity->SetName("Ghost" + ghostName);
+
+		ghostEntity->AddComponent<EntityIdComponent>().lock()->SetType(EntityType::GHOST);
 
 		const std::shared_ptr<GEngine::Shape2dRendererComponent> shape = ghostEntity->AddComponent<GEngine::Shape2dRendererComponent>().lock();
 		shape->SetLayer(1);
@@ -57,7 +60,7 @@ namespace PacMan
 
 		const std::shared_ptr<GEngine::Collider2dComponent> collider = ghostEntity->AddComponent<GEngine::Collider2dComponent>().lock();
 		collider->SetLayer(CollisionLayers::COLLISION_LAYER_GHOST);
-		collider->SetLayerMask(CollisionLayers::COLLISION_LAYER_PLAYER);
+		//collider->SetLayerMask(CollisionLayers::COLLISION_LAYER_PLAYER);
 
 		if (isPrision)
 		{
@@ -87,13 +90,13 @@ namespace PacMan
 	{
 		switch (ghostType)
 		{
-			case RED_GHOST_TYPE:
+			case GhostType::RED_GHOST:
 				return "Red";
-			case ORANGE_GHOST_TYPE:
+			case GhostType::ORANGE_GHOST:
 				return "Orange";
-			case CIAN_GHOST_TYPE:
+			case GhostType::CIAN_GHOST:
 				return "Cian";
-			case PINK_GHOST_TYPE:
+			case GhostType::PINK_GHOST:
 				return "Pink";
 		}
 
@@ -104,13 +107,13 @@ namespace PacMan
 	{
 		switch (ghostType)
 		{
-			case RED_GHOST_TYPE:
+			case GhostType::RED_GHOST:
 				return GEngine::Color01(1, 0, 0);
-			case ORANGE_GHOST_TYPE:
+			case GhostType::ORANGE_GHOST:
 				return GEngine::Color01(1, 0.3f, 0);
-			case CIAN_GHOST_TYPE:
+			case GhostType::CIAN_GHOST:
 				return GEngine::Color01(0, 0.9f, 0.9f);
-			case PINK_GHOST_TYPE:
+			case GhostType::PINK_GHOST:
 				return GEngine::Color01(0.8, 0.3f, 0.7f);
 		}
 
@@ -121,22 +124,22 @@ namespace PacMan
 	{
 		switch (ghostType)
 		{
-			case RED_GHOST_TYPE:
+			case GhostType::RED_GHOST:
 			{
 				ghostEntity->AddComponent<RedGhostAiComponent>();
 				break;
 			}
-			case ORANGE_GHOST_TYPE:
+			case GhostType::ORANGE_GHOST:
 			{
 				ghostEntity->AddComponent<RedGhostAiComponent>();
 				break;
 			}
-			case CIAN_GHOST_TYPE:
+			case GhostType::CIAN_GHOST:
 			{
 				ghostEntity->AddComponent<RedGhostAiComponent>();
 				break;
 			}
-			case PINK_GHOST_TYPE:
+			case GhostType::PINK_GHOST:
 			{
 				ghostEntity->AddComponent<RedGhostAiComponent>();
 				break;

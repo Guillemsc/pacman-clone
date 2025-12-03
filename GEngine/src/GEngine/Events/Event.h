@@ -17,7 +17,20 @@ namespace GEngine
 	};
 
 	template<typename... Args>
-	class Event final : public SubscribeEvent<Args...>
+	class UnsubscribeEvent
+	{
+	public:
+		virtual void Remove(const std::function<void(Args...)>& handler) = 0;
+	};
+
+	template<typename... Args>
+	class RegistreEvent : public SubscribeEvent<Args...>, public UnsubscribeEvent<Args...>
+	{
+
+	};
+
+	template<typename... Args>
+	class Event final : public RegistreEvent<Args...>
 	{
 	public:
 		using Handler = std::function<void(Args...)>;
@@ -32,7 +45,7 @@ namespace GEngine
 			_handlers.push_back(handler);
 		}
 
-		void Remove(const Handler& handler)
+		void Remove(const Handler& handler) override
 		{
 			_handlers.erase(
 				std::remove_if(

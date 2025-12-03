@@ -7,7 +7,7 @@
 
 namespace GEngine
 {
-	enum ResourceType
+	enum class ResourceType
 	{
 		TEXTURE,
 		SPRITE,

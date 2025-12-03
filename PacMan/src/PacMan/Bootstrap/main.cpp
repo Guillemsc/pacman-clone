@@ -3,6 +3,7 @@
 #include "GEngine/Core/GEngineCoreApplication.h"
 #include "GEngine/Modules/GameModule.h"
 #include "PacMan/Games/PacManGame.h"
+#include "PacMan/Contexts/ContextsStack.h"
 
 int main()
 {

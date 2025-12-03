@@ -19,6 +19,8 @@ namespace GEngine
 
 namespace PacMan
 {
+	class ContextsStack;
+
 	class PacManGame final : public GEngine::Game
 	{
 	public:
@@ -28,6 +30,9 @@ namespace PacMan
 
 	private:
 		tokoro::Async<void> LaunchGameAsync();
+
+	private:
+		std::unique_ptr<ContextsStack> _contextsStack;
 	};
 }
 

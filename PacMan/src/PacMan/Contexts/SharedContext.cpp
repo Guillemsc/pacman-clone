@@ -5,7 +5,6 @@
 #include "SharedContext.h"
 
 #include "GEngine/Core/GEngineCoreApplication.h"
-#include "GEngine/Modules/CoroutinesModule.h"
 #include "GEngine/ServiceLocators/ServiceLocator.h"
 
 namespace PacMan

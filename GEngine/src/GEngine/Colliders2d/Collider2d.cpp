@@ -6,7 +6,7 @@
 
 #include <cmath>
 
-#include "Collision2dData.h"
+#include "Contact2dData.h"
 
 namespace GEngine
 {
@@ -41,5 +41,25 @@ namespace GEngine
 	void Collider2d::SetLayerMask(const std::uint32_t mask)
 	{
 		_layerMask = mask;
+	}
+
+	std::weak_ptr<Entity> Collider2d::GetOwner() const
+	{
+		return _owner;
+	}
+
+	RegistreEvent<const Contact2dData&>& Collider2d::OnContactStart()
+	{
+		return _onContactStart;
+	}
+
+	RegistreEvent<const Contact2dData&>& Collider2d::OnContactStay()
+	{
+		return _onContactStay;
+	}
+
+	RegistreEvent<const Contact2dData&>& Collider2d::OnContactEnd()
+	{
+		return _onContactEnd;
 	}
 }

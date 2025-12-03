@@ -7,12 +7,12 @@
 
 namespace PacMan
 {
-	enum GhostType
+	enum class GhostType
 	{
-		RED_GHOST_TYPE,
-		CIAN_GHOST_TYPE,
-		PINK_GHOST_TYPE,
-		ORANGE_GHOST_TYPE,
+		RED_GHOST,
+		CIAN_GHOST,
+		PINK_GHOST,
+		ORANGE_GHOST,
 	};
 }
 

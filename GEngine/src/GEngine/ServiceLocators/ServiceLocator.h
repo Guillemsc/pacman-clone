@@ -15,48 +15,46 @@ namespace GEngine
 	{
 	public:
 		template<typename T>
-		static void Register(std::shared_ptr<T> service);
+		static void Register(T* service)
+		{
+			const std::type_index type = typeid(T);
+			_services[type] = service;
+		}
 
 		template<typename T>
-		static std::shared_ptr<T> Get();
+		static T* Get()
+		{
+			const std::type_index type = typeid(T);
+			const auto it = _services.find(type);
+			if (it != _services.end())
+			{
+				return static_cast<T*>(it->second);
+			}
+
+			throw std::runtime_error(std::string("ServiceLocator: service not registered: ") + type.name());
+		}
+
+		template<typename T>
+		static T* GetOrNull()
+		{
+			const std::type_index type = typeid(T);
+			const auto it = _services.find(type);
+			if (it != _services.end())
+			{
+				return static_cast<T*>(it->second);
+			}
+
+			return nullptr;
+		}
 
 		static void Clear()
 		{
-			services().clear();
+			_services.clear();
 		}
 
 	private:
-		static std::unordered_map<std::type_index, std::shared_ptr<void>>& services()
-		{
-			static std::unordered_map<std::type_index, std::shared_ptr<void>> instance;
-			return instance;
-		}
+		static inline std::unordered_map<std::type_index, void*> _services;
 	};
-
-	// -------------------------------------------------------
-	// -------------------------------------------------------
-
-	template<typename T>
-	void ServiceLocator::Register(std::shared_ptr<T> service)
-	{
-		const std::type_index typeIndex = std::type_index(typeid(T));
-		services()[typeIndex] = service;
-	}
-
-	template<typename T>
-	std::shared_ptr<T> ServiceLocator::Get()
-	{
-		const std::type_index typeIndex = std::type_index(typeid(T));
-
-		const auto it = services().find(typeIndex);
-
-		if (it != services().end())
-		{
-			return std::static_pointer_cast<T>(it->second);
-		}
-
-		return nullptr;
-	}
 }
 
 #endif //SERVICELOCATOR_H

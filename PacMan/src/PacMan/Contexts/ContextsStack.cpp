@@ -11,18 +11,9 @@
 
 namespace PacMan
 {
-	ContextsStack::ContextsStack(const std::weak_ptr<GEngine::CoroutineSequencer>& coroutineSequencer)
-		: _coroutineSequencer(coroutineSequencer)
-	{
-
-	}
-
 	tokoro::Async<void> ContextsStack::PushAsync(const std::shared_ptr<Context> context)
 	{
 		if (_loading) co_return;
-
-		const std::shared_ptr<GEngine::CoroutineSequencer> sequencer = _coroutineSequencer.lock();
-		if (!sequencer) co_return;;
 
 		_loading = true;
 

@@ -48,6 +48,11 @@ add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Gameplay/Ghosts/Data/GhostPrisionSlotData.h
         src/PacMan/Gameplay/Ghosts/Data/LoadedGhostsData.h
         src/PacMan/Gameplay/Collisions/Enums/CollisionLayers.h
+        src/PacMan/Gameplay/Entities/Components/EntityIdComponent.cpp
+        src/PacMan/Gameplay/Entities/Components/EntityIdComponent.h
+        src/PacMan/Gameplay/Entities/Enums/EntityType.h
+        src/PacMan/Gameplay/Player/Components/PlayerAnimationComponent.cpp
+        src/PacMan/Gameplay/Player/Components/PlayerAnimationComponent.h
 )
 
 target_link_libraries(PacMan PRIVATE GEngineCore)

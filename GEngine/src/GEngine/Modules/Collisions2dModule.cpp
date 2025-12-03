@@ -5,7 +5,7 @@
 #include "Collisions2dModule.h"
 
 #include "GEngine/Colliders2d/Collider2d.h"
-#include "GEngine/Colliders2d/Collision2dData.h"
+#include "GEngine/Colliders2d/Contact2dData.h"
 #include "GEngine/Entities/Entity.h"
 #include "GEngine/Extensions/UnorderedMapExtensions.h"
 #include "GEngine/Extensions/VectorExtensions.h"
@@ -44,11 +44,16 @@ namespace GEngine
 		VectorExtensions::Remove(_colliders, lCollider);
 	}
 
+	const std::unordered_map<std::shared_ptr<Collider2d>, std::vector<std::shared_ptr<Collider2d>>>& Collisions2dModule::GetCurrentContacts()
+	{
+		return _currentContacts;
+	}
+
 	void Collisions2dModule::CheckCollisions()
 	{
-		const std::uint32_t collidersCount = _colliders.size();
+		const int collidersCount = _colliders.size();
 
-		for (std::uint32_t i = 0; i < collidersCount; ++i)
+		for (int i = 0; i < collidersCount; ++i)
 		{
 			const std::shared_ptr<Collider2d>& a = _colliders[i];
 
@@ -67,21 +72,44 @@ namespace GEngine
 
 				if (aCanCollideWithB)
 				{
-					AddContact(a, b);
+					RegisterContact(a, b);
 				}
 
 				if (bCanCollideWithA)
 				{
-					AddContact(b, a);
+					RegisterContact(b, a);
 				}
 			}
 		}
+
+		for (auto entry : _currentContacts)
+		{
+			for (int i = entry.second.size() - 1; i >= 0; --i)
+			{
+				const std::shared_ptr<Collider2d>& contacting = entry.second[i];
+
+				const bool happenedThisFrame = DidContactHappenThisFrame(entry.first, contacting);
+
+				if (!happenedThisFrame)
+				{
+					_contactsToRemoveThisFrame.push_back({ entry.first, contacting });
+				}
+			}
+		}
+
+		for (std::tuple entry : _contactsToRemoveThisFrame)
+		{
+			RemoveContact(std::get<0>(entry), std::get<1>(entry));
+		}
+
+		_contactsToRemoveThisFrame.clear();
+		_contactsThisFrame.clear();
 	}
 
-	bool Collisions2dModule::ContactAlreadyExists(
+	bool Collisions2dModule::DoesContactAlreadyExists(
 		const std::shared_ptr<Collider2d>& collider,
 		const std::shared_ptr<Collider2d>& with
-		) 
+		)
 	{
 		const auto optional = UnorderedMapExtensions::GetValueReference(_currentContacts, collider);
 		if (!optional.has_value()) return false;
@@ -99,21 +127,23 @@ namespace GEngine
 		return false;
 	}
 
-	void Collisions2dModule::AddContact(const std::shared_ptr<Collider2d>& collider, const std::shared_ptr<Collider2d>& with)
+	void Collisions2dModule::RegisterContact(const std::shared_ptr<Collider2d>& collider, const std::shared_ptr<Collider2d>& with)
 	{
-		const bool contactAlreadyExists = ContactAlreadyExists(collider, with);
+		const Contact2dData collisionData = { collider->_owner, with->_owner };
 
-		const Collision2dData collisionData = { collider, with };
+		_contactsThisFrame[collider].push_back(with);
+
+		const bool contactAlreadyExists = DoesContactAlreadyExists(collider, with);
 
 		if (contactAlreadyExists)
 		{
-			collider->_onCollisionStay.Invoke(collisionData);
+			collider->_onContactStay.Invoke(collisionData);
 			return;
 		}
 
 		_currentContacts[collider].push_back(with);
 
-		collider->_onCollisionStart.Invoke(collisionData);
+		collider->_onContactStart.Invoke(collisionData);
 	}
 
 	void Collisions2dModule::RemoveContact(const std::shared_ptr<Collider2d>& collider, const std::shared_ptr<Collider2d>& with)
@@ -124,25 +154,46 @@ namespace GEngine
 		const bool removed = VectorExtensions::Remove(it->second, with);
 		if (!removed) return;
 
-		const Collision2dData collisionData = { collider, with };
-		collider->_onCollisionEnd.Invoke(collisionData);
+		const Contact2dData collisionData = { collider->_owner, with->_owner };
+		collider->_onContactEnd.Invoke(collisionData);
 	}
 
 	void Collisions2dModule::ClearContacts(const std::shared_ptr<Collider2d> &collider)
 	{
 		const auto optional = UnorderedMapExtensions::GetValueReference(_currentContacts, collider);
+		if (!optional.has_value()) return;
 
-		if (optional.has_value())
+		const std::vector<std::shared_ptr<Collider2d>>& contacts = optional.value().get();
+
+		for (int i = contacts.size() - 1; i >= 0; --i)
 		{
-			const std::vector<std::shared_ptr<Collider2d>>& contacts = optional.value().get();
+			const std::shared_ptr<Collider2d>& contacting = contacts[i];
 
-			for (std::shared_ptr<Collider2d> contacting : contacts)
-			{
-				RemoveContact(collider, contacting);
-				RemoveContact(contacting, collider);
-			}
+			RemoveContact(collider, contacting);
+			RemoveContact(contacting, collider);
 		}
 
 		UnorderedMapExtensions::RemoveKey(_currentContacts, collider);
+	}
+
+	bool Collisions2dModule::DidContactHappenThisFrame(
+		const std::shared_ptr<Collider2d> &collider,
+		const std::shared_ptr<Collider2d> &with
+		)
+	{
+		const auto optional = UnorderedMapExtensions::GetValueReference(_contactsThisFrame, collider);
+		if (!optional.has_value()) return false;
+
+		const std::vector<std::shared_ptr<Collider2d>>& contacts = optional.value().get();
+
+		for (const std::shared_ptr<Collider2d>& contact : contacts)
+		{
+			if (contact == with)
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

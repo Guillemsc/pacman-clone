@@ -13,14 +13,11 @@
 #include "GEngine/Modules/TickablesModule.h"
 #include "GEngine/ServiceLocators/ServiceLocator.h"
 #include "GEngine/Resources/TiledMapResource.h"
-#include "PacMan/Gameplay/Entities/Data/GameplayEntities.h"
 #include "PacMan/Gameplay/Ghosts/Managers/GhostsLoaderManager.h"
 #include "PacMan/Gameplay/Ghosts/Managers/GhostsPrisionManager.h"
 #include "PacMan/Gameplay/Input/Systems/PlayerInputSystem.h"
 #include "PacMan/Gameplay/MapLoading/Managers/MapLoadingManager.h"
 #include "PacMan/Gameplay/MapMovement/Components/MapMovementComponent.h"
-#include "PacMan/Gameplay/MapMovement/Managers/MapMovementManager.h"
-#include "PacMan/Gameplay/MapMovement/Managers/MapPathfindingManager.h"
 #include "PacMan/Gameplay/Player/Managers/PlayerLoaderManager.h"
 #include "PacMan/Gameplay/Ghosts/Managers/GhostsPrisionManager.h"
 #include "PacMan/Gameplay/Ghosts/Data/LoadedGhostsData.h"
@@ -38,17 +35,17 @@ namespace PacMan
 		mapLoadingManager->LoadMap("test-map");
 		const LoadedMapData loadedMapData = mapLoadingManager->GetLoadedMapData();
 
-		_mapMovementManager = std::make_shared<MapMovementManager>(loadedMapData.Tilemap);
-		GEngine::ServiceLocator::Register(_mapMovementManager);
+		_mapMovementManager = std::make_unique<MapMovementManager>(loadedMapData.Tilemap);
+		GEngine::ServiceLocator::Register(_mapMovementManager.get());
 
-		_mapPathfindingManager = std::make_shared<MapPathfindingManager>(_mapMovementManager.get());
-		GEngine::ServiceLocator::Register(_mapPathfindingManager);
+		_mapPathfindingManager = std::make_unique<MapPathfindingManager>(_mapMovementManager.get());
+		GEngine::ServiceLocator::Register(_mapPathfindingManager.get());
 
 		_playerInputSystem = std::make_shared<PlayerInputSystem>();
 		_modules->tickables->AddTickable(_playerInputSystem);
 
-		_gameplayEntities = std::make_shared<GameplayEntities>();
-		GEngine::ServiceLocator::Register(_gameplayEntities);
+		_gameplayEntities = std::make_unique<GameplayEntities>();
+		GEngine::ServiceLocator::Register(_gameplayEntities.get());
 
 		_playerLoaderManager = std::make_shared<PlayerLoaderManager>(
 			_modules,

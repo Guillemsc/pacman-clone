@@ -99,16 +99,14 @@ namespace GEngine
 	bool EntitiesModule::RemoveEntityNow(const std::weak_ptr<Entity> &entityPtr)
 	{
 		const std::shared_ptr<Entity> entity = entityPtr.lock();
-		if (entity == nullptr) return false;
+		if (!entity) return false;
 
-		if (entity->_parentPtr.lock())
+		if (!entity->_parentPtr.expired())
 		{
 			entity->RemoveParent();
 		}
-		else
-		{
-			VectorExtensions::Remove(_rootEntities, entity);
-		}
+
+		VectorExtensions::Remove(_rootEntities, entity);
 
 		_checkingRemovingEntitiesBuffer.clear();
 

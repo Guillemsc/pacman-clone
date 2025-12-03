@@ -15,6 +15,7 @@
 #include "GEngine/Editor/PropertyDrawers/Vec2PropertyDrawerEditor.h"
 #include "GEngine/Editor/PropertyDrawers/Vec3PropertyDrawerEditor.h"
 #include "GEngine/Editor/PropertyDrawers/Vec4PropertyDrawerEditor.h"
+#include "GEngine/Editor/Windows/Collisions2dEditorWindow.h"
 #include "GEngine/Editor/Windows/DemoEditorWindow.h"
 #include "GEngine/Editor/Windows/EditorWindow.h"
 #include "GEngine/Editor/Windows/ExamplesEditorWindow.h"
@@ -49,6 +50,7 @@ namespace GEngine
 		RegisterWindow<UiEditorWindow>();
 		RegisterWindow<ExamplesEditorWindow>();
 		RegisterWindow<GuizmosEditorWindow>();
+		RegisterWindow<Collisions2dEditorWindow>();
 		RegisterWindow<DemoEditorWindow>();
 	}
 

@@ -166,8 +166,6 @@ add_library(GEngineCore STATIC
         src/GEngine/Directions/CardinalDirection.h
         src/GEngine/Extensions/CardinalDirectionExtensions.h
         src/GEngine/Coroutines/Coroutine.cpp
-        src/GEngine/Modules/CoroutinesModule.cpp
-        src/GEngine/Modules/CoroutinesModule.h
         src/GEngine/ServiceLocators/ServiceLocator.h
         src/GEngine/Shapes2d/Shape2d.h
         src/GEngine/Shapes2d/RectShape2d.cpp
@@ -290,7 +288,9 @@ add_library(GEngineCore STATIC
         src/GEngine/Obbs/Obb2d.h
         src/GEngine/Components/Collider2dComponent.cpp
         src/GEngine/Components/Collider2dComponent.h
-        src/GEngine/Colliders2d/Collision2dData.h
+        src/GEngine/Colliders2d/Contact2dData.h
+        src/GEngine/Editor/Windows/Collisions2dEditorWindow.cpp
+        src/GEngine/Editor/Windows/Collisions2dEditorWindow.h
 )
 
 # Disable inclusion of Win32 API symbols that conflict with raylib

@@ -23,13 +23,10 @@ namespace PacMan
 	class ContextsStack
 	{
 	public:
-		explicit ContextsStack(const std::weak_ptr<GEngine::CoroutineSequencer>& coroutineSequencer);
-
 		tokoro::Async<void> PushAsync(std::shared_ptr<Context> context);
 		void Pop();
 
 	private:
-		const std::weak_ptr<GEngine::CoroutineSequencer> _coroutineSequencer;
 		std::vector<std::shared_ptr<Context>> _contextsStack;
 
 		bool _loading = false;

@@ -6,8 +6,10 @@
 #define GAMEPLAYCONTEXT_H
 
 #include "Context.h"
+#include "PacMan/Gameplay/Entities/Data/GameplayEntities.h"
 
-
+#include "PacMan/Gameplay/MapMovement/Managers/MapMovementManager.h"
+#include "PacMan/Gameplay/MapMovement/Managers/MapPathfindingManager.h"
 
 namespace GEngine
 {
@@ -17,15 +19,13 @@ namespace GEngine
 namespace PacMan
 {
 	class GhostsPrisionManager;
-	class MapPathfindingManager;
 	class PlayerInputSystem;
 	class GhostsLoaderManager;
 	class PlayerLoaderManager;
-	class GameplayEntities;
 	class MapMovementSystem;
-	class MapMovementManager;
 	class MapPathfindingSystem;
 
+	// Contains all the main gameplay setup and logic.
 	class GameplayContext : public Context
 	{
 	public:
@@ -34,11 +34,11 @@ namespace PacMan
 		tokoro::Async<void> OnLoadAsync() override;
 
 	private:
-		std::shared_ptr<MapMovementManager> _mapMovementManager;
+		std::unique_ptr<MapMovementManager> _mapMovementManager;
 		std::shared_ptr<MapMovementSystem> _mapMovementSystem;
-		std::shared_ptr<MapPathfindingManager> _mapPathfindingManager;
+		std::unique_ptr<MapPathfindingManager> _mapPathfindingManager;
 		std::shared_ptr<MapPathfindingSystem> _mapPathfindingSystem;
-		std::shared_ptr<GameplayEntities> _gameplayEntities;
+		std::unique_ptr<GameplayEntities> _gameplayEntities;
 		std::shared_ptr<PlayerLoaderManager> _playerLoaderManager;
 		std::shared_ptr<GhostsLoaderManager> _ghostsLoaderManager;
 		std::shared_ptr<GhostsPrisionManager> _ghostsPrisionManager;

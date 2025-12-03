@@ -15,7 +15,6 @@ namespace GEngine
 	class TimeModule;
 	class ExamplesModule;
 	class UiModule;
-	class CoroutinesModule;
 	class CameraModule;
 	class EditorModule;
 	class RenderingModule;
@@ -52,7 +51,6 @@ namespace GEngine
 		std::unique_ptr<TickablesModule> _tickables;
 		std::unique_ptr<InputModule> _input;
 		std::unique_ptr<UiModule> _ui;
-		std::unique_ptr<CoroutinesModule> _coroutines;
 		std::unique_ptr<EditorModule> _editor;
 		std::unique_ptr<ExamplesModule> _examples;
 		std::unique_ptr<TweensModule> _tweens;

@@ -6,7 +6,6 @@
 
 #include "GEngine/Modules/CameraModule.h"
 #include "GEngine/Modules/Collisions2dModule.h"
-#include "GEngine/Modules/CoroutinesModule.h"
 #include "GEngine/Modules/EditorModule.h"
 #include "GEngine/Modules/EntitiesModule.h"
 #include "GEngine/Modules/ExamplesModule.h"
@@ -28,7 +27,6 @@ namespace GEngine
 	{
 		spdlog::info("Welcome to GEngineCore :)");
 
-		_coroutines = std::make_unique<CoroutinesModule>();
 		_entities = std::make_unique<EntitiesModule>();
 		_game = std::make_unique<GameModule>();
 		_camera = std::make_unique<CameraModule>();
@@ -56,7 +54,6 @@ namespace GEngine
 			_tickables.get(),
 			_input.get(),
 			_ui.get(),
-			_coroutines.get(),
 			_editor.get(),
 			_examples.get(),
 			_tweens.get(),
@@ -106,7 +103,6 @@ namespace GEngine
 		_ui->Tick();
 		_game->Tick();
 		_tickables->Tick();
-		_coroutines->Tick();
 		_entities->Tick();
 		_collisions2d->Tick();
 		_editor->Tick();

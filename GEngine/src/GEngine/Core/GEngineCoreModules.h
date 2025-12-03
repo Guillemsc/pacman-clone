@@ -24,6 +24,7 @@ namespace GEngine
 	class TweensModule;
 	class Collisions2dModule;
 
+	// All core modules provided by GEngine.
 	class GEngineCoreModules
 	{
 	public:
@@ -38,7 +39,6 @@ namespace GEngine
 			TickablesModule* systems,
 			InputModule* input,
 			UiModule* ui,
-			CoroutinesModule* coroutines,
 			EditorModule* editor,
 			ExamplesModule* examples,
 			TweensModule* tweens,
@@ -54,7 +54,6 @@ namespace GEngine
 			tickables(systems),
 			input(input),
 			ui(ui),
-			coroutines(coroutines),
 			editor(editor),
 			examples(examples),
 			tweens(tweens),
@@ -73,7 +72,6 @@ namespace GEngine
 		TickablesModule* const tickables;
 		InputModule* const input;
 		UiModule* const ui;
-		CoroutinesModule* const coroutines;
 		EditorModule* const editor;
 		ExamplesModule* const examples;
 		TweensModule* const tweens;

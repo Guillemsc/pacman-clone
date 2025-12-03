@@ -4,6 +4,7 @@
 
 #ifndef SHAREDCONTEXT_H
 #define SHAREDCONTEXT_H
+
 #include <iostream>
 
 #include "Context.h"
@@ -11,6 +12,7 @@
 
 namespace PacMan
 {
+	// Contains initial and shared modules/logic through all the game.
 	class SharedContext : public Context
 	{
 	public:

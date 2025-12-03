@@ -5,15 +5,14 @@
 #ifndef CELLPOSITION_H
 #define CELLPOSITION_H
 
-namespace GEngine {
-
-enum CellPosition
+namespace GEngine
 {
-	BOTTOM_LEFT,
-	CENTER,
-	CENTER_RIGHT,
-};
-
-} // GEngineCore
+	enum class CellPosition
+	{
+		BOTTOM_LEFT,
+		CENTER,
+		CENTER_RIGHT,
+	};
+}
 
 #endif //CELLPOSITION_H

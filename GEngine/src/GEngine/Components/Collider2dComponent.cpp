@@ -23,17 +23,17 @@ namespace GEngine
 		_collider = modules->collisions2d->AddCollider(GetEntity());
 
 		const std::shared_ptr<Collider2d> collider = _collider.lock();
-		if (!collider) return;
 
 		collider->SetLayer(_layer);
 		collider->SetLayerMask(_layerMask);
+		collider->OnContactStart().Add(std::bind(&Collider2dComponent::WhenContactStart, this, std::placeholders::_1));
+		collider->OnContactStay().Add(std::bind(&Collider2dComponent::WhenContactStay, this, std::placeholders::_1));
+		collider->OnContactEnd().Add(std::bind(&Collider2dComponent::WhenContactEnd, this, std::placeholders::_1));
 	}
 
 	void Collider2dComponent::OnTick()
 	{
 		const std::shared_ptr<Collider2d> collider = _collider.lock();
-		if (!collider) return;
-
 		const std::shared_ptr<TransformComponent> transform = GetEntity().lock()->GetTransform().lock();
 
 		const glm::vec2 position = transform->GetPositionXY();
@@ -81,5 +81,35 @@ namespace GEngine
 		if (!collider) return;
 
 		collider->SetLayerMask(mask);
+	}
+
+	RegistreEvent<const Contact2dData&>& Collider2dComponent::OnContactStart()
+	{
+		return _onContactStart;
+	}
+
+	RegistreEvent<const Contact2dData&>& Collider2dComponent::OnContactStay()
+	{
+		return _onContactStay;
+	}
+
+	RegistreEvent<const Contact2dData&>& Collider2dComponent::OnContactEnd()
+	{
+		return _onContactEnd;
+	}
+
+	void Collider2dComponent::WhenContactStart(const Contact2dData& contact) const
+	{
+		_onContactStart.Invoke(contact);
+	}
+
+	void Collider2dComponent::WhenContactStay(const Contact2dData& contact) const
+	{
+		_onContactStay.Invoke(contact);
+	}
+
+	void Collider2dComponent::WhenContactEnd(const Contact2dData& contact) const
+	{
+		_onContactEnd.Invoke(contact);
 	}
 }

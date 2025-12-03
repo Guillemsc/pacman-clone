@@ -36,6 +36,8 @@ namespace PacMan
 		void SetNextDirection(const GEngine::CardinalDirection& nextDirection);
 		void PathfindToGridPosition(const glm::i32vec2& targetGridPosition);
 
+		glm::i32vec2 GetDirectionVector() const;
+
 		void SetGuizmoColor(const GEngine::Color01& color);
 
 	private:

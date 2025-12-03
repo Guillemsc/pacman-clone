@@ -14,6 +14,7 @@
 #include "GEngine/Resources/SpriteResource.h"
 #include "GEngine/Scenes/Scene.h"
 #include "PacMan/Gameplay/Collisions/Enums/CollisionLayers.h"
+#include "PacMan/Gameplay/Entities/Components/EntityIdComponent.h"
 #include "PacMan/Gameplay/Entities/Data/GameplayEntities.h"
 #include "PacMan/Gameplay/Input/Systems/PlayerInputSystem.h"
 #include "PacMan/Gameplay/MapMovement/Components/MapMovementComponent.h"
@@ -42,6 +43,8 @@ namespace PacMan
 
 		const std::shared_ptr<GEngine::Entity> playerEntity = _scene->AddWorldEntity().lock();
 		playerEntity->SetName("Player");
+
+		playerEntity->AddComponent<EntityIdComponent>().lock()->SetType(EntityType::PLAYER);
 
 	 	const std::weak_ptr<GEngine::SpriteResource> spriteResource = _modules->resources->GetResource<GEngine::SpriteResource>("pacman.sprite");
 
