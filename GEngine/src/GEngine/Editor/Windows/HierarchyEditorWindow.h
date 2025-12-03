@@ -15,7 +15,7 @@ namespace GEngine
 	class EntitiesModule;
 	class Entity;
 
-	class HierarchyEditorWindow : public EditorWindow
+	class HierarchyEditorWindow final : public EditorWindow
 	{
 	public:
 		explicit HierarchyEditorWindow(GEngineCoreModules* modules);

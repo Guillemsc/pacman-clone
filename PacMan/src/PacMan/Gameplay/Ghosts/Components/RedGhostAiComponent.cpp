@@ -14,6 +14,11 @@ namespace PacMan
 	{
 	}
 
+	void RedGhostAiComponent::OnDrawGuizmo()
+	{
+
+	}
+
 	glm::i32vec2 RedGhostAiComponent::GetChaseTargetGridPosition() const
 	{
 		const std::shared_ptr<GameplayEntities> gameplayEntities = GEngine::ServiceLocator::Get<GameplayEntities>();

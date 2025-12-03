@@ -7,6 +7,7 @@
 #include "GEngine/Components/Component.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
 #include "GEngine/Modules/EntitiesModule.h"
+#include "GEngine/Modules/GuizmosModule.h"
 
 namespace GEngine
 {
@@ -187,7 +188,7 @@ namespace GEngine
 		for (auto it = _components.begin(); it != _components.end(); ++it)
 		{
 			(*it)->OnTick();
-			(*it)->OnDrawGuizmo();
+			modules->guizmos->DrawComponentGuizmo(it->get());
 		}
 	}
 

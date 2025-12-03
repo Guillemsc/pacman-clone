@@ -41,8 +41,7 @@ add_library(GEngineCore STATIC
         src/GEngine/Components/TransformComponent.cpp
         src/GEngine/Components/TransformComponent.h
         src/GEngine/Extensions/UnorderedMapExtensions.h
-        src/GEngine/Events/EventBus.h
-        src/GEngine/Events/EventBuses.h
+        src/GEngine/Events/Event.h
         src/GEngine/Modules/GameModule.cpp
         src/GEngine/Modules/GameModule.h
         src/GEngine/Games/Game.h
@@ -61,7 +60,6 @@ add_library(GEngineCore STATIC
         src/GEngine/Components/Shape2dRendererComponent.cpp
         src/GEngine/Components/Shape2dRendererComponent.h
         src/GEngine/Entities/Entity.cpp
-        src/GEngine/Events/Event.h
         src/GEngine/Rendering/ImGuiRenderer.cpp
         src/GEngine/Rendering/ImGuiRenderer.h
         src/GEngine/Modules/EditorModule.cpp
@@ -282,6 +280,17 @@ add_library(GEngineCore STATIC
         src/GEngine/ComponentsRegister/ComponentsRegister.h
         src/GEngine/Modules/GuizmosModule.cpp
         src/GEngine/Modules/GuizmosModule.h
+        src/GEngine/Editor/Windows/GuizmosEditorWindow.cpp
+        src/GEngine/Editor/Windows/GuizmosEditorWindow.h
+        src/GEngine/Modules/Collisions2dModule.cpp
+        src/GEngine/Modules/Collisions2dModule.h
+        src/GEngine/Colliders2d/Collider2d.cpp
+        src/GEngine/Colliders2d/Collider2d.h
+        src/GEngine/Obbs/Obb2d.cpp
+        src/GEngine/Obbs/Obb2d.h
+        src/GEngine/Components/Collider2dComponent.cpp
+        src/GEngine/Components/Collider2dComponent.h
+        src/GEngine/Colliders2d/Collision2dData.h
 )
 
 # Disable inclusion of Win32 API symbols that conflict with raylib

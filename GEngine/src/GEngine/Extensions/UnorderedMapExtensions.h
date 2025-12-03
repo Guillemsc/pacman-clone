@@ -27,6 +27,19 @@ namespace GEngine
 		}
 
 		template <typename TKey, typename TValue>
+		static std::optional<std::reference_wrapper<TValue>> GetValueReference(std::unordered_map<TKey, TValue>& map, const TKey& key)
+		{
+			auto foundIterator = map.find(key);
+
+			if (foundIterator == map.end())
+			{
+				return std::nullopt;
+			}
+
+			return std::ref((*foundIterator).second);
+		}
+
+		template <typename TKey, typename TValue>
 		static bool RemoveKey(std::unordered_map<TKey, TValue>& map, const TKey& key)
 		{
 			auto foundIterator = map.find(key);

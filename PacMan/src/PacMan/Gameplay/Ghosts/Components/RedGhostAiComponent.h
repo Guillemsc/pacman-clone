@@ -24,6 +24,8 @@ namespace PacMan
 	public:
 		explicit RedGhostAiComponent(GEngine::GEngineCoreModules *modules, const std::weak_ptr<GEngine::Entity> &entity);
 
+		void OnDrawGuizmo() override;
+
 	protected:
 		glm::i32vec2 GetChaseTargetGridPosition() const override;
 		glm::i32vec2 GetHideTargetGridPosition() const override;

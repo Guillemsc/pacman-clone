@@ -6,6 +6,7 @@
 
 #include "GEngine/Components/TransformComponent.h"
 #include "GEngine/Extensions/CardinalDirectionExtensions.h"
+#include "GEngine/Modules/RenderingModule.h"
 #include "GEngine/Modules/TimeModule.h"
 #include "GEngine/ServiceLocators/ServiceLocator.h"
 #include "PacMan/Gameplay/MapMovement/Managers/MapMovementManager.h"
@@ -21,6 +22,26 @@ namespace PacMan
 	void MapMovementComponent::OnTick()
 	{
 		MoveThroughPath();
+	}
+
+	void MapMovementComponent::OnDrawGuizmo()
+	{
+		const std::shared_ptr<MapMovementManager> mapMovement = GEngine::ServiceLocator::Get<MapMovementManager>();
+
+		glm::vec2 previousWorldPosition = GetEntity().lock()->GetTransform().lock()->GetPositionXY();
+		for (glm::i32vec2 gridPosition : _pathToFollow)
+		{
+			glm::vec2 worldPosition = mapMovement->GridPositionToWorldPosition(gridPosition);
+
+			modules->rendering->Guizmo2dRender()->AddLine(
+				previousWorldPosition,
+				worldPosition,
+				2,
+				_guizmoColor
+				);
+
+			previousWorldPosition = worldPosition;
+		}
 	}
 
 	void MapMovementComponent::SetGridPosition(
@@ -85,6 +106,11 @@ namespace PacMan
 		ClearPath();
 
 		mapPathfinding->GeneratePath(_currentGridPosition, targetGridPosition, _pathToFollow);
+	}
+
+	void MapMovementComponent::SetGuizmoColor(const GEngine::Color01 &color)
+	{
+		_guizmoColor = color;
 	}
 
 	void MapMovementComponent::MoveThroughPath()

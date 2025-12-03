@@ -4,6 +4,7 @@
 
 #include "PlayerLoaderManager.h"
 
+#include "GEngine/Components/Collider2dComponent.h"
 #include "GEngine/Components/Shape2dRendererComponent.h"
 #include "GEngine/Components/Sprite2dAnimatorComponent.h"
 #include "GEngine/Components/Sprite2dRendererComponent.h"
@@ -12,6 +13,7 @@
 #include "GEngine/Modules/ResourcesModule.h"
 #include "GEngine/Resources/SpriteResource.h"
 #include "GEngine/Scenes/Scene.h"
+#include "PacMan/Gameplay/Collisions/Enums/CollisionLayers.h"
 #include "PacMan/Gameplay/Entities/Data/GameplayEntities.h"
 #include "PacMan/Gameplay/Input/Systems/PlayerInputSystem.h"
 #include "PacMan/Gameplay/MapMovement/Components/MapMovementComponent.h"
@@ -36,6 +38,8 @@ namespace PacMan
 
 	void PlayerLoaderManager::LoadPlayer(const glm::i32vec2& gridPosition) const
 	{
+		const GEngine::Color01 color = {0.9f, 0.9f, 0.1f};
+
 		const std::shared_ptr<GEngine::Entity> playerEntity = _scene->AddWorldEntity().lock();
 		playerEntity->SetName("Player");
 
@@ -49,7 +53,12 @@ namespace PacMan
 		spriteAnimator->SetSprite2dRenderer(spriteRenderer);
 		spriteAnimator->AddAnimation({"test", {0, 1}});
 
+		const std::shared_ptr<GEngine::Collider2dComponent> collider = playerEntity->AddComponent<GEngine::Collider2dComponent>().lock();
+		collider->SetLayer(CollisionLayers::COLLISION_LAYER_PLAYER);
+		collider->SetLayerMask(CollisionLayers::COLLISION_LAYER_GHOST);
+
 		const std::shared_ptr<MapMovementComponent> mapMovement = playerEntity->AddComponent<MapMovementComponent>().lock();
+		mapMovement->SetGuizmoColor(color);
 		mapMovement->SetGridPosition(gridPosition);
 		_playerInputSystem->SetPlayer(mapMovement);
 

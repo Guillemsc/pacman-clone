@@ -17,7 +17,7 @@ namespace GEngine
 	};
 
 	template<typename... Args>
-	class Event : public SubscribeEvent<Args...>
+	class Event final : public SubscribeEvent<Args...>
 	{
 	public:
 		using Handler = std::function<void(Args...)>;
@@ -27,7 +27,7 @@ namespace GEngine
 			_handlers.clear();
 		}
 
-		void Add(const std::function<void(Args...)>& handler) override
+		void Add(const Handler& handler) override
 		{
 			_handlers.push_back(handler);
 		}

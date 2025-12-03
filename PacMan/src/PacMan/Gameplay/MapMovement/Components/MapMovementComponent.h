@@ -7,6 +7,7 @@
 
 #include <optional>
 
+#include "GEngine/Colors/Color01.h"
 #include "GEngine/Components/Component.h"
 #include "GEngine/Data/CellPosition.h"
 #include "GEngine/Directions/CardinalDirection.h"
@@ -23,6 +24,7 @@ namespace PacMan
 		explicit MapMovementComponent(GEngine::GEngineCoreModules* modules, const std::weak_ptr<GEngine::Entity> &entity);
 
 		void OnTick() override;
+		void OnDrawGuizmo() override;
 
 		void SetGridPosition(
 			const glm::i32vec2& gridPosition,
@@ -31,10 +33,10 @@ namespace PacMan
 		glm::i32vec2 GetGridPosition() const;
 
 		void SetCanMove(bool set);
-
 		void SetNextDirection(const GEngine::CardinalDirection& nextDirection);
-
 		void PathfindToGridPosition(const glm::i32vec2& targetGridPosition);
+
+		void SetGuizmoColor(const GEngine::Color01& color);
 
 	private:
 		void MoveThroughPath();
@@ -61,6 +63,8 @@ namespace PacMan
 		bool _hasValidLastPathPointData = false;
 
 		std::optional<GEngine::CardinalDirection> _nextDirectionWhenPathEmpty;
+
+		GEngine::Color01 _guizmoColor = {0, 1, 0, 1};
 	};
 }
 

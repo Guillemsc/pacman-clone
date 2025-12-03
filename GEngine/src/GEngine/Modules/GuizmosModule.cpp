@@ -22,4 +22,29 @@ namespace GEngine
 		const std::string name = component->GetTypeName();
 		return _enabledComponents.contains(name);
 	}
+
+	bool GuizmosModule::IsComponentEnabled(const std::string &componentName) const
+	{
+		return _enabledComponents.contains(componentName);
+	}
+
+	void GuizmosModule::SetComponentEnabled(const std::string &componentName, const bool enabled)
+	{
+		if (enabled)
+		{
+			_enabledComponents.insert(componentName);
+		}
+		else
+		{
+			_enabledComponents.erase(componentName);
+		}
+	}
+
+	void GuizmosModule::DrawComponentGuizmo(Component *component) const
+	{
+		const bool isEnabled = IsComponentEnabled(component);
+		if (!isEnabled) return;
+
+		component->OnDrawGuizmo();
+	}
 }

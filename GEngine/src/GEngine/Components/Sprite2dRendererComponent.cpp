@@ -45,29 +45,21 @@ namespace GEngine
 		if (!transform) return;
 
 		const Texture2D& rawTexture = texture->GetRawTexture();
+		const glm::vec2 position = transform->GetPositionXY();
+		const float rotation = transform->GetRotationEulerZ();
+		const glm::vec2 scale = transform->GetScaleXY();
 
-		glm::vec2 position = transform->GetPositionXY();
-		position.y = -position.y;
+		const Rectangle rectangle = sprite->GetRectangle(rectangleIndex);
 
-		float rotation = transform->GetRotationEulerDegreesZ();
-		glm::vec2 scale = transform->GetScaleXY();
-
-		Rectangle rectangle = sprite->GetRectangle(rectangleIndex);
-
-		position.x -= rectangle.width * 0.5f * scale.x;
-		position.y -= rectangle.height * 0.5f * scale.y;
-
-		modules->rendering->Render2d()->Add(_layer->GetValue(), [position, rotation, scale, rawTexture, rectangle]()
-		{
-			RayLibExtensions::DrawTextureEx(
-				rawTexture,
-				rectangle,
-				{ position.x, position.y },
-				rotation,
-				{ scale.x, scale.y },
-				WHITE
-				);
-		});
+		modules->rendering->Render2d()->AddTexture(
+			_layer->GetValue(),
+			rawTexture,
+			rectangle,
+			position,
+			rotation,
+			scale,
+			{ 1, 1, 1, 1 }
+		);
 	}
 
 	void Sprite2dRendererComponent::SetLayer(const int layer) const

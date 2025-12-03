@@ -6,6 +6,7 @@
 
 #include "GEngine/Extensions/Color01Extensions.h"
 #include "GEngine/Data/CornersRect.h"
+#include "glm/trigonometric.hpp"
 
 namespace GEngine
 {
@@ -35,15 +36,24 @@ namespace GEngine
 		});
 	}
 
-	void Guizmo2dRenderer::AddRect(const glm::vec2 &position, const glm::vec2 &size, const Color01 &color)
+	void Guizmo2dRenderer::AddRect(const glm::vec2 &position, const glm::vec2 &size, float rotationRadians, const Color01 &color)
 	{
-		Add(0, [this, position, size, color]()
+		Add(0, [this, position, size, color, rotationRadians]()
 		{
 			const glm::vec2 renderPosition = PositionToRenderPosition(position);
+			const float rotationDegrees = glm::degrees(rotationRadians);
 			const Color raylibColor = Color01Extensions::ToRaylibColor(color);
-			const glm::vec2 halfSize = size * 0.5f;
-			const glm::vec2 center = renderPosition - halfSize;
-			DrawRectangleV({ center.x, center.y }, { size.x, size.y }, raylibColor);
+
+			const Vector2 center = { size.x * 0.5f, size.y * 0.5f };
+
+			const Rectangle rectangle = {
+				renderPosition.x,
+				renderPosition.y,
+				size.x,
+				size.y,
+			};
+
+			DrawRectanglePro(rectangle, center, rotationDegrees, raylibColor);
 		});
 	}
 

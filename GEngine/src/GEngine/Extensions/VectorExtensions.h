@@ -14,8 +14,9 @@ namespace GEngine
 	{
 	public:
 		template <typename T>
-		static void Remove(std::vector<std::shared_ptr<T>>& vec, const std::shared_ptr<T>& value)
+		static bool Remove(std::vector<std::shared_ptr<T>>& vec, const std::shared_ptr<T>& value)
 		{
+			const std::int32_t oldSize = vec.size();
 			vec.erase(
 				std::remove_if(
 					vec.begin(),
@@ -27,6 +28,8 @@ namespace GEngine
 				),
 			vec.end()
 			);
+			const bool removed = vec.size() != oldSize;
+			return removed;
 		}
 
 		template <typename T>
@@ -78,6 +81,15 @@ namespace GEngine
 				),
 				vec.end()
 			);
+		}
+
+		template <typename T>
+		static bool Remove(std::vector<T>& vec, const T& value)
+		{
+			const std::int32_t oldSize = vec.size();
+			vec.erase(std::remove(vec.begin(), vec.end(), value), vec.end());
+			const bool removed = vec.size() != oldSize;
+			return removed;
 		}
 
 		template <typename T>

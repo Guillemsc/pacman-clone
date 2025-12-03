@@ -113,7 +113,7 @@ namespace GEngine
 			{
 				glm::vec2 worldPosition = GridPositionToWorldPosition({ x, y }, CellPosition::CENTER);
 
-				guizmoRenderer->AddRect(worldPosition, {4, 4}, Color01::Green);
+				guizmoRenderer->AddRect(worldPosition, {4, 4}, 0, Color01::Green);
 			}
 		}
 	}

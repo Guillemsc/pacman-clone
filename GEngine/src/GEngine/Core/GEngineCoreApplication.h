@@ -57,6 +57,7 @@ namespace GEngine
 		std::unique_ptr<ExamplesModule> _examples;
 		std::unique_ptr<TweensModule> _tweens;
 		std::unique_ptr<GuizmosModule> _guizmos;
+		std::unique_ptr<Collisions2dModule> _collisions2d;
 
 		std::unique_ptr<GEngineCoreModules> _modules;
 	};

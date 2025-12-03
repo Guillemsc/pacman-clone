@@ -18,6 +18,7 @@
 #include "GEngine/Editor/Windows/DemoEditorWindow.h"
 #include "GEngine/Editor/Windows/EditorWindow.h"
 #include "GEngine/Editor/Windows/ExamplesEditorWindow.h"
+#include "GEngine/Editor/Windows/GuizmosEditorWindow.h"
 #include "GEngine/Editor/Windows/HierarchyEditorWindow.h"
 #include "GEngine/Editor/Windows/InspectorEditorWindow.h"
 #include "GEngine/Editor/Windows/ResourcesEditorWindow.h"
@@ -47,6 +48,7 @@ namespace GEngine
 		RegisterWindow<ResourcesEditorWindow>();
 		RegisterWindow<UiEditorWindow>();
 		RegisterWindow<ExamplesEditorWindow>();
+		RegisterWindow<GuizmosEditorWindow>();
 		RegisterWindow<DemoEditorWindow>();
 	}
 

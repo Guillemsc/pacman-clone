@@ -4,10 +4,12 @@
 
 #include "GhostsLoaderManager.h"
 
+#include "GEngine/Components/Collider2dComponent.h"
 #include "GEngine/Components/Shape2dRendererComponent.h"
 #include "GEngine/Components/TransformComponent.h"
 #include "GEngine/Entities/Entity.h"
 #include "GEngine/Scenes/Scene.h"
+#include "PacMan/Gameplay/Collisions/Enums/CollisionLayers.h"
 #include "PacMan/Gameplay/Entities/Data/GameplayEntities.h"
 #include "PacMan/Gameplay/Ghosts/Components/RedGhostAiComponent.h"
 #include "PacMan/Gameplay/MapLoading/Data/LoadedMapData.h"
@@ -53,6 +55,10 @@ namespace PacMan
 		shape->SetLayer(1);
 		shape->SetColor(ghostColor);
 
+		const std::shared_ptr<GEngine::Collider2dComponent> collider = ghostEntity->AddComponent<GEngine::Collider2dComponent>().lock();
+		collider->SetLayer(CollisionLayers::COLLISION_LAYER_GHOST);
+		collider->SetLayerMask(CollisionLayers::COLLISION_LAYER_PLAYER);
+
 		if (isPrision)
 		{
 			const glm::vec2 worldPosition = _mapMovementManager->GridPositionToWorldPosition(gridPosition, GEngine::CellPosition::CENTER_RIGHT);
@@ -60,6 +66,7 @@ namespace PacMan
 		}
 
 		const std::shared_ptr<MapMovementComponent> mapMovement = ghostEntity->AddComponent<MapMovementComponent>().lock();
+		mapMovement->SetGuizmoColor(ghostColor);
 
 		if (!isPrision)
 		{

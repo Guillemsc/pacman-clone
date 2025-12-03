@@ -5,6 +5,7 @@
 #include "GEngineCoreApplication.h"
 
 #include "GEngine/Modules/CameraModule.h"
+#include "GEngine/Modules/Collisions2dModule.h"
 #include "GEngine/Modules/CoroutinesModule.h"
 #include "GEngine/Modules/EditorModule.h"
 #include "GEngine/Modules/EntitiesModule.h"
@@ -42,6 +43,7 @@ namespace GEngine
 		_editor = std::make_unique<EditorModule>();
 		_examples = std::make_unique<ExamplesModule>();
 		_guizmos = std::make_unique<GuizmosModule>();
+		_collisions2d = std::make_unique<Collisions2dModule>();
 
 		_modules = std::make_unique<GEngineCoreModules>(
 			_entities.get(),
@@ -58,7 +60,8 @@ namespace GEngine
 			_editor.get(),
 			_examples.get(),
 			_tweens.get(),
-			_guizmos.get()
+			_guizmos.get(),
+			_collisions2d.get()
 		);
 	}
 
@@ -72,6 +75,7 @@ namespace GEngine
 		spdlog::info("GEngineCore Init");
 
 		_input->Init(_modules.get());
+		_collisions2d->Init(_modules.get());
 		_entities->Init(_modules.get());
 		_editor->Init(_modules.get());
 		_window->Init(_modules.get());
@@ -104,6 +108,7 @@ namespace GEngine
 		_tickables->Tick();
 		_coroutines->Tick();
 		_entities->Tick();
+		_collisions2d->Tick();
 		_editor->Tick();
 		_camera->Tick(deltaTime);
 		_rendering->Tick();
@@ -117,6 +122,7 @@ namespace GEngine
 		_tickables->Dispose();
 		_game->Dispose();
 		_entities->Dispose();
+		_collisions2d->Dispose();
 		_tweens->Dispose();
 		_ui->Dispose();
 		_editor->Dispose();

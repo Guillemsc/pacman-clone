@@ -22,6 +22,7 @@ namespace GEngine
 	class GameModule;
 	class EntitiesModule;
 	class TweensModule;
+	class Collisions2dModule;
 
 	class GEngineCoreModules
 	{
@@ -41,22 +42,24 @@ namespace GEngine
 			EditorModule* editor,
 			ExamplesModule* examples,
 			TweensModule* tweens,
-			GuizmosModule* guizmos
+			GuizmosModule* guizmos,
+			Collisions2dModule* collisions2d
 			) : entities(entities),
-				game(game),
-				camera(camera),
-				window(window),
-				rendering(rendering),
-				resources(resources),
-				time(time),
-				tickables(systems),
-				input(input),
-				ui(ui),
-				coroutines(coroutines),
-				editor(editor),
-				examples(examples),
-				tweens(tweens),
-				guizmos(guizmos)
+			game(game),
+			camera(camera),
+			window(window),
+			rendering(rendering),
+			resources(resources),
+			time(time),
+			tickables(systems),
+			input(input),
+			ui(ui),
+			coroutines(coroutines),
+			editor(editor),
+			examples(examples),
+			tweens(tweens),
+			guizmos(guizmos),
+			collisions2d(collisions2d)
 		{}
 
 	public:
@@ -75,6 +78,7 @@ namespace GEngine
 		ExamplesModule* const examples;
 		TweensModule* const tweens;
 		GuizmosModule* const guizmos;
+		Collisions2dModule* const collisions2d;
 	};
 
 } // GEngine

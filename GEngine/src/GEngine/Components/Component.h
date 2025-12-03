@@ -16,6 +16,7 @@ namespace GEngine
 	class Component : public GEngineObject
 	{
 		friend class ComponentsModule;
+		friend class GuizmosModule;
 		friend class Entity;
 		friend class EntityInspectorEditor;
 

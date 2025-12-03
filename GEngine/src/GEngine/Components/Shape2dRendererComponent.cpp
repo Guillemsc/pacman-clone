@@ -32,18 +32,21 @@ namespace GEngine
 		const std::shared_ptr<TransformComponent> transform = entity->GetTransform().lock();
 		if (transform == nullptr) return;
 
-		glm::vec2 position = transform->GetPositionXY();
-		position.y = -position.y;
-		float rotation = -transform->GetRotationEulerDegreesZ();
-		glm::vec2 scale = transform->GetScaleXY();
+		const glm::vec2 position = transform->GetPositionXY();
+		const float rotation = transform->GetRotationEulerZ();
+		const glm::vec2 scale = transform->GetScaleXY();
 
-		modules->rendering->Render2d()->Add(_layer->GetValue(), [position, rotation, scale, this]()
+		if (const auto rectShape = std::dynamic_pointer_cast<RectShape2d>(_shape2d->GetValue()))
 		{
-			if (const auto rectShape = std::dynamic_pointer_cast<RectShape2d>(_shape2d->GetValue()))
-			{
-				RenderRectShape2d(position, rotation, scale, rectShape.get());
-			}
-		});
+			modules->rendering->Render2d()->AddRect(
+				_layer->GetValue(),
+				position,
+				rotation,
+				scale,
+				rectShape->GetSize(),
+				_color->GetValue()
+				);
+		}
 	}
 
 	void Shape2dRendererComponent::OnDestroy()
