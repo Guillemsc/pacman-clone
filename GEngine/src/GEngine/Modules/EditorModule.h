@@ -42,6 +42,8 @@ namespace GEngine
 
 		const std::vector<std::shared_ptr<EditorWindow>>& GetEditorWindows() const;
 
+		bool IsEditorEnabled() const;
+
 	private:
 		void RenderEditor();
 		void DrawWindows();
@@ -52,7 +54,7 @@ namespace GEngine
 	private:
 		GEngineCoreModules* _modules = nullptr;
 
-		bool _editorRenderingEnabled = true;
+		bool _isEditorEnabled = true;
 
 		std::unordered_map<std::type_index, std::shared_ptr<IPropertyDrawerEditor>> _propertyDrawers;
 

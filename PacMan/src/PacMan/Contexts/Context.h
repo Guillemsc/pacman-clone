@@ -9,8 +9,12 @@
 
 #include "tokoro.h"
 #include "GEngine/Core/GEngineCoreModules.h"
-#include "GEngine/Coroutines/Coroutine.h"
 #include "GEngine/Scenes/Scene.h"
+
+namespace GEngine
+{
+	class CoroutinesRunner;
+}
 
 namespace GEngine
 {
@@ -29,6 +33,8 @@ namespace PacMan
 		void Start();
 		void Dispose();
 
+		GEngine::CoroutinesRunner* GetCoroutinesRunner() const;
+
 	protected:
 		virtual tokoro::Async<void> OnLoadAsync();
 		virtual void OnStart();
@@ -40,6 +46,7 @@ namespace PacMan
 
 	private:
 		const std::string _name;
+		std::weak_ptr<GEngine::CoroutinesRunner> _coroutineRunner;
 
 		bool _loaded = false;
 		bool _started = false;

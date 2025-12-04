@@ -47,34 +47,22 @@ namespace GEngine
 		float rotation = transform->GetRotationEulerZ();
 		glm::vec2 scale = transform->GetScaleXY();
 
-		position = modules->rendering->Render2d()->PositionToRenderPosition(position);
-
 		modules->rendering->Render2d()->Add(0, [rawMap, position, scale, rotation, this, tiledMap]
 		{
 			const tmx::Vector2u pixelSizeOfTile = rawMap->getTileSize();
 			const tmx::Vector2u mapGridSize = rawMap->getTileCount();
 			const std::vector<tmx::Layer::Ptr>& layers = rawMap->getLayers();
 
-			if (pixelSizeOfTile.x == 0 || pixelSizeOfTile.y == 0)
-			{
-				return;
-			}
+			if (pixelSizeOfTile.x == 0 || pixelSizeOfTile.y == 0) return;
 
 			for (int i = 0; i < layers.size(); ++i)
 			{
 				const auto& layer = layers[i];
 
-				if (layer->getType() != tmx::Layer::Type::Tile)
-				{
-					continue;
-				}
+				if (layer->getType() != tmx::Layer::Type::Tile) continue;
 
 				const bool isVisible = GetIsLayerVisible(i);
-
-				if (!isVisible)
-				{
-					continue;
-				}
+				if (!isVisible) continue;
 
 				const tmx::TileLayer& tileLayer = layer->getLayerAs<tmx::TileLayer>();
 
@@ -85,7 +73,6 @@ namespace GEngine
 					rawMap.get(),
 					tileIds,
 					pixelSizeOfTile,
-					tileLayer,
 					mapGridSize,
 					position,
 					rotation,
@@ -105,15 +92,24 @@ namespace GEngine
 		const std::shared_ptr<tmx::Map> rawMap = tiledMap->GetRawMap().lock();
 		if (!rawMap) return;
 
+		const std::shared_ptr<TransformComponent> transform = GetEntity().lock()->GetTransform().lock();
+		if (!transform) return;
+
+		const float rotationRadians = transform->GetRotationEulerZ();
+
+		const glm::vec2 tileWorldSize = GetTileWorldSize();
 		const tmx::Vector2u mapGridSize = rawMap->getTileCount();
 
 		for (int x = 0; x < mapGridSize.x; x++)
 		{
 			for (int y = 0; y < mapGridSize.y; y++)
 			{
-				glm::vec2 worldPosition = GridPositionToWorldPosition({ x, y }, CellPosition::CENTER);
+				const glm::i32vec2 girdPosition = tiledMap->TiledGridPositionToEngineGridPosition({ x, y });
 
-				guizmoRenderer->AddRect(worldPosition, {4, 4}, 0, Color01::Green);
+				glm::vec2 worldPosition = GridPositionToWorldPosition(girdPosition, CellPosition::CENTER);
+
+				guizmoRenderer->AddRect(worldPosition, {1, 1}, 0, Color01::Blue);
+				guizmoRenderer->AddRectLines(worldPosition, tileWorldSize, rotationRadians, 0.5f, Color01::Green);
 			}
 		}
 	}
@@ -251,6 +247,15 @@ namespace GEngine
 		return localNormalisedPosition;
 	}
 
+	glm::vec2 TiledMap2dRendererComponent::GetTileWorldSize() const
+	{
+		const std::shared_ptr<TransformComponent> transform = GetEntity().lock()->GetTransform().lock();
+
+		const glm::vec2 scale = transform->GetScaleXY();
+
+		return _tilePixelSize * scale;
+	}
+
 	std::int32_t TiledMap2dRendererComponent::GetLayerNameFromLayerIndex(const std::string &layerName) const
 	{
 		const std::shared_ptr<TiledMapResource> tiledMap = _tiledMapPtr.lock();
@@ -339,14 +344,14 @@ namespace GEngine
 
 		if (cellPosition == CellPosition::CENTER)
 		{
-			tilePositionX += _tilePixelSize.x * 0.5f;
-			tilePositionY += _tilePixelSize.y * 0.5f;
+			tilePositionX += _tilePixelSize.x * 0.5f * tilemapScale.x;
+			tilePositionY += _tilePixelSize.y * 0.5f * tilemapScale.y;
 		}
 
 		if (cellPosition == CellPosition::CENTER_RIGHT)
 		{
-			tilePositionX += _tilePixelSize.x;
-			tilePositionY += _tilePixelSize.y * 0.5f;
+			tilePositionX += _tilePixelSize.x * tilemapScale.x;
+			tilePositionY += _tilePixelSize.y * 0.5f * tilemapScale.y;
 		}
 
 		const glm::vec2 point = { tilePositionX, tilePositionY };
@@ -360,17 +365,14 @@ namespace GEngine
 		const TiledMapResource* tiledMapResource,
 		const tmx::Map* mapData,
 		const std::vector<tmx::TileLayer::Tile> &layerTileIds,
-		const tmx::Vector2u pixelSizeOfTile,
-		const tmx::TileLayer& tileLayer,
-		const tmx::Vector2u &layerGridSize,
+		const tmx::Vector2u& pixelSizeOfTile,
+		const tmx::Vector2u& layerGridSize,
 		const glm::vec2& position,
 		const float rotation,
 		const glm::vec2& scale
 		) const
 	{
 		const std::vector<tmx::Tileset>& tileSets = mapData->getTilesets();
-
-		const float rotationDegrees = glm::degrees(rotation);
 
 		for (std::int32_t y = 0; y < layerGridSize.y; ++y)
 		{
@@ -420,12 +422,15 @@ namespace GEngine
 				const float tileStartOnTileSetTextureX = tileSetMargin + tileNormalizedPositionOnTileSetX * (pixelSizeOfTile.x + tileSetSpacing);
 				const float tileStartOnTileSetTextureY = tileSetMargin + tileNormalizedPositionOnTileSetY * (pixelSizeOfTile.y + tileSetSpacing);
 
+				const glm::i32vec2 girdPosition = tiledMapResource->TiledGridPositionToEngineGridPosition({ x, y });
+
 				const glm::vec2 finalPosition = GridPositionToWorldPosition(
 					{ layerGridSize.x, layerGridSize.y },
 					position,
-					-rotation,
+					rotation,
 					scale,
-					{x, y}
+					girdPosition,
+					CellPosition::CENTER
 					);
 
 				Rectangle source = {
@@ -435,13 +440,13 @@ namespace GEngine
 					static_cast<float>(pixelSizeOfTile.y)
 				};
 
-				RayLibExtensions::DrawTextureEx(
+				Renderer2d::DrawTexture(
 					rawTexture,
 					source,
-					{ finalPosition.x, finalPosition.y },
-					rotationDegrees,
-					{ scale.x, scale.y },
-					WHITE
+					finalPosition,
+					rotation,
+					scale,
+					Color01::White
 					);
 			}
 		}

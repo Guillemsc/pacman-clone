@@ -52,6 +52,7 @@ namespace GEngine
 		std::unique_ptr<InputModule> _input;
 		std::unique_ptr<UiModule> _ui;
 		std::unique_ptr<EditorModule> _editor;
+		std::unique_ptr<CoroutinesModule> _coroutines;
 		std::unique_ptr<ExamplesModule> _examples;
 		std::unique_ptr<TweensModule> _tweens;
 		std::unique_ptr<GuizmosModule> _guizmos;

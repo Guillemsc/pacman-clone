@@ -96,6 +96,25 @@ namespace GEngine
 		});
 	}
 
+	void Renderer2d::DrawTexture(
+		const Texture2D &texture,
+		const Rectangle &source,
+		const glm::vec2 &position,
+		const float rotationRadians,
+		const glm::vec2 &scale,
+		const Color01 &color
+		)
+	{
+		const glm::vec2 renderPosition = PositionToRenderPosition(position);
+		const float rotationDegrees = glm::degrees(rotationRadians);
+		const Vector2 size = { source.width * scale.x, source.height * scale.y };
+		const Vector2 center = { size.x * 0.5f, size.y * 0.5f };
+		const Rectangle dest = { renderPosition.x, renderPosition.y, size.x, size.y };
+		const Color raylibColor = Color01Extensions::ToRaylibColor(color);
+
+		DrawTexturePro(texture, source, dest, center, rotationDegrees, raylibColor);
+	}
+
 	glm::vec2 Renderer2d::PositionToRenderPosition(const glm::vec2 &position)
 	{
 		const glm::vec2 newPosition = { position.x, -position.y };

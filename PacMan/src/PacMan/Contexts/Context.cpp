@@ -7,8 +7,8 @@
 #include <format>
 
 #include "GEngine/Core/GEngineCoreApplication.h"
-#include "GEngine/Coroutines/CoroutineBuilder.h"
 #include "GEngine/Entities/Entity.h"
+#include "GEngine/Modules/CoroutinesModule.h"
 #include "GEngine/Modules/EntitiesModule.h"
 #include "GEngine/ServiceLocators/ServiceLocator.h"
 
@@ -18,6 +18,7 @@ namespace PacMan
 		: _modules(modules), _name(name)
 	{
 		_scene = std::make_unique<GEngine::Scene>(modules->entities, name);
+		_coroutineRunner = modules->coroutines->CreateRunner();
 	}
 
 	tokoro::Async<void> Context::LoadAsync()
@@ -51,7 +52,14 @@ namespace PacMan
 
 		OnDispose();
 
+		_modules->coroutines->DestroyRunner(_coroutineRunner);
+
 		_scene->Dispose();
+	}
+
+	GEngine::CoroutinesRunner* Context::GetCoroutinesRunner() const
+	{
+		return _coroutineRunner.lock().get();
 	}
 
 	tokoro::Async<void> Context::OnLoadAsync()
@@ -65,5 +73,6 @@ namespace PacMan
 
 	void Context::OnDispose()
 	{
+
 	}
 }

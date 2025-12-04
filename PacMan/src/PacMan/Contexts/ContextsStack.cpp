@@ -5,8 +5,6 @@
 #include "ContextsStack.h"
 
 #include "Context.h"
-#include "GEngine/Coroutines/CoroutineBuilder.h"
-#include "GEngine/Coroutines/CoroutineSequencer.h"
 #include "GEngine/Extensions/VectorExtensions.h"
 
 namespace PacMan

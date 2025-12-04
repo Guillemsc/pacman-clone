@@ -4,6 +4,7 @@
 
 #include "GuizmosModule.h"
 
+#include "EditorModule.h"
 #include "GEngine/Components/Component.h"
 
 namespace GEngine
@@ -42,6 +43,9 @@ namespace GEngine
 
 	void GuizmosModule::DrawComponentGuizmo(Component *component) const
 	{
+		const bool isEditorEnabled = _modules->editor->IsEditorEnabled();
+		if (!isEditorEnabled) return;
+
 		const bool isEnabled = IsComponentEnabled(component);
 		if (!isEnabled) return;
 

@@ -132,13 +132,6 @@ add_library(GEngineCore STATIC
         src/GEngine/Extensions/Vec2Extensions.h
         src/GEngine/Data/TiledLayerData.h
         src/GEngine/Data/TiledLayerData.cpp
-        src/GEngine/Coroutines/Coroutine.h
-        src/GEngine/Coroutines/NestedCoroutine.cpp
-        src/GEngine/Coroutines/NestedCoroutine.h
-        src/GEngine/Coroutines/CoroutineRunner.cpp
-        src/GEngine/Coroutines/CoroutineRunner.h
-        src/GEngine/Coroutines/WaitFramesCoroutine.cpp
-        src/GEngine/Coroutines/WaitFramesCoroutine.h
         src/GEngine/Timers/Timer.cpp
         src/GEngine/Timers/Timer.h
         src/GEngine/Timers/ITimeSource.h
@@ -146,16 +139,6 @@ add_library(GEngineCore STATIC
         src/GEngine/Timers/ChronoTimeSource.h
         src/GEngine/Timers/ChronoTimer.cpp
         src/GEngine/Timers/ChronoTimer.h
-        src/GEngine/Coroutines/WaitSecondsCoroutine.cpp
-        src/GEngine/Coroutines/WaitSecondsCoroutine.h
-        src/GEngine/Coroutines/CoroutineBuilder.cpp
-        src/GEngine/Coroutines/CoroutineBuilder.h
-        src/GEngine/Coroutines/CallbackCoroutine.cpp
-        src/GEngine/Coroutines/CallbackCoroutine.h
-        src/GEngine/Coroutines/CoroutineTask.cpp
-        src/GEngine/Coroutines/CoroutineTask.h
-        src/GEngine/Coroutines/TimeSlicedCoroutine.cpp
-        src/GEngine/Coroutines/TimeSlicedCoroutine.h
         src/GEngine/Data/CellPosition.h
         src/GEngine/SerializedProperties/Property.h
         src/GEngine/SerializedProperties/PropertiesContainer.h
@@ -165,7 +148,6 @@ add_library(GEngineCore STATIC
         src/GEngine/Editor/PropertyDrawers/Vec3PropertyDrawerEditor.h
         src/GEngine/Directions/CardinalDirection.h
         src/GEngine/Extensions/CardinalDirectionExtensions.h
-        src/GEngine/Coroutines/Coroutine.cpp
         src/GEngine/ServiceLocators/ServiceLocator.h
         src/GEngine/Shapes2d/Shape2d.h
         src/GEngine/Shapes2d/RectShape2d.cpp
@@ -234,8 +216,6 @@ add_library(GEngineCore STATIC
         src/GEngine/Editor/ResourcesInspector/FontResourceInspectorEditor.h
         src/GEngine/Components/UiTextRendererComponent.cpp
         src/GEngine/Components/UiTextRendererComponent.h
-        src/GEngine/Coroutines/CoroutineSequencer.cpp
-        src/GEngine/Coroutines/CoroutineSequencer.h
         src/GEngine/Coroutines/Coroutines.h
         src/GEngine/Coroutines/Coroutines.cpp
         src/GEngine/Tweens/Tween.cpp
@@ -291,6 +271,10 @@ add_library(GEngineCore STATIC
         src/GEngine/Colliders2d/Contact2dData.h
         src/GEngine/Editor/Windows/Collisions2dEditorWindow.cpp
         src/GEngine/Editor/Windows/Collisions2dEditorWindow.h
+        src/GEngine/Modules/CoroutinesModule.cpp
+        src/GEngine/Modules/CoroutinesModule.h
+        src/GEngine/Coroutines/CoroutinesRunner.cpp
+        src/GEngine/Coroutines/CoroutinesRunner.h
 )
 
 # Disable inclusion of Win32 API symbols that conflict with raylib

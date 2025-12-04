@@ -14,6 +14,7 @@
 
 namespace GEngine
 {
+	class CoroutinesRunner;
 	class GEngineCoreModules;
 	class Entity;
 }
@@ -35,6 +36,7 @@ namespace PacMan
 	public:
 		GhostsPrisionManager(
 			GEngine::GEngineCoreModules* modules,
+			GEngine::CoroutinesRunner* coroutines,
 			MapMovementManager* mapMovementManager
 			);
 
@@ -49,6 +51,7 @@ namespace PacMan
 
 	private:
 		GEngine::GEngineCoreModules* const _modules;
+		GEngine::CoroutinesRunner* const _coroutines;
 		MapMovementManager* const _mapMovementManager;
 
 		std::unique_ptr<GhostPrisionSlotData> _leftSlot;

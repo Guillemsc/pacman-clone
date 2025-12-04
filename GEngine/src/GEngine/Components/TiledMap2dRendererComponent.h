@@ -44,8 +44,10 @@ namespace GEngine
 		int GetLayersCount() const;
 		bool HasTileAtGridPosition(std::int32_t layerIndex, const glm::i32vec2& gridPosition) const;
 
-		glm::vec2 GridPositionToWorldPosition(const glm::i32vec2& gridPosition, CellPosition cellPosition = CellPosition::BOTTOM_LEFT) const;
+		glm::vec2 GridPositionToWorldPosition(const glm::i32vec2& gridPosition, CellPosition cellPosition = CellPosition::CENTER) const;
 		glm::i32vec2 WorldPositionToGridPosition(const glm::vec2& worldPosition) const;
+
+		glm::vec2 GetTileWorldSize() const;
 
 		std::int32_t GetLayerNameFromLayerIndex(const std::string& layerName) const;
 
@@ -72,11 +74,10 @@ namespace GEngine
 			const TiledMapResource* tiledMapResource,
 			const tmx::Map* mapData,
 			const std::vector<tmx::TileLayer::Tile>& layerTileIds,
-			const tmx::Vector2u pixelSizeOfTile,
-			const tmx::TileLayer& tileLayer,
+			const tmx::Vector2u& pixelSizeOfTile,
 			const tmx::Vector2u& layerGridSize,
 			const glm::vec2& position,
-			const float rotation,
+			float rotation,
 			const glm::vec2& scale
 			) const;
 

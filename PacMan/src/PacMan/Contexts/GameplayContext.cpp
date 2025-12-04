@@ -67,6 +67,7 @@ namespace PacMan
 
 		_ghostsPrisionManager = std::make_shared<GhostsPrisionManager>(
 			_modules,
+			GetCoroutinesRunner(),
 			_mapMovementManager.get()
 			);
 		_ghostsPrisionManager->Setup(loadedMapData, loadedGhostsData);

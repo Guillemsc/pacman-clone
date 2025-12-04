@@ -6,6 +6,7 @@
 
 #include "GEngine/Modules/CameraModule.h"
 #include "GEngine/Modules/Collisions2dModule.h"
+#include "GEngine/Modules/CoroutinesModule.h"
 #include "GEngine/Modules/EditorModule.h"
 #include "GEngine/Modules/EntitiesModule.h"
 #include "GEngine/Modules/ExamplesModule.h"
@@ -38,6 +39,7 @@ namespace GEngine
 		_input = std::make_unique<InputModule>();
 		_tweens = std::make_unique<TweensModule>();
 		_ui = std::make_unique<UiModule>();
+		_coroutines = std::make_unique<CoroutinesModule>();
 		_editor = std::make_unique<EditorModule>();
 		_examples = std::make_unique<ExamplesModule>();
 		_guizmos = std::make_unique<GuizmosModule>();
@@ -54,6 +56,7 @@ namespace GEngine
 			_tickables.get(),
 			_input.get(),
 			_ui.get(),
+			_coroutines.get(),
 			_editor.get(),
 			_examples.get(),
 			_tweens.get(),
@@ -74,6 +77,7 @@ namespace GEngine
 		_input->Init(_modules.get());
 		_collisions2d->Init(_modules.get());
 		_entities->Init(_modules.get());
+		_coroutines->Init(_modules.get());
 		_editor->Init(_modules.get());
 		_window->Init(_modules.get());
 		_rendering->Init(_modules.get());
@@ -104,6 +108,7 @@ namespace GEngine
 		_game->Tick();
 		_tickables->Tick();
 		_entities->Tick();
+		_coroutines->Tick();
 		_collisions2d->Tick();
 		_editor->Tick();
 		_camera->Tick(deltaTime);

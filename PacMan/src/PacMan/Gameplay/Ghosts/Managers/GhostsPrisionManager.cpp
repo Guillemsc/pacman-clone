@@ -6,6 +6,7 @@
 
 #include "GEngine/Components/TransformComponent.h"
 #include "GEngine/Coroutines/Coroutines.h"
+#include "GEngine/Coroutines/CoroutinesRunner.h"
 #include "GEngine/Modules/TweensModule.h"
 #include "GEngine/Tweens/InterpolationTween.h"
 #include "GEngine/Tweens/Tween.h"
@@ -19,9 +20,11 @@ namespace PacMan
 {
 	GhostsPrisionManager::GhostsPrisionManager(
 		GEngine::GEngineCoreModules* modules,
+		GEngine::CoroutinesRunner* coroutines,
 		MapMovementManager *mapMovementManager
 		)
 		: _modules(modules),
+		_coroutines(coroutines),
 		_mapMovementManager(mapMovementManager)
 	{
 	}
@@ -67,7 +70,7 @@ namespace PacMan
 		const std::shared_ptr<GEngine::Entity> ghostEntity = slot->ghostEntity.lock();
 		slot->ghostEntity.reset();
 
-		GEngine::Coroutines::Start(&GhostsPrisionManager::PlayReleaseGhostAsync, this, ghostEntity).Forget();
+		_coroutines->Start(&GhostsPrisionManager::PlayReleaseGhostAsync, this, ghostEntity).Forget();
 	}
 
 	GhostPrisionSlotData* GhostsPrisionManager::GetNextSlotToReleaseOrNull() const

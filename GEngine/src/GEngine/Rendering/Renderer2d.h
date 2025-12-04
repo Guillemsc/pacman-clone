@@ -44,6 +44,15 @@ namespace GEngine
 			const Color01& color
 			);
 
+		static void DrawTexture(
+			const Texture2D& texture,
+			const Rectangle& source,
+			const glm::vec2& position,
+			float rotationRadians,
+			const glm::vec2& scale,
+			const Color01& color
+			);
+
 		static glm::vec2 PositionToRenderPosition(const glm::vec2& position);
 
 	private:

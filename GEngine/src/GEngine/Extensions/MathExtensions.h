@@ -28,6 +28,11 @@ namespace GEngine
 			const float sin = std::sin(radians);
 			const float cos = std::cos(radians);
 
+			return RotatePointAroundOrigin(point, cos, sin);
+		}
+
+		static glm::vec2 RotatePointAroundOrigin(const glm::vec2 point, const float cos, const float sin)
+		{
 			float rotatedX = (point.x * cos) - (point.y * sin);
 			float rotatedY = (point.x * sin) + (point.y * cos);
 

@@ -60,7 +60,7 @@ namespace GEngine
 
 		if (IsKeyPressed(KeyboardKey::KEY_F1))
 		{
-			_editorRenderingEnabled = !_editorRenderingEnabled;
+			_isEditorEnabled = !_isEditorEnabled;
 		}
 	}
 
@@ -95,7 +95,7 @@ namespace GEngine
 		const PropertiesContainer& constainer = gEngineObject->GetProperties();
 		const std::vector<std::shared_ptr<IProperty>>& properties = constainer.GetProperties();
 
-		ImGui::Text(gEngineObject->GetObjectTypeName());
+		ImGui::Text("%s", gEngineObject->GetObjectTypeName());
 
 		for (auto it = properties.begin(); it != properties.end(); ++it)
 		{
@@ -118,9 +118,14 @@ namespace GEngine
 		return _windows;
 	}
 
+	bool EditorModule::IsEditorEnabled() const
+	{
+		return _isEditorEnabled;
+	}
+
 	void EditorModule::RenderEditor()
 	{
-		if (!_editorRenderingEnabled)
+		if (!_isEditorEnabled)
 		{
 			return;
 		}

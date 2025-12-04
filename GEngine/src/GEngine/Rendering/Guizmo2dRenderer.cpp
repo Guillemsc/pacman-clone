@@ -6,6 +6,7 @@
 
 #include "GEngine/Extensions/Color01Extensions.h"
 #include "GEngine/Data/CornersRect.h"
+#include "GEngine/Extensions/MathExtensions.h"
 #include "glm/trigonometric.hpp"
 
 namespace GEngine
@@ -54,6 +55,35 @@ namespace GEngine
 			};
 
 			DrawRectanglePro(rectangle, center, rotationDegrees, raylibColor);
+		});
+	}
+
+	void Guizmo2dRenderer::AddRectLines(const glm::vec2 &position, const glm::vec2 &size, float rotationRadians, float thickness, const Color01 &color)
+	{
+		Add(0, [this, position, size, color, rotationRadians, thickness]()
+		{
+			const glm::vec2 renderPosition = PositionToRenderPosition(position);
+			const Color raylibColor = Color01Extensions::ToRaylibColor(color);
+
+			const glm::vec2 halfSize = size * 0.5f;
+
+			const float cos = std::cos(rotationRadians);
+			const float sin = std::sin(rotationRadians);
+
+			const glm::vec2 localTopLeft = MathExtensions::RotatePointAroundOrigin({ -halfSize.x,  halfSize.y }, cos, sin);
+ 			const glm::vec2 localBottomLeft = MathExtensions::RotatePointAroundOrigin({ -halfSize.x, -halfSize.y }, cos, sin);
+ 			const glm::vec2 localBottomRight = MathExtensions::RotatePointAroundOrigin({  halfSize.x, -halfSize.y }, cos, sin);
+ 			const glm::vec2 localTopRight = MathExtensions::RotatePointAroundOrigin({ halfSize.x,  halfSize.y }, cos, sin);
+
+			const Vector2 topLeft = { renderPosition.x + localTopLeft.x, renderPosition.y + localTopLeft.y  };
+			const Vector2 bottomLeft = { renderPosition.x + localBottomLeft.x, renderPosition.y + localBottomLeft.y  };
+			const Vector2 bottomRight = { renderPosition.x + localBottomRight.x, renderPosition.y + localBottomRight.y  };
+			const Vector2 topRight = { renderPosition.x + localTopRight.x, renderPosition.y + localTopRight.y  };
+
+			DrawLineEx(topLeft, bottomLeft, thickness, raylibColor);
+			DrawLineEx(bottomLeft, bottomRight, thickness, raylibColor);
+			DrawLineEx(bottomRight, topRight, thickness, raylibColor);
+			DrawLineEx(topRight, topLeft, thickness, raylibColor);
 		});
 	}
 

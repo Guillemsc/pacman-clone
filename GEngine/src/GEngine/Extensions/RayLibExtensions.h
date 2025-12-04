@@ -35,10 +35,11 @@ namespace GEngine
 			const Color tint
 			)
 		{
-			const Rectangle dest = { position.x, position.y, source.width * scale.x, source.height * scale.y };
-			constexpr Vector2 origin = { 0.0f, 0.0f };
+			const Vector2 size = { source.width * scale.x, source.height * scale.y };
+			const Vector2 center = { size.x * 0.5f, size.y * 0.5f };
+			const Rectangle dest = { position.x, position.y, size.x, size.y };
 
-			DrawTexturePro(texture, source, dest, origin, rotation, tint);
+			DrawTexturePro(texture, source, dest, center, rotation, tint);
 		}
 	};
 }

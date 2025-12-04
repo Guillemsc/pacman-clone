@@ -6,7 +6,6 @@
 #define TESTGAME_H
 
 #include "tokoro.h"
-#include "GEngine/Coroutines/CoroutineRunner.h"
 #include "GEngine/Games/Game.h"
 #include "glm/fwd.hpp"
 #include "glm/vec2.hpp"
