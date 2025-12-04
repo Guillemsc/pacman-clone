@@ -14,6 +14,7 @@ namespace PacMan
 		COLLISION_LAYER_DEFAULT   = 1 << 0,
 		COLLISION_LAYER_PLAYER    = 1 << 1,
 		COLLISION_LAYER_GHOST     = 1 << 2,
+		COLLISION_LAYER_PELLETS   = 1 << 3,
 	};
 }
 

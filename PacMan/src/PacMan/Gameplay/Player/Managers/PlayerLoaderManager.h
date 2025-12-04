@@ -4,6 +4,7 @@
 
 #ifndef PLAYERLOADERMANAGER_H
 #define PLAYERLOADERMANAGER_H
+
 #include <memory>
 
 #include "glm/fwd.hpp"
@@ -16,6 +17,7 @@ namespace GEngine
 
 namespace PacMan
 {
+	class PlayerCollisionsManager;
 	class PlayerInputSystem;
 	class GameplayEntities;
 	class MapMovementManager;
@@ -28,7 +30,8 @@ namespace PacMan
 			GEngine::Scene* scene,
 			MapMovementManager* mapMovementManager,
 			PlayerInputSystem* playerInputSystem,
-			GameplayEntities* gameplayEntities
+			GameplayEntities* gameplayEntities,
+			PlayerCollisionsManager* playerCollisionsManager
 			);
 
 		void LoadPlayer(const glm::i32vec2& gridPosition) const;
@@ -39,6 +42,7 @@ namespace PacMan
 		MapMovementManager* const _mapMovementManager;
 		PlayerInputSystem* const _playerInputSystem;
 		GameplayEntities* const _gameplayEntities;
+		PlayerCollisionsManager* const _playerCollisionsManager;
 	};
 }
 

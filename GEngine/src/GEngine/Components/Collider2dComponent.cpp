@@ -83,17 +83,17 @@ namespace GEngine
 		collider->SetLayerMask(mask);
 	}
 
-	RegistreEvent<const Contact2dData&>& Collider2dComponent::OnContactStart()
+	RegisterEvent<const Contact2dData&>& Collider2dComponent::OnContactStart()
 	{
 		return _onContactStart;
 	}
 
-	RegistreEvent<const Contact2dData&>& Collider2dComponent::OnContactStay()
+	RegisterEvent<const Contact2dData&>& Collider2dComponent::OnContactStay()
 	{
 		return _onContactStay;
 	}
 
-	RegistreEvent<const Contact2dData&>& Collider2dComponent::OnContactEnd()
+	RegisterEvent<const Contact2dData&>& Collider2dComponent::OnContactEnd()
 	{
 		return _onContactEnd;
 	}

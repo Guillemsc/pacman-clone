@@ -48,17 +48,17 @@ namespace GEngine
 		return _owner;
 	}
 
-	RegistreEvent<const Contact2dData&>& Collider2d::OnContactStart()
+	RegisterEvent<const Contact2dData&>& Collider2d::OnContactStart()
 	{
 		return _onContactStart;
 	}
 
-	RegistreEvent<const Contact2dData&>& Collider2d::OnContactStay()
+	RegisterEvent<const Contact2dData&>& Collider2d::OnContactStay()
 	{
 		return _onContactStay;
 	}
 
-	RegistreEvent<const Contact2dData&>& Collider2d::OnContactEnd()
+	RegisterEvent<const Contact2dData&>& Collider2d::OnContactEnd()
 	{
 		return _onContactEnd;
 	}

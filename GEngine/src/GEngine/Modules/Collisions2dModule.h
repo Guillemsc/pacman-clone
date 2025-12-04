@@ -32,6 +32,9 @@ namespace GEngine
 	private:
 		void CheckCollisions();
 
+		void ProcessCollidersToRemove();
+		void ActuallyRemoveCollider(const std::weak_ptr<Collider2d>& collider);
+
 		bool DoesContactAlreadyExists(const std::shared_ptr<Collider2d>& collider, const std::shared_ptr<Collider2d>& with);
 		void RegisterContact(const std::shared_ptr<Collider2d>& collider, const std::shared_ptr<Collider2d>& with);
 		void RemoveContact(const std::shared_ptr<Collider2d>& collider, const std::shared_ptr<Collider2d>& with);
@@ -42,6 +45,7 @@ namespace GEngine
 		GEngineCoreModules* _modules = nullptr;
 
 		std::vector<std::shared_ptr<Collider2d>> _colliders;
+		std::vector<std::weak_ptr<Collider2d>> _collidersToRemove;
 		std::unordered_map<std::shared_ptr<Collider2d>, std::vector<std::shared_ptr<Collider2d>>> _currentContacts;
 
 		std::unordered_map<std::shared_ptr<Collider2d>, std::vector<std::shared_ptr<Collider2d>>> _contactsThisFrame;

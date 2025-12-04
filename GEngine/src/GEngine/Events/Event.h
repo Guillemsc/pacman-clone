@@ -24,13 +24,13 @@ namespace GEngine
 	};
 
 	template<typename... Args>
-	class RegistreEvent : public SubscribeEvent<Args...>, public UnsubscribeEvent<Args...>
+	class RegisterEvent : public SubscribeEvent<Args...>, public UnsubscribeEvent<Args...>
 	{
 
 	};
 
 	template<typename... Args>
-	class Event final : public RegistreEvent<Args...>
+	class Event final : public RegisterEvent<Args...>
 	{
 	public:
 		using Handler = std::function<void(Args...)>;

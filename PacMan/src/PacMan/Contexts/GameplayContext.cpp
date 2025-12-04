@@ -47,12 +47,15 @@ namespace PacMan
 		_gameplayEntities = std::make_unique<GameplayEntities>();
 		GEngine::ServiceLocator::Register(_gameplayEntities.get());
 
+		_playerCollisionsManager = std::make_unique<PlayerCollisionsManager>();
+
 		_playerLoaderManager = std::make_shared<PlayerLoaderManager>(
 			_modules,
 			_scene.get(),
 			_mapMovementManager.get(),
 			_playerInputSystem.get(),
-			_gameplayEntities.get()
+			_gameplayEntities.get(),
+			_playerCollisionsManager.get()
 			);
 		_playerLoaderManager->LoadPlayer(loadedMapData.PlayerPosition);
 

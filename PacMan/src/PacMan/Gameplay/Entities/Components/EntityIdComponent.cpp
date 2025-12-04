@@ -15,4 +15,9 @@ namespace PacMan
 	{
 		_type = type;
 	}
+
+	EntityType EntityIdComponent::GetType() const
+	{
+		return _type;
+	}
 }

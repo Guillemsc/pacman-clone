@@ -20,6 +20,7 @@ namespace GEngine
 	void Collisions2dModule::Tick()
 	{
 		CheckCollisions();
+		ProcessCollidersToRemove();
 	}
 
 	void Collisions2dModule::Dispose()
@@ -36,12 +37,7 @@ namespace GEngine
 
 	void Collisions2dModule::RemoveCollider(const std::weak_ptr<Collider2d> &collider)
 	{
-		const std::shared_ptr<Collider2d> lCollider = collider.lock();
-		if (!lCollider) return;
-
-		ClearContacts(lCollider);
-
-		VectorExtensions::Remove(_colliders, lCollider);
+		_collidersToRemove.push_back(collider);
 	}
 
 	const std::unordered_map<std::shared_ptr<Collider2d>, std::vector<std::shared_ptr<Collider2d>>>& Collisions2dModule::GetCurrentContacts()
@@ -104,6 +100,26 @@ namespace GEngine
 
 		_contactsToRemoveThisFrame.clear();
 		_contactsThisFrame.clear();
+	}
+
+	void Collisions2dModule::ProcessCollidersToRemove()
+	{
+		for (const std::weak_ptr<Collider2d>& collider : _collidersToRemove)
+		{
+			ActuallyRemoveCollider(collider);
+		}
+
+		_collidersToRemove.clear();
+	}
+
+	void Collisions2dModule::ActuallyRemoveCollider(const std::weak_ptr<Collider2d> &collider)
+	{
+		const std::shared_ptr<Collider2d> lCollider = collider.lock();
+		if (!lCollider) return;
+
+		ClearContacts(lCollider);
+
+		VectorExtensions::Remove(_colliders, lCollider);
 	}
 
 	bool Collisions2dModule::DoesContactAlreadyExists(

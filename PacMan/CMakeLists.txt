@@ -53,6 +53,8 @@ add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Gameplay/Player/Components/PlayerAnimationComponent.h
         src/PacMan/Gameplay/Pellets/Managers/PelletsLoadingManager.cpp
         src/PacMan/Gameplay/Pellets/Managers/PelletsLoadingManager.h
+        src/PacMan/Gameplay/Player/Managers/PlayerCollisionsManager.cpp
+        src/PacMan/Gameplay/Player/Managers/PlayerCollisionsManager.h
 )
 
 target_link_libraries(PacMan PRIVATE GEngineCore)

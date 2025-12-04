@@ -37,9 +37,9 @@ namespace GEngine
 
 		std::weak_ptr<Entity> GetOwner() const;
 
-		RegistreEvent<const Contact2dData&>& OnContactStart();
-		RegistreEvent<const Contact2dData&>& OnContactStay();
-		RegistreEvent<const Contact2dData&>& OnContactEnd();
+		RegisterEvent<const Contact2dData&>& OnContactStart();
+		RegisterEvent<const Contact2dData&>& OnContactStay();
+		RegisterEvent<const Contact2dData&>& OnContactEnd();
 
 	private:
 		std::weak_ptr<Entity> _owner;

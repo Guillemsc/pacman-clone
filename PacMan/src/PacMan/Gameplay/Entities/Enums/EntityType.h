@@ -12,6 +12,7 @@ namespace PacMan
 		UNDEFINED,
 		PLAYER,
 		GHOST,
+		PELLET,
 	};
 }
 

@@ -4,6 +4,7 @@
 
 #include "PlayerLoaderManager.h"
 
+#include "PlayerCollisionsManager.h"
 #include "GEngine/Components/Collider2dComponent.h"
 #include "GEngine/Components/Shape2dRendererComponent.h"
 #include "GEngine/Components/Sprite2dAnimatorComponent.h"
@@ -28,13 +29,15 @@ namespace PacMan
 		GEngine::Scene *scene,
 		MapMovementManager* mapMovementManager,
 		PlayerInputSystem* playerInputSystem,
-		GameplayEntities* gameplayEntities
+		GameplayEntities* gameplayEntities,
+		PlayerCollisionsManager* playerCollisionsManager
 		)
 		: _modules(modules),
 		_scene(scene),
 		_mapMovementManager(mapMovementManager),
 		_playerInputSystem(playerInputSystem),
-		_gameplayEntities(gameplayEntities)
+		_gameplayEntities(gameplayEntities),
+		_playerCollisionsManager(playerCollisionsManager)
 	{
 	}
 
@@ -59,7 +62,8 @@ namespace PacMan
 
 		const std::shared_ptr<GEngine::Collider2dComponent> collider = playerEntity->AddComponent<GEngine::Collider2dComponent>().lock();
 		collider->SetLayer(CollisionLayers::COLLISION_LAYER_PLAYER);
-		collider->SetLayerMask(CollisionLayers::COLLISION_LAYER_GHOST);
+		collider->SetLayerMask(CollisionLayers::COLLISION_LAYER_GHOST | CollisionLayers::COLLISION_LAYER_PELLETS);
+		collider->OnContactStart().Add(std::bind(&PlayerCollisionsManager::WhenPlayerCollided, _playerCollisionsManager, std::placeholders::_1));
 
 		const std::shared_ptr<MapMovementComponent> mapMovement = playerEntity->AddComponent<MapMovementComponent>().lock();
 		mapMovement->SetGuizmoColor(color);
