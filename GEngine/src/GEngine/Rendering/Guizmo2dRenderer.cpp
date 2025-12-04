@@ -42,7 +42,7 @@ namespace GEngine
 		Add(0, [this, position, size, color, rotationRadians]()
 		{
 			const glm::vec2 renderPosition = PositionToRenderPosition(position);
-			const float rotationDegrees = glm::degrees(rotationRadians);
+			const float rotationDegrees = RotationToRenderRotation(glm::degrees(rotationRadians));
 			const Color raylibColor = Color01Extensions::ToRaylibColor(color);
 
 			const Vector2 center = { size.x * 0.5f, size.y * 0.5f };
@@ -58,7 +58,7 @@ namespace GEngine
 		});
 	}
 
-	void Guizmo2dRenderer::AddRectLines(const glm::vec2 &position, const glm::vec2 &size, float rotationRadians, float thickness, const Color01 &color)
+	void Guizmo2dRenderer::AddRectLines(const glm::vec2 &position, const glm::vec2 &size, const float rotationRadians, float thickness, const Color01 &color)
 	{
 		Add(0, [this, position, size, color, rotationRadians, thickness]()
 		{
@@ -67,8 +67,9 @@ namespace GEngine
 
 			const glm::vec2 halfSize = size * 0.5f;
 
-			const float cos = std::cos(rotationRadians);
-			const float sin = std::sin(rotationRadians);
+			const float renderRotationRadians = RotationToRenderRotation(rotationRadians);
+			const float cos = std::cos(renderRotationRadians);
+			const float sin = std::sin(renderRotationRadians);
 
 			const glm::vec2 localTopLeft = MathExtensions::RotatePointAroundOrigin({ -halfSize.x,  halfSize.y }, cos, sin);
  			const glm::vec2 localBottomLeft = MathExtensions::RotatePointAroundOrigin({ -halfSize.x, -halfSize.y }, cos, sin);
@@ -98,8 +99,13 @@ namespace GEngine
 		});
 	}
 
-	glm::vec2 Guizmo2dRenderer::PositionToRenderPosition(const glm::vec2 &position) const
+	glm::vec2 Guizmo2dRenderer::PositionToRenderPosition(const glm::vec2 &position)
 	{
 		return { position.x, -position.y };
+	}
+
+	float Guizmo2dRenderer::RotationToRenderRotation(const float rotation)
+	{
+		return -rotation;
 	}
 }

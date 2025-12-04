@@ -40,7 +40,10 @@ namespace GEngine
 		ImGui::Separator();
 
 		glm::vec3 worldPosition = inspect->GetPosition();
-		ImGui::Text(std::format("World Position: X:{:.2f} Y:{:.2f} Z:{:.2f}", worldPosition.x, worldPosition.y, worldPosition.z).c_str());
+		if (ImGui::DragFloat3("World Position", &worldPosition.x, 0.1f))
+		{
+			inspect->SetPosition(worldPosition);
+		}
 
 		glm::vec3 worldRotation = inspect->GetRotationEulerDegrees();
 		ImGui::Text(std::format("World Rotation: X:{:.2f} Y:{:.2f} Z:{:.2f}", worldRotation.x, worldRotation.y, worldRotation.z).c_str());

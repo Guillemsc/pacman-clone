@@ -22,6 +22,11 @@ namespace GEngine
 	{
 	}
 
+	Color01 Color01::WithAlpha(const float alpha) const
+	{
+		return Color01(r, g, b, alpha);
+	}
+
 	Color01 Color01::FromHex(const std::string &hex)
 	{
 		const std::string cleanHex = (hex[0] == '#') ? hex.substr(1) : hex;

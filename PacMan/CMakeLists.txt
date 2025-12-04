@@ -28,11 +28,9 @@ add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Gameplay/MapLoading/Managers/MapLoadingManager.h
         src/PacMan/Gameplay/Player/Managers/PlayerLoaderManager.cpp
         src/PacMan/Gameplay/Player/Managers/PlayerLoaderManager.h
-        src/PacMan/Gameplay/Ghosts/Managers/GhostsLoaderManager.cpp
-        src/PacMan/Gameplay/Ghosts/Managers/GhostsLoaderManager.h
+        src/PacMan/Gameplay/Ghosts/Managers/GhostsLoadingManager.cpp
+        src/PacMan/Gameplay/Ghosts/Managers/GhostsLoadingManager.h
         src/PacMan/Gameplay/Ghosts/Enums/GhostType.h
-        src/PacMan/Gameplay/Player/Components/PlayerComponent.cpp
-        src/PacMan/Gameplay/Player/Components/PlayerComponent.h
         src/PacMan/Gameplay/MapMovement/Managers/MapPathfindingManager.cpp
         src/PacMan/Gameplay/MapMovement/Managers/MapPathfindingManager.h
         src/PacMan/Gameplay/MapMovement/Data/PathfindingNode.h
@@ -53,6 +51,8 @@ add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Gameplay/Entities/Enums/EntityType.h
         src/PacMan/Gameplay/Player/Components/PlayerAnimationComponent.cpp
         src/PacMan/Gameplay/Player/Components/PlayerAnimationComponent.h
+        src/PacMan/Gameplay/Pellets/Managers/PelletsLoadingManager.cpp
+        src/PacMan/Gameplay/Pellets/Managers/PelletsLoadingManager.h
 )
 
 target_link_libraries(PacMan PRIVATE GEngineCore)

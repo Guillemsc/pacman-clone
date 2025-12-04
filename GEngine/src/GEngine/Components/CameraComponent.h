@@ -13,7 +13,7 @@ namespace GEngine
 
 	class CameraComponent final : public Component
 	{
-		DECLARE_COMPONENT(CameraComponent)
+		REGISTER_COMPONENT(CameraComponent)
 
 	public:
 		explicit CameraComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);

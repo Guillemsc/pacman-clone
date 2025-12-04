@@ -16,7 +16,7 @@ namespace GEngine
 
 	class Texture2dRendererComponent final : public Component
 	{
-		DECLARE_COMPONENT(Texture2dRendererComponent)
+		REGISTER_COMPONENT(Texture2dRendererComponent)
 
 	public:
 		explicit Texture2dRendererComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);

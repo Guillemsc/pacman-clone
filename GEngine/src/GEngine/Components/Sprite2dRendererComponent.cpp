@@ -23,6 +23,7 @@ namespace GEngine
 		_layer = _properties.Register("Layer", 0);
 		_spriteResource = _properties.Register("Sprite", std::weak_ptr<SpriteResource>());
 		_spriteIndex = _properties.Register("Sprite Index", 0);
+		_isFlippedX = _properties.Register("Flipped X", false);
 	}
 
 	void Sprite2dRendererComponent::OnTick()
@@ -49,7 +50,12 @@ namespace GEngine
 		const float rotation = transform->GetRotationEulerZ();
 		const glm::vec2 scale = transform->GetScaleXY();
 
-		const Rectangle rectangle = sprite->GetRectangle(rectangleIndex);
+		Rectangle rectangle = sprite->GetRectangle(rectangleIndex);
+
+		if (_isFlippedX->GetValue())
+		{
+			rectangle.width *= -1.0f;
+		}
 
 		modules->rendering->Render2d()->AddTexture(
 			_layer->GetValue(),
@@ -58,7 +64,7 @@ namespace GEngine
 			position,
 			rotation,
 			scale,
-			{ 1, 1, 1, 1 }
+			Color01::White
 		);
 	}
 
@@ -75,6 +81,11 @@ namespace GEngine
 	void Sprite2dRendererComponent::SetSpriteIndex(const int index) const
 	{
 		_spriteIndex->SetValue(index);
+	}
+
+	void Sprite2dRendererComponent::SetFlippedX(const bool flippedX) const
+	{
+		_isFlippedX->SetValue(flippedX);
 	}
 
 	std::weak_ptr<SpriteResource> Sprite2dRendererComponent::GetSprite() const

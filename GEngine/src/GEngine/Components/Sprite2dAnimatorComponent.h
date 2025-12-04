@@ -18,7 +18,7 @@ namespace GEngine
 
 	class Sprite2dAnimatorComponent final : public Component
 	{
-		DECLARE_COMPONENT(Sprite2dAnimatorComponent)
+		REGISTER_COMPONENT(Sprite2dAnimatorComponent)
 
 	public:
 		explicit Sprite2dAnimatorComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);

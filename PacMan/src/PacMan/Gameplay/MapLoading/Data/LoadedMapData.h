@@ -23,6 +23,7 @@ namespace PacMan
 		glm::i32vec2 GhostPrisionCenterSlotPosition = glm::i32vec2(0, 0);
 		glm::i32vec2 GhostPrisionRightSlotPosition = glm::i32vec2(0, 0);
 		glm::i32vec2 PrisionExitPosition = glm::i32vec2(0, 0);
+		std::vector<glm::i32vec2> SmallPelletsPositions;
 	};
 }
 

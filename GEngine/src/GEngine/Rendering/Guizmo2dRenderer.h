@@ -32,7 +32,8 @@ namespace GEngine
 		void AddRectLines(const glm::vec2 &position, const glm::vec2 &size, float rotationRadians, float thickness, const Color01 &color);
 		void AddLine(const glm::vec2& start, const glm::vec2& end, float thickness, const Color01& color);
 
-		glm::vec2 PositionToRenderPosition(const glm::vec2& position) const;
+		static glm::vec2 PositionToRenderPosition(const glm::vec2& position);
+		static float RotationToRenderRotation(float rotation);
 
 	private:
 		GEngineCoreModules* const _modules;

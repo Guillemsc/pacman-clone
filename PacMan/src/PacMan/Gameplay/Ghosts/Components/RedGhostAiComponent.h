@@ -19,7 +19,7 @@ namespace PacMan
 {
 	class RedGhostAiComponent final : public GhostAiComponent
 	{
-		DECLARE_COMPONENT(RedGhostAiComponent)
+		REGISTER_COMPONENT(RedGhostAiComponent)
 
 	public:
 		explicit RedGhostAiComponent(GEngine::GEngineCoreModules *modules, const std::weak_ptr<GEngine::Entity> &entity);

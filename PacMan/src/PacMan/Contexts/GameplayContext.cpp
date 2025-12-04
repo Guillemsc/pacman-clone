@@ -13,7 +13,7 @@
 #include "GEngine/Modules/TickablesModule.h"
 #include "GEngine/ServiceLocators/ServiceLocator.h"
 #include "GEngine/Resources/TiledMapResource.h"
-#include "PacMan/Gameplay/Ghosts/Managers/GhostsLoaderManager.h"
+#include "PacMan/Gameplay/Ghosts/Managers/GhostsLoadingManager.h"
 #include "PacMan/Gameplay/Ghosts/Managers/GhostsPrisionManager.h"
 #include "PacMan/Gameplay/Input/Systems/PlayerInputSystem.h"
 #include "PacMan/Gameplay/MapLoading/Managers/MapLoadingManager.h"
@@ -56,7 +56,7 @@ namespace PacMan
 			);
 		_playerLoaderManager->LoadPlayer(loadedMapData.PlayerPosition);
 
-		_ghostsLoaderManager = std::make_shared<GhostsLoaderManager>(
+		_ghostsLoaderManager = std::make_shared<GhostsLoadingManager>(
 			_modules,
 			_scene.get(),
 			_mapMovementManager.get(),
@@ -72,6 +72,14 @@ namespace PacMan
 			);
 		_ghostsPrisionManager->Setup(loadedMapData, loadedGhostsData);
 		_modules->tickables->AddTickable(_ghostsPrisionManager);
+
+		_pelletsLoadingManager = std::make_unique<PelletsLoadingManager>(
+			_modules,
+			_scene.get(),
+			_mapMovementManager.get()
+			);
+
+		_pelletsLoadingManager->LoadPellets(loadedMapData);
 
 		co_return;
 	}

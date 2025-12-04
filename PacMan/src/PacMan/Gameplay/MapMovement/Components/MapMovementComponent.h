@@ -18,7 +18,7 @@ namespace PacMan
 {
 	class MapMovementComponent final : public GEngine::Component
 	{
-		DECLARE_COMPONENT(MapMovementComponent)
+		REGISTER_COMPONENT(MapMovementComponent)
 
 	public:
 		explicit MapMovementComponent(GEngine::GEngineCoreModules* modules, const std::weak_ptr<GEngine::Entity> &entity);

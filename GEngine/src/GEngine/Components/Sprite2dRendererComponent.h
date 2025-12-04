@@ -16,7 +16,7 @@ namespace GEngine
 
 	class Sprite2dRendererComponent final : public Component
 	{
-		DECLARE_COMPONENT(Sprite2dRendererComponent)
+		REGISTER_COMPONENT(Sprite2dRendererComponent)
 
 	public:
 		explicit Sprite2dRendererComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);
@@ -26,6 +26,7 @@ namespace GEngine
 		void SetLayer(int layer) const;
 		void SetSprite(const std::weak_ptr<SpriteResource> &sprite) const;
 		void SetSpriteIndex(int index) const;
+		void SetFlippedX(bool flippedX) const;
 
 		std::weak_ptr<SpriteResource> GetSprite() const;
 		int GetSpriteIndex() const;
@@ -34,6 +35,7 @@ namespace GEngine
 		std::shared_ptr<Property<std::int32_t>> _layer;
 		std::shared_ptr<Property<std::weak_ptr<SpriteResource>>> _spriteResource;
 		std::shared_ptr<Property<std::int32_t>> _spriteIndex;
+		std::shared_ptr<Property<bool>> _isFlippedX;
 	};
 
 } // GEngine

@@ -17,7 +17,7 @@ namespace GEngine
 
 	class UiShapeRendererComponent final : public Component, public std::enable_shared_from_this<UiShapeRendererComponent>
 	{
-		DECLARE_COMPONENT(UiShapeRendererComponent)
+		REGISTER_COMPONENT(UiShapeRendererComponent)
 
 	public:
 		explicit UiShapeRendererComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);

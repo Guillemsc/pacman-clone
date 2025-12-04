@@ -13,7 +13,7 @@ namespace GEngine
 
 	class UiTextRendererComponent final : public Component
 	{
-		DECLARE_COMPONENT(UiTextRendererComponent)
+		REGISTER_COMPONENT(UiTextRendererComponent)
 
 	public:
 		explicit UiTextRendererComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);

@@ -14,7 +14,7 @@ namespace GEngine
 	{
 		friend class EntitiesModule;
 
-		DECLARE_COMPONENT(UiTransformComponent)
+		REGISTER_COMPONENT(UiTransformComponent)
 
 	public:
 		explicit UiTransformComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);

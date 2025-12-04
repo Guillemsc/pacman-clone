@@ -9,6 +9,7 @@
 #include "RenderingModule.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
 #include "GEngine/Editor/MenuBar/MenuBarEditor.h"
+#include "GEngine/Editor/PropertyDrawers/BoolPropertyDrawerEditor.h"
 #include "GEngine/Editor/PropertyDrawers/Color01PropertyDrawerEditor.h"
 #include "GEngine/Editor/PropertyDrawers/FloatPropertyDrawerEditor.h"
 #include "GEngine/Editor/PropertyDrawers/IntPropertyDrawerEditor.h"
@@ -37,6 +38,7 @@ namespace GEngine
 
 		_menuBar = std::make_shared<MenuBarEditor>(_modules);
 
+		RegisterPropertyDrawer<BoolPropertyDrawerEditor, Property<bool>>();
 		RegisterPropertyDrawer<IntPropertyDrawerEditor, Property<int>>();
 		RegisterPropertyDrawer<FloatPropertyDrawerEditor, Property<float>>();
 		RegisterPropertyDrawer<Vec2PropertyDrawerEditor, Property<glm::vec2>>();

@@ -2,7 +2,7 @@
 // Created by guillem on 11/27/25.
 //
 
-#include "GhostsLoaderManager.h"
+#include "GhostsLoadingManager.h"
 
 #include "GEngine/Components/Collider2dComponent.h"
 #include "GEngine/Components/Shape2dRendererComponent.h"
@@ -19,19 +19,19 @@
 
 namespace PacMan
 {
-	GhostsLoaderManager::GhostsLoaderManager(
+	GhostsLoadingManager::GhostsLoadingManager(
 		GEngine::GEngineCoreModules *modules,
 		GEngine::Scene *scene,
 		MapMovementManager *mapMovementManager,
 		GameplayEntities *gameplayEntities
-		): _modules(modules),
+		) : _modules(modules),
 		_scene(scene),
 		_mapMovementManager(mapMovementManager),
 		_gameplayEntities(gameplayEntities)
 	{
 	}
 
-	void GhostsLoaderManager::LoadGhosts(const LoadedMapData &loadedMapData)
+	void GhostsLoadingManager::LoadGhosts(const LoadedMapData &loadedMapData)
 	{
 		LoadGhost(GhostType::RED_GHOST, loadedMapData.RedGhostPosition, false);
 		_loadedGhostsData.LeftPrisionSlotGhostEntity = LoadGhost(GhostType::CIAN_GHOST, loadedMapData.GhostPrisionLeftSlotPosition, true);
@@ -39,12 +39,12 @@ namespace PacMan
 		_loadedGhostsData.RightPrisionSlotGhostEntity = LoadGhost(GhostType::ORANGE_GHOST, loadedMapData.GhostPrisionRightSlotPosition, true);
 	}
 
-	const LoadedGhostsData & GhostsLoaderManager::GetLoadedGhostsData() const
+	const LoadedGhostsData & GhostsLoadingManager::GetLoadedGhostsData() const
 	{
 		return _loadedGhostsData;
 	}
 
-	std::shared_ptr<GEngine::Entity> GhostsLoaderManager::LoadGhost(const GhostType ghostType, const glm::i32vec2 &gridPosition, const bool isPrision)
+	std::shared_ptr<GEngine::Entity> GhostsLoadingManager::LoadGhost(const GhostType ghostType, const glm::i32vec2 &gridPosition, const bool isPrision)
 	{
 		const std::string ghostName = GetGhostName(ghostType);
 		const GEngine::Color01 ghostColor = GetGhostColor(ghostType);
@@ -69,7 +69,7 @@ namespace PacMan
 		}
 
 		const std::shared_ptr<MapMovementComponent> mapMovement = ghostEntity->AddComponent<MapMovementComponent>().lock();
-		mapMovement->SetGuizmoColor(ghostColor);
+		mapMovement->SetGuizmoColor(ghostColor.WithAlpha(0.6f));
 
 		if (!isPrision)
 		{
@@ -86,7 +86,7 @@ namespace PacMan
 		return ghostEntity;
 	}
 
-	std::string GhostsLoaderManager::GetGhostName(const GhostType ghostType)
+	std::string GhostsLoadingManager::GetGhostName(const GhostType ghostType)
 	{
 		switch (ghostType)
 		{
@@ -103,7 +103,7 @@ namespace PacMan
 		return "Unknown";
 	}
 
-	GEngine::Color01 GhostsLoaderManager::GetGhostColor(const GhostType ghostType)
+	GEngine::Color01 GhostsLoadingManager::GetGhostColor(const GhostType ghostType)
 	{
 		switch (ghostType)
 		{
@@ -120,7 +120,7 @@ namespace PacMan
 		return GEngine::Color01(0, 0, 0);;
 	}
 
-	void GhostsLoaderManager::SetupGhostAi(GEngine::Entity *ghostEntity, const GhostType ghostType)
+	void GhostsLoadingManager::SetupGhostAi(GEngine::Entity *ghostEntity, const GhostType ghostType)
 	{
 		switch (ghostType)
 		{

@@ -19,7 +19,7 @@ namespace GEngine
 	{
 		friend class EntitiesModule;
 
-		DECLARE_COMPONENT(TransformComponent)
+		REGISTER_COMPONENT(TransformComponent)
 
 	public:
 		explicit TransformComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);

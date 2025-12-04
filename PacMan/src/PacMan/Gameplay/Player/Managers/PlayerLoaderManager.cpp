@@ -19,6 +19,7 @@
 #include "PacMan/Gameplay/Input/Systems/PlayerInputSystem.h"
 #include "PacMan/Gameplay/MapMovement/Components/MapMovementComponent.h"
 #include "PacMan/Gameplay/MapMovement/Managers/MapMovementManager.h"
+#include "PacMan/Gameplay/Player/Components/PlayerAnimationComponent.h"
 
 namespace PacMan
 {
@@ -64,6 +65,9 @@ namespace PacMan
 		mapMovement->SetGuizmoColor(color);
 		mapMovement->SetGridPosition(gridPosition);
 		_playerInputSystem->SetPlayer(mapMovement);
+
+		const std::shared_ptr<PlayerAnimationComponent> playerAnimation = playerEntity->AddComponent<PlayerAnimationComponent>().lock();
+		playerAnimation->Init(mapMovement, spriteRenderer, spriteAnimator);
 
 		_gameplayEntities->Player = playerEntity;
 	}

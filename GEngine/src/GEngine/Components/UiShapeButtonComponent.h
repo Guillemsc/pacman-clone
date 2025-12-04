@@ -12,7 +12,7 @@ namespace GEngine
 {
 	class UiShapeButtonComponent final : public Component, public UiRaycastTarget
 	{
-		DECLARE_COMPONENT(UiShapeButtonComponent)
+		REGISTER_COMPONENT(UiShapeButtonComponent)
 
 	public:
 		explicit UiShapeButtonComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);

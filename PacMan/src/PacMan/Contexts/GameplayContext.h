@@ -10,6 +10,7 @@
 
 #include "PacMan/Gameplay/MapMovement/Managers/MapMovementManager.h"
 #include "PacMan/Gameplay/MapMovement/Managers/MapPathfindingManager.h"
+#include "PacMan/Gameplay/Pellets/Managers/PelletsLoadingManager.h"
 
 namespace GEngine
 {
@@ -20,7 +21,7 @@ namespace PacMan
 {
 	class GhostsPrisionManager;
 	class PlayerInputSystem;
-	class GhostsLoaderManager;
+	class GhostsLoadingManager;
 	class PlayerLoaderManager;
 	class MapMovementSystem;
 	class MapPathfindingSystem;
@@ -40,8 +41,9 @@ namespace PacMan
 		std::shared_ptr<MapPathfindingSystem> _mapPathfindingSystem;
 		std::unique_ptr<GameplayEntities> _gameplayEntities;
 		std::shared_ptr<PlayerLoaderManager> _playerLoaderManager;
-		std::shared_ptr<GhostsLoaderManager> _ghostsLoaderManager;
+		std::shared_ptr<GhostsLoadingManager> _ghostsLoaderManager;
 		std::shared_ptr<GhostsPrisionManager> _ghostsPrisionManager;
+		std::unique_ptr<PelletsLoadingManager> _pelletsLoadingManager;
 		std::shared_ptr<PlayerInputSystem> _playerInputSystem;
 	};
 }

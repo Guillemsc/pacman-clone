@@ -73,6 +73,7 @@ namespace PacMan
 	{
 		const std::string entitiesLayer = "Entities";
 		const std::string walkabilityLayer = "Walkability";
+		const std::string pelletsLayer = "Pellets";
 
 		const glm::i32vec2 gridSize = tilemapResource->GetGridSize();
 
@@ -82,6 +83,9 @@ namespace PacMan
 		const std::int32_t walkabilityLayerIndex = tilemapResource->GetLayerIndexFromLayerName(walkabilityLayer);
 		if (walkabilityLayerIndex < 0) return;
 
+		const std::int32_t pelletsLayerIndex = tilemapResource->GetLayerIndexFromLayerName(pelletsLayer);
+		if (pelletsLayerIndex < 0) return;
+
 		const auto optionalEntitiesLayer = tilemapResource->GetTileLayer(entitiesLayerIndex);
 		if (!optionalEntitiesLayer) return;
 		const tmx::TileLayer& entitiesTileLayer = optionalEntitiesLayer->get();
@@ -89,6 +93,10 @@ namespace PacMan
 		const auto optionalWalkabilityLayer = tilemapResource->GetTileLayer(walkabilityLayerIndex);
 		if (!optionalWalkabilityLayer) return;
 		const tmx::TileLayer& walkabilityTileLayer = optionalWalkabilityLayer->get();
+
+		const auto optionalPelletsLayer = tilemapResource->GetTileLayer(pelletsLayerIndex);
+		if (!optionalPelletsLayer) return;
+		const tmx::TileLayer& pelletsTileLayer = optionalPelletsLayer->get();
 
 		for (std::int32_t y = 0; y < gridSize.y; ++y)
 		{
@@ -110,6 +118,13 @@ namespace PacMan
 				{
 					const tmx::Tileset::Tile* walkabilityLocalTile  = optionalWalkabilityLocalTile.value();
 					LoadWalkabilityTileData(loadedMapData, gridPosition, walkabilityLocalTile);
+				}
+
+				auto optionalPelletsLocalTile = tilemapResource->GetLocalTileForGridPosition(pelletsTileLayer, gridPosition);
+
+				if (optionalPelletsLocalTile.has_value())
+				{
+					loadedMapData.SmallPelletsPositions.push_back(gridPosition);
 				}
 			}
 		}

@@ -15,7 +15,7 @@ namespace GEngine
 
 	class Collider2dComponent final : public Component
 	{
-		DECLARE_COMPONENT(Collider2dComponent)
+		REGISTER_COMPONENT(Collider2dComponent)
 
 	public:
 		explicit Collider2dComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);

@@ -254,19 +254,19 @@ namespace GEngine
 
 		const std::shared_ptr<Entity> parentEntity = entity->GetParent().lock();
 
-		glm::vec3 parentWorldPosition = glm::vec3(0);
-
 		if (parentEntity)
 		{
 			const std::shared_ptr<TransformComponent> parentTransform = parentEntity->GetTransform().lock();
 
 			if (parentTransform)
 			{
-				parentWorldPosition = parentTransform->_worldPosition;
+				const glm::mat4 parentInverse = glm::inverse(parentTransform->_worldMatrix);
+				_localPosition = glm::vec3(parentInverse * glm::vec4(_worldPosition, 1.0f));
+				return;
 			}
 		}
 
-		_localPosition = _worldPosition - parentWorldPosition;
+		_localPosition = _worldPosition;
 	}
 
 	void TransformComponent::RecalculateLocalRotation()
@@ -288,7 +288,7 @@ namespace GEngine
 			}
 		}
 
-		_localRotation = parentWorldRotation * _worldRotation;
+		_localRotation = glm::inverse(parentWorldRotation) * _worldRotation;
 		_localRotationEuler = glm::eulerAngles(_localRotation);
 	}
 
@@ -320,6 +320,7 @@ namespace GEngine
 		const glm::mat4 translation = glm::translate(identityMatrix, _localPosition);
 
 		const glm::quat normalizedRotation = glm::normalize(_localRotation);
+		const glm::quat flippedRotation = glm::conjugate(normalizedRotation);
 		const glm::mat4 rotation = glm::toMat4(normalizedRotation);
 
 		const glm::mat4 scaling = glm::scale(identityMatrix, _localScale);
@@ -362,6 +363,7 @@ namespace GEngine
 		{
 			_worldPosition = translation;
 			_worldRotation = rotation;
+			//_worldScale = scale;
 
 			_worldRotationEuler = glm::eulerAngles(_worldRotation);
 		}

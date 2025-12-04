@@ -25,22 +25,6 @@ namespace GEngine
 
 			DrawTexturePro(texture, source, dest, origin, rotation, tint);
 		}
-
-		static void DrawTextureEx(
-			const Texture2D &texture,
-			const Rectangle& source,
-			const Vector2 position,
-			const float rotation,
-			const Vector2 scale,
-			const Color tint
-			)
-		{
-			const Vector2 size = { source.width * scale.x, source.height * scale.y };
-			const Vector2 center = { size.x * 0.5f, size.y * 0.5f };
-			const Rectangle dest = { position.x, position.y, size.x, size.y };
-
-			DrawTexturePro(texture, source, dest, center, rotation, tint);
-		}
 	};
 }
 

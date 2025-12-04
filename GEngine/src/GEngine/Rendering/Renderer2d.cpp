@@ -49,12 +49,11 @@ namespace GEngine
 	{
 		Add(layer, [texture, source, scale, position, rotationRadians, color]()
 		{
-			const glm::vec2 size = { source.width * scale.x, source.height * scale.y };
+			const glm::vec2 size = { std::abs(source.width * scale.x), std::abs(source.height * scale.y) };
 			const glm::vec2 renderPosition = PositionToRenderPosition(position);
-			const float rotationDegrees = glm::degrees(rotationRadians);
-			const Color raylibColor = Color01Extensions::ToRaylibColor(color);
-
 			const Vector2 center = { size.x * 0.5f, size.y * 0.5f };
+			const float rotationDegrees = RotationToRenderRotation(glm::degrees(rotationRadians));
+			const Color raylibColor = Color01Extensions::ToRaylibColor(color);
 
 			const Rectangle rectangle = {
 				renderPosition.x,
@@ -79,11 +78,10 @@ namespace GEngine
 		Add(layer, [this, position, size, color, rotationRadians, scale]()
 		{
 			const glm::vec2 renderPosition = PositionToRenderPosition(position);
-			const float rotationDegrees = glm::degrees(rotationRadians);
+			const float rotationDegrees = RotationToRenderRotation(glm::degrees(rotationRadians));
 			const glm::vec2 finalSize = { size.x * scale.x, size.y * scale.y };
+			const Vector2 center = { finalSize.x * 0.5f, finalSize.y * 0.5f };
 			const Color raylibColor = Color01Extensions::ToRaylibColor(color);
-
-			const Vector2 center = { size.x * 0.5f, size.y * 0.5f };
 
 			const Rectangle rectangle = {
 				renderPosition.x,
@@ -106,7 +104,7 @@ namespace GEngine
 		)
 	{
 		const glm::vec2 renderPosition = PositionToRenderPosition(position);
-		const float rotationDegrees = glm::degrees(rotationRadians);
+		const float rotationDegrees = RotationToRenderRotation(glm::degrees(rotationRadians));
 		const Vector2 size = { source.width * scale.x, source.height * scale.y };
 		const Vector2 center = { size.x * 0.5f, size.y * 0.5f };
 		const Rectangle dest = { renderPosition.x, renderPosition.y, size.x, size.y };
@@ -119,5 +117,10 @@ namespace GEngine
 	{
 		const glm::vec2 newPosition = { position.x, -position.y };
 		return newPosition;
+	}
+
+	float Renderer2d::RotationToRenderRotation(const float rotation)
+	{
+		return -rotation;
 	}
 } // GEngineCore

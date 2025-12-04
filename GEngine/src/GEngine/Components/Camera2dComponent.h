@@ -17,7 +17,7 @@ namespace GEngine
 
 	class Camera2dComponent final : public Component
 	{
-		DECLARE_COMPONENT(Camera2dComponent)
+		REGISTER_COMPONENT(Camera2dComponent)
 
 	public:
 		explicit Camera2dComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);

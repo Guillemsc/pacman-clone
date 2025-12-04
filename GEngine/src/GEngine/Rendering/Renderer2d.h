@@ -54,6 +54,7 @@ namespace GEngine
 			);
 
 		static glm::vec2 PositionToRenderPosition(const glm::vec2& position);
+		static float RotationToRenderRotation(float rotation);
 
 	private:
 		GEngineCoreModules* const _modules = nullptr;

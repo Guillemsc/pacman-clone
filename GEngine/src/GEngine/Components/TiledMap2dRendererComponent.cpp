@@ -105,10 +105,8 @@ namespace GEngine
 			for (int y = 0; y < mapGridSize.y; y++)
 			{
 				const glm::i32vec2 girdPosition = tiledMap->TiledGridPositionToEngineGridPosition({ x, y });
-
 				glm::vec2 worldPosition = GridPositionToWorldPosition(girdPosition, CellPosition::CENTER);
 
-				guizmoRenderer->AddRect(worldPosition, {1, 1}, 0, Color01::Blue);
 				guizmoRenderer->AddRectLines(worldPosition, tileWorldSize, rotationRadians, 0.5f, Color01::Green);
 			}
 		}
@@ -356,7 +354,7 @@ namespace GEngine
 
 		const glm::vec2 point = { tilePositionX, tilePositionY };
 		const glm::vec2 pivot = tilemapPosition;
-		const glm::vec2 finalPosition = MathExtensions::RotatePointAroundPivot(point, pivot, -tilemapRotation);
+		const glm::vec2 finalPosition = MathExtensions::RotatePointAroundPivot(point, pivot, tilemapRotation);
 
 		return finalPosition;
 	}

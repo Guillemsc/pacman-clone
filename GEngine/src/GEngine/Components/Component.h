@@ -54,7 +54,7 @@ namespace GEngine
 	};
 }
 
-#define DECLARE_COMPONENT(TYPE)                                 \
+#define REGISTER_COMPONENT(TYPE)                                 \
 public:                                                         \
 	static constexpr const char* StaticTypeName() { return #TYPE; } \
 	constexpr const char* GetTypeName() const override { return TYPE::StaticTypeName(); } \

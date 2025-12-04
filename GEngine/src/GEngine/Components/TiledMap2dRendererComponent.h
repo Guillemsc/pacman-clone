@@ -29,7 +29,7 @@ namespace GEngine
 
 	class TiledMap2dRendererComponent final : public Component
 	{
-		DECLARE_COMPONENT(TiledMap2dRendererComponent)
+		REGISTER_COMPONENT(TiledMap2dRendererComponent)
 
 	public:
 		explicit TiledMap2dRendererComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);

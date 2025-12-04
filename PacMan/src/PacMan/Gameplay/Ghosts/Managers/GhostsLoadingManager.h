@@ -26,10 +26,10 @@ namespace PacMan
 	class MapMovementManager;
 	struct LoadedMapData;
 
-	class GhostsLoaderManager
+	class GhostsLoadingManager
 	{
 	public:
-		explicit GhostsLoaderManager(
+		explicit GhostsLoadingManager(
 			GEngine::GEngineCoreModules* modules,
 			GEngine::Scene* scene,
 			MapMovementManager* mapMovementManager,

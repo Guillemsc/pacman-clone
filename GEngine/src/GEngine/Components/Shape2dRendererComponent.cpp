@@ -63,28 +63,4 @@ namespace GEngine
 	{
 		_color->SetValue(color);
 	}
-
-	void Shape2dRendererComponent::RenderRectShape2d(
-		const glm::vec2& position,
-		const float rotation,
-		const glm::vec2& scale,
-		const RectShape2d* rectShape
-		) const
-	{
-		const glm::vec2 rectSize = rectShape->GetSize();
-
-		const Vector2 size = {rectSize.x * scale.x, rectSize.y * scale.y};
-		const Vector2 center = { size.x * 0.5f, size.y * 0.5f };
-
-		const Rectangle rectangle = {
-			position.x,
-			position.y,
-			size.x,
-			size.y,
-		};
-
-		const Color color = Color01Extensions::ToRaylibColor(_color->GetValue());
-
-		DrawRectanglePro(rectangle, center, rotation, color);
-	}
 } // GEngineCore

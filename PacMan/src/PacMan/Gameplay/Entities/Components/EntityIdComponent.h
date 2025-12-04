@@ -12,7 +12,7 @@ namespace PacMan
 {
 	class EntityIdComponent final : public GEngine::Component
 	{
-		DECLARE_COMPONENT(EntityIdComponent)
+		REGISTER_COMPONENT(EntityIdComponent)
 
 	public:
 		explicit EntityIdComponent(GEngine::GEngineCoreModules *modules, const std::weak_ptr<GEngine::Entity> &entity);
