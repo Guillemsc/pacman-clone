@@ -51,6 +51,12 @@ namespace GEngine
 		return _started && !_completed;
 	}
 
+	void Tween::Kill()
+	{
+		if (!_started) return;
+		_completed = true;
+	}
+
 	void Tween::CompleteMain()
 	{
 		_mainCompleted = true;

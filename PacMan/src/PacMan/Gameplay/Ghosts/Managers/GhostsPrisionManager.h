@@ -14,6 +14,7 @@
 
 namespace GEngine
 {
+	class Tween;
 	class CoroutinesRunner;
 	class GEngineCoreModules;
 	class Entity;
@@ -40,9 +41,11 @@ namespace PacMan
 			MapMovementManager* mapMovementManager
 			);
 
+		void Tick() override;
+
 		void Setup(const LoadedMapData& loadedMapData, const LoadedGhostsData& loadedGhostsData);
 
-		void Tick() override;
+		void Stop();
 
 	private:
 		void ReleaseNextGhost();
@@ -57,6 +60,9 @@ namespace PacMan
 		std::unique_ptr<GhostPrisionSlotData> _leftSlot;
 		std::unique_ptr<GhostPrisionSlotData> _centerSlot;
 		std::unique_ptr<GhostPrisionSlotData> _rightSlot;
+
+		bool _isPrisionRunning = true;
+		std::vector<std::shared_ptr<GEngine::Tween>> _releasingGhostsTweens;
 
 		glm::i32vec2 _prisionExitGridPosition = glm::i32vec2(0);
 		glm::vec2 _prisionExitPosition = glm::vec2(0);

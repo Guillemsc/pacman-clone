@@ -7,7 +7,7 @@
 
 #include <memory>
 
-#include "glm/fwd.hpp"
+#include "glm/vec2.hpp"
 
 namespace GEngine
 {
@@ -34,7 +34,9 @@ namespace PacMan
 			PlayerCollisionsManager* playerCollisionsManager
 			);
 
-		void LoadPlayer(const glm::i32vec2& gridPosition) const;
+		void LoadPlayer(const glm::i32vec2& gridPosition);
+
+		void SetPlayerToInitialPosition() const;
 
 	private:
 		GEngine::GEngineCoreModules* const _modules;
@@ -43,6 +45,8 @@ namespace PacMan
 		PlayerInputSystem* const _playerInputSystem;
 		GameplayEntities* const _gameplayEntities;
 		PlayerCollisionsManager* const _playerCollisionsManager;
+
+		glm::i32vec2 _playerInitialGridPosition = glm::i32vec2(0);
 	};
 }
 

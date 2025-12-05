@@ -11,6 +11,7 @@
 #include "GEngine/ServiceLocators/ServiceLocator.h"
 #include "PacMan/Gameplay/MapMovement/Managers/MapMovementManager.h"
 #include "PacMan/Gameplay/MapMovement/Managers/MapPathfindingManager.h"
+#include "spdlog/spdlog.h"
 
 namespace PacMan
 {
@@ -55,10 +56,14 @@ namespace PacMan
 
 		_currentGridPosition = gridPosition;
 		_hasValidGridPosition = true;
+		_distanceCarriedFromLastPathPoint = 0;
+		_hasValidLastPathPointData = false;
 
 		const glm::vec2 positionToSet = mapMovement->GridPositionToWorldPosition(gridPosition, cellPosition);
 
 		transform->SetPositionXY(positionToSet);
+
+		spdlog::info("SetGridPosition");
 
 		ClearPath();
 		TryGenerateNextPathIfEmpty();
@@ -171,6 +176,7 @@ namespace PacMan
 			_distanceCarriedFromLastPathPoint = distanceToMove - distanceLeftMagnitude;
 			distanceToMove = distanceLeftMagnitude;
 			hasReachedTarget = true;
+			spdlog::info("Reached target");
 		}
 
 		const glm::vec2 toMove = direction * distanceToMove;
@@ -213,11 +219,14 @@ namespace PacMan
 			{
 				ClearPath();
 				_pathToFollow.push_back(nextPosition);
+				spdlog::info(std::format("TryGenerateNextPathIfEmpty -> Valid last {} {}", nextPosition.x, nextPosition.y));
 				return;
 			}
 		}
 		else
 		{
+			spdlog::info("TryGenerateNextPathIfEmpty -> No valid last");
+
 			MapPathfindingManager* mapPathfinding = GEngine::ServiceLocator::Get<MapPathfindingManager>();
 
 			std::vector<glm::i32vec2> neighbors;

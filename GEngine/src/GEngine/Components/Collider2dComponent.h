@@ -29,6 +29,8 @@ namespace GEngine
 		void SetLayer(std::uint32_t layer);
 		void SetLayerMask(std::uint32_t mask);
 
+		void SetSize(const glm::vec2& size) const;
+
 		RegisterEvent<const Contact2dData&>& OnContactStart();
 		RegisterEvent<const Contact2dData&>& OnContactStay();
 		RegisterEvent<const Contact2dData&>& OnContactEnd();

@@ -41,8 +41,10 @@ namespace PacMan
 	{
 	}
 
-	void PlayerLoaderManager::LoadPlayer(const glm::i32vec2& gridPosition) const
+	void PlayerLoaderManager::LoadPlayer(const glm::i32vec2& gridPosition)
 	{
+		_playerInitialGridPosition = gridPosition;
+
 		const GEngine::Color01 color = {0.9f, 0.9f, 0.1f};
 
 		const std::shared_ptr<GEngine::Entity> playerEntity = _scene->AddWorldEntity().lock();
@@ -67,12 +69,21 @@ namespace PacMan
 
 		const std::shared_ptr<MapMovementComponent> mapMovement = playerEntity->AddComponent<MapMovementComponent>().lock();
 		mapMovement->SetGuizmoColor(color);
-		mapMovement->SetGridPosition(gridPosition);
-		_playerInputSystem->SetPlayer(mapMovement);
+		mapMovement->SetGridPosition(_playerInitialGridPosition);
 
 		const std::shared_ptr<PlayerAnimationComponent> playerAnimation = playerEntity->AddComponent<PlayerAnimationComponent>().lock();
 		playerAnimation->Init(mapMovement, spriteRenderer, spriteAnimator);
 
 		_gameplayEntities->Player = playerEntity;
+		_playerInputSystem->SetPlayer(mapMovement); // Todo: this is not needed, we should use _gameplayEntities->Player
+	}
+
+	void PlayerLoaderManager::SetPlayerToInitialPosition() const
+	{
+		const std::shared_ptr<GEngine::Entity> player = _gameplayEntities->Player.lock();
+		if (!player) return;
+
+		const std::shared_ptr<MapMovementComponent> mapMovement = player->AddComponent<MapMovementComponent>().lock();
+		mapMovement->SetGridPosition(_playerInitialGridPosition);
 	}
 } // PacMan

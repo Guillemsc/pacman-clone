@@ -9,7 +9,7 @@
 
 namespace PacMan
 {
-	MapMovementManager::MapMovementManager(const std::weak_ptr<GEngine::TiledMap2dRendererComponent> &tiledMap)
+	void MapMovementManager::Setup(const std::weak_ptr<GEngine::TiledMap2dRendererComponent> &tiledMap)
 	{
 		_tiledMap = tiledMap;
 

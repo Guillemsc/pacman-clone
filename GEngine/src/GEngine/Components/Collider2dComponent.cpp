@@ -83,6 +83,11 @@ namespace GEngine
 		collider->SetLayerMask(mask);
 	}
 
+	void Collider2dComponent::SetSize(const glm::vec2 &size) const
+	{
+		_size->SetValue(size);
+	}
+
 	RegisterEvent<const Contact2dData&>& Collider2dComponent::OnContactStart()
 	{
 		return _onContactStart;

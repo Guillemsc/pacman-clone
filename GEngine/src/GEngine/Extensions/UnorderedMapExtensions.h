@@ -42,14 +42,14 @@ namespace GEngine
 		template <typename TKey, typename TValue>
 		static bool RemoveKey(std::unordered_map<TKey, TValue>& map, const TKey& key)
 		{
-			auto foundIterator = map.find(key);
+			auto it = map.find(key);
 
-			if (foundIterator == map.end())
+			if (it == map.end())
 			{
 				return false;
 			}
 
-			map.erase(foundIterator);
+			map.erase(it);
 
 			return true;
 		}

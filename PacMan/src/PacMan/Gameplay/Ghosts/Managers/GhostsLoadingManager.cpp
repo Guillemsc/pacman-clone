@@ -60,7 +60,6 @@ namespace PacMan
 
 		const std::shared_ptr<GEngine::Collider2dComponent> collider = ghostEntity->AddComponent<GEngine::Collider2dComponent>().lock();
 		collider->SetLayer(CollisionLayers::COLLISION_LAYER_GHOST);
-		//collider->SetLayerMask(CollisionLayers::COLLISION_LAYER_PLAYER);
 
 		if (isPrision)
 		{

@@ -9,6 +9,8 @@
 #include <typeindex>
 #include <unordered_map>
 
+#include "GEngine/Extensions/UnorderedMapExtensions.h"
+
 namespace GEngine
 {
 	class ServiceLocator
@@ -19,6 +21,13 @@ namespace GEngine
 		{
 			const std::type_index type = typeid(T);
 			_services[type] = service;
+		}
+
+		template<typename T>
+		static void Unregister()
+		{
+			const std::type_index type = typeid(T);
+			UnorderedMapExtensions::RemoveKey(_services, type);
 		}
 
 		template<typename T>

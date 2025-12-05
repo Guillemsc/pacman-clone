@@ -7,6 +7,7 @@
 #include "GEngine/Components/TransformComponent.h"
 #include "GEngine/Coroutines/Coroutines.h"
 #include "GEngine/Coroutines/CoroutinesRunner.h"
+#include "GEngine/Extensions/VectorExtensions.h"
 #include "GEngine/Modules/TweensModule.h"
 #include "GEngine/Tweens/InterpolationTween.h"
 #include "GEngine/Tweens/Tween.h"
@@ -52,8 +53,20 @@ namespace PacMan
 		_timeSinceLastGhostReleasedTimer.Start();
 	}
 
+	void GhostsPrisionManager::Stop()
+	{
+		_isPrisionRunning = false;
+
+		for (const std::shared_ptr<GEngine::Tween>& tween : _releasingGhostsTweens)
+		{
+			tween->Kill();
+		}
+	}
+
 	void GhostsPrisionManager::Tick()
 	{
+		if (!_isPrisionRunning) return;
+
 		if (_timeSinceLastGhostReleasedTimer.GetTimeSeconds() > 3)
 		{
 			ReleaseNextGhost();
@@ -120,7 +133,13 @@ namespace PacMan
 			timeToHeight
 			));
 
+		_releasingGhostsTweens.push_back(tween);
+
 		co_await _modules->tweens->PlayAsync(tween);
+
+		GEngine::VectorExtensions::Remove(_releasingGhostsTweens, tween);
+
+		if (!_isPrisionRunning) co_return;
 
 		const std::shared_ptr<MapMovementComponent> mapMovement = ghostEntity->GetComponent<MapMovementComponent>().lock();
 		mapMovement->SetGridPosition(_prisionExitGridPosition, GEngine::CellPosition::CENTER_RIGHT);

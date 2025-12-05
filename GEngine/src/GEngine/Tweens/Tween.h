@@ -24,6 +24,8 @@ namespace GEngine
 
 		bool IsPlaying() const;
 
+		void Kill();
+
 	protected:
 		void CompleteMain();
 

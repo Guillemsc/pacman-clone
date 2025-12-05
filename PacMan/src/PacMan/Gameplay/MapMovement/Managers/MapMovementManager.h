@@ -22,7 +22,7 @@ namespace PacMan
 	class MapMovementManager
 	{
 	public:
-		explicit MapMovementManager(const std::weak_ptr<GEngine::TiledMap2dRendererComponent>& tiledMap);
+		void Setup(const std::weak_ptr<GEngine::TiledMap2dRendererComponent>& tiledMap);
 
 		glm::vec2 GridPositionToWorldPosition(const glm::ivec2& gridPosition, const GEngine::CellPosition& cellPosition = GEngine::CellPosition::CENTER) const;
 		bool IsWalkable(const glm::ivec2& gridPosition) const;
