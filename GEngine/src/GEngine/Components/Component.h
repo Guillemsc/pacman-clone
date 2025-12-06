@@ -23,7 +23,7 @@ namespace GEngine
 	public:
 		explicit Component(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);
 
-		std::weak_ptr<Entity> GetEntity() const;
+		[[nodiscard]] std::weak_ptr<Entity> GetEntity() const;
 
 		bool IsEnanbled() const;
 		void SetEnabled(bool enabled);

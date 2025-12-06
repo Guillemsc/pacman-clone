@@ -83,7 +83,7 @@ namespace PacMan
 		const std::shared_ptr<GEngine::Entity> player = _gameplayEntities->Player.lock();
 		if (!player) return;
 
-		const std::shared_ptr<MapMovementComponent> mapMovement = player->AddComponent<MapMovementComponent>().lock();
+		const std::shared_ptr<MapMovementComponent> mapMovement = player->GetComponent<MapMovementComponent>().lock();
 		mapMovement->SetGridPosition(_playerInitialGridPosition);
 	}
 } // PacMan

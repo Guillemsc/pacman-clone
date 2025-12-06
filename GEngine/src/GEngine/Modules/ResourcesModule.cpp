@@ -122,7 +122,10 @@ namespace GEngine
 
 		if (!std::filesystem::exists(_resourcesPath) || !std::filesystem::is_directory(_resourcesPath))
 		{
-			spdlog::error("Could not get resources to import, because resources folder does not exist");
+			spdlog::error(
+				"Could not get resources to import, because resources folder does not exist. Folder should be: {}",
+				_resourcesPath.string()
+				);
 			return files;
 		}
 

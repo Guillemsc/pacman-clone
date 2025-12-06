@@ -27,6 +27,8 @@ namespace PacMan
 
 	void MapMovementComponent::OnDrawGuizmo()
 	{
+		if (!_canMove) return;
+
 		const MapMovementManager* mapMovement = GEngine::ServiceLocator::Get<MapMovementManager>();
 
 		glm::vec2 previousWorldPosition = GetEntity().lock()->GetTransform().lock()->GetPositionXY();
@@ -62,8 +64,6 @@ namespace PacMan
 		const glm::vec2 positionToSet = mapMovement->GridPositionToWorldPosition(gridPosition, cellPosition);
 
 		transform->SetPositionXY(positionToSet);
-
-		spdlog::info("SetGridPosition");
 
 		ClearPath();
 		TryGenerateNextPathIfEmpty();
@@ -104,6 +104,7 @@ namespace PacMan
 
 	void MapMovementComponent::PathfindToGridPosition(const glm::i32vec2& targetGridPosition)
 	{
+		if (!_canMove) return;
 		if (!_hasValidGridPosition) return;
 
 		MapPathfindingManager* mapPathfinding = GEngine::ServiceLocator::Get<MapPathfindingManager>();
@@ -137,7 +138,7 @@ namespace PacMan
 
 		const glm::vec2 currentTargetPosition = mapMovement->GridPositionToWorldPosition(nextPathGridPosition);
 
-		const bool hasReachedTarget = MoveTowardsPosition(transform.get(), currentTargetPosition, 50);
+		const bool hasReachedTarget = MoveTowardsPosition(transform.get(), currentTargetPosition, 30);
 
 		if (hasReachedTarget)
 		{
@@ -176,7 +177,6 @@ namespace PacMan
 			_distanceCarriedFromLastPathPoint = distanceToMove - distanceLeftMagnitude;
 			distanceToMove = distanceLeftMagnitude;
 			hasReachedTarget = true;
-			spdlog::info("Reached target");
 		}
 
 		const glm::vec2 toMove = direction * distanceToMove;
@@ -219,14 +219,11 @@ namespace PacMan
 			{
 				ClearPath();
 				_pathToFollow.push_back(nextPosition);
-				spdlog::info(std::format("TryGenerateNextPathIfEmpty -> Valid last {} {}", nextPosition.x, nextPosition.y));
 				return;
 			}
 		}
 		else
 		{
-			spdlog::info("TryGenerateNextPathIfEmpty -> No valid last");
-
 			MapPathfindingManager* mapPathfinding = GEngine::ServiceLocator::Get<MapPathfindingManager>();
 
 			std::vector<glm::i32vec2> neighbors;
