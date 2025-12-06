@@ -6,6 +6,7 @@
 
 #include "GEngine/Modules/CameraModule.h"
 #include "GEngine/Modules/Collisions2dModule.h"
+#include "GEngine/Modules/ConfigurationModule.h"
 #include "GEngine/Modules/CoroutinesModule.h"
 #include "GEngine/Modules/EditorModule.h"
 #include "GEngine/Modules/EntitiesModule.h"
@@ -28,6 +29,7 @@ namespace GEngine
 	{
 		spdlog::info("Welcome to GEngineCore :)");
 
+		_configuration = std::make_unique<ConfigurationModule>();
 		_entities = std::make_unique<EntitiesModule>();
 		_game = std::make_unique<GameModule>();
 		_camera = std::make_unique<CameraModule>();
@@ -46,6 +48,7 @@ namespace GEngine
 		_collisions2d = std::make_unique<Collisions2dModule>();
 
 		_modules = std::make_unique<GEngineCoreModules>(
+			_configuration.get(),
 			_entities.get(),
 			_game.get(),
 			_camera.get(),
@@ -74,6 +77,7 @@ namespace GEngine
 	{
 		spdlog::info("GEngineCore Init");
 
+		_configuration->Init();
 		_input->Init(_modules.get());
 		_collisions2d->Init(_modules.get());
 		_entities->Init(_modules.get());

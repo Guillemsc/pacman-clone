@@ -38,30 +38,30 @@ namespace GEngine
 		void OnDrawSelectedGuizmo() override;
 
 		void SetTiledMap(const std::weak_ptr<TiledMapResource> &resource);
-		std::weak_ptr<TiledMapResource> GetTiledMap() const;
+		[[nodiscard]] std::weak_ptr<TiledMapResource> GetTiledMap() const;
 
-		glm::i32vec2 GetMapGridSize() const;
-		int GetLayersCount() const;
-		bool HasTileAtGridPosition(std::int32_t layerIndex, const glm::i32vec2& gridPosition) const;
+		[[nodiscard]] glm::i32vec2 GetMapGridSize() const;
+		[[nodiscard]] int GetLayersCount() const;
+		[[nodiscard]] bool HasTileAtGridPosition(std::int32_t layerIndex, const glm::i32vec2& gridPosition) const;
 
-		glm::vec2 GridPositionToWorldPosition(const glm::i32vec2& gridPosition, CellPosition cellPosition = CellPosition::CENTER) const;
-		glm::i32vec2 WorldPositionToGridPosition(const glm::vec2& worldPosition) const;
+		[[nodiscard]] glm::vec2 GridPositionToWorldPosition(const glm::i32vec2& gridPosition, CellPosition cellPosition = CellPosition::CENTER) const;
+		[[nodiscard]] glm::i32vec2 WorldPositionToGridPosition(const glm::vec2& worldPosition) const;
 
-		glm::vec2 GetTileWorldSize() const;
+		[[nodiscard]] glm::vec2 GetTileWorldSize() const;
 
-		std::int32_t GetLayerNameFromLayerIndex(const std::string& layerName) const;
+		[[nodiscard]] std::int32_t GetLayerNameFromLayerIndex(const std::string& layerName) const;
 
 		void SetLayerVisible(std::int32_t layerIndex, bool visible);
-		bool GetIsLayerVisible(std::int32_t layerIndex) const;
+		[[nodiscard]] bool GetIsLayerVisible(std::int32_t layerIndex) const;
 
 		static glm::i32vec2 TiledGridPositionToEngineGridPosition(const tmx::TileLayer& tileLayer, glm::i32vec2 gridPosition);
 
 	private:
 		void GenerateLayersData();
 
-		std::optional<std::reference_wrapper<const tmx::TileLayer>> GetTileLayer(std::int32_t layerIndex) const;
+		[[nodiscard]] std::optional<std::reference_wrapper<const tmx::TileLayer>> GetTileLayer(std::int32_t layerIndex) const;
 
-		glm::vec2 GridPositionToWorldPosition(
+		[[nodiscard]] glm::vec2 GridPositionToWorldPosition(
 			const glm::i32vec2& mapGridSize,
 			glm::vec2 tilemapPosition,
 			float tilemapRotation,

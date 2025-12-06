@@ -41,6 +41,7 @@ namespace GEngine
 		GEngineCoreModules* Modules() const { return _modules.get(); }
 
 	private:
+		std::unique_ptr<ConfigurationModule> _configuration;
 		std::unique_ptr<EntitiesModule> _entities;
 		std::unique_ptr<GameModule> _game;
 		std::unique_ptr<CameraModule> _camera;

@@ -7,6 +7,7 @@
 
 namespace GEngine
 {
+	class ConfigurationModule;
 	class GuizmosModule;
 	class ExamplesModule;
 	class EditorModule;
@@ -29,6 +30,7 @@ namespace GEngine
 	{
 	public:
 		explicit GEngineCoreModules(
+			ConfigurationModule* configuration,
 			EntitiesModule* entities,
 			GameModule* game,
 			CameraModule* camera,
@@ -45,7 +47,8 @@ namespace GEngine
 			TweensModule* tweens,
 			GuizmosModule* guizmos,
 			Collisions2dModule* collisions2d
-			) : entities(entities),
+			) : configuration(configuration),
+			entities(entities),
 			game(game),
 			camera(camera),
 			window(window),
@@ -64,6 +67,7 @@ namespace GEngine
 		{}
 
 	public:
+		ConfigurationModule* const configuration;
 		EntitiesModule* const entities;
 		GameModule* const game;
 		CameraModule* const camera;

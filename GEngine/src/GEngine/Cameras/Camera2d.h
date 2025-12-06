@@ -23,11 +23,7 @@ namespace GEngine
 		void SetRotation(float rotation);
 		void SetHorizontalFov(float zoom);
 
-		glm::vec2 GetPosition() const;
-		float GetRotation() const;
-		float GetHorizontalFov() const;
-
-		::Camera2D GetRawCamera() const;
+		[[nodiscard]] ::Camera2D GetRawCamera() const;
 
 	private:
 		GEngineCoreModules* const _modules = nullptr;

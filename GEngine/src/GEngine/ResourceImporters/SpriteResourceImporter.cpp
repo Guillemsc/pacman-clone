@@ -26,29 +26,7 @@ namespace GEngine
 		const std::filesystem::path &resourcesPath
 		)
 	{
-		const std::ifstream file(fullPath);
-		if (!file) return nullptr;
-
-		std::stringstream buffer;
-		buffer << file.rdbuf();
-		std::string contents = buffer.str();
-
-		nlohmann::json json;
-
-		try
-		{
-			json = nlohmann::json::parse(contents);
-		}
-		catch (const nlohmann::json::parse_error& error)
-		{
-			//std::cerr << "JSON parse error: " << e.what() << std::endl;
-			//std::cerr << "Exception ID: " << e.id << "\n";
-			//std::cerr << "Byte position: " << e.byte << "\n";
-			spdlog::error("Sprite parse error");
-			return nullptr;
-		}
-
-		JsonData jsonData = JsonData(json);
+		const JsonData jsonData = JsonData::LoadFromFile(fullPath.c_str());
 		std::string textureResourcePath = jsonData.GetString("texture");
 
 		std::shared_ptr<SpriteResource> resource = std::make_shared<SpriteResource>(
@@ -57,7 +35,7 @@ namespace GEngine
 			textureResourcePath
 			);
 
-		std::int32_t rects = jsonData.GetArrayCount("rects");
+		const std::int32_t rects = jsonData.GetArrayCount("rects");
 
 		for (std::size_t i = 0; i < rects; i++)
 		{

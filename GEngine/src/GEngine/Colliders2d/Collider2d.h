@@ -35,7 +35,7 @@ namespace GEngine
 		void SetLayer(std::uint32_t layer);
 		void SetLayerMask(std::uint32_t mask);
 
-		std::weak_ptr<Entity> GetOwner() const;
+		[[nodiscard]] std::weak_ptr<Entity> GetOwner() const;
 
 		RegisterEvent<const Contact2dData&>& OnContactStart();
 		RegisterEvent<const Contact2dData&>& OnContactStay();

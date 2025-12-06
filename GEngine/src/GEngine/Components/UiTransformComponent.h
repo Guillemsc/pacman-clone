@@ -30,23 +30,23 @@ namespace GEngine
 
 		void SetWorldPosition(const glm::vec2& worldPosition) const;
 
-		glm::vec2 GetScreenPosition() const;
-		glm::vec2 GetScreenSize() const;
+		[[nodiscard]] glm::vec2 GetScreenPosition() const;
+		[[nodiscard]] glm::vec2 GetScreenSize() const;
 		float GetRotation() const;
-		glm::vec2 GetPivot() const;
+		[[nodiscard]] glm::vec2 GetPivot() const;
 
 		UiRect GetWorldUiRect() const;
 
-		glm::vec2 GetAnchoredPosition() const;
-		glm::vec2 GetSizeDelta() const;
+		[[nodiscard]] glm::vec2 GetAnchoredPosition() const;
+		[[nodiscard]] glm::vec2 GetSizeDelta() const;
 
 	private:
 		void ComposeLocalUiRect();
 		void RecalculateWorldUiRect();
 		void RecalculateChildrenHierarchyWorldUiRects() const;
-		UiRect GetParentWorldUiRect() const;
+		[[nodiscard]] UiRect GetParentWorldUiRect() const;
 
-		CornersRect GetAnchorsScreenPosition(const UiRect& parentRect) const;
+		[[nodiscard]] CornersRect GetAnchorsScreenPosition(const UiRect& parentRect) const;
 		void RecalculateLocalPositionAndLocalSizeFromAnchoredPositionAndSizeDelta() const;
 
 	private:

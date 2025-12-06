@@ -40,25 +40,25 @@ namespace GEngine
 		void SetLocalScale(const glm::vec3 &scale);
 		void SetLocalScaleXY(const glm::vec2 &scale);
 
-		glm::vec3 GetPosition() const;
-		glm::vec2 GetPositionXY() const;
-		glm::vec3 GetLocalPosition() const;
-		glm::vec2 GetLocalPositionXY() const;
+		[[nodiscard]] glm::vec3 GetPosition() const;
+		[[nodiscard]] glm::vec2 GetPositionXY() const;
+		[[nodiscard]] glm::vec3 GetLocalPosition() const;
+		[[nodiscard]] glm::vec2 GetLocalPositionXY() const;
 
-		glm::quat GetRotation() const;
-		glm::vec3 GetRotationEuler() const;
-		glm::vec3 GetRotationEulerDegrees() const;
-		float GetRotationEulerZ() const;
-		float GetRotationEulerDegreesZ() const;
-		glm::quat GetLocalRotation() const;
-		glm::vec3 GetLocalRotationEuler() const;
-		glm::vec3 GetLocalRotationEulerDegrees() const;
-		float GetLocalRotationEulerZ() const;
-		float GetLocalRotationEulerDegreesZ() const;
+		[[nodiscard]] glm::quat GetRotation() const;
+		[[nodiscard]] glm::vec3 GetRotationEuler() const;
+		[[nodiscard]] glm::vec3 GetRotationEulerDegrees() const;
+		[[nodiscard]] float GetRotationEulerZ() const;
+		[[nodiscard]] float GetRotationEulerDegreesZ() const;
+		[[nodiscard]] glm::quat GetLocalRotation() const;
+		[[nodiscard]] glm::vec3 GetLocalRotationEuler() const;
+		[[nodiscard]] glm::vec3 GetLocalRotationEulerDegrees() const;
+		[[nodiscard]] float GetLocalRotationEulerZ() const;
+		[[nodiscard]] float GetLocalRotationEulerDegreesZ() const;
 
-		glm::vec3 GetScale() const;
-		glm::vec2 GetScaleXY() const;
-		glm::vec3 GetLocalScale() const;
+		[[nodiscard]] glm::vec3 GetScale() const;
+		[[nodiscard]] glm::vec2 GetScaleXY() const;
+		[[nodiscard]] glm::vec3 GetLocalScale() const;
 
 	private:
 		void SetLocalPositionAsWorldPosition();

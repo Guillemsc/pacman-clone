@@ -13,8 +13,8 @@ namespace GEngine
 	struct CornersRect
 	{
 		CornersRect GetFromNormalisedRect(const glm::vec4& rect) const;
-		glm::vec2 GetCenter() const;
-		glm::vec2 GetSize() const;
+		[[nodiscard]] glm::vec2 GetCenter() const;
+		[[nodiscard]] glm::vec2 GetSize() const;
 
 		glm::vec2 bottomLeft = glm::vec2(0.0f);
 		glm::vec2 topLeft = glm::vec2(0.0f);

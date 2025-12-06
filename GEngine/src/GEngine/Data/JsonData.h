@@ -12,23 +12,31 @@ namespace GEngine
 	class JsonData
 	{
 	public:
-		explicit JsonData(const nlohmann::json &json);
+		static JsonData LoadFromFile(const char* filepath);
+
+	public:
 		JsonData();
+		explicit JsonData(const nlohmann::json &json);
 
-		bool GetBool(const char* name, bool defaultValue = false) const;
-		int GetInt(const char* name, int defaultValue = 0) const;
-		int GetFloat(const char* name, float defaultValue = 0) const;
-		std::string GetString(const char* name, const std::string& defaultValue = "") const;
-		JsonData GetObject(const char* name) const;
+		[[nodiscard]] bool HasData() const;
 
-		int GetArrayCount(const char* name) const;
-		bool GetArrayBool(const char* name, int index) const;
-		int GetArrayInt(const char* name, int index) const;
-		float GetArrayFloat(const char* name, int index) const;
-		std::string GetArrayString(const char* name, int index) const;
-		JsonData GetArrayObject(const char* name, int index) const;
+		[[nodiscard]] bool GetBool(const char* name, bool defaultValue = false) const;
+		[[nodiscard]] int GetInt(const char* name, int defaultValue = 0) const;
+		[[nodiscard]] int GetFloat(const char* name, float defaultValue = 0) const;
+		[[nodiscard]] std::string GetString(const char* name, const std::string& defaultValue = "") const;
+		[[nodiscard]] JsonData GetObject(const char* name) const;
+
+		[[nodiscard]] int GetArrayCount(const char* name) const;
+		[[nodiscard]] bool GetArrayBool(const char* name, int index) const;
+		[[nodiscard]] int GetArrayInt(const char* name, int index) const;
+		[[nodiscard]] float GetArrayFloat(const char* name, int index) const;
+		[[nodiscard]] std::string GetArrayString(const char* name, int index) const;
+		[[nodiscard]] JsonData GetArrayObject(const char* name, int index) const;
+
+		[[nodiscard]] std::string Dump(int indent) const;
 
 	private:
+		bool _hasData = false;
 		nlohmann::json _json;
 	};
 }

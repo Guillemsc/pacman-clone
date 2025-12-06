@@ -4,15 +4,51 @@
 
 #include "JsonData.h"
 
+#include <fstream>
+
+#include "spdlog/spdlog.h"
+
 namespace GEngine
 {
+	JsonData JsonData::LoadFromFile(const char* filepath)
+	{
+		const std::ifstream file(filepath);
+		if (!file) return {};
+
+		std::stringstream buffer;
+		buffer << file.rdbuf();
+		std::string contents = buffer.str();
+
+		nlohmann::json json;
+
+		try
+		{
+			json = nlohmann::json::parse(contents);
+		}
+		catch (const nlohmann::json::parse_error& error)
+		{
+			//std::cerr << "JSON parse error: " << e.what() << std::endl;
+			//std::cerr << "Exception ID: " << e.id << "\n";
+			//std::cerr << "Byte position: " << e.byte << "\n";
+			spdlog::error("JSON parse error");
+			return {};
+		}
+
+		JsonData data(json);
+		return data;
+	}
+
+	JsonData::JsonData() = default;
+
 	JsonData::JsonData(const nlohmann::json &json)
 	{
+		_hasData = true;
 		_json = json;
 	}
 
-	JsonData::JsonData()
+	bool JsonData::HasData() const
 	{
+		return _hasData;
 	}
 
 	bool JsonData::GetBool(const char *name, const bool defaultValue) const
@@ -121,5 +157,10 @@ namespace GEngine
 		const nlohmann::basic_json<>& value = array[index];
 		if (!value.is_object()) return JsonData();
 		return JsonData(value);
+	}
+
+	std::string JsonData::Dump(const int indent) const
+	{
+		return _json.dump(indent);
 	}
 } // GEngine

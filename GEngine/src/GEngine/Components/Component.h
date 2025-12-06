@@ -25,10 +25,10 @@ namespace GEngine
 
 		[[nodiscard]] std::weak_ptr<Entity> GetEntity() const;
 
-		bool IsEnanbled() const;
+		[[nodiscard]] bool IsEnanbled() const;
 		void SetEnabled(bool enabled);
 
-		virtual constexpr const char* GetTypeName() const = 0;
+		[[nodiscard]] virtual constexpr const char* GetTypeName() const = 0;
 
 	protected:
 		virtual void OnAwake() {}

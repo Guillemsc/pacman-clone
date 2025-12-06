@@ -22,32 +22,14 @@ namespace GEngine
 		const std::filesystem::path &resourcesPath
 		)
 	{
-		const std::ifstream file(fullPath);
-		if (!file) return nullptr;
+		JsonData data = JsonData::LoadFromFile(fullPath.c_str());
 
-		std::stringstream buffer;
-		buffer << file.rdbuf();
-		std::string contents = buffer.str();
-
-		nlohmann::json json;
-
-		try
-		{
-			json = nlohmann::json::parse(contents);
-		}
-		catch (const nlohmann::json::parse_error& error)
-		{
-			//std::cerr << "JSON parse error: " << e.what() << std::endl;
-			//std::cerr << "Exception ID: " << e.id << "\n";
-			//std::cerr << "Byte position: " << e.byte << "\n";
-			spdlog::error("JSON parse error");
-			return nullptr;
-		}
+		if (!data.HasData()) return nullptr;
 
 		std::shared_ptr<JsonResource> resource = std::make_shared<JsonResource>(
 			fullPath,
 			resourcesPath,
-			json
+			data
 			);
 
 		return resource;

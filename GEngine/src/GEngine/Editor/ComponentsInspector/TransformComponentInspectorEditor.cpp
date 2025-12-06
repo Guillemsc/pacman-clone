@@ -46,9 +46,9 @@ namespace GEngine
 		}
 
 		glm::vec3 worldRotation = inspect->GetRotationEulerDegrees();
-		ImGui::Text(std::format("World Rotation: X:{:.2f} Y:{:.2f} Z:{:.2f}", worldRotation.x, worldRotation.y, worldRotation.z).c_str());
+		ImGui::Text("%s", std::format("World Rotation: X:{:.2f} Y:{:.2f} Z:{:.2f}", worldRotation.x, worldRotation.y, worldRotation.z).c_str());
 
 		glm::vec3 worldScale = inspect->GetScale();
-		ImGui::Text(std::format("World Scale: X:{:.2f} Y:{:.2f} Z:{:.2f}", worldScale.x, worldScale.y, worldScale.z).c_str());
+		ImGui::Text("%s", std::format("World Scale: X:{:.2f} Y:{:.2f} Z:{:.2f}", worldScale.x, worldScale.y, worldScale.z).c_str());
 	}
 } // GEngineCore

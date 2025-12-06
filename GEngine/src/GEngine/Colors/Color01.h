@@ -17,7 +17,7 @@ namespace GEngine
 		explicit Color01(char scalar);
 		Color01();
 
-		Color01 WithAlpha(float alpha) const;
+		[[nodiscard]] Color01 WithAlpha(float alpha) const;
 
 		static Color01 FromHex(const std::string& hex);
 

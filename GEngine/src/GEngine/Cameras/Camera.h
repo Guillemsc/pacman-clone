@@ -28,14 +28,14 @@ namespace GEngine
         void SetPrespectiveFov(float fov);
         void SetOrthographicPlane(float plane);
 
-        glm::vec3 GetPosition() const;
-        glm::quat GetRotation() const;
+        [[nodiscard]] glm::vec3 GetPosition() const;
+        [[nodiscard]] glm::quat GetRotation() const;
 
-        glm::vec3 GetForwardDirection() const;
-        glm::vec3 GetUpDirection() const;
-        glm::vec3 GetRightDirection() const;
+        [[nodiscard]] glm::vec3 GetForwardDirection() const;
+        [[nodiscard]] glm::vec3 GetUpDirection() const;
+        [[nodiscard]] glm::vec3 GetRightDirection() const;
 
-        ::Camera GetRawCamera() const;
+        [[nodiscard]] ::Camera GetRawCamera() const;
 
     private:
         GEngineCoreModules* const _modules = nullptr;

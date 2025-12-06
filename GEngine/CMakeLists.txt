@@ -277,6 +277,8 @@ add_library(GEngineCore STATIC
         src/GEngine/Coroutines/CoroutinesRunner.h
         src/GEngine/Editor/PropertyDrawers/BoolPropertyDrawerEditor.cpp
         src/GEngine/Editor/PropertyDrawers/BoolPropertyDrawerEditor.h
+        src/GEngine/Modules/ConfigurationModule.cpp
+        src/GEngine/Modules/ConfigurationModule.h
 )
 
 # Disable inclusion of Win32 API symbols that conflict with raylib

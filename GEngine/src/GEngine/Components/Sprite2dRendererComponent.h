@@ -28,8 +28,8 @@ namespace GEngine
 		void SetSpriteIndex(int index) const;
 		void SetFlippedX(bool flippedX) const;
 
-		std::weak_ptr<SpriteResource> GetSprite() const;
-		int GetSpriteIndex() const;
+		[[nodiscard]] std::weak_ptr<SpriteResource> GetSprite() const;
+		[[nodiscard]] int GetSpriteIndex() const;
 
 	private:
 		std::shared_ptr<Property<std::int32_t>> _layer;

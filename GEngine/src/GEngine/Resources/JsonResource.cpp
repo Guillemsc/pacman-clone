@@ -11,7 +11,8 @@ namespace GEngine
 	JsonResource::JsonResource(
 		const std::filesystem::path &fullPath,
 		const std::filesystem::path &resourcesPath,
-		const nlohmann::json &json)
+		const JsonData &json
+		)
 	: Resource(fullPath, resourcesPath)
 	{
 		_json = json;
@@ -19,11 +20,11 @@ namespace GEngine
 
 	JsonData JsonResource::GetJson() const
 	{
-		return JsonData(_json);
+		return _json;
 	}
 
 	std::string JsonResource::GetJsonString() const
 	{
-		return _json.dump(4);
+		return _json.Dump(4);
 	}
 }

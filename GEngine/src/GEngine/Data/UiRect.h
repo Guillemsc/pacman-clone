@@ -17,15 +17,15 @@ namespace GEngine
 	struct UiRect
 	{
 		static UiRect Transform(const UiRect& parent, const UiRect& child);
-		glm::mat4 BuildMatrix() const;
-		glm::vec2 GetPivotOffset(const glm::vec2& pivot) const;
-		glm::vec2 GetPivotOffset() const;
-		glm::vec2 GetPivotPosition(const glm::vec2& pivot) const;
-		glm::vec2 GetPivotPosition() const;
-		glm::vec2 GetPointFromNormalizedPoint(const glm::vec2& point) const;
-		glm::vec4 GetRectFromNormalizedRect(const glm::vec4& point) const;
-		CornersRect GetCorners() const;
-		bool ContainsPoint(const glm::vec2& point) const;
+		[[nodiscard]] glm::mat4 BuildMatrix() const;
+		[[nodiscard]] glm::vec2 GetPivotOffset(const glm::vec2& pivot) const;
+		[[nodiscard]] glm::vec2 GetPivotOffset() const;
+		[[nodiscard]] glm::vec2 GetPivotPosition(const glm::vec2& pivot) const;
+		[[nodiscard]] glm::vec2 GetPivotPosition() const;
+		[[nodiscard]] glm::vec2 GetPointFromNormalizedPoint(const glm::vec2& point) const;
+		[[nodiscard]] glm::vec4 GetRectFromNormalizedRect(const glm::vec4& point) const;
+		[[nodiscard]] CornersRect GetCorners() const;
+		[[nodiscard]] bool ContainsPoint(const glm::vec2& point) const;
 
 		glm::vec2 position = glm::vec2(0);
 		float rotation = 0;
