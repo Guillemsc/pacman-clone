@@ -32,6 +32,8 @@ namespace PacMan
 
 	tokoro::Async<void> GameplayContext::OnLoadAsync()
 	{
+		_cameraManager = std::make_unique<CameraManager>();
+
 		std::unique_ptr<MapLoadingManager> mapLoadingManager = std::make_unique<MapLoadingManager>(
 			_modules,
 			_scene.get()

@@ -42,11 +42,6 @@ namespace PacMan
 		_contextsStack = std::make_unique<ContextsStack>();
 		GEngine::ServiceLocator::Register(_contextsStack.get());
 
-		const auto cameraEntity = _modules->entities->AddWorldEntity();
-		cameraEntity.lock()->SetName("Camera");
-		cameraEntity.lock()->AddComponent<GEngine::Camera2dComponent>().lock()->SetHorizontalFov(350);
-		cameraEntity.lock()->GetTransform().lock()->SetPosition({0, 0, 0});
-
 		GEngine::Coroutines::Start(&PacManGame::LaunchGameAsync, this).Forget();
 	}
 

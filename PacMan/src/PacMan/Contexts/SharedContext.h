@@ -9,6 +9,7 @@
 
 #include "Context.h"
 #include "tokoro.h"
+#include "PacMan/Shared/Camera/Data/CameraData.h"
 
 namespace PacMan
 {
@@ -21,7 +22,7 @@ namespace PacMan
 		tokoro::Async<void> OnLoadAsync() override;
 
 	private:
-		tokoro::Handle<void> patrolTask;
+		std::unique_ptr<CameraData> _cameraData;
 	};
 }
 

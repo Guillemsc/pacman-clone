@@ -59,6 +59,9 @@ add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Gameplay/Player/Managers/PlayerDeathManager.h
         src/PacMan/Gameplay/Entities/Managers/EntitiesManager.cpp
         src/PacMan/Gameplay/Entities/Managers/EntitiesManager.h
+        src/PacMan/Gameplay/Cameras/Managers/CameraManager.cpp
+        src/PacMan/Gameplay/Cameras/Managers/CameraManager.h
+        src/PacMan/Shared/Camera/Data/CameraData.h
 )
 
 target_link_libraries(PacMan PRIVATE GEngineCore)

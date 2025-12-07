@@ -6,6 +6,7 @@
 #define GAMEPLAYCONTEXT_H
 
 #include "Context.h"
+#include "PacMan/Gameplay/Cameras/Managers/CameraManager.h"
 #include "PacMan/Gameplay/Entities/Data/GameplayEntities.h"
 
 #include "PacMan/Gameplay/MapMovement/Managers/MapMovementManager.h"
@@ -37,6 +38,7 @@ namespace PacMan
 		void OnDispose() override;
 
 	private:
+		std::unique_ptr<CameraManager> _cameraManager;
 		std::unique_ptr<MapLoadingManager> _mapLoadingManager;
 		std::unique_ptr<MapMovementManager> _mapMovementManager;
 		std::unique_ptr<MapPathfindingManager> _mapPathfindingManager;
