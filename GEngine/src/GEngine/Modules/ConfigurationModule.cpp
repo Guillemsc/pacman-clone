@@ -6,12 +6,12 @@
 
 namespace GEngine
 {
-    void ConfigurationModule::Init()
+    void ConfigurationModule::LoadConfiguration()
     {
         _configuration = JsonData::LoadFromFile("init.gengine");
     }
 
-    const JsonData& ConfigurationModule::GetConfiguration()
+    const JsonData& ConfigurationModule::GetConfig()
     {
         return _configuration;
     }

@@ -91,6 +91,20 @@ namespace GEngine
 		return JsonData(value);
 	}
 
+	glm::i32vec2 JsonData::GetIVec2(const char* name, const glm::i32vec2& defaultValue) const
+	{
+		const nlohmann::basic_json<>& value = _json[name];
+		if (!value.is_object()) return defaultValue;
+
+		const nlohmann::basic_json<>& xValue = value["x"];
+		if (!xValue.is_number_integer()) return defaultValue;
+
+		const nlohmann::basic_json<>& yValue = value["y"];
+		if (!yValue.is_number_integer()) return defaultValue;
+
+		return { xValue.get<int>(), yValue.get<int>() };
+	}
+
 	int JsonData::GetArrayCount(const char *name) const
 	{
 		if (!_json.contains(name)) return 0;

@@ -77,7 +77,9 @@ namespace GEngine
 	{
 		spdlog::info("GEngineCore Init");
 
-		_configuration->Init();
+		_configuration->LoadConfiguration();
+		_window->ApplyConfig(_configuration->GetConfig());
+
 		_input->Init(_modules.get());
 		_collisions2d->Init(_modules.get());
 		_entities->Init(_modules.get());

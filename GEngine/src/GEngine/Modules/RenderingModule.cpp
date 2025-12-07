@@ -30,12 +30,12 @@ namespace GEngine
 		_imGuiRenderer->Init();
 	}
 
-	void RenderingModule::Tick()
+	void RenderingModule::Tick() const
 	{
 		RenderOnCurrentCamera();
 	}
 
-	void RenderingModule::Dispose()
+	void RenderingModule::Dispose() const
 	{
 		_imGuiRenderer->Dispose();
 	}

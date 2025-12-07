@@ -6,6 +6,7 @@
 #define JSONDATA_H
 
 #include "json.hpp"
+#include "glm/vec2.hpp"
 
 namespace GEngine
 {
@@ -25,6 +26,7 @@ namespace GEngine
 		[[nodiscard]] int GetFloat(const char* name, float defaultValue = 0) const;
 		[[nodiscard]] std::string GetString(const char* name, const std::string& defaultValue = "") const;
 		[[nodiscard]] JsonData GetObject(const char* name) const;
+		[[nodiscard]] glm::i32vec2 GetIVec2(const char* name, const glm::i32vec2& defaultValue = glm::i32vec2(0)) const;
 
 		[[nodiscard]] int GetArrayCount(const char* name) const;
 		[[nodiscard]] bool GetArrayBool(const char* name, int index) const;

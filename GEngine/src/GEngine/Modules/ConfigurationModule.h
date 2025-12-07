@@ -12,9 +12,9 @@ namespace GEngine
     class ConfigurationModule
     {
     public:
-        void Init();
+        void LoadConfiguration();
 
-        const JsonData& GetConfiguration();
+        const JsonData& GetConfig();
 
     private:
         JsonData _configuration;

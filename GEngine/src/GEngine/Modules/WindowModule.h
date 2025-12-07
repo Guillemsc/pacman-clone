@@ -14,16 +14,18 @@
 namespace GEngine
 {
 	class GEngineCoreApplication;
+	class JsonData;
 
 	class WindowModule
 	{
 	public:
+		void ApplyConfig(const JsonData& config);
 		void Init(GEngineCoreModules* modules);
 		bool CanRun();
 		void Tick();
 		void Dispose();
 
-		glm::i32vec2 GetWindowSize() const;
+		[[nodiscard]] glm::i32vec2 GetWindowSize() const;
 
 	private:
 		void CheckWindowSizeChanged();
@@ -31,6 +33,13 @@ namespace GEngine
 
 	private:
 		GEngineCoreModules* _modules = nullptr;
+
+		std::string _titleInitialValue = "GEngine";
+		glm::i32vec2 _sizeInitialValue = glm::i32vec2(1200, 850);
+		bool _fullscreenInitialValue = false;
+		bool _resizableInitialValue = true;
+		bool _vSyncInitialValue = false;
+		int _targetFramesInitialValue = 0;
 
 		glm::i32vec2 _previousWindowSize = Vec2Extensions::Int32Zero;
 	};

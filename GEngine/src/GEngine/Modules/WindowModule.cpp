@@ -4,6 +4,7 @@
 
 #include "WindowModule.h"
 
+#include "ConfigurationModule.h"
 #include "EntitiesModule.h"
 #include "GEngine/Raylib/RaylibWrapper.h"
 #include "UiModule.h"
@@ -11,18 +12,43 @@
 
 namespace GEngine
 {
+	void WindowModule::ApplyConfig(const JsonData& config)
+	{
+		const JsonData json = config.GetObject("Window");
+		_titleInitialValue = json.GetString("Title");
+		_sizeInitialValue = json.GetIVec2("Size", _sizeInitialValue);
+		_fullscreenInitialValue = json.GetBool("Fullscreen", _fullscreenInitialValue);
+		_resizableInitialValue = json.GetBool("Resizable", _resizableInitialValue);
+		_vSyncInitialValue = json.GetBool("VSync", _vSyncInitialValue);
+		_targetFramesInitialValue = json.GetInt("Target Frames", _targetFramesInitialValue);
+	}
+
 	void WindowModule::Init(GEngineCoreModules* modules)
 	{
 		_modules = modules;
 
-		const int screenWidth = 1200;
-		const int screenHeight = 850;
+		int configFlags = 0;
 
-		SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+		if (_fullscreenInitialValue)
+		{
+			configFlags |= FLAG_FULLSCREEN_MODE;
+		}
 
-		InitWindow(screenWidth, screenHeight, "raylib [shapes] example - basic shapes drawing");
+		if (_resizableInitialValue)
+		{
+			configFlags |= FLAG_WINDOW_RESIZABLE;
+		}
 
-		SetTargetFPS(60);
+		if (_vSyncInitialValue)
+		{
+			configFlags |= FLAG_VSYNC_HINT;
+		}
+
+		SetConfigFlags(configFlags);
+
+		InitWindow(_sizeInitialValue.x, _sizeInitialValue.y, _titleInitialValue.c_str());
+
+		SetTargetFPS(_targetFramesInitialValue);
 	}
 
 	bool WindowModule::CanRun()

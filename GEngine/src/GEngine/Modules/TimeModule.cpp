@@ -12,4 +12,9 @@ namespace GEngine
 	{
 		return GetFrameTime();
 	}
+
+	int TimeModule::GetFps() const
+	{
+		return GetFPS();
+	}
 } // GEngine

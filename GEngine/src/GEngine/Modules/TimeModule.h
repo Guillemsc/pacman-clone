@@ -10,7 +10,8 @@ namespace GEngine
 	class TimeModule
 	{
 	public:
-		float GetDeltaTime() const;
+		[[nodiscard]] float GetDeltaTime() const;
+		[[nodiscard]] int GetFps() const;
 	};
 }
 

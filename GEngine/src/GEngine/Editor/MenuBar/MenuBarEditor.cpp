@@ -9,6 +9,7 @@
 #include "GEngine/Editor/Windows/EditorWindow.h"
 #include "GEngine/Modules/CameraModule.h"
 #include "GEngine/Modules/EditorModule.h"
+#include "GEngine/Modules/TimeModule.h"
 
 namespace GEngine
 {
@@ -34,6 +35,9 @@ namespace GEngine
 			}
 
 			DrawWindows();
+
+			const int fps = _modules->time->GetFps();
+			ImGui::Text("%d", fps);
 
 			ImGui::EndMainMenuBar();
 		}

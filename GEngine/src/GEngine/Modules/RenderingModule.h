@@ -29,8 +29,8 @@ namespace GEngine
 		explicit RenderingModule();
 
 		void Init(GEngineCoreModules* modules);
-		void Tick();
-		void Dispose();
+		void Tick() const;
+		void Dispose() const;
 
 		Renderer2d* Render2d() const { return _renderer2d.get(); }
 		UiRenderer* UiRender() const { return _uiRenderer.get(); }
