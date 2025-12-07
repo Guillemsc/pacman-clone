@@ -182,10 +182,9 @@ namespace GEngine
 		if (!mapData) return Vec2Extensions::Zero;
 
 		const std::shared_ptr<Entity> entity = GetEntity().lock();
-		if (entity == nullptr) return Vec2Extensions::Zero;
 
 		const std::shared_ptr<TransformComponent> transform = entity->GetTransform().lock();
-		if (transform == nullptr) return Vec2Extensions::Zero;
+		if (!transform) return Vec2Extensions::Zero;
 
 		if (_tilePixelSize.x == 0 || _tilePixelSize.y == 0) return Vec2Extensions::Zero;
 
@@ -216,10 +215,9 @@ namespace GEngine
 		if (!mapData) return Vec2Extensions::Int32Zero;
 
 		const std::shared_ptr<Entity> entity = GetEntity().lock();
-		if (entity == nullptr) return Vec2Extensions::Int32Zero;
 
 		const std::shared_ptr<TransformComponent> transform = entity->GetTransform().lock();
-		if (transform == nullptr) return Vec2Extensions::Int32Zero;
+		if (!transform) return Vec2Extensions::Int32Zero;
 
 		const glm::vec2 position = transform->GetPositionXY();
 		const float rotation = transform->GetRotationEulerZ();
@@ -243,6 +241,22 @@ namespace GEngine
 		const glm::vec2 localNormalisedPosition = {layerGridSize.x * normalizedPosition.x, layerGridSize.y * normalizedPosition.y};
 
 		return localNormalisedPosition;
+	}
+
+	glm::vec2 TiledMap2dRendererComponent::GetWorldBounds() const
+	{
+		const std::shared_ptr<Entity> entity = GetEntity().lock();
+
+		const std::shared_ptr<TransformComponent> transform = entity->GetTransform().lock();
+		if (!transform) return Vec2Extensions::Zero;
+
+		const glm::vec2 scale = transform->GetScaleXY();
+
+		const glm::vec2 gridSize = GetMapGridSize();
+		const glm::vec2 worldSize = gridSize * _tilePixelSize;
+		const glm::vec2 worldSizeScaled = { worldSize.x * scale.x, worldSize.y * scale.y };
+
+		return worldSizeScaled;
 	}
 
 	glm::vec2 TiledMap2dRendererComponent::GetTileWorldSize() const
@@ -350,6 +364,11 @@ namespace GEngine
 		{
 			tilePositionX += _tilePixelSize.x * tilemapScale.x;
 			tilePositionY += _tilePixelSize.y * 0.5f * tilemapScale.y;
+		}
+
+		if (cellPosition == CellPosition::TOP_LEFT)
+		{
+			tilePositionY += _tilePixelSize.y * tilemapScale.y;
 		}
 
 		const glm::vec2 point = { tilePositionX, tilePositionY };

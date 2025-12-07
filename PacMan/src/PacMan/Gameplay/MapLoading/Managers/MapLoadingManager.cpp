@@ -55,7 +55,7 @@ namespace PacMan
 	void MapLoadingManager::LoadTilemapGameObject(
 		LoadedMapData& loadedMapData,
 		const std::shared_ptr<GEngine::TiledMapResource> &tilemapResource
-		)
+		) const
 	{
 		const std::shared_ptr<GEngine::Entity> tilemapEntity = _scene->AddWorldEntity().lock();
 		tilemapEntity->SetName("Tilemap");
@@ -64,6 +64,7 @@ namespace PacMan
 		tilemap->SetTiledMap(tilemapResource);
 
 		loadedMapData.Tilemap = tilemap;
+		loadedMapData.MapBounds = tilemap->GetWorldBounds();
 	}
 
 	void MapLoadingManager::LoadMapData(

@@ -12,6 +12,7 @@ namespace GEngine
 		BOTTOM_LEFT,
 		CENTER,
 		CENTER_RIGHT,
+		TOP_LEFT,
 	};
 }
 

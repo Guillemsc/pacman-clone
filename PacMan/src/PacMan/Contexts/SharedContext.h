@@ -20,6 +20,7 @@ namespace PacMan
 		explicit SharedContext(GEngine::GEngineCoreModules* modules);
 
 		tokoro::Async<void> OnLoadAsync() override;
+		void OnDispose() override;
 
 	private:
 		std::unique_ptr<CameraData> _cameraData;

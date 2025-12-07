@@ -57,10 +57,8 @@ namespace PacMan
 
 	tokoro::Async<void> PacManGame::LaunchGameAsync()
 	{
-		ContextsStack* contextsStack = GEngine::ServiceLocator::Get<ContextsStack>();
-
-		co_await contextsStack->PushAsync(std::make_shared<SharedContext>(_modules));
-		co_await contextsStack->PushAsync(std::make_shared<MetaContext>(_modules));
+		co_await _contextsStack->PushAsync(std::make_shared<SharedContext>(_modules));
+		co_await _contextsStack->PushAsync(std::make_shared<MetaContext>(_modules));
 	}
 }
 

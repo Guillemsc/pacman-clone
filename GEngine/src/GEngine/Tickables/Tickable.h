@@ -10,6 +10,7 @@ namespace GEngine
 	class Tickable
 	{
 	public:
+		virtual ~Tickable() = default;
 		virtual void Tick() = 0;
 	};
 }

@@ -7,6 +7,7 @@
 #include "TransformComponent.h"
 #include "GEngine/Cameras/Camera2d.h"
 #include "GEngine/Modules/CameraModule.h"
+#include "GEngine/Modules/WindowModule.h"
 
 namespace GEngine
 {
@@ -50,5 +51,25 @@ namespace GEngine
 	void Camera2dComponent::SetHorizontalFov(const float zoom) const
 	{
 		_horizontalFovProperty->SetValue(zoom);
+	}
+
+	void Camera2dComponent::EncapsulateBounds(const glm::vec2& bounds) const
+	{
+		const glm::vec2 windowSize = modules->window->GetWindowSize();
+		const float windowHorizontalAspectRatio = windowSize.x / windowSize.y;
+		const float boundsHorizontalAspectRatio = bounds.x / bounds.y;
+
+		float horizontalFov;
+
+		if (windowHorizontalAspectRatio > boundsHorizontalAspectRatio)
+		{
+			horizontalFov = bounds.y * windowHorizontalAspectRatio;
+		}
+		else
+		{
+			horizontalFov = bounds.x;
+		}
+
+		_horizontalFovProperty->SetValue(horizontalFov);
 	}
 }

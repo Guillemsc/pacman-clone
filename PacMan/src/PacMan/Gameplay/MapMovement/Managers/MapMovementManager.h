@@ -24,7 +24,7 @@ namespace PacMan
 	public:
 		void Setup(const std::weak_ptr<GEngine::TiledMap2dRendererComponent>& tiledMap);
 
-		glm::vec2 GridPositionToWorldPosition(const glm::ivec2& gridPosition, const GEngine::CellPosition& cellPosition = GEngine::CellPosition::CENTER) const;
+		glm::vec2 GridPositionToWorldPosition(const glm::ivec2& gridPosition, GEngine::CellPosition cellPosition = GEngine::CellPosition::CENTER) const;
 		bool IsWalkable(const glm::ivec2& gridPosition) const;
 
 	private:

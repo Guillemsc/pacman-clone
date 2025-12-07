@@ -31,4 +31,9 @@ namespace PacMan
 
 		co_await Context::OnLoadAsync();
 	}
+
+	void SharedContext::OnDispose()
+	{
+		GEngine::ServiceLocator::Unregister<CameraData>();
+	}
 }

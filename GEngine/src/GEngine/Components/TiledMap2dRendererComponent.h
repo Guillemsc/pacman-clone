@@ -47,6 +47,7 @@ namespace GEngine
 		[[nodiscard]] glm::vec2 GridPositionToWorldPosition(const glm::i32vec2& gridPosition, CellPosition cellPosition = CellPosition::CENTER) const;
 		[[nodiscard]] glm::i32vec2 WorldPositionToGridPosition(const glm::vec2& worldPosition) const;
 
+		[[nodiscard]] glm::vec2 GetWorldBounds() const;
 		[[nodiscard]] glm::vec2 GetTileWorldSize() const;
 
 		[[nodiscard]] std::int32_t GetLayerNameFromLayerIndex(const std::string& layerName) const;
@@ -67,7 +68,7 @@ namespace GEngine
 			float tilemapRotation,
 			glm::vec2 tilemapScale,
 			const glm::i32vec2& gridPosition,
-			CellPosition cellPosition = CellPosition::BOTTOM_LEFT
+			CellPosition cellPosition = CellPosition::CENTER
 			) const;
 
 		void RenderLayerGrid(

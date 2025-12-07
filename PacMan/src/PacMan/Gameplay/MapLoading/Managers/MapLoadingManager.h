@@ -20,12 +20,16 @@ namespace GEngine
 
 namespace PacMan
 {
+	class CameraManager;
 	struct LoadedMapData;
 
 	class MapLoadingManager
 	{
 	public:
-		explicit MapLoadingManager(GEngine::GEngineCoreModules* modules, GEngine::Scene* scene);
+		explicit MapLoadingManager(
+			GEngine::GEngineCoreModules* modules,
+			GEngine::Scene* scene
+			);
 
 		void LoadMap(const std::string& mapFileName);
 		const LoadedMapData& GetLoadedMapData() const;
@@ -34,7 +38,7 @@ namespace PacMan
 		void LoadTilemapGameObject(
 			LoadedMapData& loadedMapData,
 			const std::shared_ptr<GEngine::TiledMapResource>& tilemapResource
-		);
+		) const;
 		void LoadMapData(
 			LoadedMapData& loadedMapData,
 			const std::shared_ptr<GEngine::TiledMapResource>& tilemapResource

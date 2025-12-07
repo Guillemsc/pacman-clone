@@ -17,6 +17,7 @@ namespace PacMan
 	struct LoadedMapData
 	{
 		std::weak_ptr<GEngine::TiledMap2dRendererComponent> Tilemap;
+		glm::vec2 MapBounds = glm::vec2(0);
 		glm::i32vec2 PlayerPosition = glm::i32vec2(0, 0);
 		glm::i32vec2 RedGhostPosition = glm::i32vec2(0, 0);
 		glm::i32vec2 GhostPrisionLeftSlotPosition = glm::i32vec2(0, 0);

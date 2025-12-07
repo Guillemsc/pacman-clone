@@ -8,6 +8,7 @@
 #include <memory>
 
 #include "Component.h"
+#include "glm/vec2.hpp"
 
 namespace GEngine
 {
@@ -27,6 +28,7 @@ namespace GEngine
 		void OnDisable() override;
 
 		void SetHorizontalFov(float zoom) const;
+		void EncapsulateBounds(const glm::vec2& bounds) const;
 
 	private:
 		std::weak_ptr<Camera2d> _camera;

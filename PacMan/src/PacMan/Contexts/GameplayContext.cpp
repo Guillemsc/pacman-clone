@@ -23,6 +23,7 @@
 #include "PacMan/Gameplay/Ghosts/Managers/GhostsPrisionManager.h"
 #include "PacMan/Gameplay/Ghosts/Data/LoadedGhostsData.h"
 #include "PacMan/Gameplay/Ghosts/Data/GhostPrisionSlotData.h"
+#include "PacMan/Shared/Camera/Data/CameraData.h"
 
 namespace PacMan
 {
@@ -32,7 +33,12 @@ namespace PacMan
 
 	tokoro::Async<void> GameplayContext::OnLoadAsync()
 	{
-		_cameraManager = std::make_unique<CameraManager>();
+		CameraData* cameraData = GEngine::ServiceLocator::Get<CameraData>();
+
+		_cameraManager = std::make_shared<CameraManager>(
+			cameraData
+			);
+		_modules->tickables->AddTickable(_cameraManager);
 
 		std::unique_ptr<MapLoadingManager> mapLoadingManager = std::make_unique<MapLoadingManager>(
 			_modules,
@@ -111,6 +117,7 @@ namespace PacMan
 		_mapLoadingManager->LoadMap("test-map");
 		const LoadedMapData loadedMapData = _mapLoadingManager->GetLoadedMapData();
 
+		_cameraManager->SetBounds(loadedMapData.MapBounds);
 		_mapMovementManager->Setup(loadedMapData.Tilemap);
 
 		_playerLoaderManager->LoadPlayer(loadedMapData.PlayerPosition);
@@ -130,6 +137,7 @@ namespace PacMan
 		GEngine::ServiceLocator::Unregister<GameplayEntities>();
 		GEngine::ServiceLocator::Unregister<PlayerDeathManager>();
 
+		_modules->tickables->RemoveTickable(_cameraManager);
 		_modules->tickables->RemoveTickable(_playerInputSystem);
 		_modules->tickables->RemoveTickable(_ghostsPrisionManager);
 	}

@@ -38,7 +38,7 @@ namespace PacMan
 		void OnDispose() override;
 
 	private:
-		std::unique_ptr<CameraManager> _cameraManager;
+		std::shared_ptr<CameraManager> _cameraManager;
 		std::unique_ptr<MapLoadingManager> _mapLoadingManager;
 		std::unique_ptr<MapMovementManager> _mapMovementManager;
 		std::unique_ptr<MapPathfindingManager> _mapPathfindingManager;
