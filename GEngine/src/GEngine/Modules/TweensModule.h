@@ -13,6 +13,11 @@
 
 namespace GEngine
 {
+	class CancellationToken;
+}
+
+namespace GEngine
+{
 	class Tween;
 }
 
@@ -26,6 +31,7 @@ namespace GEngine
 		void Dispose();
 
 		bool Play(const std::shared_ptr<Tween>& tween);
+		tokoro::Async<void> PlayAsync(const std::shared_ptr<Tween>& tween, CancellationToken cancellationToken);
 		tokoro::Async<void> PlayAsync(const std::shared_ptr<Tween>& tween);
 
 	private:

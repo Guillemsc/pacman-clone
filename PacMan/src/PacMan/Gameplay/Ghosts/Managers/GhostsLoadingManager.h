@@ -9,7 +9,7 @@
 #include <string>
 
 #include "GEngine/Colors/Color01.h"
-#include "glm/fwd.hpp"
+#include "glm/vec2.hpp"
 #include "PacMan/Gameplay/Ghosts/Data/LoadedGhostsData.h"
 #include "PacMan/Gameplay/Ghosts/Enums/GhostType.h"
 
@@ -37,10 +37,18 @@ namespace PacMan
 			);
 
 		void LoadGhosts(const LoadedMapData& loadedMapData);
-		const LoadedGhostsData& GetLoadedGhostsData() const;
+		[[nodiscard]] const LoadedGhostsData& GetLoadedGhostsData() const;
+
+		void SetGhostsToInitialPosition();
 
 	private:
 		std::shared_ptr<GEngine::Entity> LoadGhost(GhostType ghostType, const glm::i32vec2& gridPosition, bool isPrision);
+
+		void SetGhostToInitialPosition(
+			const std::weak_ptr<GEngine::Entity>& entity,
+			const glm::i32vec2& gridPosition,
+			bool isPrision
+			);
 
 		std::string GetGhostName(GhostType ghostType);
 		GEngine::Color01 GetGhostColor(GhostType ghostType);
@@ -51,6 +59,12 @@ namespace PacMan
 		GEngine::Scene* const _scene;
 		MapMovementManager* const _mapMovementManager;
 		GameplayEntities* const _gameplayEntities;
+
+		glm::i32vec2 _mapGhostInitialGridPosition = glm::i32vec2(0);
+		glm::i32vec2 _ghostPrisionLeftSlotInitialGridPosition = glm::i32vec2(0);
+		glm::i32vec2 _ghostPrisionCenterSlotInitialGridPosition = glm::i32vec2(0);
+		glm::i32vec2 _ghostPrisionRightSlotInitialGridPosition = glm::i32vec2(0);
+
 
 		LoadedGhostsData _loadedGhostsData;
 	};

@@ -33,15 +33,60 @@ namespace PacMan
 
 	void GhostsLoadingManager::LoadGhosts(const LoadedMapData &loadedMapData)
 	{
-		LoadGhost(GhostType::RED_GHOST, loadedMapData.RedGhostPosition, false);
-		_loadedGhostsData.LeftPrisionSlotGhostEntity = LoadGhost(GhostType::CIAN_GHOST, loadedMapData.GhostPrisionLeftSlotPosition, true);
-		_loadedGhostsData.CenterPrisionSlotGhostEntity = LoadGhost(GhostType::PINK_GHOST, loadedMapData.GhostPrisionCenterSlotPosition, true);
-		_loadedGhostsData.RightPrisionSlotGhostEntity = LoadGhost(GhostType::ORANGE_GHOST, loadedMapData.GhostPrisionRightSlotPosition, true);
+		_mapGhostInitialGridPosition = loadedMapData.MapGhostPosition;
+		_ghostPrisionLeftSlotInitialGridPosition = loadedMapData.GhostPrisionLeftSlotGridPosition;
+		_ghostPrisionCenterSlotInitialGridPosition = loadedMapData.GhostPrisionCenterSlotGridPosition;
+		_ghostPrisionRightSlotInitialGridPosition = loadedMapData.GhostPrisionRightSlotGridPosition;
+
+		_loadedGhostsData.MapGhostEntity = LoadGhost(
+			GhostType::RED_GHOST,
+			_mapGhostInitialGridPosition,
+			false
+			);
+		_loadedGhostsData.LeftPrisionSlotGhostEntity = LoadGhost(
+			GhostType::CIAN_GHOST,
+			_ghostPrisionLeftSlotInitialGridPosition,
+			true
+			);
+		_loadedGhostsData.CenterPrisionSlotGhostEntity = LoadGhost(
+			GhostType::PINK_GHOST,
+			_ghostPrisionCenterSlotInitialGridPosition,
+			true
+			);
+		_loadedGhostsData.RightPrisionSlotGhostEntity = LoadGhost(
+			GhostType::ORANGE_GHOST,
+			_ghostPrisionRightSlotInitialGridPosition,
+			true
+			);
 	}
 
 	const LoadedGhostsData & GhostsLoadingManager::GetLoadedGhostsData() const
 	{
 		return _loadedGhostsData;
+	}
+
+	void GhostsLoadingManager::SetGhostsToInitialPosition()
+	{
+		SetGhostToInitialPosition(
+			_loadedGhostsData.MapGhostEntity,
+			_mapGhostInitialGridPosition,
+			false
+			);
+		SetGhostToInitialPosition(
+			_loadedGhostsData.LeftPrisionSlotGhostEntity,
+			_ghostPrisionLeftSlotInitialGridPosition,
+			true
+			);
+		SetGhostToInitialPosition(
+			_loadedGhostsData.CenterPrisionSlotGhostEntity,
+			_ghostPrisionCenterSlotInitialGridPosition,
+			true
+			);
+		SetGhostToInitialPosition(
+			_loadedGhostsData.RightPrisionSlotGhostEntity,
+			_ghostPrisionRightSlotInitialGridPosition,
+			true
+			);
 	}
 
 	std::shared_ptr<GEngine::Entity> GhostsLoadingManager::LoadGhost(const GhostType ghostType, const glm::i32vec2 &gridPosition, const bool isPrision)
@@ -83,6 +128,29 @@ namespace PacMan
 		_gameplayEntities->Ghosts.push_back(ghostEntity);
 
 		return ghostEntity;
+	}
+
+	void GhostsLoadingManager::SetGhostToInitialPosition(
+		const std::weak_ptr<GEngine::Entity>& entity,
+		const glm::i32vec2& gridPosition,
+		const bool isPrision
+		)
+	{
+		const std::shared_ptr<GEngine::Entity> lEntity = entity.lock();
+		if (!lEntity) return;
+
+		const glm::vec2 worldPosition = _mapMovementManager->GridPositionToWorldPosition(
+			gridPosition,
+			GEngine::CellPosition::CENTER_RIGHT
+			);
+
+		lEntity->GetTransform().lock()->SetPositionXY(worldPosition);
+
+		if (!isPrision)
+		{
+			const std::shared_ptr<MapMovementComponent> mapMovement = lEntity->GetComponent<MapMovementComponent>().lock();
+			mapMovement->SetGridPosition(gridPosition);
+		}
 	}
 
 	std::string GhostsLoadingManager::GetGhostName(const GhostType ghostType)

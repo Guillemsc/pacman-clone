@@ -28,45 +28,46 @@ namespace PacMan
 		_coroutines(coroutines),
 		_mapMovementManager(mapMovementManager)
 	{
+		_cancellationTokenSource = std::make_shared<GEngine::CancellationTokenSource>();
 	}
 
 	void GhostsPrisionManager::Setup(const LoadedMapData &loadedMapData, const LoadedGhostsData &loadedGhostsData)
 	{
-		_leftSlot = std::make_unique<GhostPrisionSlotData>(
-			loadedMapData.GhostPrisionLeftSlotPosition,
-			loadedGhostsData.LeftPrisionSlotGhostEntity
-			);
+		_loadedGhostsData = loadedGhostsData;
 
-		_centerSlot = std::make_unique<GhostPrisionSlotData>(
-			loadedMapData.GhostPrisionCenterSlotPosition,
-			loadedGhostsData.CenterPrisionSlotGhostEntity
-			);
-
-		_rightSlot = std::make_unique<GhostPrisionSlotData>(
-			loadedMapData.GhostPrisionRightSlotPosition,
-			loadedGhostsData.RightPrisionSlotGhostEntity
-			);
+		_leftSlot = std::make_unique<GhostPrisionSlotData>(loadedGhostsData.LeftPrisionSlotGhostEntity);
+		_centerSlot = std::make_unique<GhostPrisionSlotData>(loadedGhostsData.CenterPrisionSlotGhostEntity);
+		_rightSlot = std::make_unique<GhostPrisionSlotData>(loadedGhostsData.RightPrisionSlotGhostEntity);
 
 		_prisionExitGridPosition = loadedMapData.PrisionExitPosition;
-		_prisionExitPosition = _mapMovementManager->GridPositionToWorldPosition(_prisionExitGridPosition, GEngine::CellPosition::CENTER_RIGHT);
+
+		_prisionExitPosition = _mapMovementManager->GridPositionToWorldPosition(
+			_prisionExitGridPosition,
+			GEngine::CellPosition::CENTER_RIGHT
+			);
 
 		_timeSinceLastGhostReleasedTimer.Start();
 	}
 
-	void GhostsPrisionManager::Stop()
+	void GhostsPrisionManager::StopReleases()
 	{
-		_isPrisionRunning = false;
+		_cancellationTokenSource->Cancel();
+		_cancellationTokenSource = std::make_shared<GEngine::CancellationTokenSource>();
 
-		for (const std::shared_ptr<GEngine::Tween>& tween : _releasingGhostsTweens)
-		{
-			tween->Kill();
-		}
+		_timeSinceLastGhostReleasedTimer.Reset();
+	}
+
+	void GhostsPrisionManager::ResetPrision()
+	{
+		_leftSlot->ghostEntity = _loadedGhostsData.LeftPrisionSlotGhostEntity;
+		_centerSlot->ghostEntity = _loadedGhostsData.CenterPrisionSlotGhostEntity;
+		_rightSlot->ghostEntity = _loadedGhostsData.RightPrisionSlotGhostEntity;
+
+		_timeSinceLastGhostReleasedTimer.Start();
 	}
 
 	void GhostsPrisionManager::Tick()
 	{
-		if (!_isPrisionRunning) return;
-
 		if (_timeSinceLastGhostReleasedTimer.GetTimeSeconds() > 3)
 		{
 			ReleaseNextGhost();
@@ -83,7 +84,12 @@ namespace PacMan
 		const std::shared_ptr<GEngine::Entity> ghostEntity = slot->ghostEntity.lock();
 		slot->ghostEntity.reset();
 
-		_coroutines->Start(&GhostsPrisionManager::PlayReleaseGhostAsync, this, ghostEntity).Forget();
+		_coroutines->Start(
+			&GhostsPrisionManager::PlayReleaseGhostAsync,
+			this,
+			ghostEntity,
+			_cancellationTokenSource->GetToken()
+			).Forget();
 	}
 
 	GhostPrisionSlotData* GhostsPrisionManager::GetNextSlotToReleaseOrNull() const
@@ -106,7 +112,10 @@ namespace PacMan
 		return nullptr;
 	}
 
-	tokoro::Async<void> GhostsPrisionManager::PlayReleaseGhostAsync(const std::shared_ptr<GEngine::Entity> ghostEntity)
+	tokoro::Async<void> GhostsPrisionManager::PlayReleaseGhostAsync(
+		const std::shared_ptr<GEngine::Entity> ghostEntity,
+		const GEngine::CancellationToken cancellationToken
+		)
 	{
 		const std::shared_ptr<GEngine::TransformComponent> transform = ghostEntity->GetTransform().lock();
 		const glm::vec2 position = transform->GetPositionXY();
@@ -133,13 +142,8 @@ namespace PacMan
 			timeToHeight
 			));
 
-		_releasingGhostsTweens.push_back(tween);
-
-		co_await _modules->tweens->PlayAsync(tween);
-
-		GEngine::VectorExtensions::Remove(_releasingGhostsTweens, tween);
-
-		if (!_isPrisionRunning) co_return;
+		co_await _modules->tweens->PlayAsync(tween, cancellationToken);
+		if (cancellationToken.IsCancelled()) co_return;
 
 		const std::shared_ptr<MapMovementComponent> mapMovement = ghostEntity->GetComponent<MapMovementComponent>().lock();
 		mapMovement->SetGridPosition(_prisionExitGridPosition, GEngine::CellPosition::CENTER_RIGHT);

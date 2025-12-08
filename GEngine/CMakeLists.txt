@@ -280,6 +280,8 @@ add_library(GEngineCore STATIC
         src/GEngine/Modules/ConfigurationModule.cpp
         src/GEngine/Modules/ConfigurationModule.h
         src/GEngine/Modules/Module.h
+        src/GEngine/Coroutines/CancellationToken.cpp
+        src/GEngine/Coroutines/CancellationToken.h
 )
 
 # Disable inclusion of Win32 API symbols that conflict with raylib

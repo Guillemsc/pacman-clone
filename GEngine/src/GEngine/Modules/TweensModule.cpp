@@ -5,6 +5,7 @@
 #include "TweensModule.h"
 
 #include "TimeModule.h"
+#include "GEngine/Coroutines/CancellationToken.h"
 #include "GEngine/Extensions/VectorExtensions.h"
 #include "GEngine/Tweens/Tween.h"
 #include "spdlog/spdlog.h"
@@ -51,7 +52,10 @@ namespace GEngine
 		return true;
 	}
 
-	tokoro::Async<void> TweensModule::PlayAsync(const std::shared_ptr<Tween> &tween)
+	tokoro::Async<void> TweensModule::PlayAsync(
+		const std::shared_ptr<Tween>& tween,
+		const CancellationToken cancellationToken
+		)
 	{
 		const bool couldPlay = Play(tween);
 
@@ -59,7 +63,18 @@ namespace GEngine
 
 		while (tween->IsPlaying())
 		{
+			if (cancellationToken.IsCancelled())
+			{
+				tween->Kill();
+				co_return;
+			}
+
 			co_await tokoro::Wait();
 		}
+	}
+
+	tokoro::Async<void> TweensModule::PlayAsync(const std::shared_ptr<Tween> &tween)
+	{
+		return PlayAsync(tween, CancellationToken::None());
 	}
 } // GEngine

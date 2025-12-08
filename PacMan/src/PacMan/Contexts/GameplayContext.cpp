@@ -76,22 +76,23 @@ namespace PacMan
 			playerCollisionsManager.get()
 			);
 
-		std::unique_ptr<PlayerDeathManager> playerDeathManager = std::make_unique<PlayerDeathManager>(
-			GetCoroutinesRunner(),
-			entitiesManager.get(),
-			ghostsPrisionManager.get(),
-			playerLoaderManager.get()
-			);
-
-		std::unique_ptr<MapPathfindingManager> mapPathfindingManager = std::make_unique<MapPathfindingManager>(mapMovementManager.get());
-		GEngine::ServiceLocator::Register(mapPathfindingManager.get());
-
 		std::unique_ptr<GhostsLoadingManager> ghostsLoaderManager = std::make_unique<GhostsLoadingManager>(
 			_modules,
 			_scene.get(),
 			mapMovementManager.get(),
 			gameplayEntities.get()
 			);
+
+		std::unique_ptr<PlayerDeathManager> playerDeathManager = std::make_unique<PlayerDeathManager>(
+			GetCoroutinesRunner(),
+			entitiesManager.get(),
+			ghostsPrisionManager.get(),
+			playerLoaderManager.get(),
+			ghostsLoaderManager.get()
+			);
+
+		std::unique_ptr<MapPathfindingManager> mapPathfindingManager = std::make_unique<MapPathfindingManager>(mapMovementManager.get());
+		GEngine::ServiceLocator::Register(mapPathfindingManager.get());
 
 		std::unique_ptr<PelletsLoadingManager> pelletsLoadingManager = std::make_unique<PelletsLoadingManager>(
 			_modules,

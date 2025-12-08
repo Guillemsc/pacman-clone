@@ -7,6 +7,11 @@
 
 #include "tokoro.h"
 
+namespace PacMan
+{
+	class GhostsLoadingManager;
+}
+
 namespace GEngine
 {
 	class CoroutinesRunner;
@@ -25,19 +30,21 @@ namespace PacMan
 			GEngine::CoroutinesRunner* coroutines,
 			EntitiesManager* entitiesManager,
 			GhostsPrisionManager* ghostsPrisionManager,
-			PlayerLoaderManager* playerLoaderManager
+			PlayerLoaderManager* playerLoaderManager,
+			GhostsLoadingManager* ghostsLoadingManager
 			);
 
 		void RunDeath();
 
 	private:
-		tokoro::Async<void> RunDeathSequenceAsync();
+		[[nodiscard]] tokoro::Async<void> RunDeathSequenceAsync() const;
 
 	private:
 		GEngine::CoroutinesRunner* const _coroutines;
 		EntitiesManager* const _entitiesManager;
 		GhostsPrisionManager* const _ghostsPrisionManager;
 		PlayerLoaderManager* const _playerLoaderManager;
+		GhostsLoadingManager* const _ghostsLoadingManager;
 	};
 }
 

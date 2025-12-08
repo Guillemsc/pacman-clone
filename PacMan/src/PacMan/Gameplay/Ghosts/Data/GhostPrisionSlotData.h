@@ -18,7 +18,6 @@ namespace PacMan
 {
 	struct GhostPrisionSlotData
 	{
-		glm::i32vec2 gridPosition;
 		std::weak_ptr<GEngine::Entity> ghostEntity;
 	};
 }

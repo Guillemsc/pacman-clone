@@ -8,9 +8,11 @@
 #include <vector>
 
 #include "tokoro.h"
+#include "GEngine/Coroutines/CancellationToken.h"
 #include "GEngine/Tickables/Tickable.h"
 #include "GEngine/Timers/ChronoTimer.h"
 #include "glm/vec2.hpp"
+#include "PacMan/Gameplay/Ghosts/Data/LoadedGhostsData.h"
 
 namespace GEngine
 {
@@ -32,7 +34,7 @@ namespace PacMan
 	struct GhostPrisionSlotData;
 	struct GhostsPrisionData;
 
-	class GhostsPrisionManager : public GEngine::Tickable
+	class GhostsPrisionManager final : public GEngine::Tickable
 	{
 	public:
 		GhostsPrisionManager(
@@ -45,24 +47,29 @@ namespace PacMan
 
 		void Setup(const LoadedMapData& loadedMapData, const LoadedGhostsData& loadedGhostsData);
 
-		void Stop();
+		void StopReleases();
+		void ResetPrision();
 
 	private:
 		void ReleaseNextGhost();
 		GhostPrisionSlotData* GetNextSlotToReleaseOrNull() const;
-		tokoro::Async<void> PlayReleaseGhostAsync(std::shared_ptr<GEngine::Entity> ghostEntity);
+		tokoro::Async<void> PlayReleaseGhostAsync(
+			std::shared_ptr<GEngine::Entity> ghostEntity,
+			GEngine::CancellationToken cancellationToken
+			);
 
 	private:
 		GEngine::GEngineCoreModules* const _modules;
 		GEngine::CoroutinesRunner* const _coroutines;
 		MapMovementManager* const _mapMovementManager;
 
+		LoadedGhostsData _loadedGhostsData;
+
 		std::unique_ptr<GhostPrisionSlotData> _leftSlot;
 		std::unique_ptr<GhostPrisionSlotData> _centerSlot;
 		std::unique_ptr<GhostPrisionSlotData> _rightSlot;
 
-		bool _isPrisionRunning = true;
-		std::vector<std::shared_ptr<GEngine::Tween>> _releasingGhostsTweens;
+		std::shared_ptr<GEngine::CancellationTokenSource> _cancellationTokenSource;
 
 		glm::i32vec2 _prisionExitGridPosition = glm::i32vec2(0);
 		glm::vec2 _prisionExitPosition = glm::vec2(0);

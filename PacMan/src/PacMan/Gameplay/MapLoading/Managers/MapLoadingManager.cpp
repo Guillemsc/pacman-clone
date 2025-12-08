@@ -36,14 +36,14 @@ namespace PacMan
 		spdlog::info("Map data loaded [Player:x{0} y{1}] [RedGhost:x{2} y{3}] [CianGhost:x{4} y{5}] [PinkGhost:x{6} y{7}] [OrangeGhost:x{8} y{9}]",
 			_loadedMapData.PlayerPosition.x,
 			_loadedMapData.PlayerPosition.y,
-			_loadedMapData.RedGhostPosition.x,
-			_loadedMapData.RedGhostPosition.y,
-			_loadedMapData.GhostPrisionLeftSlotPosition.x,
-			_loadedMapData.GhostPrisionLeftSlotPosition.y,
-			_loadedMapData.GhostPrisionCenterSlotPosition.x,
-			_loadedMapData.GhostPrisionCenterSlotPosition.y,
-			_loadedMapData.GhostPrisionRightSlotPosition.x,
-			_loadedMapData.GhostPrisionRightSlotPosition.y
+			_loadedMapData.MapGhostPosition.x,
+			_loadedMapData.MapGhostPosition.y,
+			_loadedMapData.GhostPrisionLeftSlotGridPosition.x,
+			_loadedMapData.GhostPrisionLeftSlotGridPosition.y,
+			_loadedMapData.GhostPrisionCenterSlotGridPosition.x,
+			_loadedMapData.GhostPrisionCenterSlotGridPosition.y,
+			_loadedMapData.GhostPrisionRightSlotGridPosition.x,
+			_loadedMapData.GhostPrisionRightSlotGridPosition.y
 			);
 	}
 
@@ -109,7 +109,7 @@ namespace PacMan
 
 				if (optionalEntityLocalTile.has_value())
 				{
-					const tmx::Tileset::Tile* localTile  = optionalEntityLocalTile.value();
+					const tmx::Tileset::Tile* localTile = optionalEntityLocalTile.value();
 					LoadEntityTileData(loadedMapData, gridPosition, localTile);
 				}
 
@@ -117,7 +117,7 @@ namespace PacMan
 
 				if (optionalWalkabilityLocalTile.has_value())
 				{
-					const tmx::Tileset::Tile* walkabilityLocalTile  = optionalWalkabilityLocalTile.value();
+					const tmx::Tileset::Tile* walkabilityLocalTile = optionalWalkabilityLocalTile.value();
 					LoadWalkabilityTileData(loadedMapData, gridPosition, walkabilityLocalTile);
 				}
 
@@ -146,22 +146,22 @@ namespace PacMan
 
 		if (typeProperty == "redGhost")
 		{
-			loadedMapData.RedGhostPosition = gridPosition;
+			loadedMapData.MapGhostPosition = gridPosition;
 		}
 
 		if (typeProperty == "ghostPrision1")
 		{
-			loadedMapData.GhostPrisionLeftSlotPosition = gridPosition;
+			loadedMapData.GhostPrisionLeftSlotGridPosition = gridPosition;
 		}
 
 		if (typeProperty == "ghostPrision2")
 		{
-			loadedMapData.GhostPrisionCenterSlotPosition = gridPosition;
+			loadedMapData.GhostPrisionCenterSlotGridPosition = gridPosition;
 		}
 
 		if (typeProperty == "ghostPrision3")
 		{
-			loadedMapData.GhostPrisionRightSlotPosition = gridPosition;
+			loadedMapData.GhostPrisionRightSlotGridPosition = gridPosition;
 		}
 	}
 
