@@ -995,14 +995,14 @@ Image GetClipboardImage(void)
 #endif // SUPPORT_CLIPBOARD_IMAGE
 
 // Show mouse cursor
-void ShowCursor(void)
+void rlShowCursor(void)
 {
     glfwSetInputMode(platform.handle, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     CORE.Input.Mouse.cursorHidden = false;
 }
 
 // Hides mouse cursor
-void HideCursor(void)
+void rlHideCursor(void)
 {
     glfwSetInputMode(platform.handle, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
     CORE.Input.Mouse.cursorHidden = true;

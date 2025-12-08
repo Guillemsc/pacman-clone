@@ -5,6 +5,7 @@
 #include "UiTextRendererComponent.h"
 
 #include "UiTransformComponent.h"
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Data/UiRect.h"
 #include "GEngine/Modules/RenderingModule.h"
 #include "GEngine/Rendering/UiRenderer.h"

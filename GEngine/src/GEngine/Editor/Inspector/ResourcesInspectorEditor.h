@@ -14,7 +14,6 @@
 
 namespace GEngine
 {
-	struct GEngineCoreModules;
 	class EditorModule;
 	class IResourceInspectorEditor;
 	class Resource;

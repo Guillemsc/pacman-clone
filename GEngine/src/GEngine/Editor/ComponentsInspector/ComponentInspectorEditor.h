@@ -7,11 +7,10 @@
 
 #include <memory>
 
-#include "GEngine/Core/GEngineCoreModules.h"
-
 namespace GEngine
 {
 	class Component;
+	class GEngineCoreModules;
 
 	class IComponentInspectorEditor
 	{

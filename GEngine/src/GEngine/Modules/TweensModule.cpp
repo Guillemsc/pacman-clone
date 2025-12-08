@@ -5,6 +5,7 @@
 #include "TweensModule.h"
 
 #include "TimeModule.h"
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Coroutines/CancellationToken.h"
 #include "GEngine/Extensions/VectorExtensions.h"
 #include "GEngine/Tweens/Tween.h"

@@ -5,6 +5,7 @@
 #include "MapMovementComponent.h"
 
 #include "GEngine/Components/TransformComponent.h"
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Extensions/CardinalDirectionExtensions.h"
 #include "GEngine/Modules/RenderingModule.h"
 #include "GEngine/Modules/TimeModule.h"

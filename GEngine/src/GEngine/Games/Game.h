@@ -7,16 +7,16 @@
 
 #include <memory>
 
-#include "GEngine/Core/GEngineCoreModules.h"
-
 namespace GEngine
 {
+	class GEngineCoreModules;
 	class GEngineCoreApplication;
 
 	class Game
 	{
 	public:
 		virtual ~Game() = default;
+
 		void Setup(GEngineCoreModules* modules) { _modules = modules; }
 
 		virtual void Init() = 0;
@@ -24,7 +24,7 @@ namespace GEngine
 		virtual void Dispose() = 0;
 
 	protected:
-		GEngineCoreModules* _modules;
+		GEngineCoreModules* _modules = nullptr;
 	};
 }
 

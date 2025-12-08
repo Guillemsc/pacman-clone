@@ -9,6 +9,7 @@
 #include "rlgl.h"
 #include "GEngine/Cameras/Camera.h"
 #include "GEngine/Cameras/Camera2d.h"
+#include "GEngine/Core/GEngineCoreModules.h"
 
 namespace GEngine
 {

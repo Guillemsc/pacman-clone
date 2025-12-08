@@ -719,7 +719,7 @@ void InitWindow(int width, int height, const char *title)
 }
 
 // Close window and unload OpenGL context
-void CloseWindow(void)
+void rlCloseWindow(void)
 {
 #if defined(SUPPORT_GIF_RECORDING)
     if (gifRecording)
@@ -844,7 +844,7 @@ void DisableEventWaiting(void)
 }
 
 // Check if cursor is not visible
-bool IsCursorHidden(void)
+bool rlIsCursorHidden(void)
 {
     return CORE.Input.Mouse.cursorHidden;
 }

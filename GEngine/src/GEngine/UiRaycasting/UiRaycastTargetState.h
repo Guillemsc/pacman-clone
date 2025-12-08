@@ -7,7 +7,7 @@
 
 namespace GEngine
 {
-	enum UiRaycastTargetState
+	enum class UiRaycastTargetState
 	{
 		IDLE,
 		MOUSE_INSIDE,

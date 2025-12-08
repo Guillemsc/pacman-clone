@@ -8,16 +8,16 @@
 #include <memory>
 #include <string>
 
-#include "GEngine/Core/GEngineCoreModules.h"
-
 namespace GEngine
 {
+	class GEngineCoreModules;
 	class GEngineCoreApplication;
 
 	class EditorWindow
 	{
 	public:
 		explicit EditorWindow(GEngineCoreModules* modules, const std::string& windowTitle);
+		virtual ~EditorWindow() = default;
 
 		virtual void Draw();
 

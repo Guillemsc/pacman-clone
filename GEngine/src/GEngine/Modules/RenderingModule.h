@@ -7,7 +7,6 @@
 
 #include <memory>
 
-#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Rendering/Guizmo2dRenderer.h"
 #include "GEngine/Rendering/GuizmoUiRenderer.h"
 #include "GEngine/Rendering/ImGuiRenderer.h"
@@ -32,11 +31,11 @@ namespace GEngine
 		void Tick() const;
 		void Dispose() const;
 
-		Renderer2d* Render2d() const { return _renderer2d.get(); }
-		UiRenderer* UiRender() const { return _uiRenderer.get(); }
-		Guizmo2dRenderer* Guizmo2dRender() const { return _guizmo2dRenderer.get(); }
-		GuizmoUiRenderer* GuizmoUiRender() const { return _guizmoUiRenderer.get(); }
-		ImGuiRenderer* ImGuiRender() const { return _imGuiRenderer.get(); }
+		[[nodiscard]] Renderer2d* Render2d() const { return _renderer2d.get(); }
+		[[nodiscard]] UiRenderer* UiRender() const { return _uiRenderer.get(); }
+		[[nodiscard]] Guizmo2dRenderer* Guizmo2dRender() const { return _guizmo2dRenderer.get(); }
+		[[nodiscard]] GuizmoUiRenderer* GuizmoUiRender() const { return _guizmoUiRenderer.get(); }
+		[[nodiscard]] ImGuiRenderer* ImGuiRender() const { return _imGuiRenderer.get(); }
 
 	private:
 		void RenderOnCurrentCamera() const;

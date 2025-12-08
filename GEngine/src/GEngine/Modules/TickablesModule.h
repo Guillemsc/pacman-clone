@@ -8,11 +8,8 @@
 #include <memory>
 #include <vector>
 
-#include "GEngine/Core/GEngineCoreModules.h"
-
 namespace GEngine
 {
-	class GEngineCoreApplication;
 	class Tickable;
 
 	class TickablesModule

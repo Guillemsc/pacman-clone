@@ -5,6 +5,7 @@
 #include "Sprite2dRendererComponent.h"
 
 #include "TransformComponent.h"
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Extensions/RayLibExtensions.h"
 #include "GEngine/Modules/RenderingModule.h"
 #include "GEngine/Rendering/Renderer2d.h"

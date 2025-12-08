@@ -7,6 +7,7 @@
 #include "EditorWindow.h"
 #include "imgui.h"
 #include "GEngine/Colliders2d/Collider2d.h"
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Entities/Entity.h"
 #include "GEngine/Modules/Collisions2dModule.h"
 

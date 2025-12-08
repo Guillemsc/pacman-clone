@@ -5,6 +5,7 @@
 #include "GhostsPrisionManager.h"
 
 #include "GEngine/Components/TransformComponent.h"
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Coroutines/Coroutines.h"
 #include "GEngine/Coroutines/CoroutinesRunner.h"
 #include "GEngine/Extensions/VectorExtensions.h"

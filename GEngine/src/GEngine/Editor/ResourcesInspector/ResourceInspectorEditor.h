@@ -7,12 +7,10 @@
 
 #include <memory>
 
-#include "GEngine/Core/GEngineCoreModules.h"
-
 namespace GEngine
 {
 	class Resource;
-	class GEngineCoreApplication;
+	class GEngineCoreModules;
 
 	class IResourceInspectorEditor
 	{

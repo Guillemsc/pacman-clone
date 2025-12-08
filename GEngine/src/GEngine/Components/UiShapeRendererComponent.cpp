@@ -6,6 +6,7 @@
 
 #include "TransformComponent.h"
 #include "UiTransformComponent.h"
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Extensions/Color01Extensions.h"
 #include "GEngine/Extensions/Vec4Extensions.h"
 #include "GEngine/Modules/RenderingModule.h"

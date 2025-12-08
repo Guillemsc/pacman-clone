@@ -10,12 +10,12 @@
 
 #include "LayeredRenderQueue.h"
 #include "GEngine/Colors/Color01.h"
-#include "GEngine/Core/GEngineCoreModules.h"
 #include "glm/vec2.hpp"
 #include "glm/vec4.hpp"
 
 namespace GEngine
 {
+	class GEngineCoreModules;
 	struct CornersRect;
 	class GEngineCoreApplication;
 

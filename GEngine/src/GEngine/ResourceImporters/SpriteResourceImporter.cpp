@@ -7,6 +7,7 @@
 #include <fstream>
 
 #include "json.hpp"
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Data/JsonData.h"
 #include "GEngine/Modules/ResourcesModule.h"
 #include "GEngine/Resources/SpriteResource.h"

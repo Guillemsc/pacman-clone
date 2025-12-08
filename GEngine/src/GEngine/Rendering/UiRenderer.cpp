@@ -4,6 +4,7 @@
 
 #include "UiRenderer.h"
 
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Extensions/Vec4Extensions.h"
 #include "GEngine/Modules/WindowModule.h"
 

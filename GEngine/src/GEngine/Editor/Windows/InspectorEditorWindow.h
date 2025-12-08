@@ -16,7 +16,7 @@ namespace GEngine
 	class IGEngineObjectInspectorEditor;
 	class GEngineObject;
 
-	class InspectorEditorWindow : public EditorWindow
+	class InspectorEditorWindow final : public EditorWindow
 	{
 	public:
 		explicit InspectorEditorWindow(GEngineCoreModules* modules);

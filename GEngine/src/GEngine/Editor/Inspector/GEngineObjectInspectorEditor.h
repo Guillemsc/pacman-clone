@@ -7,10 +7,9 @@
 
 #include <memory>
 
-#include "GEngine/Core/GEngineCoreModules.h"
-
 namespace GEngine
 {
+	class GEngineCoreModules;
 	class GEngineCoreApplication;
 	class GEngineObject;
 

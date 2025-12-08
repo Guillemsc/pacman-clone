@@ -10,17 +10,15 @@
 #include <vector>
 #include <typeindex>
 
-#include "GEngine/Core/GEngineCoreModules.h"
-
 namespace GEngine
 {
+	class GEngineCoreModules;
 	class IPropertyDrawerEditor;
 	class IProperty;
 	class MenuBarEditor;
 	class GEngineObject;
 	class Entity;
 	class EditorWindow;
-	class GEngineCoreApplication;
 
 	class EditorModule
 	{

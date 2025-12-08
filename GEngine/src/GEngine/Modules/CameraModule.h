@@ -8,12 +8,12 @@
 #include <memory>
 #include <vector>
 
-#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Extensions/Vec2Extensions.h"
 #include "glm/vec2.hpp"
 
 namespace GEngine
 {
+    class GEngineCoreModules;
     class Camera2d;
     class Camera;
 }

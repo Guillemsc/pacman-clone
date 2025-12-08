@@ -16,6 +16,8 @@ namespace GEngine
 	class Tween
 	{
 	public:
+		virtual ~Tween() = default;
+
 		void Start();
 		void Tick(float deltaTime);
 

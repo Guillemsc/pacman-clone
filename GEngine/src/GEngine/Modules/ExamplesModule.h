@@ -8,7 +8,6 @@
 #include <memory>
 #include <vector>
 
-#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Data/ExampleData.h"
 
 namespace GEngine
@@ -22,7 +21,7 @@ namespace GEngine
 
 		void Init(GEngineCoreModules* modules);
 
-		const std::vector<ExampleData>& GetExamples() const;
+		[[nodiscard]] const std::vector<ExampleData>& GetExamples() const;
 
 	private:
 		GEngineCoreModules* _modules = nullptr;

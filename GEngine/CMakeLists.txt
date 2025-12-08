@@ -3,15 +3,6 @@ project(GEngineCore)
 
 set(CMAKE_CXX_STANDARD 20)
 
-if (WIN32)
-    add_compile_definitions(WIN32_LEAN_AND_MEAN)
-    add_compile_definitions(NOMINMAX)
-endif()
-
-if (MSVC)
-    add_compile_options(/utf-8)
-endif()
-
 # Add raylib
 add_subdirectory(vendor/raylib)
 
@@ -283,9 +274,6 @@ add_library(GEngineCore STATIC
         src/GEngine/Coroutines/CancellationToken.cpp
         src/GEngine/Coroutines/CancellationToken.h
 )
-
-# Disable inclusion of Win32 API symbols that conflict with raylib
-target_compile_definitions(GEngineCore PUBLIC RAYLIB_NO_WINDOWS_FUNCTIONS)
 
 # Link raylib
 target_link_libraries(GEngineCore PUBLIC raylib)

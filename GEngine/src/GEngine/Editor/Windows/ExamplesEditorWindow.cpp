@@ -31,7 +31,7 @@ namespace GEngine
 			}
 
 			ImGui::SameLine();
-			ImGui::Text(it->name.c_str());
+			ImGui::Text("%s", it->name.c_str());
 
 			ImGui::PopID();
 		}

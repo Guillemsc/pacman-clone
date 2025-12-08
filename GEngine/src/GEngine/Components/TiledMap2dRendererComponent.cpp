@@ -7,6 +7,7 @@
 #include <cmath>
 
 #include "TransformComponent.h"
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Data/TiledLayerData.h"
 #include "GEngine/Extensions/MathExtensions.h"
 #include "GEngine/Extensions/RayLibExtensions.h"

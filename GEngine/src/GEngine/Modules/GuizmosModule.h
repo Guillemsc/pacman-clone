@@ -11,12 +11,8 @@
 
 namespace GEngine
 {
-	class Component;
-}
-
-namespace GEngine
-{
 	class GEngineCoreModules;
+	class Component;
 
 	class GuizmosModule
 	{

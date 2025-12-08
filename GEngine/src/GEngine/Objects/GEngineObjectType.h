@@ -7,7 +7,7 @@
 
 namespace GEngine
 {
-	enum GEngineObjectType
+	enum class GEngineObjectType
 	{
 		UNKNOWN,
 		ENTITY,

@@ -6,6 +6,7 @@
 
 #include "imgui.h"
 #include "GEngine/ComponentsRegister/ComponentsRegister.h"
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Modules/GuizmosModule.h"
 
 namespace GEngine

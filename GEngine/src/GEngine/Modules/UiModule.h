@@ -7,14 +7,13 @@
 
 #include <memory>
 
-#include "GEngine/Core/GEngineCoreModules.h"
 #include "glm/vec2.hpp"
 
 namespace GEngine
 {
+	class GEngineCoreModules;
 	class UiRaycastTarget;
 	class Entity;
-	class GEngineCoreApplication;
 
 	class UiModule
 	{

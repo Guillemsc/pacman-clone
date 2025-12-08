@@ -5,6 +5,7 @@
 #include "SpriteResourceInspectorEditor.h"
 
 #include "imgui.h"
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Editor/Extensions/EditorExtensions.h"
 #include "GEngine/Resources/TextureResource.h"
 

@@ -10,12 +10,10 @@
 #include <typeindex>
 
 #include "GEngineObjectInspectorEditor.h"
-#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Editor/ComponentsInspector/ComponentInspectorEditor.h"
 
 namespace GEngine
 {
-	struct GEngineCoreModules;
 	class IComponentInspectorEditor;
 	class Entity;
 

@@ -9,20 +9,13 @@
 #include <vector>
 
 #include "tokoro.h"
-#include "GEngine/Core/GEngineCoreModules.h"
 
 namespace GEngine
 {
+	class GEngineCoreModules;
 	class CancellationToken;
-}
-
-namespace GEngine
-{
 	class Tween;
-}
 
-namespace GEngine
-{
 	class TweensModule
 	{
 	public:

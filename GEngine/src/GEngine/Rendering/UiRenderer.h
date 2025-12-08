@@ -8,12 +8,13 @@
 #include <memory>
 
 #include "LayeredRenderQueue.h"
-#include "GEngine/Core/GEngineCoreApplication.h"
 #include "glm/vec2.hpp"
 #include "glm/vec4.hpp"
 
 namespace GEngine
 {
+	class GEngineCoreModules;
+
 	class UiRenderer
 	{
 	public:

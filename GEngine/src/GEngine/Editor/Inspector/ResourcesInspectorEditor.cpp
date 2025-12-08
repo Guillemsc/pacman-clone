@@ -40,7 +40,7 @@ namespace GEngine
 				return;;
 			}
 
-			ImGui::Text(std::format("Path: {0}", inspect->GetResourcesPath().string()).c_str());
+			ImGui::Text("%s", std::format("Path: {0}", inspect->GetResourcesPath().string()).c_str());
 
 			inspector->Draw(inspect);
 		}

@@ -4,6 +4,7 @@
 
 #include "Sprite2dAnimatorComponent.h"
 
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Extensions/VectorExtensions.h"
 #include "GEngine/Modules/TimeModule.h"
 

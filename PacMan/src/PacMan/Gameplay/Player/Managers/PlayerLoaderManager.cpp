@@ -10,6 +10,7 @@
 #include "GEngine/Components/Sprite2dAnimatorComponent.h"
 #include "GEngine/Components/Sprite2dRendererComponent.h"
 #include "GEngine/Components/TransformComponent.h"
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Entities/Entity.h"
 #include "GEngine/Modules/ResourcesModule.h"
 #include "GEngine/Resources/SpriteResource.h"

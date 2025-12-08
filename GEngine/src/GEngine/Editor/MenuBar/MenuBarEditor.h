@@ -4,12 +4,12 @@
 
 #ifndef MENUBAREDITOR_H
 #define MENUBAREDITOR_H
-#include <memory>
 
-#include "GEngine/Core/GEngineCoreModules.h"
+#include <memory>
 
 namespace GEngine
 {
+	class GEngineCoreModules;
 	class GEngineCoreApplication;
 
 	class MenuBarEditor

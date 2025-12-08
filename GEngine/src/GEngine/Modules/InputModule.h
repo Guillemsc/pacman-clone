@@ -8,12 +8,11 @@
 #include <memory>
 
 #include "GEngine/Raylib/RaylibWrapper.h"
-#include "GEngine/Core/GEngineCoreModules.h"
 #include "glm/vec2.hpp"
 
 namespace GEngine
 {
-    class GEngineCoreApplication;
+    class GEngineCoreModules;
 
     class InputModule
     {

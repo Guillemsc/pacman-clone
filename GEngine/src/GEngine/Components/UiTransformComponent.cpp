@@ -4,6 +4,7 @@
 
 #include "UiTransformComponent.h"
 
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Extensions/Vec4Extensions.h"
 #include "GEngine/Modules/RenderingModule.h"
 #include "GEngine/Modules/UiModule.h"

@@ -4,13 +4,12 @@
 
 #ifndef GAMEMODULE_H
 #define GAMEMODULE_H
-#include <memory>
 
-#include "GEngine/Core/GEngineCoreModules.h"
+#include <memory>
 
 namespace GEngine
 {
-	class GEngineCoreApplication;
+	class GEngineCoreModules;
 	class Game;
 
 	class GameModule

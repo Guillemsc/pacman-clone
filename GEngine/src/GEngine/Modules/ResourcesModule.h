@@ -9,7 +9,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/ResourceImporters/ResourceImporter.h"
 #include "GEngine/Resources/ResourceType.h"
 

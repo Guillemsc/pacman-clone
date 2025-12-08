@@ -6,6 +6,7 @@
 
 #include "TransformComponent.h"
 #include "GEngine/Colliders2d/Collider2d.h"
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Extensions/Color01Extensions.h"
 #include "GEngine/Modules/Collisions2dModule.h"
 #include "GEngine/Modules/RenderingModule.h"

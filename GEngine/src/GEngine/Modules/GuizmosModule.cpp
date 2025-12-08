@@ -6,6 +6,7 @@
 
 #include "EditorModule.h"
 #include "GEngine/Components/Component.h"
+#include "GEngine/Core/GEngineCoreModules.h"
 
 namespace GEngine
 {

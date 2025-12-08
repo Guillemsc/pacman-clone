@@ -6,6 +6,7 @@
 
 #include "TransformComponent.h"
 #include "GEngine/Cameras/Camera2d.h"
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Modules/CameraModule.h"
 #include "GEngine/Modules/WindowModule.h"
 

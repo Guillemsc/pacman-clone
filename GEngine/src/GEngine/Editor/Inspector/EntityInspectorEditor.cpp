@@ -9,6 +9,7 @@
 
 #include "imgui.h"
 #include "GEngine/Components/Component.h"
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Editor/ComponentsInspector/TiledMap2dRendererComponentInspectorEditor.h"
 #include "GEngine/Editor/ComponentsInspector/TransformComponentInspectorEditor.h"
 #include "GEngine/Editor/Extensions/ImGuiExtensions.h"

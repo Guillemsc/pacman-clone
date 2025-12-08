@@ -6,6 +6,7 @@
 
 #include "imgui.h"
 #include "GEngine/Components/TiledMap2dRendererComponent.h"
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Editor/Extensions/EditorExtensions.h"
 #include "GEngine/Resources/TiledMapResource.h"
 

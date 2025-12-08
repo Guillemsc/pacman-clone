@@ -182,11 +182,11 @@ static void ImGuiNewFrame(float deltaTime)
                 CurrentMouseCursor = imgui_cursor;
                 if (io.MouseDrawCursor || imgui_cursor == ImGuiMouseCursor_None)
                 {
-                    HideCursor();
+                    rlHideCursor();
                 }
                 else
                 {
-                    ShowCursor();
+                    rlShowCursor();
 
                     if (!(io.ConfigFlags & ImGuiConfigFlags_NoMouseCursorChange))
                     {

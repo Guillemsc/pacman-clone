@@ -9,11 +9,11 @@
 #include <memory>
 #include <vector>
 
-#include "GEngine/Core/GEngineCoreApplication.h"
 #include "GEngine/Objects/GEngineObject.h"
 
 namespace GEngine
 {
+	class GEngineCoreModules;
 	class UiTransformComponent;
 	class Component;
 	class TransformComponent;

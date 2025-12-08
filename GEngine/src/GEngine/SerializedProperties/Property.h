@@ -16,6 +16,8 @@ namespace GEngine
 	class IProperty
 	{
 	public:
+		virtual ~IProperty() = default;
+
 		virtual const std::string& GetName() const = 0;
 
 		virtual std::weak_ptr<GEngineObject> GetObjectValue() = 0;

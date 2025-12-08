@@ -6,6 +6,7 @@
 
 #include "TransformComponent.h"
 #include "GEngine/Cameras/Camera.h"
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Modules/CameraModule.h"
 
 namespace GEngine

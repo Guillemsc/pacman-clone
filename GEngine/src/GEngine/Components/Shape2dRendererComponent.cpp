@@ -7,6 +7,7 @@
 #include "GEngine/Raylib/RaylibWrapper.h"
 #include "TransformComponent.h"
 #include "GEngine/Colors/Color01.h"
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Extensions/Color01Extensions.h"
 #include "GEngine/Modules/RenderingModule.h"
 #include "GEngine/Rendering/Renderer2d.h"
