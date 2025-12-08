@@ -29,7 +29,7 @@ namespace GEngine
 	{
 		const std::shared_ptr<tmx::Map> tiledMap = std::make_shared<tmx::Map>();
 
-		const bool couldLoad = tiledMap->load(fullPath);
+		const bool couldLoad = tiledMap->load(fullPath.string());
 
 		if (!couldLoad)
 		{
