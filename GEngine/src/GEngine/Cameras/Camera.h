@@ -15,6 +15,10 @@ namespace GEngine
 {
     class GEngineCoreModules;
 
+    // Camera class represents a raw 3D camera in the engine. It represents
+    // the camera's position, rotation, and projection type (perspective or orthographic),
+    // and provides utility functions to get direction vectors for rendering.
+    // This camera is used by the CameraComponent.
     class Camera
     {
         friend class CameraModule;

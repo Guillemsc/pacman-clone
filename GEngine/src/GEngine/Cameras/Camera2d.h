@@ -12,6 +12,9 @@ namespace GEngine
 {
 	class GEngineCoreModules;
 
+	// Camera class represents a raw 2D camera in the engine. It represents
+	// the camera's position, and rotation and provides utility functions for rendering.
+	// This camera is used by the Camera2dComponent.
 	class Camera2d
 	{
 		friend class CameraModule;
