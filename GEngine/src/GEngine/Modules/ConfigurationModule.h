@@ -9,6 +9,7 @@
 
 namespace GEngine
 {
+    // Loads and holds the engine configuration json.
     class ConfigurationModule
     {
     public:

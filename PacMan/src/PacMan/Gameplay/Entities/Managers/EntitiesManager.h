@@ -21,9 +21,10 @@ namespace PacMan
 		explicit EntitiesManager(GameplayEntities* entities);
 
 		void StopAllEntitiesMovement();
+		void StartPlayerAndMapGhostEntitiesMovement();
 
 	private:
-		void StopEntityMovement(const std::weak_ptr<GEngine::Entity>& entity);
+		void SetEntityMovementEnabled(const std::weak_ptr<GEngine::Entity>& entity, bool set);
 
 	private:
 		GameplayEntities* const _entities;

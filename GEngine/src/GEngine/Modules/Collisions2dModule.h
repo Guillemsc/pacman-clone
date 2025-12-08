@@ -17,6 +17,9 @@ namespace GEngine
 	class GEngineCoreModules;
 	class Entity;
 
+	// Responsible for managing simple square-shaped 2D colliders.
+	// It tracks active colliders, detects collisions each tick, maintains current contacts,
+	// and provides an interface for adding/removing colliders safely.
 	class Collisions2dModule
 	{
 	public:
@@ -46,7 +49,7 @@ namespace GEngine
 
 		std::vector<std::shared_ptr<Collider2d>> _colliders;
 		std::vector<std::weak_ptr<Collider2d>> _collidersToRemove;
-		std::unordered_map<std::shared_ptr<Collider2d>, std::vector<std::shared_ptr<Collider2d>>> _currentContacts;
+		std::unordered_map<std::shared_ptr<Collider2d>, std::vector<std::shared_ptr<Collider2d>>> _activeContacts;
 
 		std::unordered_map<std::shared_ptr<Collider2d>, std::vector<std::shared_ptr<Collider2d>>> _contactsThisFrame;
 		std::vector<std::tuple<std::shared_ptr<Collider2d>, std::shared_ptr<Collider2d>>> _contactsToRemoveThisFrame;

@@ -8,6 +8,7 @@
 
 #include "GEngine/Entities/Entity.h"
 #include "PacMan/Gameplay/Entities/Data/GameplayEntities.h"
+#include "PacMan/Gameplay/Ghosts/Components/RedGhostAiComponent.h"
 #include "PacMan/Gameplay/MapMovement/Components/MapMovementComponent.h"
 
 namespace PacMan
@@ -19,20 +20,39 @@ namespace PacMan
 
 	void EntitiesManager::StopAllEntitiesMovement()
 	{
-		StopEntityMovement(_entities->Player);
+		SetEntityMovementEnabled(_entities->Player, false);
 
 		for (const std::weak_ptr<GEngine::Entity>& ghost : _entities->Ghosts)
 		{
-			StopEntityMovement(ghost);
+			SetEntityMovementEnabled(ghost, false);
 		}
 
-		for (const std::weak_ptr<GEngine::Entity>& ghost : _entities->Collectables)
+		for (const std::weak_ptr<GEngine::Entity>& collectables : _entities->Collectables)
 		{
-			StopEntityMovement(ghost);
+			SetEntityMovementEnabled(collectables, false);
 		}
 	}
 
-	void EntitiesManager::StopEntityMovement(const std::weak_ptr<GEngine::Entity>& entity)
+	void EntitiesManager::StartPlayerAndMapGhostEntitiesMovement()
+	{
+		SetEntityMovementEnabled(_entities->Player, true);
+
+		for (const std::weak_ptr<GEngine::Entity>& ghost : _entities->Ghosts)
+		{
+			const std::shared_ptr<GEngine::Entity> lEntity = ghost.lock();
+			if (!lEntity) continue;
+
+			const bool isRedGhost = lEntity->HasComponent<RedGhostAiComponent>();
+			if (!isRedGhost) continue;
+
+			const std::shared_ptr<MapMovementComponent>& mapMovement = lEntity->GetComponent<MapMovementComponent>().lock();
+			if (!mapMovement) continue;
+
+			mapMovement->SetCanMove(true);
+		}
+	}
+
+	void EntitiesManager::SetEntityMovementEnabled(const std::weak_ptr<GEngine::Entity>& entity, const bool set)
 	{
 		const std::shared_ptr<GEngine::Entity> lEntity = entity.lock();
 		if (!lEntity) return;
@@ -40,6 +60,6 @@ namespace PacMan
 		const std::shared_ptr<MapMovementComponent>& mapMovement = lEntity->GetComponent<MapMovementComponent>().lock();
 		if (!mapMovement) return;
 
-		mapMovement->SetCanMove(false);
+		mapMovement->SetCanMove(set);
 	}
 }

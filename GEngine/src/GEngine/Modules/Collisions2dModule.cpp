@@ -42,7 +42,7 @@ namespace GEngine
 
 	const std::unordered_map<std::shared_ptr<Collider2d>, std::vector<std::shared_ptr<Collider2d>>>& Collisions2dModule::GetCurrentContacts()
 	{
-		return _currentContacts;
+		return _activeContacts;
 	}
 
 	void Collisions2dModule::CheckCollisions()
@@ -78,7 +78,7 @@ namespace GEngine
 			}
 		}
 
-		for (auto entry : _currentContacts)
+		for (auto entry : _activeContacts)
 		{
 			for (int i = entry.second.size() - 1; i >= 0; --i)
 			{
@@ -127,7 +127,7 @@ namespace GEngine
 		const std::shared_ptr<Collider2d>& with
 		)
 	{
-		const auto optional = UnorderedMapExtensions::GetValueReference(_currentContacts, collider);
+		const auto optional = UnorderedMapExtensions::GetValueReference(_activeContacts, collider);
 		if (!optional.has_value()) return false;
 
 		const std::vector<std::shared_ptr<Collider2d>>& contacts = optional.value().get();
@@ -157,15 +157,15 @@ namespace GEngine
 			return;
 		}
 
-		_currentContacts[collider].push_back(with);
+		_activeContacts[collider].push_back(with);
 
 		collider->_onContactStart.Invoke(collisionData);
 	}
 
 	void Collisions2dModule::RemoveContact(const std::shared_ptr<Collider2d>& collider, const std::shared_ptr<Collider2d>& with)
 	{
-		const auto it = _currentContacts.find(collider);
-		if (it == _currentContacts.end()) return;
+		const auto it = _activeContacts.find(collider);
+		if (it == _activeContacts.end()) return;
 
 		const bool removed = VectorExtensions::Remove(it->second, with);
 		if (!removed) return;
@@ -176,7 +176,7 @@ namespace GEngine
 
 	void Collisions2dModule::ClearContacts(const std::shared_ptr<Collider2d> &collider)
 	{
-		const auto optional = UnorderedMapExtensions::GetValueReference(_currentContacts, collider);
+		const auto optional = UnorderedMapExtensions::GetValueReference(_activeContacts, collider);
 		if (!optional.has_value()) return;
 
 		const std::vector<std::shared_ptr<Collider2d>>& contacts = optional.value().get();
@@ -189,7 +189,7 @@ namespace GEngine
 			RemoveContact(contacting, collider);
 		}
 
-		UnorderedMapExtensions::RemoveKey(_currentContacts, collider);
+		UnorderedMapExtensions::RemoveKey(_activeContacts, collider);
 	}
 
 	bool Collisions2dModule::DidContactHappenThisFrame(

@@ -28,6 +28,7 @@ namespace PacMan
 	{
 	public:
 		explicit Context(GEngine::GEngineCoreModules* modules, const std::string& name);
+		virtual ~Context() = default;
 
 		tokoro::Async<void> LoadAsync();
 		void Start();

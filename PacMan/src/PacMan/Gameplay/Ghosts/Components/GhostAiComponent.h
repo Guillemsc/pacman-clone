@@ -29,7 +29,7 @@ namespace PacMan
 	private:
 		std::weak_ptr<MapMovementComponent> _mapMovementComponent;
 
-		glm::i32vec2 _previousTargetGridPosition;
+		glm::i32vec2 _previousTargetGridPosition = glm::i32vec2(0);
 	};
 }
 

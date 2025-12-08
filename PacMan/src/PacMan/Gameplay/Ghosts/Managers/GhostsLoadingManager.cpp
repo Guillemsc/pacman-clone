@@ -12,6 +12,9 @@
 #include "PacMan/Gameplay/Collisions/Enums/CollisionLayers.h"
 #include "PacMan/Gameplay/Entities/Components/EntityIdComponent.h"
 #include "PacMan/Gameplay/Entities/Data/GameplayEntities.h"
+#include "PacMan/Gameplay/Ghosts/Components/CianGhostAiComponent.h"
+#include "PacMan/Gameplay/Ghosts/Components/OrangeGhostAiComponent.h"
+#include "PacMan/Gameplay/Ghosts/Components/PinkGhostAiComponent.h"
 #include "PacMan/Gameplay/Ghosts/Components/RedGhostAiComponent.h"
 #include "PacMan/Gameplay/MapLoading/Data/LoadedMapData.h"
 #include "PacMan/Gameplay/MapMovement/Components/MapMovementComponent.h"
@@ -198,17 +201,17 @@ namespace PacMan
 			}
 			case GhostType::ORANGE_GHOST:
 			{
-				ghostEntity->AddComponent<RedGhostAiComponent>();
+				ghostEntity->AddComponent<OrangeGhostAiComponent>();
 				break;
 			}
 			case GhostType::CIAN_GHOST:
 			{
-				ghostEntity->AddComponent<RedGhostAiComponent>();
+				ghostEntity->AddComponent<CianGhostAiComponent>();
 				break;
 			}
 			case GhostType::PINK_GHOST:
 			{
-				ghostEntity->AddComponent<RedGhostAiComponent>();
+				ghostEntity->AddComponent<PinkGhostAiComponent>();
 				break;
 			}
 		}

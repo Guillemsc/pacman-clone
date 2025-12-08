@@ -36,12 +36,15 @@ namespace PacMan
 	tokoro::Async<void> PlayerDeathManager::RunDeathSequenceAsync() const
 	{
 		_entitiesManager->StopAllEntitiesMovement();
-		_ghostsPrisionManager->StopReleases();
+		_ghostsPrisionManager->Stop();
 
 		_playerLoaderManager->SetPlayerToInitialPosition();
 		_ghostsLoadingManager->SetGhostsToInitialPosition();
 
-		_ghostsPrisionManager->ResetPrision();
+		co_await GEngine::ChronoTimer::AwaitSeconds(1, GEngine::CancellationToken::None());
+
+		_ghostsPrisionManager->Reset();
+		_entitiesManager->StartPlayerAndMapGhostEntitiesMovement();
 
 		co_return;
 	}

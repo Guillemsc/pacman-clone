@@ -29,7 +29,7 @@ namespace PacMan
 	class PlayerInputSystem;
 
 	// Contains all the main gameplay setup and logic.
-	class GameplayContext : public Context
+	class GameplayContext final : public Context
 	{
 	public:
 		explicit GameplayContext(GEngine::GEngineCoreModules* modules);

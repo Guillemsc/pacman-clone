@@ -62,6 +62,12 @@ add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Gameplay/Cameras/Managers/CameraManager.cpp
         src/PacMan/Gameplay/Cameras/Managers/CameraManager.h
         src/PacMan/Shared/Camera/Data/CameraData.h
+        src/PacMan/Gameplay/Ghosts/Components/CianGhostAiComponent.cpp
+        src/PacMan/Gameplay/Ghosts/Components/CianGhostAiComponent.h
+        src/PacMan/Gameplay/Ghosts/Components/PinkGhostAiComponent.cpp
+        src/PacMan/Gameplay/Ghosts/Components/PinkGhostAiComponent.h
+        src/PacMan/Gameplay/Ghosts/Components/OrangeGhostAiComponent.cpp
+        src/PacMan/Gameplay/Ghosts/Components/OrangeGhostAiComponent.h
 )
 
 target_link_libraries(PacMan PRIVATE GEngineCore)

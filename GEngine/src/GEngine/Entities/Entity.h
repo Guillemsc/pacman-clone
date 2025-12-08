@@ -56,6 +56,8 @@ namespace GEngine
 
 		const std::vector<std::shared_ptr<Component>>& GetComponents() const;
 		template <class T>
+		bool HasComponent() const;
+		template <class T>
 		std::weak_ptr<T> GetComponent();
 		template <class T>
 		std::weak_ptr<T> AddComponent();
@@ -92,6 +94,20 @@ namespace GEngine
 		std::weak_ptr<TransformComponent> _transformPtr;
 		std::weak_ptr<UiTransformComponent> _uiTransformPtr;
 	};
+
+	template <class T>
+	bool Entity::HasComponent() const
+	{
+		for (auto it = _components.begin(); it != _components.end(); ++it)
+		{
+			if (auto casted = std::dynamic_pointer_cast<T>(*it))
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	template<class T>
 	std::weak_ptr<T> Entity::GetComponent()

@@ -20,6 +20,8 @@ namespace GEngine
 
 namespace GEngine
 {
+    // Manages 2d and 3d cameras.
+    // Handles camera stacking, and the editor camera.
     class CameraModule
     {
     public:

@@ -47,8 +47,8 @@ namespace PacMan
 
 		void Setup(const LoadedMapData& loadedMapData, const LoadedGhostsData& loadedGhostsData);
 
-		void StopReleases();
-		void ResetPrision();
+		void Stop();
+		void Reset();
 
 	private:
 		void ReleaseNextGhost();

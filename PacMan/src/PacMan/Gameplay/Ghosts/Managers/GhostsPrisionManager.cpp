@@ -49,7 +49,7 @@ namespace PacMan
 		_timeSinceLastGhostReleasedTimer.Start();
 	}
 
-	void GhostsPrisionManager::StopReleases()
+	void GhostsPrisionManager::Stop()
 	{
 		_cancellationTokenSource->Cancel();
 		_cancellationTokenSource = std::make_shared<GEngine::CancellationTokenSource>();
@@ -57,7 +57,7 @@ namespace PacMan
 		_timeSinceLastGhostReleasedTimer.Reset();
 	}
 
-	void GhostsPrisionManager::ResetPrision()
+	void GhostsPrisionManager::Reset()
 	{
 		_leftSlot->ghostEntity = _loadedGhostsData.LeftPrisionSlotGhostEntity;
 		_centerSlot->ghostEntity = _loadedGhostsData.CenterPrisionSlotGhostEntity;
@@ -147,6 +147,7 @@ namespace PacMan
 
 		const std::shared_ptr<MapMovementComponent> mapMovement = ghostEntity->GetComponent<MapMovementComponent>().lock();
 		mapMovement->SetGridPosition(_prisionExitGridPosition, GEngine::CellPosition::CENTER_RIGHT);
+		mapMovement->SetCanMove(true);
 
 		co_return;
 	}
