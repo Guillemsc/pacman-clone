@@ -3,6 +3,10 @@ project(GEngineCore)
 
 set(CMAKE_CXX_STANDARD 20)
 
+if (MSVC)
+    add_compile_options(/utf-8)
+endif()
+
 # Add raylib
 add_subdirectory(vendor/raylib)
 
