@@ -9,6 +9,7 @@
 
 #include "GEngine/Extensions/Vec2Extensions.h"
 #include "glm/vec2.hpp"
+#include <string>
 
 namespace GEngine
 {
