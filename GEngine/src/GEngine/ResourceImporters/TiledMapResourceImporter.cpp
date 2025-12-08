@@ -71,7 +71,7 @@ namespace GEngine
 			const tmx::Tileset& tileSet = tileSets[i];
 
 			const std::string& imagePath = tileSet.getImagePath();
-			std::string resourcesImagePath = _modules->resources->FullPathToRelativeResourcesPath(imagePath);
+			std::string resourcesImagePath = _modules->resources->FullPathToRelativeResourcesPath(imagePath).string();
 			const std::weak_ptr<TextureResource> tilesetTexture = _modules->resources->GetResource<TextureResource>(resourcesImagePath);
 
 			tiledMapResource->_tileSetTextures.push_back(tilesetTexture);
