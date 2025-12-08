@@ -30,10 +30,10 @@ namespace GEngine
 		{
 			if (ImGui::CollapsingHeader(tileset.getName().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 			{
-				std::filesystem::path resourcesPath = _modules->resources->FullPathToRelativeResourcesPath(tileset.getImagePath());
+				std::string resourcesPath = _modules->resources->FullPathToRelativeResourcesPath(tileset.getImagePath()).string();
 
-				ImGui::Text(std::format("Tile Size: X:{0} Y:{1}", tileset.getTileSize().x, tileset.getTileSize().y).c_str());
-				ImGui::TextWrapped(std::format("Image Path: {0}", resourcesPath.c_str()).c_str());
+				ImGui::Text("%s", std::format("Tile Size: X:{0} Y:{1}", tileset.getTileSize().x, tileset.getTileSize().y).c_str());
+				ImGui::TextWrapped("%s", std::format("Image Path: {0}", resourcesPath).c_str());
 			}
 		}
 
