@@ -3,6 +3,10 @@ project(PacMan)
 
 set(CMAKE_CXX_STANDARD 20)
 
+if (MSVC)
+    add_compile_options(/utf-8)
+endif()
+
 add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Games/PacManGame.h
         src/PacMan/Games/PacManGame.cpp
