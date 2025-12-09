@@ -14,7 +14,7 @@ namespace GEngine
 {
 	void WindowModule::ApplyConfig(const JsonData& config)
 	{
-		const JsonData json = config.GetObject("Window");
+		const JsonData json = config.GetJsonObject("Window");
 		_titleInitialValue = json.GetString("Title");
 		_sizeInitialValue = json.GetIVec2("Size", _sizeInitialValue);
 		_fullscreenInitialValue = json.GetBool("Fullscreen", _fullscreenInitialValue);

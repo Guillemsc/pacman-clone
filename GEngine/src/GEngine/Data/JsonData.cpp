@@ -83,7 +83,7 @@ namespace GEngine
 		return value.get<std::string>();
 	}
 
-	JsonData JsonData::GetObject(const char *name) const
+	JsonData JsonData::GetJsonObject(const char *name) const
 	{
 		if (!_json.contains(name)) return JsonData();
 		const nlohmann::basic_json<>& value = _json[name];
@@ -161,7 +161,7 @@ namespace GEngine
 		return value.get<std::string>();
 	}
 
-	JsonData JsonData::GetArrayObject(const char *name, const int index) const
+	JsonData JsonData::GetArrayJsonObject(const char *name, const int index) const
 	{
 		if (!_json.contains(name)) return JsonData();
 		const nlohmann::basic_json<>& array = _json[name];

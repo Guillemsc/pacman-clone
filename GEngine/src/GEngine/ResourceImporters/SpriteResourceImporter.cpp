@@ -41,7 +41,7 @@ namespace GEngine
 
 		for (std::size_t i = 0; i < rects; i++)
 		{
-			JsonData rectData = jsonData.GetArrayObject("rects", i);
+			JsonData rectData = jsonData.GetArrayJsonObject("rects", i);
 			std::size_t x = rectData.GetInt("x");
 			std::size_t y = rectData.GetInt("y");
 			std::size_t w = rectData.GetInt("w");

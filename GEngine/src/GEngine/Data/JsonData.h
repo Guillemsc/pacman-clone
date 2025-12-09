@@ -25,7 +25,7 @@ namespace GEngine
 		[[nodiscard]] int GetInt(const char* name, int defaultValue = 0) const;
 		[[nodiscard]] int GetFloat(const char* name, float defaultValue = 0) const;
 		[[nodiscard]] std::string GetString(const char* name, const std::string& defaultValue = "") const;
-		[[nodiscard]] JsonData GetObject(const char* name) const;
+		[[nodiscard]] JsonData GetJsonObject(const char* name) const;
 		[[nodiscard]] glm::i32vec2 GetIVec2(const char* name, const glm::i32vec2& defaultValue = glm::i32vec2(0)) const;
 
 		[[nodiscard]] int GetArrayCount(const char* name) const;
@@ -33,7 +33,7 @@ namespace GEngine
 		[[nodiscard]] int GetArrayInt(const char* name, int index) const;
 		[[nodiscard]] float GetArrayFloat(const char* name, int index) const;
 		[[nodiscard]] std::string GetArrayString(const char* name, int index) const;
-		[[nodiscard]] JsonData GetArrayObject(const char* name, int index) const;
+		[[nodiscard]] JsonData GetArrayJsonObject(const char* name, int index) const;
 
 		[[nodiscard]] std::string Dump(int indent) const;
 
