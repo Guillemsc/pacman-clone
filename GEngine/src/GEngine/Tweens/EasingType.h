@@ -7,7 +7,7 @@
 
 namespace GEngine
 {
-	enum EasingType
+	enum class EasingType
 	{
 		LINEAR,
 		IN_SINE,

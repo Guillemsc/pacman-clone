@@ -5,6 +5,7 @@
 #include "Easing.h"
 
 #include <complex>
+#include <numbers>
 
 namespace GEngine
 {
@@ -13,67 +14,67 @@ namespace GEngine
 		switch (easing)
 		{
 			default:
-			case LINEAR:
+			case EasingType::LINEAR:
 				return EaseLinear;
-			case IN_SINE:
+			case EasingType::IN_SINE:
 				return EaseInSine;
-			case OUT_SINE:
+			case EasingType::OUT_SINE:
 				return EaseOutSine;
-			case IN_OUT_SINE:
+			case EasingType::IN_OUT_SINE:
 				return EaseInOutSine;
-			case IN_QUAD:
+			case EasingType::IN_QUAD:
 				return EaseInQuad;
-			case OUT_QUAD:
+			case EasingType::OUT_QUAD:
 				return EaseOutQuad;
-			case IN_OUT_QUAD:
+			case EasingType::IN_OUT_QUAD:
 				return EaseInOutQuad;
-			case IN_CUBIC:
+			case EasingType::IN_CUBIC:
 				return EaseInCubic;
-			case OUT_CUBIC:
+			case EasingType::OUT_CUBIC:
 				return EaseOutCubic;
-			case IN_OUT_CUBIC:
+			case EasingType::IN_OUT_CUBIC:
 				return EaseInOutCubic;
-			case IN_QUART:
+			case EasingType::IN_QUART:
 				return EaseInQuart;
-			case OUT_QUART:
+			case EasingType::OUT_QUART:
 				return EaseOutQuart;
-			case IN_OUT_QUART:
+			case EasingType::IN_OUT_QUART:
 				return EaseInOutQuart;
-			case IN_QUINT:
+			case EasingType::IN_QUINT:
 				return EaseInQuint;
-			case OUT_QUINT:
+			case EasingType::OUT_QUINT:
 				return EaseOutQuint;
-			case IN_OUT_QUINT:
+			case EasingType::IN_OUT_QUINT:
 				return EaseInOutQuint;
-			case IN_EXPO:
+			case EasingType::IN_EXPO:
 				return EaseInExpo;
-			case OUT_EXPO:
+			case EasingType::OUT_EXPO:
 				return EaseOutExpo;
-			case IN_OUT_EXPO:
+			case EasingType::IN_OUT_EXPO:
 				return EaseInOutExpo;
-			case IN_CIRC:
+			case EasingType::IN_CIRC:
 				return EaseInCirc;
-			case OUT_CIRC:
+			case EasingType::OUT_CIRC:
 				return EaseOutCirc;
-			case IN_OUT_CIRC:
+			case EasingType::IN_OUT_CIRC:
 				return EaseInOutCirc;
-			case IN_BACK:
+			case EasingType::IN_BACK:
 				return EaseInBack;
-			case OUT_BACK:
+			case EasingType::OUT_BACK:
 				return EaseOutBack;
-			case IN_OUT_BACK:
+			case EasingType::IN_OUT_BACK:
 				return EaseInOutBack;
-			case IN_ELASTIC:
+			case EasingType::IN_ELASTIC:
 				return EaseInElastic;
-			case OUT_ELASTIC:
+			case EasingType::OUT_ELASTIC:
 				return EaseOutElastic;
-			case IN_OUT_ELASTIC:
+			case EasingType::IN_OUT_ELASTIC:
 				return EaseInOutElastic;
-			case IN_BOUNCE:
+			case EasingType::IN_BOUNCE:
 				return EaseInBounce;
-			case OUT_BOUNCE:
+			case EasingType::OUT_BOUNCE:
 				return EaseOutBounce;
-			case IN_OUT_BOUNCE:
+			case EasingType::IN_OUT_BOUNCE:
 				return EaseInOutBounce;
 		}
 	}
