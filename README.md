@@ -1,4 +1,5 @@
 [![Build](https://github.com/Guillemsc/pacman-clone/actions/workflows/cmake-multi-platform.yml/badge.svg)](https://github.com/Guillemsc/pacman-clone/actions/workflows/cmake-multi-platform.yml)
+
 <img width="1640" height="664" alt="logo" src="https://github.com/user-attachments/assets/ecd61182-7382-4f7e-accc-9c49940e7d10" />
 
 A simple **Pac-Man** clone done as an example of the **C++** game engine framework: **GEngine**. 
