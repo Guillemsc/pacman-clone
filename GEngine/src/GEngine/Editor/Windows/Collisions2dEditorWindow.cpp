@@ -34,6 +34,7 @@ namespace GEngine
 		{
 			const std::shared_ptr<Collider2d>& current = it->first;
 			const std::shared_ptr<Entity> currentEntity = current->GetOwner().lock();
+			if (!currentEntity) continue;
 
 			ImGui::Text("%s", currentEntity->GetName().c_str());
 
@@ -44,6 +45,7 @@ namespace GEngine
 			for (const std::shared_ptr<Collider2d>& other : otherColliders)
 			{
 				const std::shared_ptr<Entity> otherEntity = other->GetOwner().lock();
+				if (!otherEntity) continue;
 
 				ImGui::BulletText("%s", otherEntity->GetName().c_str());
 			}

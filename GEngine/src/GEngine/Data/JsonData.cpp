@@ -42,7 +42,7 @@ namespace GEngine
 
 	JsonData::JsonData(const nlohmann::json &json)
 	{
-		_hasData = true;
+		_hasData = json.is_object();
 		_json = json;
 	}
 
@@ -53,6 +53,7 @@ namespace GEngine
 
 	bool JsonData::GetBool(const char *name, const bool defaultValue) const
 	{
+		if (!_hasData) return defaultValue;
 		if (!_json.contains(name)) return defaultValue;
 		const nlohmann::basic_json<>& value = _json[name];
 		if (!value.is_boolean()) return defaultValue;
@@ -61,6 +62,7 @@ namespace GEngine
 
 	int JsonData::GetInt(const char *name, const int defaultValue) const
 	{
+		if (!_hasData) return defaultValue;
 		if (!_json.contains(name)) return defaultValue;
 		const nlohmann::basic_json<>& value = _json[name];
 		if (!value.is_number_integer()) return defaultValue;
@@ -69,6 +71,7 @@ namespace GEngine
 
 	int JsonData::GetFloat(const char *name, const float defaultValue) const
 	{
+		if (!_hasData) return defaultValue;
 		if (!_json.contains(name)) return defaultValue;
 		const nlohmann::basic_json<>& value = _json[name];
 		if (!value.is_number_float()) return defaultValue;
@@ -77,6 +80,7 @@ namespace GEngine
 
 	std::string JsonData::GetString(const char *name, const std::string& defaultValue) const
 	{
+		if (!_hasData) return defaultValue;
 		if (!_json.contains(name)) return defaultValue;
 		const nlohmann::basic_json<>& value = _json[name];
 		if (!value.is_string()) return defaultValue;
@@ -85,6 +89,7 @@ namespace GEngine
 
 	JsonData JsonData::GetJsonObject(const char *name) const
 	{
+		if (!_hasData) return JsonData();
 		if (!_json.contains(name)) return JsonData();
 		const nlohmann::basic_json<>& value = _json[name];
 		if (!value.is_object()) return JsonData();
@@ -93,6 +98,9 @@ namespace GEngine
 
 	glm::i32vec2 JsonData::GetIVec2(const char* name, const glm::i32vec2& defaultValue) const
 	{
+		if (!_hasData) return defaultValue;
+		if (!_json.contains(name)) return defaultValue;
+
 		const nlohmann::basic_json<>& value = _json[name];
 		if (!value.is_object()) return defaultValue;
 
@@ -107,6 +115,7 @@ namespace GEngine
 
 	int JsonData::GetArrayCount(const char *name) const
 	{
+		if (!_hasData) return 0;
 		if (!_json.contains(name)) return 0;
 		const nlohmann::basic_json<>& value = _json[name];
 		if (!value.is_array()) return 0;
@@ -115,6 +124,7 @@ namespace GEngine
 
 	bool JsonData::GetArrayBool(const char *name, const int index) const
 	{
+		if (!_hasData) return false;
 		if (!_json.contains(name)) return false;
 		const nlohmann::basic_json<>& array = _json[name];
 		if (!array.is_array()) return false;
@@ -127,6 +137,7 @@ namespace GEngine
 
 	int JsonData::GetArrayInt(const char *name, const int index) const
 	{
+		if (!_hasData) return 0;
 		if (!_json.contains(name)) return 0;
 		const nlohmann::basic_json<>& array = _json[name];
 		if (!array.is_array()) return 0;
@@ -139,6 +150,7 @@ namespace GEngine
 
 	float JsonData::GetArrayFloat(const char *name, const int index) const
 	{
+		if (!_hasData) return 0.0f;
 		if (!_json.contains(name)) return 0.0f;
 		const nlohmann::basic_json<>& array = _json[name];
 		if (!array.is_array()) return 0.0f;
@@ -151,6 +163,7 @@ namespace GEngine
 
 	std::string JsonData::GetArrayString(const char *name, const int index) const
 	{
+		if (!_hasData) return "";
 		if (!_json.contains(name)) return "";
 		const nlohmann::basic_json<>& array = _json[name];
 		if (!array.is_array()) return "";
@@ -163,6 +176,7 @@ namespace GEngine
 
 	JsonData JsonData::GetArrayJsonObject(const char *name, const int index) const
 	{
+		if (!_hasData) return JsonData();
 		if (!_json.contains(name)) return JsonData();
 		const nlohmann::basic_json<>& array = _json[name];
 		if (!array.is_array()) return JsonData();
