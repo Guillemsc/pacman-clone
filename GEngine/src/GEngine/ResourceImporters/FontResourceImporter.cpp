@@ -20,7 +20,7 @@ namespace GEngine
 		const std::filesystem::path &resourcesPath
 		)
 	{
-		std::string fullPathString = fullPath.c_str();
+		const std::string fullPathString = fullPath.string();
 		Font rawFont = LoadFont(fullPathString.c_str());
 
 		if (rawFont.glyphCount == 0 || rawFont.texture.id == 0)
