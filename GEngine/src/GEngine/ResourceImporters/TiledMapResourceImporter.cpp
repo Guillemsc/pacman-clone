@@ -27,9 +27,10 @@ namespace GEngine
 		const std::filesystem::path &resourcesPath
 		)
 	{
+		const std::string fullPathString = fullPath.string();
 		const std::shared_ptr<tmx::Map> tiledMap = std::make_shared<tmx::Map>();
 
-		const bool couldLoad = tiledMap->load(fullPath.string());
+		const bool couldLoad = tiledMap->load(fullPathString);
 
 		if (!couldLoad)
 		{
