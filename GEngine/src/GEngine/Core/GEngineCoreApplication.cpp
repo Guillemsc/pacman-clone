@@ -8,6 +8,7 @@
 #include "GEngine/Modules/Collisions2dModule.h"
 #include "GEngine/Modules/ConfigurationModule.h"
 #include "GEngine/Modules/CoroutinesModule.h"
+#include "GEngine/Modules/DeferredExecutionModule.h"
 #include "GEngine/Modules/EditorModule.h"
 #include "GEngine/Modules/EntitiesModule.h"
 #include "GEngine/Modules/ExamplesModule.h"
@@ -46,6 +47,7 @@ namespace GEngine
 		_examples = std::make_unique<ExamplesModule>();
 		_guizmos = std::make_unique<GuizmosModule>();
 		_collisions2d = std::make_unique<Collisions2dModule>();
+		_deferredExecution = std::make_unique<DeferredExecutionModule>();
 
 		_modules = std::make_unique<GEngineCoreModules>(
 			_configuration.get(),
@@ -64,7 +66,8 @@ namespace GEngine
 			_examples.get(),
 			_tweens.get(),
 			_guizmos.get(),
-			_collisions2d.get()
+			_collisions2d.get(),
+			_deferredExecution.get()
 		);
 	}
 
@@ -116,6 +119,7 @@ namespace GEngine
 		_entities->Tick();
 		_coroutines->Tick();
 		_collisions2d->Tick();
+		_deferredExecution->Tick();
 		_editor->Tick();
 		_camera->Tick(deltaTime);
 		_rendering->Tick();
@@ -132,6 +136,7 @@ namespace GEngine
 		_collisions2d->Dispose();
 		_tweens->Dispose();
 		_ui->Dispose();
+		_deferredExecution->Dispose();
 		_editor->Dispose();
 		_resources->Dispose();
 		_rendering->Dispose();

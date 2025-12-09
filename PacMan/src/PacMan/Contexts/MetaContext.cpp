@@ -27,7 +27,7 @@ namespace PacMan
 		uiEntity2->AddComponent<GEngine::UiShapeRendererComponent>();
 		const std::shared_ptr<GEngine::UiShapeButtonComponent> button = uiEntity2->AddComponent<GEngine::UiShapeButtonComponent>().lock();
 
-		button->OnClick().Add(std::bind(&MetaContext::WhenPlayButtonClicked, this));
+		button->OnClick().Add([this] { WhenPlayButtonClicked(); });
 
 		co_await Context::OnLoadAsync();
 	}

@@ -39,7 +39,7 @@ namespace PacMan
 {
 	void PacManGame::Init()
 	{
-		_contextsStack = std::make_unique<ContextsStack>();
+		_contextsStack = std::make_unique<ContextsStack>(_modules);
 		GEngine::ServiceLocator::Register(_contextsStack.get());
 
 		GEngine::Coroutines::Start(&PacManGame::LaunchGameAsync, this).Forget();

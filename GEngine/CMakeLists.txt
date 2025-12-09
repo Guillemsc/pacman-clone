@@ -277,6 +277,8 @@ add_library(GEngineCore STATIC
         src/GEngine/Modules/Module.h
         src/GEngine/Coroutines/CancellationToken.cpp
         src/GEngine/Coroutines/CancellationToken.h
+        src/GEngine/Modules/DeferredExecutionModule.cpp
+        src/GEngine/Modules/DeferredExecutionModule.h
 )
 
 # Link raylib

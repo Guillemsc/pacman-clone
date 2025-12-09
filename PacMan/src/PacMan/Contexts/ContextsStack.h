@@ -12,6 +12,11 @@
 
 namespace GEngine
 {
+	class GEngineCoreModules;
+}
+
+namespace GEngine
+{
 	class CoroutineSequencer;
 	class CoroutinesModule;
 }
@@ -23,11 +28,16 @@ namespace PacMan
 	class ContextsStack
 	{
 	public:
+		ContextsStack(GEngine::GEngineCoreModules* modules);
+
 		tokoro::Async<void> PushAsync(std::shared_ptr<Context> context);
 		void Pop();
 
 	private:
+		GEngine::GEngineCoreModules* const _modules;
+
 		std::vector<std::shared_ptr<Context>> _contextsStack;
+		std::vector<std::shared_ptr<Context>> _poppingContexts;
 
 		bool _loading = false;
 	};

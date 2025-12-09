@@ -24,6 +24,6 @@ namespace GEngine
 			_modules->ui->SetReferenceScreenSize(referenceScreenSize);
 		}
 
-		ImGui::Text(std::format("Scale: {:.2f}", _modules->ui->GetUiScale()).c_str());
+		ImGui::Text("%s", std::format("Scale: {:.2f}", _modules->ui->GetUiScale()).c_str());
 	}
 }
