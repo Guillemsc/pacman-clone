@@ -6,6 +6,7 @@
 #define EXAMPLEDATA_H
 
 #include <memory>
+#include <string>
 
 #include "GEngine/Games/Game.h"
 

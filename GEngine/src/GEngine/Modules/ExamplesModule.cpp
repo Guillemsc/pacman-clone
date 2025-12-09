@@ -12,8 +12,14 @@ namespace GEngine
 {
 	ExamplesModule::ExamplesModule()
 	{
-		_examples.push_back({"Anchors Ui Transform", std::make_shared<AnchorsUiTransformExample>()});
-		_examples.push_back({"Development Tweens", std::make_shared<DevelopmentTweensExample>()});
+		_examples.push_back(ExampleData(
+			"Anchors Ui Transform",
+			std::make_shared<AnchorsUiTransformExample>()
+			));
+		_examples.push_back(ExampleData(
+			"Development Tweens",
+			std::make_shared<DevelopmentTweensExample>()
+			));
 	}
 
 	void ExamplesModule::Init(GEngineCoreModules* modules)
