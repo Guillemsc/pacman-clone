@@ -8,6 +8,7 @@
 
 #include "json.hpp"
 #include "GEngine/Core/GEngineCoreModules.h"
+#include "GEngine/Raylib/RaylibWrapper.h"
 #include "GEngine/Data/JsonData.h"
 #include "GEngine/Modules/ResourcesModule.h"
 #include "GEngine/Resources/SpriteResource.h"
@@ -42,10 +43,10 @@ namespace GEngine
 		for (std::size_t i = 0; i < rects; i++)
 		{
 			JsonData rectData = jsonData.GetArrayJsonObject("rects", i);
-			std::size_t x = rectData.GetInt("x");
-			std::size_t y = rectData.GetInt("y");
-			std::size_t w = rectData.GetInt("w");
-			std::size_t h = rectData.GetInt("h");
+			const std::size_t x = rectData.GetInt("x");
+			const std::size_t y = rectData.GetInt("y");
+			const std::size_t w = rectData.GetInt("w");
+			const std::size_t h = rectData.GetInt("h");
 
 			Rectangle rect(x, y, w, h);
 
