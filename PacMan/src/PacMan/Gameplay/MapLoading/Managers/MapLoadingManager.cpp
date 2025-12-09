@@ -25,9 +25,10 @@ namespace PacMan
 		const std::filesystem::path mapsBasePath = "Tiled/maps";
 
 		const std::filesystem::path mapPath = mapsBasePath / (mapFileName + ".tmx");
+		const std::string mapPathString = mapPath.string();
 
 		const std::shared_ptr<GEngine::TiledMapResource> tilemapResource
-			= _modules->resources->GetResource<GEngine::TiledMapResource>(mapPath).lock();
+			= _modules->resources->GetResource<GEngine::TiledMapResource>(mapPathString).lock();
 		if (!tilemapResource) return;
 
 		LoadTilemapGameObject(_loadedMapData, tilemapResource);
