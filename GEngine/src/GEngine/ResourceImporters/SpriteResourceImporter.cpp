@@ -48,7 +48,7 @@ namespace GEngine
 			const std::size_t w = rectData.GetInt("w");
 			const std::size_t h = rectData.GetInt("h");
 
-			Rectangle rect(x, y, w, h);
+			rlRectangle rect(x, y, w, h);
 
 			resource->_rectangles.push_back(rect);
 		}

@@ -44,7 +44,7 @@ namespace GEngine
 		rlImGuiImageSize(&texture, textureWidth, textureHeight);
 	}
 
-	void EditorExtensions::DrawRawTexture(const Texture& texture, const Rectangle& rectangle)
+	void EditorExtensions::DrawRawTexture(const Texture& texture, const rlRectangle& rectangle)
 	{
 		const float textureWidth = ImGui::GetWindowWidth() - 20;
 		const float ratio = static_cast<float>(rectangle.height) / static_cast<float>(rectangle.width);

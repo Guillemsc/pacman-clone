@@ -47,7 +47,7 @@ namespace GEngine
 
 			const Vector2 center = { size.x * 0.5f, size.y * 0.5f };
 
-			const Rectangle rectangle = {
+			const rlRectangle rectangle = {
 				renderPosition.x,
 				renderPosition.y,
 				size.x,

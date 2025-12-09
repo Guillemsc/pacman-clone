@@ -31,14 +31,14 @@ namespace GEngine
 
 		std::weak_ptr<TextureResource> GetTextureResource() const;
 		int GetRectanglesCount() const;
-		Rectangle GetRectangle(int index) const;
+		rlRectangle GetRectangle(int index) const;
 
 	protected:
 		void Dispose() override;
 
 	private:
 		const std::string _textureResourcePath;
-		std::vector<Rectangle> _rectangles;
+		std::vector<rlRectangle> _rectangles;
 		std::weak_ptr<TextureResource> _textureResource;
 	};
 }

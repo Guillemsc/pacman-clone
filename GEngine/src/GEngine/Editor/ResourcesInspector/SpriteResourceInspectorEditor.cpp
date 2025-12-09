@@ -26,7 +26,7 @@ namespace GEngine
 
 		for (int i = 0; i < rectsCount; i++)
 		{
-			const Rectangle rectangle = inspect->GetRectangle(i);
+			const rlRectangle rectangle = inspect->GetRectangle(i);
 			ImGui::Text("Rect %d [x: %.1f] [y: %.1f] [w: %.1f] [h: %.1f]", i, rectangle.x, rectangle.y, rectangle.width, rectangle.height);
 
 			if (textureResource)

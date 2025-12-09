@@ -19,8 +19,8 @@ namespace GEngine
 			const Color tint
 			)
 		{
-			const Rectangle source = { 0.0f, 0.0f, static_cast<float>(texture.width), static_cast<float>(texture.height) };
-			const Rectangle dest = { position.x, position.y, static_cast<float>(texture.width) * scale.x, static_cast<float>(texture.height) * scale.y };
+			const rlRectangle source = { 0.0f, 0.0f, static_cast<float>(texture.width), static_cast<float>(texture.height) };
+			const rlRectangle dest = { position.x, position.y, static_cast<float>(texture.width) * scale.x, static_cast<float>(texture.height) * scale.y };
 			constexpr Vector2 origin = { 0.0f, 0.0f };
 
 			DrawTexturePro(texture, source, dest, origin, rotation, tint);

@@ -586,7 +586,7 @@ void rlImGuiImageSizeV(const Texture* image, Vector2 size)
     ImGui::Image(ImTextureID(image->id), ImVec2(size.x, size.y));
 }
 
-void rlImGuiImageRect(const Texture* image, int destWidth, int destHeight, Rectangle sourceRect)
+void rlImGuiImageRect(const Texture* image, int destWidth, int destHeight, rlRectangle sourceRect)
 {
     if (!image)
         return;
@@ -630,7 +630,7 @@ void rlImGuiImageRenderTexture(const RenderTexture* image)
     if (GlobalContext)
         ImGui::SetCurrentContext(GlobalContext);
     
-    rlImGuiImageRect(&image->texture, image->texture.width, image->texture.height, Rectangle{ 0,0, float(image->texture.width), -float(image->texture.height) });
+    rlImGuiImageRect(&image->texture, image->texture.width, image->texture.height, rlRectangle{ 0,0, float(image->texture.width), -float(image->texture.height) });
 }
 
 void rlImGuiImageRenderTextureFit(const RenderTexture* image, bool center)
@@ -661,7 +661,7 @@ void rlImGuiImageRenderTextureFit(const RenderTexture* image, bool center)
         ImGui::SetCursorPosY(ImGui::GetCursorPosY() + (area.y / 2 - sizeY / 2));
     }
 
-    rlImGuiImageRect(&image->texture, sizeX, sizeY, Rectangle{ 0,0, float(image->texture.width), -float(image->texture.height) });
+    rlImGuiImageRect(&image->texture, sizeX, sizeY, rlRectangle{ 0,0, float(image->texture.width), -float(image->texture.height) });
 }
 
 // raw ImGui backend API

@@ -40,7 +40,7 @@ namespace GEngine
 	void Renderer2d::AddTexture(
 		const std::int32_t layer,
 		const Texture2D &texture,
-		const Rectangle &source,
+		const rlRectangle &source,
 		const glm::vec2& position,
 		const float rotationRadians,
 		const glm::vec2& scale,
@@ -55,7 +55,7 @@ namespace GEngine
 			const float rotationDegrees = RotationToRenderRotation(glm::degrees(rotationRadians));
 			const Color raylibColor = Color01Extensions::ToRaylibColor(color);
 
-			const Rectangle rectangle = {
+			const rlRectangle rectangle = {
 				renderPosition.x,
 				renderPosition.y,
 				size.x,
@@ -83,7 +83,7 @@ namespace GEngine
 			const Vector2 center = { finalSize.x * 0.5f, finalSize.y * 0.5f };
 			const Color raylibColor = Color01Extensions::ToRaylibColor(color);
 
-			const Rectangle rectangle = {
+			const rlRectangle rectangle = {
 				renderPosition.x,
 				renderPosition.y,
 				finalSize.x,
@@ -96,7 +96,7 @@ namespace GEngine
 
 	void Renderer2d::DrawTexture(
 		const Texture2D &texture,
-		const Rectangle &source,
+		const rlRectangle &source,
 		const glm::vec2 &position,
 		const float rotationRadians,
 		const glm::vec2 &scale,
@@ -107,7 +107,7 @@ namespace GEngine
 		const float rotationDegrees = RotationToRenderRotation(glm::degrees(rotationRadians));
 		const Vector2 size = { source.width * scale.x, source.height * scale.y };
 		const Vector2 center = { size.x * 0.5f, size.y * 0.5f };
-		const Rectangle dest = { renderPosition.x, renderPosition.y, size.x, size.y };
+		const rlRectangle dest = { renderPosition.x, renderPosition.y, size.x, size.y };
 		const Color raylibColor = Color01Extensions::ToRaylibColor(color);
 
 		DrawTexturePro(texture, source, dest, center, rotationDegrees, raylibColor);

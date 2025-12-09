@@ -118,7 +118,7 @@ namespace GEngine
 		if (!_json.contains(name)) return false;
 		const nlohmann::basic_json<>& array = _json[name];
 		if (!array.is_array()) return false;
-		if (!array.size() <= index) return false;
+		if (index < 0 || index >= array.size()) return false;
 
 		const nlohmann::basic_json<>& value = array[index];
 		if (!value.is_boolean()) return false;
@@ -130,7 +130,7 @@ namespace GEngine
 		if (!_json.contains(name)) return 0;
 		const nlohmann::basic_json<>& array = _json[name];
 		if (!array.is_array()) return 0;
-		if (!array.size() <= index) return 0;
+		if (index < 0 || index >= array.size()) return 0;
 
 		const nlohmann::basic_json<>& value = array[index];
 		if (!value.is_number_integer()) return 0;
@@ -142,7 +142,7 @@ namespace GEngine
 		if (!_json.contains(name)) return 0.0f;
 		const nlohmann::basic_json<>& array = _json[name];
 		if (!array.is_array()) return 0.0f;
-		if (!array.size() <= index) return 0.0f;
+		if (index < 0 || index >= array.size()) return 0.0f;
 
 		const nlohmann::basic_json<>& value = array[index];
 		if (!value.is_number_float()) return 0.0f;
@@ -154,7 +154,7 @@ namespace GEngine
 		if (!_json.contains(name)) return "";
 		const nlohmann::basic_json<>& array = _json[name];
 		if (!array.is_array()) return "";
-		if (!array.size() <= index) return "";
+		if (index < 0 || index >= array.size()) return "";
 
 		const nlohmann::basic_json<>& value = array[index];
 		if (!value.is_string()) return "";
@@ -166,7 +166,7 @@ namespace GEngine
 		if (!_json.contains(name)) return JsonData();
 		const nlohmann::basic_json<>& array = _json[name];
 		if (!array.is_array()) return JsonData();
-		if (array.size() <= index) return JsonData();
+		if (index < 0 || index >= array.size()) return JsonData();
 
 		const nlohmann::basic_json<>& value = array[index];
 		if (!value.is_object()) return JsonData();

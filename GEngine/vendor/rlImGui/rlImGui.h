@@ -162,7 +162,7 @@ RLIMGUIAPI void rlImGuiImageSizeV(const Texture* image, Vector2 size);
 /// <param name="destWidth">The width of the drawn image</param>
 /// <param name="destHeight">The height of the drawn image</param>
 /// <param name="sourceRect">The portion of the texture to draw as an image. Negative values for the width and height will flip the image</param>
-RLIMGUIAPI void rlImGuiImageRect(const Texture* image, int destWidth, int destHeight, Rectangle sourceRect);
+RLIMGUIAPI void rlImGuiImageRect(const Texture* image, int destWidth, int destHeight, rlRectangle sourceRect);
 
 /// <summary>
 /// Draws a render texture as an image an ImGui Context, automatically flipping the Y axis so it will show correctly on screen

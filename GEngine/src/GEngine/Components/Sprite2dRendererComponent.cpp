@@ -51,7 +51,7 @@ namespace GEngine
 		const float rotation = transform->GetRotationEulerZ();
 		const glm::vec2 scale = transform->GetScaleXY();
 
-		Rectangle rectangle = sprite->GetRectangle(rectangleIndex);
+		rlRectangle rectangle = sprite->GetRectangle(rectangleIndex);
 
 		if (_isFlippedX->GetValue())
 		{

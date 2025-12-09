@@ -28,7 +28,7 @@ namespace GEngine
 		void AddTexture(
 			std::int32_t layer,
 			const Texture2D& texture,
-			const Rectangle& source,
+			const rlRectangle& source,
 			const glm::vec2& position,
 			float rotationRadians,
 			const glm::vec2& scale,
@@ -46,7 +46,7 @@ namespace GEngine
 
 		static void DrawTexture(
 			const Texture2D& texture,
-			const Rectangle& source,
+			const rlRectangle& source,
 			const glm::vec2& position,
 			float rotationRadians,
 			const glm::vec2& scale,

@@ -451,7 +451,7 @@ namespace GEngine
 					CellPosition::CENTER
 					);
 
-				Rectangle source = {
+				rlRectangle source = {
 					tileStartOnTileSetTextureX,
 					tileStartOnTileSetTextureY,
 					static_cast<float>(pixelSizeOfTile.x),

@@ -27,9 +27,9 @@ namespace GEngine
 		return _rectangles.size();
 	}
 
-	Rectangle SpriteResource::GetRectangle(const int index) const
+	rlRectangle SpriteResource::GetRectangle(const int index) const
 	{
-		return VectorExtensions::GetOrDefault(_rectangles, index, Rectangle());
+		return VectorExtensions::GetOrDefault(_rectangles, index, rlRectangle());
 	}
 
 	void SpriteResource::Dispose()
