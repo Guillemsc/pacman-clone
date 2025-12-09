@@ -6,6 +6,7 @@
 #define SCENE_H
 
 #include <memory>
+#include <string>
 
 namespace GEngine
 {
