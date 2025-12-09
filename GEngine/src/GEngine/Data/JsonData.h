@@ -13,7 +13,7 @@ namespace GEngine
 	class JsonData
 	{
 	public:
-		static JsonData LoadFromFile(const char* filepath);
+		static JsonData LoadFromFile(const std::string& filepath);
 
 	public:
 		JsonData();

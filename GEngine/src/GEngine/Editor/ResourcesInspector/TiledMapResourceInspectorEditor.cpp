@@ -46,7 +46,7 @@ namespace GEngine
 		{
 			if (ImGui::CollapsingHeader(layer->getName().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 			{
-				ImGui::Text(std::format("Layer Size: X:{0} Y:{0}", layer->getSize().x,  layer->getSize().y).c_str());
+				ImGui::Text("%s", std::format("Layer Size: X:{0} Y:{0}", layer->getSize().x,  layer->getSize().y).c_str());
 			}
 		}
 	}

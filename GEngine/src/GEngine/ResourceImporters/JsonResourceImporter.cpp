@@ -22,7 +22,8 @@ namespace GEngine
 		const std::filesystem::path &resourcesPath
 		)
 	{
-		JsonData data = JsonData::LoadFromFile(fullPath.c_str());
+		const std::string fullPathString = fullPath.string();
+		JsonData data = JsonData::LoadFromFile(fullPathString);
 
 		if (!data.HasData()) return nullptr;
 

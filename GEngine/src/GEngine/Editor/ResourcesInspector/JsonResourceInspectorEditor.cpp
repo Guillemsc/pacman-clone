@@ -21,6 +21,6 @@ namespace GEngine
 
 		ImGui::Spacing();
 		ImGui::CollapsingHeader("Data", ImGuiTreeNodeFlags_Leaf);
-		ImGui::Text(json.c_str());
+		ImGui::Text("%s", json.c_str());
 	}
 }

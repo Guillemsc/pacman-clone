@@ -27,7 +27,8 @@ namespace GEngine
 		const std::filesystem::path &resourcesPath
 		)
 	{
-		const JsonData jsonData = JsonData::LoadFromFile(fullPath.c_str());
+		const std::string fullPathString = fullPath.string();
+		const JsonData jsonData = JsonData::LoadFromFile(fullPathString);
 		std::string textureResourcePath = jsonData.GetString("texture");
 
 		std::shared_ptr<SpriteResource> resource = std::make_shared<SpriteResource>(

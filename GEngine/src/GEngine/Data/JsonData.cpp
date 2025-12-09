@@ -10,7 +10,7 @@
 
 namespace GEngine
 {
-	JsonData JsonData::LoadFromFile(const char* filepath)
+	JsonData JsonData::LoadFromFile(const std::string& filepath)
 	{
 		const std::ifstream file(filepath);
 		if (!file) return {};
