@@ -46,7 +46,7 @@ namespace GEngine
 
 		modules->rendering->UiRender()->Add(0, [this, position, rawFont]()
 		{
-			DrawTextEx(rawFont, _text.c_str(), (Vector2){ position.x, position.y }, static_cast<float>(rawFont.baseSize), 2, MAROON);
+			DrawTextEx(rawFont, _text.c_str(), Vector2(position.x, position.y), static_cast<float>(rawFont.baseSize), 2, MAROON);
 		});
 	}
 }
