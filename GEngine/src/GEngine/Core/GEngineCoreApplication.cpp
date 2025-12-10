@@ -4,6 +4,7 @@
 
 #include "GEngineCoreApplication.h"
 
+#include "GEngine/Logging/GEngineLog.h"
 #include "GEngine/Modules/CameraModule.h"
 #include "GEngine/Modules/Collisions2dModule.h"
 #include "GEngine/Modules/ConfigurationModule.h"
@@ -28,7 +29,9 @@ namespace GEngine
 {
 	GEngineCoreApplication::GEngineCoreApplication()
 	{
-		spdlog::info("Welcome to GEngineCore :)");
+		GEngineLog::Init();
+
+		GENGINE_INFO("Welcome to GEngine :)");
 
 		_configuration = std::make_unique<ConfigurationModule>();
 		_entities = std::make_unique<EntitiesModule>();
@@ -73,12 +76,12 @@ namespace GEngine
 
 	GEngineCoreApplication::~GEngineCoreApplication()
 	{
-		spdlog::info("Bye :)");
+		GENGINE_INFO("Bye :)");
 	}
 
 	void GEngineCoreApplication::Init() const
 	{
-		spdlog::info("GEngineCore Init");
+		GENGINE_INFO("GEngine Init");
 
 		_configuration->LoadConfiguration();
 		_window->ApplyConfig(_configuration->GetConfig());
@@ -124,12 +127,15 @@ namespace GEngine
 		_camera->Tick(deltaTime);
 		_rendering->Tick();
 		_window->Tick();
+
+		_entities->LateTick();
 	}
 
 	void GEngineCoreApplication::Dispose() const
 	{
-		spdlog::info("GEngineCore Dispose");
+		GENGINE_INFO("GEngine Dispose");
 
+		_editor->Dispose();
 		_tickables->Dispose();
 		_game->Dispose();
 		_entities->Dispose();
@@ -137,7 +143,6 @@ namespace GEngine
 		_tweens->Dispose();
 		_ui->Dispose();
 		_deferredExecution->Dispose();
-		_editor->Dispose();
 		_resources->Dispose();
 		_rendering->Dispose();
 		_window->Dispose();

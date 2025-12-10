@@ -7,6 +7,7 @@
 #include "GEngine/Components/TiledMap2dRendererComponent.h"
 #include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Entities/Entity.h"
+#include "GEngine/Logging/GEngineLog.h"
 #include "GEngine/Modules/ResourcesModule.h"
 #include "GEngine/Resources/TiledMapResource.h"
 #include "PacMan/Gameplay/MapLoading/Data/LoadedMapData.h"
@@ -22,6 +23,8 @@ namespace PacMan
 
 	void MapLoadingManager::LoadMap(const std::string &mapFileName)
 	{
+		GGAME_INFO("Starting map loading.");
+
 		const std::filesystem::path mapsBasePath = "Tiled/maps";
 
 		const std::filesystem::path mapPath = mapsBasePath / (mapFileName + ".tmx");
@@ -29,12 +32,17 @@ namespace PacMan
 
 		const std::shared_ptr<GEngine::TiledMapResource> tilemapResource
 			= _modules->resources->GetResource<GEngine::TiledMapResource>(mapPathString).lock();
-		if (!tilemapResource) return;
+
+		if (!tilemapResource)
+		{
+			GCLIENT_ERROR("Failed to load map {}.", mapPathString);
+			return;
+		}
 
 		LoadTilemapGameObject(_loadedMapData, tilemapResource);
 		LoadMapData(_loadedMapData, tilemapResource);
 
-		spdlog::info("Map data loaded [Player:x{0} y{1}] [RedGhost:x{2} y{3}] [CianGhost:x{4} y{5}] [PinkGhost:x{6} y{7}] [OrangeGhost:x{8} y{9}]",
+		GGAME_INFO("Map data loaded [Player:x{0} y{1}] [RedGhost:x{2} y{3}] [CianGhost:x{4} y{5}] [PinkGhost:x{6} y{7}] [OrangeGhost:x{8} y{9}].",
 			_loadedMapData.PlayerPosition.x,
 			_loadedMapData.PlayerPosition.y,
 			_loadedMapData.MapGhostPosition.x,

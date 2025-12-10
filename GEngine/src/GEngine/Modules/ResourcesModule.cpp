@@ -7,6 +7,7 @@
 #include "GEngine/Raylib/RaylibWrapper.h"
 #include "GEngine/Extensions/StringExtensions.h"
 #include "GEngine/Extensions/UnorderedMapExtensions.h"
+#include "GEngine/Logging/GEngineLog.h"
 #include "GEngine/ResourceImporters/FontResourceImporter.h"
 #include "GEngine/ResourceImporters/JsonResourceImporter.h"
 #include "GEngine/ResourceImporters/SpriteResourceImporter.h"
@@ -71,6 +72,8 @@ namespace GEngine
 
 	void ResourcesModule::ImportAllResources()
 	{
+		GENGINE_INFO("Starting resource import");
+
 		std::vector<std::filesystem::path> paths = GetAllResourcesPathsToImport();
 
 		for (auto it = paths.begin(); it != paths.end(); ++it)
@@ -90,10 +93,14 @@ namespace GEngine
 			_resourcesPathByResources[resourcesPath.string()] = resource;
 			_resourcesByResourceImporters.push_back({resource, importer});
 		}
+
+		GENGINE_INFO("Finished resource import");
 	}
 
 	void ResourcesModule::AfterImportAllResources()
 	{
+		GENGINE_INFO("Starting after resource import");
+
 		for (auto it = _resourcesByResourceImporters.begin(); it != _resourcesByResourceImporters.end(); ++it)
 		{
 			const std::shared_ptr<Resource> resource = it->first.lock();
@@ -104,6 +111,8 @@ namespace GEngine
 
 			importer->AfterImport(resource.get());
 		}
+
+		GENGINE_INFO("Finished after resource import");
 	}
 
 	void ResourcesModule::DisposeAllResources()
@@ -122,8 +131,8 @@ namespace GEngine
 
 		if (!std::filesystem::exists(_resourcesPath) || !std::filesystem::is_directory(_resourcesPath))
 		{
-			spdlog::error(
-				"Could not get resources to import, because resources folder does not exist. Folder should be: {}",
+			GENGINE_ERROR(
+				"Could not find resources to import, because resources folder does not exist. Folder should be: {}",
 				_resourcesPath.string()
 				);
 			return files;

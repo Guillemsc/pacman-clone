@@ -27,6 +27,10 @@ namespace GEngine
 	void EntitiesModule::Tick()
 	{
 		TickEntities();
+	}
+
+	void EntitiesModule::LateTick()
+	{
 		ActuallyRemoveEntities();
 	}
 

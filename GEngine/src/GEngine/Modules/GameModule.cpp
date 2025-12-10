@@ -9,6 +9,7 @@
 #include "TimeModule.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
 #include "GEngine/Games/Game.h"
+#include "GEngine/Logging/GEngineLog.h"
 
 namespace GEngine
 {
@@ -42,6 +43,7 @@ namespace GEngine
 	{
 		if (_currentGame != nullptr)
 		{
+			GENGINE_INFO("Unloading game {}", _currentGame->GetName());
 			_currentGame->Dispose();
 		}
 
@@ -50,6 +52,7 @@ namespace GEngine
 
 		_currentGame = game;
 
+		GENGINE_INFO("Loading game {}", game->GetName());
 		_currentGame->Setup(_modules);
 		_currentGame->Init();
 	}

@@ -16,6 +16,8 @@ namespace GEngine
 	class AnchorsUiTransformExample final : public Game
 	{
 	public:
+		AnchorsUiTransformExample();
+
 		void Init() override;
 		void Tick(float deltaTime) override;
 		void Dispose() override;

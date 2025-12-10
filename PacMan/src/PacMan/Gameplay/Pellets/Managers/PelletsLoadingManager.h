@@ -25,7 +25,7 @@ namespace PacMan
 			MapMovementManager* mapMovementManager
 		);
 
-		void LoadPellets(const LoadedMapData& loadedMapData);
+		void LoadPellets(const LoadedMapData& loadedMapData) const;
 
 	private:
 		GEngine::GEngineCoreModules* const _modules;

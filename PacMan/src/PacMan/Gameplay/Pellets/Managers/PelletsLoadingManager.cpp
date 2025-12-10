@@ -10,6 +10,7 @@
 #include "GEngine/Components/Shape2dRendererComponent.h"
 #include "GEngine/Components/TransformComponent.h"
 #include "GEngine/Entities/Entity.h"
+#include "GEngine/Logging/GEngineLog.h"
 #include "GEngine/Scenes/Scene.h"
 #include "PacMan/Gameplay/Collisions/Enums/CollisionLayers.h"
 #include "PacMan/Gameplay/Entities/Components/EntityIdComponent.h"
@@ -28,8 +29,10 @@ namespace PacMan
 	{
 	}
 
-	void PelletsLoadingManager::LoadPellets(const LoadedMapData &loadedMapData)
+	void PelletsLoadingManager::LoadPellets(const LoadedMapData &loadedMapData) const
 	{
+		GGAME_INFO("Starting pellets loading.");
+
 		const std::shared_ptr<GEngine::Entity> parentEntity = _scene->AddWorldEntity().lock();
 		parentEntity->SetName("Pellets");
 
@@ -53,5 +56,7 @@ namespace PacMan
 			const std::shared_ptr<GEngine::Collider2dComponent> collider = entity->AddComponent<GEngine::Collider2dComponent>().lock();
 			collider->SetLayer(CollisionLayers::COLLISION_LAYER_PELLETS);
 		}
+
+		GGAME_INFO("Pellets loaded.");
 	}
 }

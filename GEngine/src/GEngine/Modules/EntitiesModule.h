@@ -24,6 +24,7 @@ namespace GEngine
 
 		void Init(GEngineCoreModules* modules);
 		void Tick();
+		void LateTick();
 		void Dispose();
 
 		std::weak_ptr<Entity> AddWorldEntity();

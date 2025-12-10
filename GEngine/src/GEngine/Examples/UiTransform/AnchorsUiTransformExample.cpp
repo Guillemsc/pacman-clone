@@ -12,6 +12,10 @@
 
 namespace GEngine
 {
+	AnchorsUiTransformExample::AnchorsUiTransformExample() : Game("AnchorsUiTransformExample")
+	{
+	}
+
 	void AnchorsUiTransformExample::Init()
 	{
 		// Big square with bottom left and top right quads

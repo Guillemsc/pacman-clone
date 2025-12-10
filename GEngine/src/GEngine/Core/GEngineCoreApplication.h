@@ -27,7 +27,7 @@ namespace GEngine
 	class InputModule;
 	class EventBuses;
 
-	class GEngineCoreApplication : public std::enable_shared_from_this<GEngineCoreApplication>
+	class GEngineCoreApplication
 	{
 	public:
 		GEngineCoreApplication();

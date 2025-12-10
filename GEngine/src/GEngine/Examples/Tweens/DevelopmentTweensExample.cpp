@@ -4,6 +4,7 @@
 
 #include "DevelopmentTweensExample.h"
 
+#include "GEngine/Components/Camera2dComponent.h"
 #include "GEngine/Components/CameraComponent.h"
 #include "GEngine/Components/Shape2dRendererComponent.h"
 #include "GEngine/Components/TransformComponent.h"
@@ -21,12 +22,15 @@ namespace GEngine
 {
 	class EntitiesModule;
 
+	DevelopmentTweensExample::DevelopmentTweensExample() : Game("DevelopmentTweensExample")
+	{
+	}
+
 	void DevelopmentTweensExample::Init()
 	{
 		const std::shared_ptr<Entity> cameraEntity = _modules->entities->AddWorldEntity().lock();
 		cameraEntity->SetName("Camera");
-		cameraEntity->AddComponent<CameraComponent>();
-		cameraEntity->GetTransform().lock()->SetPosition({0, 0, -320});
+		cameraEntity->AddComponent<Camera2dComponent>();
 
 		const std::shared_ptr<Entity> entity = _modules->entities->AddWorldEntity().lock();
 		entity->AddComponent<Shape2dRendererComponent>();

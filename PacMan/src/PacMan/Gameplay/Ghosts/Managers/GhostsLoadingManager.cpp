@@ -8,6 +8,7 @@
 #include "GEngine/Components/Shape2dRendererComponent.h"
 #include "GEngine/Components/TransformComponent.h"
 #include "GEngine/Entities/Entity.h"
+#include "GEngine/Logging/GEngineLog.h"
 #include "GEngine/Scenes/Scene.h"
 #include "PacMan/Gameplay/Collisions/Enums/CollisionLayers.h"
 #include "PacMan/Gameplay/Entities/Components/EntityIdComponent.h"
@@ -36,6 +37,8 @@ namespace PacMan
 
 	void GhostsLoadingManager::LoadGhosts(const LoadedMapData &loadedMapData)
 	{
+		GGAME_INFO("Starting ghosts loading.");
+
 		_mapGhostInitialGridPosition = loadedMapData.MapGhostPosition;
 		_ghostPrisionLeftSlotInitialGridPosition = loadedMapData.GhostPrisionLeftSlotGridPosition;
 		_ghostPrisionCenterSlotInitialGridPosition = loadedMapData.GhostPrisionCenterSlotGridPosition;
@@ -61,6 +64,8 @@ namespace PacMan
 			_ghostPrisionRightSlotInitialGridPosition,
 			true
 			);
+
+		GGAME_INFO("Ghosts loaded.");
 	}
 
 	const LoadedGhostsData & GhostsLoadingManager::GetLoadedGhostsData() const

@@ -23,6 +23,8 @@ namespace PacMan
 	class PacManGame final : public GEngine::Game
 	{
 	public:
+		PacManGame();
+
 		void Init() override;
 		void Tick(float deltaTime) override;
 		void Dispose() override;

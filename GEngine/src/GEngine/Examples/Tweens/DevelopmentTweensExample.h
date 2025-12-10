@@ -12,6 +12,9 @@ namespace GEngine
 {
 	class DevelopmentTweensExample final : public Game
 	{
+	public:
+		DevelopmentTweensExample();
+
 		void Init() override;
 		void Tick(float deltaTime) override;
 		void Dispose() override;

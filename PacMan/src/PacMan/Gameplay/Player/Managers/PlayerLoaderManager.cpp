@@ -12,6 +12,7 @@
 #include "GEngine/Components/TransformComponent.h"
 #include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Entities/Entity.h"
+#include "GEngine/Logging/GEngineLog.h"
 #include "GEngine/Modules/ResourcesModule.h"
 #include "GEngine/Resources/SpriteResource.h"
 #include "GEngine/Scenes/Scene.h"
@@ -44,6 +45,8 @@ namespace PacMan
 
 	void PlayerLoaderManager::LoadPlayer(const glm::i32vec2& gridPosition)
 	{
+		GGAME_INFO("Starting player loading.");
+
 		_playerInitialGridPosition = gridPosition;
 
 		const GEngine::Color01 color = {0.9f, 0.9f, 0.1f};
@@ -77,6 +80,8 @@ namespace PacMan
 
 		_gameplayEntities->Player = playerEntity;
 		_playerInputSystem->SetPlayer(mapMovement); // Todo: this is not needed, we should use _gameplayEntities->Player
+
+		GGAME_INFO("Player loaded.");
 	}
 
 	void PlayerLoaderManager::SetPlayerToInitialPosition() const
