@@ -78,6 +78,6 @@ namespace GEngine
 		const Color color = Color01Extensions::ToRaylibColor(_color->GetValue());
 		const rlRectangle button = {position.x, position.y, size.x, size.y};
 		DrawRectanglePro(button, { center.x, center.y }, rotation, color);
-		DrawText("Click Me", button.x + 10, button.y + 15, 20, BLACK);
+		rlDrawText("Click Me", button.x + 10, button.y + 15, 20, BLACK);
 	}
 } // GEngine
