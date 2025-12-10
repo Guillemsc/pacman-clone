@@ -81,7 +81,7 @@ namespace GEngine
 
 	void GEngineCoreApplication::Init() const
 	{
-		GENGINE_INFO("GEngine Init");
+		GENGINE_INFO("GEngine Init started.");
 
 		_configuration->LoadConfiguration();
 		_window->ApplyConfig(_configuration->GetConfig());
@@ -99,6 +99,8 @@ namespace GEngine
 		_tweens->Init(_modules.get());
 		_ui->Init(_modules.get());
 		_game->Init(_modules.get());
+
+		GENGINE_INFO("GEngine Init finished.");
 	}
 
 	bool GEngineCoreApplication::CanRun() const
@@ -133,7 +135,7 @@ namespace GEngine
 
 	void GEngineCoreApplication::Dispose() const
 	{
-		GENGINE_INFO("GEngine Dispose");
+		GENGINE_INFO("GEngine Dispose started.");
 
 		_editor->Dispose();
 		_tickables->Dispose();
@@ -146,5 +148,7 @@ namespace GEngine
 		_resources->Dispose();
 		_rendering->Dispose();
 		_window->Dispose();
+
+		GENGINE_INFO("GEngine Dispose finished.");
 	}
 } // GEngineCore

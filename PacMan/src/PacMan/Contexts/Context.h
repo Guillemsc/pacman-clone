@@ -34,6 +34,8 @@ namespace PacMan
 		void Start();
 		void Dispose();
 
+		std::string GetName() const;
+
 		GEngine::CoroutinesRunner* GetCoroutinesRunner() const;
 
 	protected:

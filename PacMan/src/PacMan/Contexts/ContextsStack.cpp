@@ -6,6 +6,7 @@
 
 #include "Context.h"
 #include "GEngine/Extensions/VectorExtensions.h"
+#include "GEngine/Logging/GEngineLog.h"
 #include "GEngine/Modules/DeferredExecutionModule.h"
 
 namespace PacMan
@@ -22,6 +23,8 @@ namespace PacMan
 
 		_loading = true;
 
+		GENGINE_INFO("Pushing context {}", context->GetName());
+
 		co_await context->LoadAsync();
 
 		_contextsStack.push_back(context);
@@ -35,6 +38,9 @@ namespace PacMan
 		if (_contextsStack.empty()) return;
 
 		const std::shared_ptr<Context> context = _contextsStack.back();
+
+		GENGINE_INFO("Popping context {}", context->GetName());
+
 		GEngine::VectorExtensions::Remove(_contextsStack, context);
 
 		context->Dispose();

@@ -72,7 +72,7 @@ namespace GEngine
 
 	void ResourcesModule::ImportAllResources()
 	{
-		GENGINE_INFO("Starting resource import");
+		GENGINE_INFO("Starting resource import.");
 
 		std::vector<std::filesystem::path> paths = GetAllResourcesPathsToImport();
 
@@ -87,19 +87,24 @@ namespace GEngine
 			std::filesystem::path resourcesPath = FullPathToRelativeResourcesPath(*it);
 
 			const std::shared_ptr<Resource> resource = importer->Import(*it, resourcesPath);
-			if (!resource) continue;
+
+			if (!resource)
+			{
+				GENGINE_WARN("Failed to import resource at path {}.", it->string());
+				continue;
+			}
 
 			_resources.push_back(resource);
 			_resourcesPathByResources[resourcesPath.string()] = resource;
 			_resourcesByResourceImporters.push_back({resource, importer});
 		}
 
-		GENGINE_INFO("Finished resource import");
+		GENGINE_INFO("Finished resource import.");
 	}
 
 	void ResourcesModule::AfterImportAllResources()
 	{
-		GENGINE_INFO("Starting after resource import");
+		GENGINE_INFO("Starting after resource import.");
 
 		for (auto it = _resourcesByResourceImporters.begin(); it != _resourcesByResourceImporters.end(); ++it)
 		{
@@ -112,7 +117,7 @@ namespace GEngine
 			importer->AfterImport(resource.get());
 		}
 
-		GENGINE_INFO("Finished after resource import");
+		GENGINE_INFO("Finished after resource import.");
 	}
 
 	void ResourcesModule::DisposeAllResources()
@@ -132,7 +137,7 @@ namespace GEngine
 		if (!std::filesystem::exists(_resourcesPath) || !std::filesystem::is_directory(_resourcesPath))
 		{
 			GENGINE_ERROR(
-				"Could not find resources to import, because resources folder does not exist. Folder should be: {}",
+				"Could not find resources to import, because resources folder does not exist. Folder should be: {}.",
 				_resourcesPath.string()
 				);
 			return files;

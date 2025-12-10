@@ -57,6 +57,11 @@ namespace PacMan
 		_scene->Dispose();
 	}
 
+	std::string Context::GetName() const
+	{
+		return _name;
+	}
+
 	GEngine::CoroutinesRunner* Context::GetCoroutinesRunner() const
 	{
 		return _coroutineRunner.lock().get();
