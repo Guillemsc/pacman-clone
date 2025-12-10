@@ -6,6 +6,7 @@
 #define GAME_H
 
 #include <memory>
+#include <string>
 
 namespace GEngine
 {
