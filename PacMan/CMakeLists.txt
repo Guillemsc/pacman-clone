@@ -72,6 +72,7 @@ add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Gameplay/Ghosts/Components/PinkGhostAiComponent.h
         src/PacMan/Gameplay/Ghosts/Components/OrangeGhostAiComponent.cpp
         src/PacMan/Gameplay/Ghosts/Components/OrangeGhostAiComponent.h
+        src/PacMan/Gameplay/Ghosts/Data/GhostsStateData.h
 )
 
 target_link_libraries(PacMan PRIVATE GEngineCore)

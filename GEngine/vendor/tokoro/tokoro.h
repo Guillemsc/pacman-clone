@@ -419,7 +419,7 @@ public:
                 TimeEnum   timeType   = TimeEnum::Realtime)
     {
         auto& timeQueue = GetUpdateQueue(updateType, timeType);
-        timeQueue.SetupUpdate(GetCurrentTime(timeType));
+        timeQueue.SetupUpdate(tokoro_GetCurrentTime(timeType));
 
         while (timeQueue.CheckUpdate())
         {
@@ -461,7 +461,7 @@ private:
         return diff.count();
     }
 
-    double GetCurrentTime(TimeEnum timeType)
+    double tokoro_GetCurrentTime(TimeEnum timeType)
     {
         auto& customTimer = GetCustomTimer(timeType);
         if (customTimer)
@@ -481,7 +481,7 @@ private:
 
         double executeTime = 0;
         if (wait->mDelay != 0)
-            executeTime = GetCurrentTime(timeType) + wait->mDelay;
+            executeTime = tokoro_GetCurrentTime(timeType) + wait->mDelay;
         return timeQueue.AddTimed(executeTime, wait);
     }
 

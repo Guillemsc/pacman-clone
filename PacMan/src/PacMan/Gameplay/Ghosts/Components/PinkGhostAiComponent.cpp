@@ -9,11 +9,6 @@
 
 namespace PacMan
 {
-    PinkGhostAiComponent::PinkGhostAiComponent(GEngine::GEngineCoreModules* modules, const std::weak_ptr<GEngine::Entity>& entity)
-        : GhostAiComponent(modules, entity)
-    {
-    }
-
     glm::i32vec2 PinkGhostAiComponent::GetChaseTargetGridPosition() const
     {
         const GameplayEntities* gameplayEntities = GEngine::ServiceLocator::Get<GameplayEntities>();

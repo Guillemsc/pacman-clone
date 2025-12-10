@@ -65,6 +65,8 @@ namespace PacMan
 		std::shared_ptr<PlayerInputSystem> playerInputSystem = std::make_shared<PlayerInputSystem>();
 		_modules->tickables->AddTickable(playerInputSystem);
 
+		std::unique_ptr<GhostsStateData> ghostsStateData = std::make_unique<GhostsStateData>();
+
 		std::unique_ptr<PlayerCollisionsManager> playerCollisionsManager = std::make_unique<PlayerCollisionsManager>();
 
 		std::unique_ptr<PlayerLoaderManager> playerLoaderManager = std::make_unique<PlayerLoaderManager>(
@@ -80,7 +82,8 @@ namespace PacMan
 			_modules,
 			_scene.get(),
 			mapMovementManager.get(),
-			gameplayEntities.get()
+			gameplayEntities.get(),
+			ghostsStateData.get()
 			);
 
 		std::unique_ptr<PlayerDeathManager> playerDeathManager = std::make_unique<PlayerDeathManager>(
@@ -112,6 +115,7 @@ namespace PacMan
 		_playerDeathManager = std::move(playerDeathManager);
 		_ghostsLoaderManager = std::move(ghostsLoaderManager);
 		_ghostsPrisionManager = ghostsPrisionManager;
+		_ghostsStateData = std::move(ghostsStateData);
 		_pelletsLoadingManager = std::move(pelletsLoadingManager);
 		_playerInputSystem = playerInputSystem;
 

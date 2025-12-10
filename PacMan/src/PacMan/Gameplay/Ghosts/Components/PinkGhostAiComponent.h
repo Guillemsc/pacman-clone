@@ -14,7 +14,7 @@ namespace PacMan
         REGISTER_COMPONENT(PinkGhostAiComponent);
 
     public:
-        explicit PinkGhostAiComponent(GEngine::GEngineCoreModules *modules, const std::weak_ptr<GEngine::Entity> &entity);
+        using GhostAiComponent::GhostAiComponent;
 
     protected:
         glm::i32vec2 GetChaseTargetGridPosition() const override;

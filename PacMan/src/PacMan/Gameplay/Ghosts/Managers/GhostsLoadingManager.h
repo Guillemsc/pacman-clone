@@ -22,6 +22,8 @@ namespace GEngine
 
 namespace PacMan
 {
+	class MapMovementComponent;
+	struct GhostsStateData;
 	class GameplayEntities;
 	class MapMovementManager;
 	struct LoadedMapData;
@@ -33,7 +35,8 @@ namespace PacMan
 			GEngine::GEngineCoreModules* modules,
 			GEngine::Scene* scene,
 			MapMovementManager* mapMovementManager,
-			GameplayEntities* gameplayEntities
+			GameplayEntities* gameplayEntities,
+			GhostsStateData* ghostsStateData
 			);
 
 		void LoadGhosts(const LoadedMapData& loadedMapData);
@@ -48,17 +51,22 @@ namespace PacMan
 			const std::weak_ptr<GEngine::Entity>& entity,
 			const glm::i32vec2& gridPosition,
 			bool isPrision
-			);
+			) const;
 
 		std::string GetGhostName(GhostType ghostType);
 		GEngine::Color01 GetGhostColor(GhostType ghostType);
-		void SetupGhostAi(GEngine::Entity* ghostEntity, GhostType ghostType);
+		void SetupGhostAi(
+			GEngine::Entity* ghostEntity,
+			const std::weak_ptr<MapMovementComponent>& mapMovement,
+			GhostType ghostType
+			) const;
 
 	private:
 		GEngine::GEngineCoreModules* const _modules;
 		GEngine::Scene* const _scene;
 		MapMovementManager* const _mapMovementManager;
 		GameplayEntities* const _gameplayEntities;
+		GhostsStateData* const _ghostsStateData;
 
 		glm::i32vec2 _mapGhostInitialGridPosition = glm::i32vec2(0);
 		glm::i32vec2 _ghostPrisionLeftSlotInitialGridPosition = glm::i32vec2(0);

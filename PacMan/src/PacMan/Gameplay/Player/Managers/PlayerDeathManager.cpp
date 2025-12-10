@@ -6,6 +6,7 @@
 
 #include "PlayerLoaderManager.h"
 #include "GEngine/Coroutines/CoroutinesRunner.h"
+#include "GEngine/Logging/GEngineLog.h"
 #include "PacMan/Gameplay/Entities/Managers/EntitiesManager.h"
 #include "PacMan/Gameplay/Ghosts/Managers/GhostsLoadingManager.h"
 #include "PacMan/Gameplay/Ghosts/Managers/GhostsPrisionManager.h"
@@ -35,6 +36,8 @@ namespace PacMan
 
 	tokoro::Async<void> PlayerDeathManager::RunDeathSequenceAsync() const
 	{
+		GGAME_INFO("Starting death sequence.");
+
 		_entitiesManager->StopAllEntitiesMovement();
 		_ghostsPrisionManager->Stop();
 

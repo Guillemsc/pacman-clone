@@ -27,11 +27,13 @@ namespace PacMan
 		GEngine::GEngineCoreModules *modules,
 		GEngine::Scene *scene,
 		MapMovementManager *mapMovementManager,
-		GameplayEntities *gameplayEntities
+		GameplayEntities *gameplayEntities,
+		GhostsStateData* ghostsStateData
 		) : _modules(modules),
 		_scene(scene),
 		_mapMovementManager(mapMovementManager),
-		_gameplayEntities(gameplayEntities)
+		_gameplayEntities(gameplayEntities),
+		_ghostsStateData(ghostsStateData)
 	{
 	}
 
@@ -128,10 +130,7 @@ namespace PacMan
 			mapMovement->SetGridPosition(gridPosition);
 		}
 
-		SetupGhostAi(ghostEntity.get(), ghostType);
-
-		const std::shared_ptr<GhostAiComponent> ai = ghostEntity->GetComponent<GhostAiComponent>().lock();
-		ai->Init(mapMovement);
+		SetupGhostAi(ghostEntity.get(), mapMovement, ghostType);
 
 		_gameplayEntities->Ghosts.push_back(ghostEntity);
 
@@ -142,7 +141,7 @@ namespace PacMan
 		const std::weak_ptr<GEngine::Entity>& entity,
 		const glm::i32vec2& gridPosition,
 		const bool isPrision
-		)
+		) const
 	{
 		const std::shared_ptr<GEngine::Entity> lEntity = entity.lock();
 		if (!lEntity) return;
@@ -195,28 +194,32 @@ namespace PacMan
 		return GEngine::Color01(0, 0, 0);;
 	}
 
-	void GhostsLoadingManager::SetupGhostAi(GEngine::Entity *ghostEntity, const GhostType ghostType)
+	void GhostsLoadingManager::SetupGhostAi(
+		GEngine::Entity *ghostEntity,
+		const std::weak_ptr<MapMovementComponent>& mapMovement,
+		const GhostType ghostType
+		) const
 	{
 		switch (ghostType)
 		{
 			case GhostType::RED_GHOST:
 			{
-				ghostEntity->AddComponent<RedGhostAiComponent>();
+				ghostEntity->AddComponent<RedGhostAiComponent>(_ghostsStateData, mapMovement);
 				break;
 			}
 			case GhostType::ORANGE_GHOST:
 			{
-				ghostEntity->AddComponent<OrangeGhostAiComponent>();
+				ghostEntity->AddComponent<OrangeGhostAiComponent>(_ghostsStateData, mapMovement);
 				break;
 			}
 			case GhostType::CIAN_GHOST:
 			{
-				ghostEntity->AddComponent<CianGhostAiComponent>();
+				ghostEntity->AddComponent<CianGhostAiComponent>(_ghostsStateData, mapMovement);
 				break;
 			}
 			case GhostType::PINK_GHOST:
 			{
-				ghostEntity->AddComponent<PinkGhostAiComponent>();
+				ghostEntity->AddComponent<PinkGhostAiComponent>(_ghostsStateData, mapMovement);
 				break;
 			}
 		}

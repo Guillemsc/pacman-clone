@@ -59,8 +59,8 @@ namespace GEngine
 		bool HasComponent() const;
 		template <class T>
 		std::weak_ptr<T> GetComponent();
-		template <class T>
-		std::weak_ptr<T> AddComponent();
+		template <class T, class... Args>
+		std::weak_ptr<T> AddComponent(Args&&... args);
 		bool RemoveComponent(const std::weak_ptr<Component> &componentPtr);
 
 		std::weak_ptr<TransformComponent> GetTransform() const;
@@ -123,12 +123,12 @@ namespace GEngine
 		return std::weak_ptr<T>();
 	}
 
-	template<class T>
-	std::weak_ptr<T> Entity::AddComponent()
+	template <class T, class... Args>
+	std::weak_ptr<T> Entity::AddComponent(Args&&... args)
 	{
 		static_assert(std::is_base_of_v<Component, T>, "T is not derived from Component");
 
-		const std::shared_ptr<T> component = std::make_shared<T>(modules, weak_from_this());
+		const std::shared_ptr<T> component = std::make_shared<T>(modules, weak_from_this(), std::forward<Args>(args)...);
 
 		if (_transformPtr.expired())
 		{

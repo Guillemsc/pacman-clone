@@ -15,6 +15,7 @@
 #include "PacMan/Gameplay/Player/Managers/PlayerCollisionsManager.h"
 #include "PacMan/Gameplay/Player/Managers/PlayerDeathManager.h"
 #include "PacMan/Gameplay/Entities/Managers/EntitiesManager.h"
+#include "PacMan/Gameplay/Ghosts/Data/GhostsStateData.h"
 #include "PacMan/Gameplay/Ghosts/Managers/GhostsLoadingManager.h"
 #include "PacMan/Gameplay/MapLoading/Managers/MapLoadingManager.h"
 #include "PacMan/Gameplay/Player/Managers/PlayerLoaderManager.h"
@@ -49,6 +50,7 @@ namespace PacMan
 		std::unique_ptr<PlayerDeathManager> _playerDeathManager;
 		std::shared_ptr<GhostsLoadingManager> _ghostsLoaderManager;
 		std::shared_ptr<GhostsPrisionManager> _ghostsPrisionManager;
+		std::unique_ptr<GhostsStateData> _ghostsStateData;
 		std::unique_ptr<PelletsLoadingManager> _pelletsLoadingManager;
 		std::shared_ptr<PlayerInputSystem> _playerInputSystem;
 	};

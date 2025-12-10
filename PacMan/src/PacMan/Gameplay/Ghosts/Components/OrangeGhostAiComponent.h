@@ -14,7 +14,7 @@ namespace PacMan
         REGISTER_COMPONENT(OrangeGhostAiComponent);
 
     public:
-        explicit OrangeGhostAiComponent(GEngine::GEngineCoreModules *modules, const std::weak_ptr<GEngine::Entity> &entity);
+        using GhostAiComponent::GhostAiComponent;
 
     protected:
         glm::i32vec2 GetChaseTargetGridPosition() const override;

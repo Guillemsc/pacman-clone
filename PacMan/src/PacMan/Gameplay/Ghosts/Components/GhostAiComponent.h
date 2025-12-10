@@ -11,22 +11,28 @@
 
 namespace PacMan
 {
+	struct GhostsStateData;
+
 	class GhostAiComponent : public GEngine::Component
 	{
 		REGISTER_COMPONENT(GhostAiComponent)
 
 	public:
-		explicit GhostAiComponent(GEngine::GEngineCoreModules* modules, const std::weak_ptr<GEngine::Entity> &entity);
+		explicit GhostAiComponent(
+			GEngine::GEngineCoreModules* modules,
+			const std::weak_ptr<GEngine::Entity> &entity,
+			GhostsStateData* ghostsStateData,
+			const std::weak_ptr<MapMovementComponent>& mapMovementComponent
+			);
 
 		void OnTick() override;
-
-		void Init(const std::weak_ptr<MapMovementComponent>& mapMovementComponent);
 
 	protected:
 		virtual glm::i32vec2 GetChaseTargetGridPosition() const = 0;
 		virtual glm::i32vec2 GetHideTargetGridPosition() const = 0;
 
 	private:
+		GhostsStateData* const _ghostsStateData;
 		std::weak_ptr<MapMovementComponent> _mapMovementComponent;
 
 		glm::i32vec2 _previousTargetGridPosition = glm::i32vec2(0);
