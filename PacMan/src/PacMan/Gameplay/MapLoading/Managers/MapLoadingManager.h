@@ -46,6 +46,7 @@ namespace PacMan
 
 		void LoadEntityTileData(LoadedMapData& loadedMapData, const glm::i32vec2& gridPosition, const tmx::Tileset::Tile *localTile);
 		void LoadWalkabilityTileData(LoadedMapData& loadedMapData, const glm::i32vec2& gridPosition, const tmx::Tileset::Tile *localTile);
+		void LoadPelletsTileData(LoadedMapData& loadedMapData, const glm::i32vec2& gridPosition, const tmx::Tileset::Tile *localTile);
 
 	private:
 		GEngine::GEngineCoreModules* const _modules;

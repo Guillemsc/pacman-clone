@@ -47,7 +47,28 @@ namespace PacMan
 			entity->AddComponent<EntityIdComponent>().lock()->SetType(EntityType::PELLET);
 
 			const std::shared_ptr<GEngine::TransformComponent> transform = entity->GetComponent<GEngine::TransformComponent>().lock();
-			transform->SetLocalScaleXY({0.3f, 0.3f});
+			transform->SetLocalScaleXY({0.2f, 0.2f});
+			transform->SetPositionXY(worldPosition);
+
+			const std::shared_ptr<GEngine::Shape2dRendererComponent> shapeRenderer = entity->AddComponent<GEngine::Shape2dRendererComponent>().lock();
+			shapeRenderer->SetLayer(1);
+
+			const std::shared_ptr<GEngine::Collider2dComponent> collider = entity->AddComponent<GEngine::Collider2dComponent>().lock();
+			collider->SetLayer(CollisionLayers::COLLISION_LAYER_PELLETS);
+		}
+
+		for (const glm::vec2& pelletPosition : loadedMapData.BigPelletsPositions)
+		{
+			const glm::vec2 worldPosition = _mapMovementManager->GridPositionToWorldPosition(pelletPosition);
+
+			const std::shared_ptr<GEngine::Entity> entity = _scene->AddWorldEntity().lock();
+			entity->SetParent(parentEntity);
+			entity->SetName(std::format("Big Pellet: [{}, {}]", pelletPosition.x, pelletPosition.y));
+
+			entity->AddComponent<EntityIdComponent>().lock()->SetType(EntityType::PELLET);
+
+			const std::shared_ptr<GEngine::TransformComponent> transform = entity->GetComponent<GEngine::TransformComponent>().lock();
+			transform->SetLocalScaleXY({0.4f, 0.4f});
 			transform->SetPositionXY(worldPosition);
 
 			const std::shared_ptr<GEngine::Shape2dRendererComponent> shapeRenderer = entity->AddComponent<GEngine::Shape2dRendererComponent>().lock();

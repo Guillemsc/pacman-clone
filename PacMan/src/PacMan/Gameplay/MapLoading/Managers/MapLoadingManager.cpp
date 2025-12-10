@@ -134,7 +134,8 @@ namespace PacMan
 
 				if (optionalPelletsLocalTile.has_value())
 				{
-					loadedMapData.SmallPelletsPositions.push_back(gridPosition);
+					const tmx::Tileset::Tile* pelletLocalTile = optionalPelletsLocalTile.value();
+					LoadPelletsTileData(loadedMapData, gridPosition, pelletLocalTile);
 				}
 			}
 		}
@@ -185,6 +186,24 @@ namespace PacMan
 		if (typeProperty == "prision_exit")
 		{
 			loadedMapData.PrisionExitPosition = gridPosition;
+		}
+	}
+
+	void MapLoadingManager::LoadPelletsTileData(
+		LoadedMapData &loadedMapData,
+		const glm::i32vec2 &gridPosition,
+		const tmx::Tileset::Tile *localTile
+		)
+	{
+		const std::string typeProperty = GEngine::TiledMapResource::GetTilesetTileStringProperty(localTile, "type", "");
+
+		if (typeProperty == "big")
+		{
+			loadedMapData.BigPelletsPositions.push_back(gridPosition);
+		}
+		else
+		{
+			loadedMapData.SmallPelletsPositions.push_back(gridPosition);
 		}
 	}
 } // PacMan
