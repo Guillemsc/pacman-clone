@@ -21,7 +21,7 @@ namespace PacMan
 		}
 	}
 
-	glm::vec2 MapMovementManager::GridPositionToWorldPosition(const glm::ivec2 &gridPosition, GEngine::CellPosition cellPosition) const
+	glm::vec2 MapMovementManager::GridPositionToWorldPosition(const glm::ivec2 &gridPosition, const GEngine::CellPosition cellPosition) const
 	{
 		const std::shared_ptr<GEngine::TiledMap2dRendererComponent> tiledMapComponent = _tiledMap.lock();
 		if (!tiledMapComponent) return glm::vec2(0);

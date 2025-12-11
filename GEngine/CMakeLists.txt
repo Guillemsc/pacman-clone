@@ -283,6 +283,8 @@ add_library(GEngineCore STATIC
         src/GEngine/Logging/GEngineLog.h
         src/GEngine/Raylib/RaylibLogger.cpp
         src/GEngine/Raylib/RaylibLogger.h
+        src/GEngine/Modules/RandomModule.cpp
+        src/GEngine/Modules/RandomModule.h
 )
 
 # Link raylib

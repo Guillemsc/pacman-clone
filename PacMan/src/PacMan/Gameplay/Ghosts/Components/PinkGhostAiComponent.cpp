@@ -21,7 +21,12 @@ namespace PacMan
         return mapMovement->GetGridPosition();
     }
 
-    glm::i32vec2 PinkGhostAiComponent::GetHideTargetGridPosition() const
+    glm::i32vec2 PinkGhostAiComponent::GetScatterTargetGridPosition() const
+    {
+        return { -999, 999 };
+    }
+
+    glm::i32vec2 PinkGhostAiComponent::GetFrightenedTargetGridPosition() const
     {
         return { 0, 0 };
     }

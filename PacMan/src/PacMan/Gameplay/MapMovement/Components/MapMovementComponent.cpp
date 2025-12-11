@@ -7,6 +7,7 @@
 #include "GEngine/Components/TransformComponent.h"
 #include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Extensions/CardinalDirectionExtensions.h"
+#include "GEngine/Modules/RandomModule.h"
 #include "GEngine/Modules/RenderingModule.h"
 #include "GEngine/Modules/TimeModule.h"
 #include "GEngine/ServiceLocators/ServiceLocator.h"
@@ -80,6 +81,11 @@ namespace PacMan
 		_canMove = set;
 	}
 
+	void MapMovementComponent::SetCanAutomaticallyFindNextDirection(const bool set)
+	{
+		_canFindNextDirection = set;
+	}
+
 	void MapMovementComponent::SetNextDirection(const GEngine::CardinalDirection &nextDirection)
 	{
 		const glm::i32vec2 nextDirectionVector = GEngine::CardinalDirectionExtensions::GetDirectionVector(nextDirection);
@@ -103,16 +109,27 @@ namespace PacMan
 		TryGenerateNextPathIfEmpty();
 	}
 
-	void MapMovementComponent::PathfindToGridPosition(const glm::i32vec2& targetGridPosition)
+	PathfindingResult MapMovementComponent::PathfindToGridPosition(const glm::i32vec2& targetGridPosition)
 	{
-		if (!_canMove) return;
-		if (!_hasValidGridPosition) return;
+		if (!_hasValidGridPosition) return { false, false, _currentGridPosition };
 
 		MapPathfindingManager* mapPathfinding = GEngine::ServiceLocator::Get<MapPathfindingManager>();
 
 		ClearPath();
 
-		mapPathfinding->GeneratePath(_currentGridPosition, targetGridPosition, _pathToFollow);
+		glm::i32vec2 direction = glm::i32vec2(0);
+
+		if (_hasValidLastPathPointData)
+		{
+			direction = _lastPathPointDirectionVector;
+		}
+
+		return mapPathfinding->GeneratePath(
+			_currentGridPosition,
+			direction,
+			targetGridPosition,
+			_pathToFollow
+			);
 	}
 
 	glm::i32vec2 MapMovementComponent::GetDirectionVector() const
@@ -192,56 +209,98 @@ namespace PacMan
 	{
 		if(!_pathToFollow.empty()) return;
 
-		if (_nextDirectionWhenPathEmpty.has_value())
-		{
-			const GEngine::CardinalDirection nextDirectionWhenPathEmpty = _nextDirectionWhenPathEmpty.value();
-			const bool isNextDirectionWhenPathEmptyValid = IsValidNextDirection(_currentGridPosition, nextDirectionWhenPathEmpty);
+		// If we have forced a next direction, we try to follow it
+		if (TryGenerateNextPathFromNextDirectionWhenEmpty()) return;
 
-			if (isNextDirectionWhenPathEmptyValid)
-			{
-				const glm::i32vec2 directionVector = GEngine::CardinalDirectionExtensions::GetDirectionVector(nextDirectionWhenPathEmpty);
-				const glm::i32vec2 nextPosition = _currentGridPosition + directionVector;
-
-				ClearPath();
-				_pathToFollow.push_back(nextPosition);
-				_nextDirectionWhenPathEmpty.reset();
-				return;
-			}
-		}
-
+		// Have we selected any previous direction previously? If not, we just select a random one
 		if (_hasValidLastPathPointData)
 		{
-			const MapMovementManager* mapMovement = GEngine::ServiceLocator::Get<MapMovementManager>();
-
-			const glm::i32vec2 nextPosition = _currentGridPosition + _lastPathPointDirectionVector;
-			const bool hasTile = mapMovement->IsWalkable(nextPosition);
-
-			if (hasTile)
+			// Can this entity move autonomously?
+			// Entities than can move autonomously never stop, and always keep moving through random directions
+			if (_canFindNextDirection)
 			{
-				ClearPath();
-				_pathToFollow.push_back(nextPosition);
-				return;
-			}
-		}
-		else
-		{
-			MapPathfindingManager* mapPathfinding = GEngine::ServiceLocator::Get<MapPathfindingManager>();
+				// We try to keep moving on our previous direction. If we find an intersection, we pick a random direction.
+				if (TryGeneratePathFromRandomValidDirection()) return;
 
-			std::vector<glm::i32vec2> neighbors;
-			mapPathfinding->GenerateWalkableNeighbors(_currentGridPosition, neighbors);
-			if (!neighbors.empty())
-			{
-				ClearPath();
-				_pathToFollow.push_back(neighbors[0]);
-				return;
+				// In case there is no valid forward random direction, we go backwards from where we came (last resort).
+				if (TryGenerateNextPathFromAnyValidNeighbor()) return;
 			}
+			else
+			{
+				// We try to keep moving on our previous direction. If we find a wall, we stop.
+				if (TryGenerateNextPathFromPreviousDirection()) return;
+			}
+			return;
 		}
+
+		// Pick any walkable direction
+		TryGenerateNextPathFromAnyValidNeighbor();
+	}
+
+	bool MapMovementComponent::TryGenerateNextPathFromNextDirectionWhenEmpty()
+	{
+		if (!_nextDirectionWhenPathEmpty.has_value()) return false;
+
+		const GEngine::CardinalDirection nextDirectionWhenPathEmpty = _nextDirectionWhenPathEmpty.value();
+		const bool isNextDirectionWhenPathEmptyValid = IsValidNextDirection(_currentGridPosition, nextDirectionWhenPathEmpty);
+
+		if (!isNextDirectionWhenPathEmptyValid) return false;
+
+		const glm::i32vec2 directionVector = GEngine::CardinalDirectionExtensions::GetDirectionVector(nextDirectionWhenPathEmpty);
+		const glm::i32vec2 nextPosition = _currentGridPosition + directionVector;
+
+		ClearPath();
+		_pathToFollow.push_back(nextPosition);
+		_nextDirectionWhenPathEmpty.reset();
+
+		return true;
+	}
+
+	bool MapMovementComponent::TryGenerateNextPathFromAnyValidNeighbor()
+	{
+		MapPathfindingManager* mapPathfinding = GEngine::ServiceLocator::Get<MapPathfindingManager>();
+
+		std::vector<glm::i32vec2> neighbors;
+		mapPathfinding->GenerateWalkableNeighbors(_currentGridPosition, {1, 0}, neighbors);
+
+		if (neighbors.empty())return false;
+
+		ClearPath();
+		_pathToFollow.push_back(neighbors[0]);
+
+		return true;
+	}
+
+	bool MapMovementComponent::TryGenerateNextPathFromPreviousDirection()
+	{
+		const MapMovementManager* mapMovement = GEngine::ServiceLocator::Get<MapMovementManager>();
+
+		const glm::i32vec2 nextPosition = _currentGridPosition + _lastPathPointDirectionVector;
+		const bool hasTile = mapMovement->IsWalkable(nextPosition);
+
+		if (!hasTile)return false;
+
+		ClearPath();
+		_pathToFollow.push_back(nextPosition);
+
+		return true;
+	}
+
+	bool MapMovementComponent::TryGeneratePathFromRandomValidDirection()
+	{
+		const std::optional<glm::i32vec2> optionalNextNeighbor = FindNextValidNeighbor();
+
+		if (!optionalNextNeighbor.has_value()) return false;
+
+		ClearPath();
+		_pathToFollow.push_back(optionalNextNeighbor.value());
+
+		return true;
 	}
 
 	void MapMovementComponent::ClearPath()
 	{
 		_pathToFollow.clear();
-		_hasValidLastPathPointData = false;
 	}
 
 	bool MapMovementComponent::IsValidNextDirection(const glm::i32vec2& originGridPosition, const GEngine::CardinalDirection direction) const
@@ -254,5 +313,18 @@ namespace PacMan
 		const bool hasTile = mapMovement->IsWalkable(testingPosition);
 
 		return hasTile;
+	}
+
+	std::optional<glm::i32vec2> MapMovementComponent::FindNextValidNeighbor() const
+	{
+		MapPathfindingManager* mapPathfinding = GEngine::ServiceLocator::Get<MapPathfindingManager>();
+
+		std::vector<glm::i32vec2> neighbors;
+		mapPathfinding->GenerateWalkableNeighbors(_currentGridPosition, _lastPathPointDirectionVector, neighbors);
+
+		if (neighbors.empty()) return std::nullopt;
+
+		const int randomIndex = GEngine::RandomModule::Range(0, neighbors.size());
+		return neighbors[randomIndex];
 	}
 }

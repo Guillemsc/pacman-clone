@@ -22,13 +22,20 @@ namespace GEngine
 		void Reset();
 		void Restart();
 
+		void Pause();
+		void Resume();
+
 		bool IsStarted() const;
+		bool IsPaused() const;
 
 	private:
 		std::shared_ptr<ITimeSource> _timeSource;
 
 		double _startSeconds = 0;
 		bool _isStarted = false;
+
+		bool _isPaused = false;
+		double _pauseStartSeconds = 0;
 	};
 }
 

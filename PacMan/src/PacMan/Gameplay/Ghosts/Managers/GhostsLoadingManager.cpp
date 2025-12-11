@@ -123,6 +123,7 @@ namespace PacMan
 		}
 
 		const std::shared_ptr<MapMovementComponent> mapMovement = ghostEntity->AddComponent<MapMovementComponent>().lock();
+		mapMovement->SetCanAutomaticallyFindNextDirection(true);
 		mapMovement->SetGuizmoColor(ghostColor.WithAlpha(0.6f));
 
 		if (!isPrision)

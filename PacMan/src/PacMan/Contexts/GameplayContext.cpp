@@ -67,7 +67,18 @@ namespace PacMan
 
 		std::unique_ptr<GhostsStateData> ghostsStateData = std::make_unique<GhostsStateData>();
 
-		std::unique_ptr<PlayerCollisionsManager> playerCollisionsManager = std::make_unique<PlayerCollisionsManager>();
+		std::shared_ptr<GhostsBehaviourManager> ghostsBehaviourManager = std::make_shared<GhostsBehaviourManager>(
+			ghostsStateData.get()
+			);
+		_modules->tickables->AddTickable(ghostsBehaviourManager);
+
+		std::unique_ptr<PelletCollectionManager> pelletsCollectionManager = std::make_unique<PelletCollectionManager>(
+			ghostsBehaviourManager.get()
+			);
+
+		std::unique_ptr<PlayerCollisionsManager> playerCollisionsManager = std::make_unique<PlayerCollisionsManager>(
+			pelletsCollectionManager.get()
+			);
 
 		std::unique_ptr<PlayerLoaderManager> playerLoaderManager = std::make_unique<PlayerLoaderManager>(
 			_modules,
@@ -91,7 +102,8 @@ namespace PacMan
 			entitiesManager.get(),
 			ghostsPrisionManager.get(),
 			playerLoaderManager.get(),
-			ghostsLoaderManager.get()
+			ghostsLoaderManager.get(),
+			ghostsBehaviourManager.get()
 			);
 
 		std::unique_ptr<MapPathfindingManager> mapPathfindingManager = std::make_unique<MapPathfindingManager>(mapMovementManager.get());
@@ -115,8 +127,10 @@ namespace PacMan
 		_playerDeathManager = std::move(playerDeathManager);
 		_ghostsLoaderManager = std::move(ghostsLoaderManager);
 		_ghostsPrisionManager = ghostsPrisionManager;
+		_ghostsBehaviourManager = ghostsBehaviourManager;
 		_ghostsStateData = std::move(ghostsStateData);
 		_pelletsLoadingManager = std::move(pelletsLoadingManager);
+		_pelletCollectionManager = std::move(pelletsCollectionManager);
 		_playerInputSystem = playerInputSystem;
 
 		_mapLoadingManager->LoadMap("test-map");
@@ -136,6 +150,11 @@ namespace PacMan
 		co_return;
 	}
 
+	void GameplayContext::OnStart()
+	{
+		_ghostsBehaviourManager->StartGhostsBehaviours();
+	}
+
 	void GameplayContext::OnDispose()
 	{
 		GEngine::ServiceLocator::Unregister<MapMovementManager>();
@@ -145,5 +164,6 @@ namespace PacMan
 		_modules->tickables->RemoveTickable(_cameraManager);
 		_modules->tickables->RemoveTickable(_playerInputSystem);
 		_modules->tickables->RemoveTickable(_ghostsPrisionManager);
+		_modules->tickables->RemoveTickable(_ghostsBehaviourManager);
 	}
 } // PacMan

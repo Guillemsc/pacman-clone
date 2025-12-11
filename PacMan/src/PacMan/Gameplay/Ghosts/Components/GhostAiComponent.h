@@ -29,13 +29,16 @@ namespace PacMan
 
 	protected:
 		virtual glm::i32vec2 GetChaseTargetGridPosition() const = 0;
-		virtual glm::i32vec2 GetHideTargetGridPosition() const = 0;
+		virtual glm::i32vec2 GetScatterTargetGridPosition() const = 0;
+		virtual glm::i32vec2 GetFrightenedTargetGridPosition() const = 0;
 
 	private:
 		GhostsStateData* const _ghostsStateData;
 		std::weak_ptr<MapMovementComponent> _mapMovementComponent;
 
 		glm::i32vec2 _previousTargetGridPosition = glm::i32vec2(0);
+		glm::i32vec2 _validTargetGridPosition = glm::i32vec2(0);
+		bool _hasValidPreviousTargetGridPosition = false;
 	};
 }
 

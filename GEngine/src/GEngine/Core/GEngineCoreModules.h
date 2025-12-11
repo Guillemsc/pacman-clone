@@ -25,6 +25,7 @@ namespace GEngine
 	class TweensModule;
 	class Collisions2dModule;
 	class DeferredExecutionModule;
+	class RandomModule;
 
 	// All core modules provided by GEngine.
 	class GEngineCoreModules
@@ -48,7 +49,8 @@ namespace GEngine
 			TweensModule* tweens,
 			GuizmosModule* guizmos,
 			Collisions2dModule* collisions2d,
-			DeferredExecutionModule* deferredExecution
+			DeferredExecutionModule* deferredExecution,
+			RandomModule* random
 			) : configuration(configuration),
 			entities(entities),
 			game(game),
@@ -66,7 +68,8 @@ namespace GEngine
 			tweens(tweens),
 			guizmos(guizmos),
 			collisions2d(collisions2d),
-			deferredExecution(deferredExecution)
+			deferredExecution(deferredExecution),
+			random(random)
 		{}
 
 	public:
@@ -88,6 +91,7 @@ namespace GEngine
 		GuizmosModule* const guizmos;
 		Collisions2dModule* const collisions2d;
 		DeferredExecutionModule* const deferredExecution;
+		RandomModule* const random;
 	};
 
 } // GEngine

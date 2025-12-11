@@ -65,7 +65,7 @@ namespace PacMan
 			entity->SetParent(parentEntity);
 			entity->SetName(std::format("Big Pellet: [{}, {}]", pelletPosition.x, pelletPosition.y));
 
-			entity->AddComponent<EntityIdComponent>().lock()->SetType(EntityType::PELLET);
+			entity->AddComponent<EntityIdComponent>().lock()->SetType(EntityType::BIG_PELLET);
 
 			const std::shared_ptr<GEngine::TransformComponent> transform = entity->GetComponent<GEngine::TransformComponent>().lock();
 			transform->SetLocalScaleXY({0.4f, 0.4f});

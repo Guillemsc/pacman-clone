@@ -28,20 +28,39 @@ namespace PacMan
 
 		glm::i32vec2 targetGridPosition;
 
-		if (!_ghostsStateData->ghostsCanBeEaten)
+		switch (_ghostsStateData->ghostsMode)
 		{
-			targetGridPosition = GetChaseTargetGridPosition();
-		}
-		else
-		{
-			targetGridPosition = GetHideTargetGridPosition();
+			case GhostMode::CHASE:
+			{
+				targetGridPosition = GetChaseTargetGridPosition();
+				break;
+			}
+
+			case GhostMode::SCATTER:
+			{
+				targetGridPosition = GetScatterTargetGridPosition();
+				break;
+			}
+
+			case GhostMode::FRIGHTENED:
+			{
+				targetGridPosition = GetFrightenedTargetGridPosition();
+				break;
+			}
 		}
 
-		const bool targetChanged = targetGridPosition != _previousTargetGridPosition;
+		const bool targetChanged = targetGridPosition != _previousTargetGridPosition || !_hasValidPreviousTargetGridPosition;
 
 		if (targetChanged)
 		{
-			mapMovement->PathfindToGridPosition(targetGridPosition);
+			const PathfindingResult pathfindingResult = mapMovement->PathfindToGridPosition(targetGridPosition);
+
+			if (pathfindingResult.couldReachAnyPosition)
+			{
+				_previousTargetGridPosition = targetGridPosition;
+				_validTargetGridPosition = pathfindingResult.realTargetGridPosition;
+				_hasValidPreviousTargetGridPosition = true;
+			}
 		}
 	}
 } // PacMan

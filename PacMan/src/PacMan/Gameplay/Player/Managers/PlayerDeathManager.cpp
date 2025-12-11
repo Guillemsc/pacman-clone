@@ -8,6 +8,7 @@
 #include "GEngine/Coroutines/CoroutinesRunner.h"
 #include "GEngine/Logging/GEngineLog.h"
 #include "PacMan/Gameplay/Entities/Managers/EntitiesManager.h"
+#include "PacMan/Gameplay/Ghosts/Managers/GhostsBehaviourManager.h"
 #include "PacMan/Gameplay/Ghosts/Managers/GhostsLoadingManager.h"
 #include "PacMan/Gameplay/Ghosts/Managers/GhostsPrisionManager.h"
 #include "spdlog/spdlog.h"
@@ -19,13 +20,15 @@ namespace PacMan
 		EntitiesManager* entitiesManager,
 		GhostsPrisionManager* ghostsPrisionManager,
 		PlayerLoaderManager* playerLoaderManager,
-		GhostsLoadingManager* ghostsLoadingManager
+		GhostsLoadingManager* ghostsLoadingManager,
+		GhostsBehaviourManager* ghostsBehaviourManager
 		)
 		: _coroutines(coroutines),
 		_entitiesManager(entitiesManager),
 		_ghostsPrisionManager(ghostsPrisionManager),
 		_playerLoaderManager(playerLoaderManager),
-		_ghostsLoadingManager(ghostsLoadingManager)
+		_ghostsLoadingManager(ghostsLoadingManager),
+		_ghostsBehaviourManager(ghostsBehaviourManager)
 	{
 	}
 
@@ -38,6 +41,7 @@ namespace PacMan
 	{
 		GGAME_INFO("Starting death sequence.");
 
+		_ghostsBehaviourManager->ResetGhostsState();
 		_entitiesManager->StopAllEntitiesMovement();
 		_ghostsPrisionManager->Stop();
 
@@ -48,6 +52,7 @@ namespace PacMan
 
 		_ghostsPrisionManager->Reset();
 		_entitiesManager->StartPlayerAndMapGhostEntitiesMovement();
+		_ghostsBehaviourManager->StartGhostsBehaviours();
 
 		co_return;
 	}

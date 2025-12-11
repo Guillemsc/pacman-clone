@@ -30,6 +30,8 @@ namespace PacMan
 		_contextsStack.push_back(context);
 
 		_loading = false;
+
+		context->Start();
 	}
 
 	void ContextsStack::Pop()

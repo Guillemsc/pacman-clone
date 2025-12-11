@@ -13,6 +13,7 @@ namespace PacMan
 		PLAYER,
 		GHOST,
 		PELLET,
+		BIG_PELLET,
 	};
 }
 

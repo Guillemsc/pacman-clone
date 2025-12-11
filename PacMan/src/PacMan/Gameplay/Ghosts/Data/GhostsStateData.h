@@ -5,11 +5,18 @@
 #ifndef GHOSTSSTATEDATA_H
 #define GHOSTSSTATEDATA_H
 
+#include "GEngine/Timers/ChronoTimer.h"
+#include "PacMan/Gameplay/Ghosts/Enums/GhostMode.h"
+
 namespace PacMan
 {
 	struct GhostsStateData
 	{
-		bool ghostsCanBeEaten = false;
+		GhostMode ghostsMode = GhostMode::SCATTER;
+		GEngine::ChronoTimer ghostsScaterChaseTimer;
+
+		GEngine::ChronoTimer ghostsFrightenedTimer;
+		GhostMode ghostsModeBeforeFrightened = GhostMode::SCATTER;
 	};
 }
 

@@ -19,6 +19,8 @@
 #include "PacMan/Gameplay/Ghosts/Managers/GhostsLoadingManager.h"
 #include "PacMan/Gameplay/MapLoading/Managers/MapLoadingManager.h"
 #include "PacMan/Gameplay/Player/Managers/PlayerLoaderManager.h"
+#include "PacMan/Gameplay/Pellets/Managers/PelletCollectionManager.h"
+#include "PacMan/Gameplay/Ghosts/Managers/GhostsBehaviourManager.h"
 
 namespace GEngine
 {
@@ -36,6 +38,7 @@ namespace PacMan
 		explicit GameplayContext(GEngine::GEngineCoreModules* modules);
 
 		tokoro::Async<void> OnLoadAsync() override;
+		void OnStart() override;
 		void OnDispose() override;
 
 	private:
@@ -50,8 +53,10 @@ namespace PacMan
 		std::unique_ptr<PlayerDeathManager> _playerDeathManager;
 		std::shared_ptr<GhostsLoadingManager> _ghostsLoaderManager;
 		std::shared_ptr<GhostsPrisionManager> _ghostsPrisionManager;
+		std::shared_ptr<GhostsBehaviourManager> _ghostsBehaviourManager;
 		std::unique_ptr<GhostsStateData> _ghostsStateData;
 		std::unique_ptr<PelletsLoadingManager> _pelletsLoadingManager;
+		std::unique_ptr<PelletCollectionManager> _pelletCollectionManager;
 		std::shared_ptr<PlayerInputSystem> _playerInputSystem;
 	};
 }

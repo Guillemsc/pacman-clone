@@ -13,6 +13,8 @@
 #include "GEngine/Directions/CardinalDirection.h"
 #include "GEngine/Extensions/Vec2Extensions.h"
 #include "glm/fwd.hpp"
+#include "PacMan/Gameplay/MapMovement/Data/PathfindingResult.h"
+#include "PacMan/Gameplay/MapMovement/Managers/MapMovementManager.h"
 
 namespace PacMan
 {
@@ -33,8 +35,9 @@ namespace PacMan
 		[[nodiscard]] glm::i32vec2 GetGridPosition() const;
 
 		void SetCanMove(bool set);
+		void SetCanAutomaticallyFindNextDirection(bool set);
 		void SetNextDirection(const GEngine::CardinalDirection& nextDirection);
-		void PathfindToGridPosition(const glm::i32vec2& targetGridPosition);
+		PathfindingResult PathfindToGridPosition(const glm::i32vec2& targetGridPosition);
 
 		[[nodiscard]] glm::i32vec2 GetDirectionVector() const;
 
@@ -45,6 +48,11 @@ namespace PacMan
 		bool MoveTowardsPosition(GEngine::TransformComponent* transform, glm::vec2 targetPosition, float speed);
 
 		void TryGenerateNextPathIfEmpty();
+		bool TryGenerateNextPathFromNextDirectionWhenEmpty();
+		bool TryGenerateNextPathFromPreviousDirection();
+		bool TryGenerateNextPathFromAnyValidNeighbor();
+		bool TryGeneratePathFromRandomValidDirection();
+
 		void ClearPath();
 
 		bool IsValidNextDirection(
@@ -52,11 +60,14 @@ namespace PacMan
 			GEngine::CardinalDirection direction
 			) const;
 
+		std::optional<glm::i32vec2> FindNextValidNeighbor() const;
+
 	private:
+		bool _canMove = true;
+		bool _canFindNextDirection = false;
+
 		glm::i32vec2 _currentGridPosition = glm::i32vec2(0);
 		bool _hasValidGridPosition = false;
-
-		bool _canMove = true;
 
 		std::vector<glm::i32vec2> _pathToFollow;
 		float _distanceCarriedFromLastPathPoint = 0;

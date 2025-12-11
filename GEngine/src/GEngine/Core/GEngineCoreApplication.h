@@ -26,6 +26,7 @@ namespace GEngine
 	class ResourcesModule;
 	class InputModule;
 	class EventBuses;
+	class RandomModule;
 
 	class GEngineCoreApplication
 	{
@@ -59,6 +60,7 @@ namespace GEngine
 		std::unique_ptr<GuizmosModule> _guizmos;
 		std::unique_ptr<Collisions2dModule> _collisions2d;
 		std::unique_ptr<DeferredExecutionModule> _deferredExecution;
+		std::unique_ptr<RandomModule> _random;
 
 		std::unique_ptr<GEngineCoreModules> _modules;
 	};

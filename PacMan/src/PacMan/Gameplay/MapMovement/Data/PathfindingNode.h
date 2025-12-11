@@ -13,8 +13,9 @@ namespace PacMan
 {
 	struct PathfindingNode
 	{
-		glm::i32vec2 position = glm::i32vec2(0);
+		float priority;
 		float distance;
+		glm::i32vec2 position = glm::i32vec2(0);
 		std::shared_ptr<PathfindingNode> parent;
 	};
 }

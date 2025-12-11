@@ -32,7 +32,9 @@ namespace GEngine
 	void Timer::Reset()
 	{
 		_isStarted = false;
+		_isPaused = false;
 		_startSeconds = 0;
+		_pauseStartSeconds = 0;
 	}
 
 	void Timer::Restart()
@@ -41,8 +43,34 @@ namespace GEngine
 		Start();
 	}
 
+	void Timer::Pause()
+	{
+		if (!_isStarted) return;
+		if (_isPaused) return;
+
+		_isPaused = true;
+		_pauseStartSeconds = _timeSource->GetTimeSeconds();
+	}
+
+	void Timer::Resume()
+	{
+		if (!_isStarted) return;
+		if (!_isPaused) return;
+
+		_isPaused = false;
+
+		const float pausedSecondsPassed = _timeSource->GetTimeSeconds() - _pauseStartSeconds;
+		_startSeconds += pausedSecondsPassed;
+		_pauseStartSeconds = 0;
+	}
+
 	bool Timer::IsStarted() const
 	{
 		return _isStarted;
+	}
+
+	bool Timer::IsPaused() const
+	{
+		return _isPaused;
 	}
 } // GEngineCore

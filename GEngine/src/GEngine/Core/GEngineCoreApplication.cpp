@@ -16,6 +16,7 @@
 #include "GEngine/Modules/GameModule.h"
 #include "GEngine/Modules/GuizmosModule.h"
 #include "GEngine/Modules/InputModule.h"
+#include "GEngine/Modules/RandomModule.h"
 #include "GEngine/Modules/RenderingModule.h"
 #include "GEngine/Modules/ResourcesModule.h"
 #include "GEngine/Modules/TickablesModule.h"
@@ -51,6 +52,7 @@ namespace GEngine
 		_guizmos = std::make_unique<GuizmosModule>();
 		_collisions2d = std::make_unique<Collisions2dModule>();
 		_deferredExecution = std::make_unique<DeferredExecutionModule>();
+		_random  = std::make_unique<RandomModule>();
 
 		_modules = std::make_unique<GEngineCoreModules>(
 			_configuration.get(),
@@ -70,7 +72,8 @@ namespace GEngine
 			_tweens.get(),
 			_guizmos.get(),
 			_collisions2d.get(),
-			_deferredExecution.get()
+			_deferredExecution.get(),
+			_random.get()
 		);
 	}
 

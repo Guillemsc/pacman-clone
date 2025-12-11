@@ -9,7 +9,7 @@
 
 namespace PacMan
 {
-	class GhostsLoadingManager;
+	class GhostsBehaviourManager;
 }
 
 namespace GEngine
@@ -22,6 +22,7 @@ namespace PacMan
 	class GhostsPrisionManager;
 	class EntitiesManager;
 	class PlayerLoaderManager;
+	class GhostsLoadingManager;
 
 	class PlayerDeathManager
 	{
@@ -31,7 +32,8 @@ namespace PacMan
 			EntitiesManager* entitiesManager,
 			GhostsPrisionManager* ghostsPrisionManager,
 			PlayerLoaderManager* playerLoaderManager,
-			GhostsLoadingManager* ghostsLoadingManager
+			GhostsLoadingManager* ghostsLoadingManager,
+			GhostsBehaviourManager* ghostsBehaviourManager
 			);
 
 		void RunDeath();
@@ -45,6 +47,7 @@ namespace PacMan
 		GhostsPrisionManager* const _ghostsPrisionManager;
 		PlayerLoaderManager* const _playerLoaderManager;
 		GhostsLoadingManager* const _ghostsLoadingManager;
+		GhostsBehaviourManager* const _ghostsBehaviourManager;
 	};
 }
 

@@ -26,7 +26,8 @@ namespace PacMan
 
 	protected:
 		glm::i32vec2 GetChaseTargetGridPosition() const override;
-		glm::i32vec2 GetHideTargetGridPosition() const override;
+		glm::i32vec2 GetScatterTargetGridPosition() const override;
+		glm::i32vec2 GetFrightenedTargetGridPosition() const override;
 	};
 }
 

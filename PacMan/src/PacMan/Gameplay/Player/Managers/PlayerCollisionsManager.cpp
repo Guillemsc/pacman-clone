@@ -9,12 +9,15 @@
 #include "GEngine/Entities/Entity.h"
 #include "PacMan/Gameplay/Entities/Components/EntityIdComponent.h"
 #include "PacMan/Gameplay/Entities/Enums/EntityType.h"
+#include "PacMan/Gameplay/Pellets/Managers/PelletCollectionManager.h"
 #include "spdlog/spdlog.h"
 
 namespace PacMan
 {
-	PlayerCollisionsManager::PlayerCollisionsManager()
+	PlayerCollisionsManager::PlayerCollisionsManager(PelletCollectionManager *pelletCollectionManager)
+		: _pelletCollectionManager(pelletCollectionManager)
 	{
+
 	}
 
 	void PlayerCollisionsManager::Init(PlayerDeathManager *playerDeathManager)
@@ -34,7 +37,13 @@ namespace PacMan
 		{
 			case EntityType::PELLET:
 			{
-				collider->SetActive(false);
+				_pelletCollectionManager->HandlePelletCollected(collider);
+				break;
+			}
+
+			case EntityType::BIG_PELLET:
+			{
+				_pelletCollectionManager->HandleBigPelletCollected(collider);
 				break;
 			}
 

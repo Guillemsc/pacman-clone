@@ -18,8 +18,9 @@ namespace PacMan
 
 	}
 
-	void MapPathfindingManager::GeneratePath(
+	PathfindingResult MapPathfindingManager::GeneratePath(
 		const glm::i32vec2 &originGridPosition,
+		const glm::i32vec2 &allowedDirection,
 		const glm::i32vec2 &targetGridPosition,
 		std::vector<glm::i32vec2> &generatedPath
 		)
@@ -27,8 +28,9 @@ namespace PacMan
 		generatedPath.clear();
 
 		const std::shared_ptr<PathfindingNode> initialNode = std::make_shared<PathfindingNode>(
-			originGridPosition,
+			0,
 			GEngine::Vec2Extensions::Distance(originGridPosition, targetGridPosition),
+			originGridPosition,
 			nullptr
 			);
 		_checkingNodes.push(initialNode);
@@ -49,20 +51,23 @@ namespace PacMan
 
 			_checkingNodes.pop();
 			_checkedNodes.insert(currentNode->position);
+			_checkedNodesByDistance.push(currentNode);
 
-			GenerateNeighbors(currentNode->position);
+			glm::i32vec2 direction = GetDirectionFromParent(currentNode.get(), allowedDirection);
+			GenerateNeighbors(currentNode->position, direction);
 
-			for (glm::i32vec2 neighbor : _neighborsBuffer)
+			for (glm::i32vec2 neighborGridPosition : _neighborsBuffer)
 			{
-				const bool isWalkable = _mapMovementManager->IsWalkable(neighbor);
+				const bool isWalkable = _mapMovementManager->IsWalkable(neighborGridPosition);
 				if (!isWalkable) continue;
 
-				const bool alreadyChecked = _checkedNodes.contains(neighbor);
+				const bool alreadyChecked = _checkedNodes.contains(neighborGridPosition);
 				if (alreadyChecked) continue;
 
 				const std::shared_ptr<PathfindingNode> newNode = std::make_shared<PathfindingNode>(
-					neighbor,
-					GEngine::Vec2Extensions::Distance(neighbor, targetGridPosition),
+					0,
+					GEngine::Vec2Extensions::Distance(neighborGridPosition, targetGridPosition),
+					neighborGridPosition,
 					currentNode
 					);
 				_checkingNodes.push(newNode);
@@ -72,7 +77,17 @@ namespace PacMan
 		_checkingNodes = std::priority_queue<std::shared_ptr<PathfindingNode>, std::vector<std::shared_ptr<PathfindingNode>>, PathfindingComparer>();
 		_checkedNodes.clear();
 
-		if (!nodeFound) return;
+		bool couldReachTarget = true;
+
+		if (!nodeFound)
+		{
+			if (_checkedNodesByDistance.empty()) return { false, false, originGridPosition };
+
+			foundNode = _checkedNodesByDistance.top();
+			couldReachTarget = false;
+		}
+
+		_checkedNodesByDistance = std::priority_queue<std::shared_ptr<PathfindingNode>, std::vector<std::shared_ptr<PathfindingNode>>, PathfindingComparer>();
 
 		std::shared_ptr<PathfindingNode> checkingNode = foundNode;
 
@@ -84,32 +99,59 @@ namespace PacMan
 		}
 
 		std::ranges::reverse(generatedPath);
+
+		return { true, couldReachTarget, foundNode->position };
 	}
 
 	void MapPathfindingManager::GenerateWalkableNeighbors(
 		const glm::i32vec2 &originGridPosition,
-		std::vector<glm::i32vec2> &generatedPath
+		const glm::i32vec2 &allowedDirection,
+		std::vector<glm::i32vec2> &generatedNeighbors
 		)
 	{
-		generatedPath.clear();
+		generatedNeighbors.clear();
 
-		GenerateNeighbors(originGridPosition);
+		GenerateNeighbors(originGridPosition, allowedDirection);
 
 		for (glm::i32vec2 neighbor : _neighborsBuffer)
 		{
 			const bool isWalkable = _mapMovementManager->IsWalkable(neighbor);
 			if (!isWalkable) continue;
 
-			generatedPath.push_back(neighbor);
+			generatedNeighbors.push_back(neighbor);
 		}
 	}
 
-	void MapPathfindingManager::GenerateNeighbors(const glm::i32vec2 &gridPosition)
+	glm::i32vec2 MapPathfindingManager::GetDirectionFromParent(const PathfindingNode *pathfindingNode, const glm::i32vec2& defaultDirection)
 	{
+		if (!pathfindingNode->parent) return defaultDirection;
+
+		return pathfindingNode->position - pathfindingNode->parent->position;
+	}
+
+	void MapPathfindingManager::GenerateNeighbors(
+		const glm::i32vec2 &gridPosition,
+		const glm::i32vec2 &allowedDirection
+		)
+	{
+		static constexpr glm::i32vec2 directions[4] = {
+			{ 1,  0},
+			{-1,  0},
+			{ 0,  1},
+			{ 0, -1}
+		};
+
+		const glm::i32vec2 reverseDirection = -allowedDirection;
+
 		_neighborsBuffer.clear();
-		_neighborsBuffer.push_back(gridPosition + glm::i32vec2(1, 0));
-		_neighborsBuffer.push_back(gridPosition + glm::i32vec2(-1, 0));
-		_neighborsBuffer.push_back(gridPosition + glm::i32vec2(0, 1));
-		_neighborsBuffer.push_back(gridPosition + glm::i32vec2(0, -1));
+
+		for (const glm::i32vec2& direction : directions)
+		{
+			const bool isReverseDirection = reverseDirection == direction;
+
+			if (isReverseDirection) continue;
+
+			_neighborsBuffer.push_back(gridPosition + direction);
+		}
 	}
 }
