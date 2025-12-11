@@ -11,6 +11,7 @@
 
 namespace PacMan
 {
+	class GameplayEntities;
 	struct GhostsStateData;
 
 	class GhostAiComponent : public GEngine::Component
@@ -22,6 +23,7 @@ namespace PacMan
 			GEngine::GEngineCoreModules* modules,
 			const std::weak_ptr<GEngine::Entity> &entity,
 			GhostsStateData* ghostsStateData,
+			GameplayEntities* gameplayEntities,
 			const std::weak_ptr<MapMovementComponent>& mapMovementComponent
 			);
 
@@ -32,10 +34,12 @@ namespace PacMan
 		virtual glm::i32vec2 GetScatterTargetGridPosition() const = 0;
 		virtual glm::i32vec2 GetFrightenedTargetGridPosition() const = 0;
 
-	private:
+	protected:
 		GhostsStateData* const _ghostsStateData;
+		GameplayEntities* const _gameplayEntities;
 		std::weak_ptr<MapMovementComponent> _mapMovementComponent;
 
+	private:
 		glm::i32vec2 _previousTargetGridPosition = glm::i32vec2(0);
 		glm::i32vec2 _validTargetGridPosition = glm::i32vec2(0);
 		bool _hasValidPreviousTargetGridPosition = false;

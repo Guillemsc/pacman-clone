@@ -27,11 +27,13 @@ namespace PacMan
 		GEngine::GEngineCoreModules *modules,
 		GEngine::Scene *scene,
 		MapMovementManager *mapMovementManager,
+		MapPathfindingManager* mapPathfindingManager,
 		GameplayEntities *gameplayEntities,
 		GhostsStateData* ghostsStateData
 		) : _modules(modules),
 		_scene(scene),
 		_mapMovementManager(mapMovementManager),
+		_mapPathfindingManager(mapPathfindingManager),
 		_gameplayEntities(gameplayEntities),
 		_ghostsStateData(ghostsStateData)
 	{
@@ -122,7 +124,10 @@ namespace PacMan
 			ghostEntity->GetTransform().lock()->SetPositionXY(worldPosition);
 		}
 
-		const std::shared_ptr<MapMovementComponent> mapMovement = ghostEntity->AddComponent<MapMovementComponent>().lock();
+		const std::shared_ptr<MapMovementComponent> mapMovement = ghostEntity->AddComponent<MapMovementComponent>(
+			_mapMovementManager,
+			_mapPathfindingManager
+			).lock();
 		mapMovement->SetCanAutomaticallyFindNextDirection(true);
 		mapMovement->SetGuizmoColor(ghostColor.WithAlpha(0.6f));
 
@@ -205,22 +210,38 @@ namespace PacMan
 		{
 			case GhostType::RED_GHOST:
 			{
-				ghostEntity->AddComponent<RedGhostAiComponent>(_ghostsStateData, mapMovement);
+				ghostEntity->AddComponent<RedGhostAiComponent>(
+					_ghostsStateData,
+					_gameplayEntities,
+					mapMovement
+					);
 				break;
 			}
 			case GhostType::ORANGE_GHOST:
 			{
-				ghostEntity->AddComponent<OrangeGhostAiComponent>(_ghostsStateData, mapMovement);
+				ghostEntity->AddComponent<OrangeGhostAiComponent>(
+					_ghostsStateData,
+					_gameplayEntities,
+					mapMovement
+					);
 				break;
 			}
 			case GhostType::CIAN_GHOST:
 			{
-				ghostEntity->AddComponent<CianGhostAiComponent>(_ghostsStateData, mapMovement);
+				ghostEntity->AddComponent<CianGhostAiComponent>(
+					_ghostsStateData,
+					_gameplayEntities,
+					mapMovement
+					);
 				break;
 			}
 			case GhostType::PINK_GHOST:
 			{
-				ghostEntity->AddComponent<PinkGhostAiComponent>(_ghostsStateData, mapMovement);
+				ghostEntity->AddComponent<PinkGhostAiComponent>(
+					_ghostsStateData,
+					_gameplayEntities,
+					mapMovement
+					);
 				break;
 			}
 		}

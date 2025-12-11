@@ -13,6 +13,11 @@
 #include "PacMan/Gameplay/Ghosts/Data/LoadedGhostsData.h"
 #include "PacMan/Gameplay/Ghosts/Enums/GhostType.h"
 
+namespace PacMan
+{
+	class MapPathfindingManager;
+}
+
 namespace GEngine
 {
 	class Entity;
@@ -35,6 +40,7 @@ namespace PacMan
 			GEngine::GEngineCoreModules* modules,
 			GEngine::Scene* scene,
 			MapMovementManager* mapMovementManager,
+			MapPathfindingManager* mapPathfindingManager,
 			GameplayEntities* gameplayEntities,
 			GhostsStateData* ghostsStateData
 			);
@@ -65,6 +71,7 @@ namespace PacMan
 		GEngine::GEngineCoreModules* const _modules;
 		GEngine::Scene* const _scene;
 		MapMovementManager* const _mapMovementManager;
+		MapPathfindingManager* const _mapPathfindingManager;
 		GameplayEntities* const _gameplayEntities;
 		GhostsStateData* const _ghostsStateData;
 

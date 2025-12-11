@@ -32,14 +32,16 @@ namespace PacMan
 		MapMovementManager* mapMovementManager,
 		PlayerInputSystem* playerInputSystem,
 		GameplayEntities* gameplayEntities,
-		PlayerCollisionsManager* playerCollisionsManager
+		PlayerCollisionsManager* playerCollisionsManager,
+		MapPathfindingManager* mapPathfindingManager
 		)
 		: _modules(modules),
 		_scene(scene),
 		_mapMovementManager(mapMovementManager),
 		_playerInputSystem(playerInputSystem),
 		_gameplayEntities(gameplayEntities),
-		_playerCollisionsManager(playerCollisionsManager)
+		_playerCollisionsManager(playerCollisionsManager),
+		_mapPathfindingManager(mapPathfindingManager)
 	{
 	}
 
@@ -71,7 +73,10 @@ namespace PacMan
 		collider->SetLayerMask(CollisionLayers::COLLISION_LAYER_GHOST | CollisionLayers::COLLISION_LAYER_PELLETS);
 		collider->OnContactStart().Add(std::bind(&PlayerCollisionsManager::WhenPlayerCollided, _playerCollisionsManager, std::placeholders::_1));
 
-		const std::shared_ptr<MapMovementComponent> mapMovement = playerEntity->AddComponent<MapMovementComponent>().lock();
+		const std::shared_ptr<MapMovementComponent> mapMovement = playerEntity->AddComponent<MapMovementComponent>(
+			_mapMovementManager,
+			_mapPathfindingManager
+		).lock();
 		mapMovement->SetGuizmoColor(color);
 		mapMovement->SetGridPosition(_playerInitialGridPosition);
 

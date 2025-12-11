@@ -46,10 +46,8 @@ namespace PacMan
 			);
 
 		std::unique_ptr<MapMovementManager> mapMovementManager = std::make_unique<MapMovementManager>();
-		GEngine::ServiceLocator::Register(mapMovementManager.get());
 
 		std::unique_ptr<GameplayEntities> gameplayEntities = std::make_unique<GameplayEntities>();
-		GEngine::ServiceLocator::Register(gameplayEntities.get());
 
 		std::unique_ptr<EntitiesManager> entitiesManager = std::make_unique<EntitiesManager>(
 			gameplayEntities.get()
@@ -80,19 +78,23 @@ namespace PacMan
 			pelletsCollectionManager.get()
 			);
 
+		std::unique_ptr<MapPathfindingManager> mapPathfindingManager = std::make_unique<MapPathfindingManager>(mapMovementManager.get());
+
 		std::unique_ptr<PlayerLoaderManager> playerLoaderManager = std::make_unique<PlayerLoaderManager>(
 			_modules,
 			_scene.get(),
 			mapMovementManager.get(),
 			playerInputSystem.get(),
 			gameplayEntities.get(),
-			playerCollisionsManager.get()
+			playerCollisionsManager.get(),
+			mapPathfindingManager.get()
 			);
 
 		std::unique_ptr<GhostsLoadingManager> ghostsLoaderManager = std::make_unique<GhostsLoadingManager>(
 			_modules,
 			_scene.get(),
 			mapMovementManager.get(),
+			mapPathfindingManager.get(),
 			gameplayEntities.get(),
 			ghostsStateData.get()
 			);
@@ -105,9 +107,6 @@ namespace PacMan
 			ghostsLoaderManager.get(),
 			ghostsBehaviourManager.get()
 			);
-
-		std::unique_ptr<MapPathfindingManager> mapPathfindingManager = std::make_unique<MapPathfindingManager>(mapMovementManager.get());
-		GEngine::ServiceLocator::Register(mapPathfindingManager.get());
 
 		std::unique_ptr<PelletsLoadingManager> pelletsLoadingManager = std::make_unique<PelletsLoadingManager>(
 			_modules,
@@ -157,10 +156,6 @@ namespace PacMan
 
 	void GameplayContext::OnDispose()
 	{
-		GEngine::ServiceLocator::Unregister<MapMovementManager>();
-		GEngine::ServiceLocator::Unregister<GameplayEntities>();
-		GEngine::ServiceLocator::Unregister<PlayerDeathManager>();
-
 		_modules->tickables->RemoveTickable(_cameraManager);
 		_modules->tickables->RemoveTickable(_playerInputSystem);
 		_modules->tickables->RemoveTickable(_ghostsPrisionManager);

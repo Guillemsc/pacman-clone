@@ -26,7 +26,7 @@ namespace PacMan
 		const std::shared_ptr<GEngine::Sprite2dRendererComponent> spriteRenderer = _spriteRendererComponent.lock();
 		if (!spriteRenderer) return;
 
-		const glm::vec2 directionVector = mapMovement->GetDirectionVector();
+		const glm::vec2 directionVector = mapMovement->GetGridDirectionVector();
 
 		const bool flipX = directionVector.x < 0;
 

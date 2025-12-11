@@ -11,9 +11,7 @@ namespace PacMan
 {
     glm::i32vec2 PinkGhostAiComponent::GetChaseTargetGridPosition() const
     {
-        const GameplayEntities* gameplayEntities = GEngine::ServiceLocator::Get<GameplayEntities>();
-
-        const std::shared_ptr<GEngine::Entity> player = gameplayEntities->Player.lock();
+        const std::shared_ptr<GEngine::Entity> player = _gameplayEntities->Player.lock();
         if (player == nullptr) return { 0, 0 };
 
         const std::shared_ptr<MapMovementComponent> mapMovement = player->GetComponent<MapMovementComponent>().lock();

@@ -9,6 +9,11 @@
 
 #include "glm/vec2.hpp"
 
+namespace PacMan
+{
+	class MapPathfindingManager;
+}
+
 namespace GEngine
 {
 	class Scene;
@@ -31,7 +36,8 @@ namespace PacMan
 			MapMovementManager* mapMovementManager,
 			PlayerInputSystem* playerInputSystem,
 			GameplayEntities* gameplayEntities,
-			PlayerCollisionsManager* playerCollisionsManager
+			PlayerCollisionsManager* playerCollisionsManager,
+			MapPathfindingManager* mapPathfindingManager
 			);
 
 		void LoadPlayer(const glm::i32vec2& gridPosition);
@@ -45,6 +51,7 @@ namespace PacMan
 		PlayerInputSystem* const _playerInputSystem;
 		GameplayEntities* const _gameplayEntities;
 		PlayerCollisionsManager* const _playerCollisionsManager;
+		MapPathfindingManager* const _mapPathfindingManager;
 
 		glm::i32vec2 _playerInitialGridPosition = glm::i32vec2(0);
 	};

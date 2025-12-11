@@ -14,16 +14,23 @@
 #include "GEngine/Extensions/Vec2Extensions.h"
 #include "glm/fwd.hpp"
 #include "PacMan/Gameplay/MapMovement/Data/PathfindingResult.h"
-#include "PacMan/Gameplay/MapMovement/Managers/MapMovementManager.h"
 
 namespace PacMan
 {
+	class MapMovementManager;
+	class MapPathfindingManager;
+
 	class MapMovementComponent final : public GEngine::Component
 	{
 		REGISTER_COMPONENT(MapMovementComponent)
 
 	public:
-		explicit MapMovementComponent(GEngine::GEngineCoreModules* modules, const std::weak_ptr<GEngine::Entity> &entity);
+		explicit MapMovementComponent(
+			GEngine::GEngineCoreModules* modules,
+			const std::weak_ptr<GEngine::Entity> &entity,
+			MapMovementManager* mapMovementManager,
+			MapPathfindingManager* mapPathfindingManager
+			);
 
 		void OnTick() override;
 		void OnDrawGuizmo() override;
@@ -39,7 +46,8 @@ namespace PacMan
 		void SetNextDirection(const GEngine::CardinalDirection& nextDirection);
 		PathfindingResult PathfindToGridPosition(const glm::i32vec2& targetGridPosition);
 
-		[[nodiscard]] glm::i32vec2 GetDirectionVector() const;
+		[[nodiscard]] glm::i32vec2 GetGridDirectionVector() const;
+		[[nodiscard]] bool GetIsMovingRandomly() const;
 
 		void SetGuizmoColor(const GEngine::Color01& color);
 
@@ -63,8 +71,11 @@ namespace PacMan
 		std::optional<glm::i32vec2> FindNextValidNeighbor() const;
 
 	private:
+		MapMovementManager* const _mapMovementManager;
+		MapPathfindingManager* const _mapPathfindingManager;
+
 		bool _canMove = true;
-		bool _canFindNextDirection = false;
+		bool _canAutomaticallyFindNextDirection = false;
 
 		glm::i32vec2 _currentGridPosition = glm::i32vec2(0);
 		bool _hasValidGridPosition = false;
@@ -76,6 +87,8 @@ namespace PacMan
 		bool _hasValidLastPathPointData = false;
 
 		std::optional<GEngine::CardinalDirection> _nextDirectionWhenPathEmpty;
+
+		bool _isMovingRandomly = false;
 
 		GEngine::Color01 _guizmoColor = {0, 1, 0, 1};
 	};

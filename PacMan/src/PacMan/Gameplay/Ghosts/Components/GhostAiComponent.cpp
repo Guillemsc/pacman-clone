@@ -13,10 +13,12 @@ namespace PacMan
 		GEngine::GEngineCoreModules *modules,
 		const std::weak_ptr<GEngine::Entity> &entity,
 		GhostsStateData* ghostsStateData,
+		GameplayEntities* gameplayEntities,
 		const std::weak_ptr<MapMovementComponent>& mapMovementComponent
 		)
 		: Component(modules, entity),
 		_ghostsStateData(ghostsStateData),
+		_gameplayEntities(gameplayEntities),
 		_mapMovementComponent(mapMovementComponent)
 	{
 	}
@@ -49,7 +51,20 @@ namespace PacMan
 			}
 		}
 
-		const bool targetChanged = targetGridPosition != _previousTargetGridPosition || !_hasValidPreviousTargetGridPosition;
+		bool targetChanged = targetGridPosition != _previousTargetGridPosition || !_hasValidPreviousTargetGridPosition;
+
+		if (!targetChanged && _hasValidPreviousTargetGridPosition)
+		{
+			if (mapMovement->GetIsMovingRandomly())
+			{
+				const float distance = GEngine::Vec2Extensions::Distance(_validTargetGridPosition, mapMovement->GetGridPosition());
+
+				if (distance > 4)
+				{
+					targetChanged = true;
+				}
+			}
+		}
 
 		if (targetChanged)
 		{
