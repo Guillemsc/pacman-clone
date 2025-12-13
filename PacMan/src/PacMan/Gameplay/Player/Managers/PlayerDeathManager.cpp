@@ -41,7 +41,7 @@ namespace PacMan
 	{
 		GGAME_INFO("Starting death sequence.");
 
-		_ghostsBehaviourManager->ResetGhostsState();
+		_ghostsBehaviourManager->ResetGhostsBehavioursState();
 		_entitiesManager->StopAllEntitiesMovement();
 		_ghostsPrisionManager->Stop();
 

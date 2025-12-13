@@ -80,8 +80,11 @@ namespace PacMan
 		mapMovement->SetGuizmoColor(color);
 		mapMovement->SetGridPosition(_playerInitialGridPosition);
 
-		const std::shared_ptr<PlayerAnimationComponent> playerAnimation = playerEntity->AddComponent<PlayerAnimationComponent>().lock();
-		playerAnimation->Init(mapMovement, spriteRenderer, spriteAnimator);
+		const std::shared_ptr<PlayerAnimationComponent> playerAnimation = playerEntity->AddComponent<PlayerAnimationComponent>(
+			mapMovement,
+			spriteRenderer,
+			spriteAnimator
+		).lock();
 
 		_gameplayEntities->Player = playerEntity;
 		_playerInputSystem->SetPlayer(mapMovement); // Todo: this is not needed, we should use _gameplayEntities->Player

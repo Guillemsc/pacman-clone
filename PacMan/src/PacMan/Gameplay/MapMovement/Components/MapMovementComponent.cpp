@@ -90,6 +90,11 @@ namespace PacMan
 		_canAutomaticallyFindNextDirection = set;
 	}
 
+	void MapMovementComponent::SetCanAutomaticallyKeepMovingOnCurrentDirection(const bool set)
+	{
+		_canAutomaticallyKeepMovingOnCurrentDirection = set;
+	}
+
 	void MapMovementComponent::SetNextDirection(const GEngine::CardinalDirection &nextDirection)
 	{
 		const glm::i32vec2 nextDirectionVector = GEngine::CardinalDirectionExtensions::GetDirectionVector(nextDirection);
@@ -119,15 +124,18 @@ namespace PacMan
 
 		glm::i32vec2 direction = glm::i32vec2(0);
 
+		glm::vec2 startGridPosition = _currentGridPosition;
+
 		if (_hasValidLastPathPointData)
 		{
-			direction = _lastPathPointDirectionVector;
+			direction = _gridDirectionVector;
+			startGridPosition = _targetGridPosition;
 		}
 
 		std::vector<glm::i32vec2> newGeneratedPath;
 
 		const PathfindingResult pathfindingResult = _mapPathfindingManager->GeneratePath(
-			_currentGridPosition,
+			startGridPosition,
 			direction,
 			targetGridPosition,
 			newGeneratedPath
@@ -141,6 +149,11 @@ namespace PacMan
 		}
 
 		return pathfindingResult;
+	}
+
+	void MapMovementComponent::SetMovementSpeed(const float speed)
+	{
+		_movementSpeed = speed;
 	}
 
 	glm::i32vec2 MapMovementComponent::GetGridDirectionVector() const
@@ -166,22 +179,23 @@ namespace PacMan
 		const std::shared_ptr<GEngine::Entity> entity = GetEntity().lock();
 		const std::shared_ptr<GEngine::TransformComponent> transform = entity->GetTransform().lock();
 
-		const glm::i32vec2 nextPathGridPosition = _pathToFollow[0];
-		_currentDirectionVector = GEngine::Vec2Extensions::SafeNormalize(nextPathGridPosition - _currentGridPosition);
+		_targetGridPosition = _pathToFollow[0];
 
-		const glm::vec2 currentTargetPosition = _mapMovementManager->GridPositionToWorldPosition(nextPathGridPosition);
+		if (_targetGridPosition != _currentGridPosition)
+		{
+			_gridDirectionVector = GEngine::Vec2Extensions::Normalize(_targetGridPosition - _currentGridPosition);
+		}
 
-		const bool hasReachedTarget = MoveTowardsPosition(transform.get(), currentTargetPosition, 30);
+		_currentDirectionVector = GEngine::Vec2Extensions::SafeNormalize(_targetGridPosition - _currentGridPosition);
+
+		const glm::vec2 currentTargetPosition = _mapMovementManager->GridPositionToWorldPosition(_targetGridPosition);
+
+		const bool hasReachedTarget = MoveTowardsPosition(transform.get(), currentTargetPosition, _movementSpeed);
 
 		if (hasReachedTarget)
 		{
-			if (nextPathGridPosition != _currentGridPosition)
-			{
-				_lastPathPointDirectionVector = nextPathGridPosition - _currentGridPosition;
-				_hasValidLastPathPointData = true;
-			}
-
-			_currentGridPosition = nextPathGridPosition;
+			_hasValidLastPathPointData = true;
+			_currentGridPosition = _targetGridPosition;
 			_hasValidGridPosition = true;
 
 			_pathToFollow.erase(_pathToFollow.begin());
@@ -294,7 +308,9 @@ namespace PacMan
 
 	bool MapMovementComponent::TryGenerateNextPathFromPreviousDirection()
 	{
-		const glm::i32vec2 nextPosition = _currentGridPosition + _lastPathPointDirectionVector;
+		if (!_canAutomaticallyKeepMovingOnCurrentDirection) return false;
+
+		const glm::i32vec2 nextPosition = _currentGridPosition + _gridDirectionVector;
 		const bool hasTile = _mapMovementManager->IsWalkable(nextPosition);
 
 		if (!hasTile)return false;
@@ -337,7 +353,7 @@ namespace PacMan
 	std::optional<glm::i32vec2> MapMovementComponent::FindNextValidNeighbor() const
 	{
 		std::vector<glm::i32vec2> neighbors;
-		_mapPathfindingManager->GenerateWalkableNeighbors(_currentGridPosition, _lastPathPointDirectionVector, neighbors);
+		_mapPathfindingManager->GenerateWalkableNeighbors(_currentGridPosition, _gridDirectionVector, neighbors);
 
 		if (neighbors.empty()) return std::nullopt;
 

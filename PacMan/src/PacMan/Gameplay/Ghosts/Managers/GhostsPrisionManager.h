@@ -24,6 +24,7 @@ namespace GEngine
 
 namespace PacMan
 {
+	struct GhostsStateData;
 	class MapMovementManager;
 	struct LoadedMapData;
 }
@@ -40,7 +41,8 @@ namespace PacMan
 		GhostsPrisionManager(
 			GEngine::GEngineCoreModules* modules,
 			GEngine::CoroutinesRunner* coroutines,
-			MapMovementManager* mapMovementManager
+			MapMovementManager* mapMovementManager,
+			GhostsStateData* ghostsStateData
 			);
 
 		void Tick() override;
@@ -50,10 +52,16 @@ namespace PacMan
 		void Stop();
 		void Reset();
 
+		void KillGhostAndStartPathBackToPrision(const std::weak_ptr<GEngine::Entity> &ghost);
+
 	private:
 		void ReleaseNextGhost();
 		GhostPrisionSlotData* GetNextSlotToReleaseOrNull() const;
 		tokoro::Async<void> PlayReleaseGhostAsync(
+			std::shared_ptr<GEngine::Entity> ghostEntity,
+			GEngine::CancellationToken cancellationToken
+			);
+		tokoro::Async<void> PlayReturnGhostAsync(
 			std::shared_ptr<GEngine::Entity> ghostEntity,
 			GEngine::CancellationToken cancellationToken
 			);
@@ -62,6 +70,7 @@ namespace PacMan
 		GEngine::GEngineCoreModules* const _modules;
 		GEngine::CoroutinesRunner* const _coroutines;
 		MapMovementManager* const _mapMovementManager;
+		GhostsStateData* const _ghostsStateData;
 
 		LoadedGhostsData _loadedGhostsData;
 
@@ -73,6 +82,7 @@ namespace PacMan
 
 		glm::i32vec2 _prisionExitGridPosition = glm::i32vec2(0);
 		glm::vec2 _prisionExitPosition = glm::vec2(0);
+		glm::vec2 _prisionReturnPosition = glm::vec2(0);
 
 		GEngine::ChronoTimer _timeSinceLastGhostReleasedTimer;
 	};

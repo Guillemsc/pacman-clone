@@ -24,6 +24,11 @@ namespace PacMan
 	{
 	}
 
+	void GhostAiComponent::OnEnable()
+	{
+		_hasValidPreviousTargetGridPosition = false;
+	}
+
 	void GhostAiComponent::OnTick()
 	{
 		const std::shared_ptr<MapMovementComponent> mapMovement = _mapMovementComponent.lock();

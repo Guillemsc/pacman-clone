@@ -22,15 +22,15 @@ namespace PacMan
 		REGISTER_COMPONENT(PlayerAnimationComponent)
 
 	public:
-		explicit PlayerAnimationComponent(GEngine::GEngineCoreModules* modules, const std::weak_ptr<GEngine::Entity> &entity);
-
-		void OnTick() override;
-
-		void Init(
+		explicit PlayerAnimationComponent(
+			GEngine::GEngineCoreModules* modules,
+			const std::weak_ptr<GEngine::Entity> &entity,
 			const std::weak_ptr<MapMovementComponent>& mapMovementComponent,
 			const std::weak_ptr<GEngine::Sprite2dRendererComponent>& spriteRendererComponent,
 			const std::weak_ptr<GEngine::Sprite2dAnimatorComponent>& spriteAnimatorComponent
 			);
+
+		void OnTick() override;
 
 	private:
 		std::weak_ptr<MapMovementComponent> _mapMovementComponent;

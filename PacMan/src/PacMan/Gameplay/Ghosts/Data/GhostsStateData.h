@@ -17,6 +17,8 @@ namespace PacMan
 
 		GEngine::ChronoTimer ghostsFrightenedTimer;
 		GhostMode ghostsModeBeforeFrightened = GhostMode::SCATTER;
+
+		std::vector<std::weak_ptr<GEngine::Entity>> ghostsReturningToPrision;
 	};
 }
 

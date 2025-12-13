@@ -5,7 +5,20 @@
 #ifndef GHOSTSBEHAVIOURMANAGER_H
 #define GHOSTSBEHAVIOURMANAGER_H
 
+#include <memory>
+#include <vector>
+
 #include "GEngine/Tickables/Tickable.h"
+
+namespace GEngine
+{
+	class Entity;
+}
+
+namespace PacMan
+{
+	class GameplayEntities;
+}
 
 namespace PacMan
 {
@@ -15,21 +28,26 @@ namespace PacMan
 	{
 	public:
 		explicit GhostsBehaviourManager(
-			GhostsStateData* ghostsStateData
+			GhostsStateData* ghostsStateData,
+			GameplayEntities* gameplayEntities
 			);
 
 		void Tick() override;
 
 		void StartGhostsBehaviours() const;
+		void ResetGhostsBehavioursState() const;
 		void SetGhostsFrightened() const;
-		void ResetGhostsState() const;
 
 	private:
 		void TickCheckScatterChaseBehaviour() const;
 		void TickCheckGhostsFrightenedTimeFinished() const;
+		void SetNonDeathGhostsMovementSpeed(float speed) const;
 
 	private:
 		GhostsStateData* const _ghostsStateData;
+		GameplayEntities* const _gameplayEntities;
+
+		float _initialGhostsMovementSpeed = 30;
 	};
 }
 

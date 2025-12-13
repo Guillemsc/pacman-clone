@@ -9,13 +9,21 @@
 #include "GEngine/Entities/Entity.h"
 #include "PacMan/Gameplay/Entities/Components/EntityIdComponent.h"
 #include "PacMan/Gameplay/Entities/Enums/EntityType.h"
+#include "PacMan/Gameplay/Ghosts/Data/GhostsStateData.h"
+#include "PacMan/Gameplay/Ghosts/Managers/GhostsPrisionManager.h"
 #include "PacMan/Gameplay/Pellets/Managers/PelletCollectionManager.h"
 #include "spdlog/spdlog.h"
 
 namespace PacMan
 {
-	PlayerCollisionsManager::PlayerCollisionsManager(PelletCollectionManager *pelletCollectionManager)
-		: _pelletCollectionManager(pelletCollectionManager)
+	PlayerCollisionsManager::PlayerCollisionsManager(
+		PelletCollectionManager* pelletCollectionManager,
+		GhostsPrisionManager* ghostsPrisionManager,
+		GhostsStateData* ghostsStateData
+		)
+		: _pelletCollectionManager(pelletCollectionManager),
+		_ghostsPrisionManager(ghostsPrisionManager),
+		_ghostsStateData(ghostsStateData)
 	{
 
 	}
@@ -57,6 +65,13 @@ namespace PacMan
 
 	void PlayerCollisionsManager::HandleGhostCollision(const std::shared_ptr<GEngine::Entity> &collider) const
 	{
-		_playerDeathManager->RunDeath();
+		if (_ghostsStateData->ghostsMode == GhostMode::FRIGHTENED)
+		{
+			_ghostsPrisionManager->KillGhostAndStartPathBackToPrision(collider);
+		}
+		else
+		{
+			_playerDeathManager->RunDeath();
+		}
 	}
 }

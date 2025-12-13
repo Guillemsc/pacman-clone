@@ -43,8 +43,12 @@ namespace PacMan
 
 		void SetCanMove(bool set);
 		void SetCanAutomaticallyFindNextDirection(bool set);
+		void SetCanAutomaticallyKeepMovingOnCurrentDirection(bool set);
+
 		void SetNextDirection(const GEngine::CardinalDirection& nextDirection);
 		PathfindingResult PathfindToGridPosition(const glm::i32vec2& targetGridPosition);
+
+		void SetMovementSpeed(float speed);
 
 		[[nodiscard]] glm::i32vec2 GetGridDirectionVector() const;
 		[[nodiscard]] bool GetIsMovingRandomly() const;
@@ -76,6 +80,9 @@ namespace PacMan
 
 		bool _canMove = true;
 		bool _canAutomaticallyFindNextDirection = false;
+		bool _canAutomaticallyKeepMovingOnCurrentDirection = true;
+
+		float _movementSpeed = 30.0f;
 
 		glm::i32vec2 _currentGridPosition = glm::i32vec2(0);
 		bool _hasValidGridPosition = false;
@@ -83,7 +90,8 @@ namespace PacMan
 		std::vector<glm::i32vec2> _pathToFollow;
 		float _distanceCarriedFromLastPathPoint = 0;
 		glm::i32vec2 _currentDirectionVector = glm::i32vec2(0);
-		glm::i32vec2 _lastPathPointDirectionVector = glm::i32vec2(0);
+		glm::i32vec2 _gridDirectionVector = glm::i32vec2(0);
+		glm::i32vec2 _targetGridPosition = glm::i32vec2(0);
 		bool _hasValidLastPathPointData = false;
 
 		std::optional<GEngine::CardinalDirection> _nextDirectionWhenPathEmpty;

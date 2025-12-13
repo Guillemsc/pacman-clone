@@ -11,8 +11,17 @@
 
 namespace PacMan
 {
-	PlayerAnimationComponent::PlayerAnimationComponent(GEngine::GEngineCoreModules *modules, const std::weak_ptr<GEngine::Entity> &entity)
-		: Component(modules, entity)
+	PlayerAnimationComponent::PlayerAnimationComponent(
+		GEngine::GEngineCoreModules *modules,
+		const std::weak_ptr<GEngine::Entity> &entity,
+		const std::weak_ptr<MapMovementComponent> &mapMovementComponent,
+		const std::weak_ptr<GEngine::Sprite2dRendererComponent> &spriteRendererComponent,
+		const std::weak_ptr<GEngine::Sprite2dAnimatorComponent> &spriteAnimatorComponent
+		)
+		: Component(modules, entity),
+		_mapMovementComponent(mapMovementComponent),
+		_spriteRendererComponent(spriteRendererComponent),
+		_spriteAnimatorComponent(spriteAnimatorComponent)
 	{
 	}
 
@@ -48,16 +57,5 @@ namespace PacMan
 		{
 			transform->SetLocalRotationEulerDegreesZ(-90);
 		}
-	}
-
-	void PlayerAnimationComponent::Init(
-		const std::weak_ptr<MapMovementComponent> &mapMovementComponent,
-		const std::weak_ptr<GEngine::Sprite2dRendererComponent> &spriteRendererComponent,
-		const std::weak_ptr<GEngine::Sprite2dAnimatorComponent>& spriteAnimatorComponent
-		)
-	{
-		_mapMovementComponent = mapMovementComponent;
-		_spriteRendererComponent = spriteRendererComponent;
-		_spriteAnimatorComponent = spriteAnimatorComponent;
 	}
 }

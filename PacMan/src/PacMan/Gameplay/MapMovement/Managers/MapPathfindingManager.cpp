@@ -98,12 +98,12 @@ namespace PacMan
 
 		while (true)
 		{
+			generatedPath.push_back(checkingNode->position);
+
 			if (checkingNode->position == originGridPosition)
 			{
 				break;
 			}
-
-			generatedPath.push_back(checkingNode->position);
 
 			checkingNode = checkingNode->parent;
 

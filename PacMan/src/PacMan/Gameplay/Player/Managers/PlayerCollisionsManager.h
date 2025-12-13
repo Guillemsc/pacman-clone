@@ -9,6 +9,13 @@
 
 namespace PacMan
 {
+	class GhostsPrisionManager;
+	class GhostsBehaviourManager;
+}
+
+namespace PacMan
+{
+	struct GhostsStateData;
 	class PelletCollectionManager;
 	class PlayerDeathManager;
 }
@@ -25,7 +32,9 @@ namespace PacMan
 	{
 	public:
 		explicit PlayerCollisionsManager(
-			PelletCollectionManager* pelletCollectionManager
+			PelletCollectionManager* pelletCollectionManager,
+			GhostsPrisionManager* ghostsPrisionManager,
+			GhostsStateData* ghostsStateData
 		);
 		void Init(PlayerDeathManager* playerDeathManager);
 
@@ -36,6 +45,8 @@ namespace PacMan
 
 	private:
 		PelletCollectionManager* const _pelletCollectionManager;
+		GhostsPrisionManager* const _ghostsPrisionManager;
+		GhostsStateData* const _ghostsStateData;
 
 		PlayerDeathManager* _playerDeathManager = nullptr;
 	};

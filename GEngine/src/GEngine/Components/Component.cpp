@@ -17,16 +17,16 @@ namespace GEngine
 		return _entity;
 	}
 
-	bool Component::IsEnanbled() const
-	{
-		return _isEnabledSelf;
-	}
-
 	void Component::SetEnabled(const bool enabled)
 	{
 		_isEnabledSelf = enabled;
 
 		RefreshEnabledState();
+	}
+
+	bool Component::IsEnabled() const
+	{
+		return _isEnabledSelf;
 	}
 
 	void Component::RefreshEnabledState()

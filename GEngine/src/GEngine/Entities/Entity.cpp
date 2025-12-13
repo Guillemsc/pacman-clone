@@ -188,6 +188,8 @@ namespace GEngine
 	{
 		for (auto it = _components.begin(); it != _components.end(); ++it)
 		{
+			if (!(*it)->_isEnabledInHierarchy) continue;
+
 			(*it)->OnTick();
 			modules->guizmos->DrawComponentGuizmo(it->get());
 		}

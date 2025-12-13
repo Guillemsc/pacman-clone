@@ -25,8 +25,8 @@ namespace GEngine
 
 		[[nodiscard]] std::weak_ptr<Entity> GetEntity() const;
 
-		[[nodiscard]] bool IsEnanbled() const;
 		void SetEnabled(bool enabled);
+		[[nodiscard]] bool IsEnabled() const;
 
 		[[nodiscard]] virtual constexpr const char* GetTypeName() const = 0;
 

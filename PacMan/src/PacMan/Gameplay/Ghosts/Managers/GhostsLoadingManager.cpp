@@ -53,21 +53,21 @@ namespace PacMan
 			_mapGhostInitialGridPosition,
 			false
 			);
-		_loadedGhostsData.LeftPrisionSlotGhostEntity = LoadGhost(
-			GhostType::CIAN_GHOST,
-			_ghostPrisionLeftSlotInitialGridPosition,
-			true
-			);
-		_loadedGhostsData.CenterPrisionSlotGhostEntity = LoadGhost(
-			GhostType::PINK_GHOST,
-			_ghostPrisionCenterSlotInitialGridPosition,
-			true
-			);
-		_loadedGhostsData.RightPrisionSlotGhostEntity = LoadGhost(
-			GhostType::ORANGE_GHOST,
-			_ghostPrisionRightSlotInitialGridPosition,
-			true
-			);
+		// _loadedGhostsData.LeftPrisionSlotGhostEntity = LoadGhost(
+		// 	GhostType::CIAN_GHOST,
+		// 	_ghostPrisionLeftSlotInitialGridPosition,
+		// 	true
+		// 	);
+		// _loadedGhostsData.CenterPrisionSlotGhostEntity = LoadGhost(
+		// 	GhostType::PINK_GHOST,
+		// 	_ghostPrisionCenterSlotInitialGridPosition,
+		// 	true
+		// 	);
+		// _loadedGhostsData.RightPrisionSlotGhostEntity = LoadGhost(
+		// 	GhostType::ORANGE_GHOST,
+		// 	_ghostPrisionRightSlotInitialGridPosition,
+		// 	true
+		// 	);
 
 		GGAME_INFO("Ghosts loaded.");
 	}
@@ -116,7 +116,9 @@ namespace PacMan
 		shape->SetColor(ghostColor);
 
 		const std::shared_ptr<GEngine::Collider2dComponent> collider = ghostEntity->AddComponent<GEngine::Collider2dComponent>().lock();
-		collider->SetLayer(CollisionLayers::COLLISION_LAYER_GHOST);
+
+		const std::uint32_t collisionLayer = isPrision ? CollisionLayers::COLLISION_LAYER_DEFAULT : CollisionLayers::COLLISION_LAYER_GHOST;
+		collider->SetLayer(collisionLayer);
 
 		if (isPrision)
 		{

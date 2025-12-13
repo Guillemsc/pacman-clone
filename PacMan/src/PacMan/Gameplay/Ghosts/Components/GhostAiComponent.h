@@ -27,6 +27,7 @@ namespace PacMan
 			const std::weak_ptr<MapMovementComponent>& mapMovementComponent
 			);
 
+		void OnEnable() override;
 		void OnTick() override;
 
 	protected:

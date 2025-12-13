@@ -48,6 +48,7 @@ namespace PacMan
 		std::unique_ptr<MapMovementManager> mapMovementManager = std::make_unique<MapMovementManager>();
 
 		std::unique_ptr<GameplayEntities> gameplayEntities = std::make_unique<GameplayEntities>();
+		std::unique_ptr<GhostsStateData> ghostsStateData = std::make_unique<GhostsStateData>();
 
 		std::unique_ptr<EntitiesManager> entitiesManager = std::make_unique<EntitiesManager>(
 			gameplayEntities.get()
@@ -56,17 +57,17 @@ namespace PacMan
 		std::shared_ptr<GhostsPrisionManager> ghostsPrisionManager = std::make_shared<GhostsPrisionManager>(
 			_modules,
 			GetCoroutinesRunner(),
-			mapMovementManager.get()
+			mapMovementManager.get(),
+			ghostsStateData.get()
 			);
 		_modules->tickables->AddTickable(ghostsPrisionManager);
 
 		std::shared_ptr<PlayerInputSystem> playerInputSystem = std::make_shared<PlayerInputSystem>();
 		_modules->tickables->AddTickable(playerInputSystem);
 
-		std::unique_ptr<GhostsStateData> ghostsStateData = std::make_unique<GhostsStateData>();
-
 		std::shared_ptr<GhostsBehaviourManager> ghostsBehaviourManager = std::make_shared<GhostsBehaviourManager>(
-			ghostsStateData.get()
+			ghostsStateData.get(),
+			gameplayEntities.get()
 			);
 		_modules->tickables->AddTickable(ghostsBehaviourManager);
 
@@ -75,7 +76,9 @@ namespace PacMan
 			);
 
 		std::unique_ptr<PlayerCollisionsManager> playerCollisionsManager = std::make_unique<PlayerCollisionsManager>(
-			pelletsCollectionManager.get()
+			pelletsCollectionManager.get(),
+			ghostsPrisionManager.get(),
+			ghostsStateData.get()
 			);
 
 		std::unique_ptr<MapPathfindingManager> mapPathfindingManager = std::make_unique<MapPathfindingManager>(mapMovementManager.get());

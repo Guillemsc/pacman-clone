@@ -60,6 +60,31 @@ namespace GEngine
 			if (v == Zero) return Zero;
 			return glm::normalize(v);
 		}
+
+		static glm::i32vec2 Normalize(const glm::i32vec2& v)
+		{
+			glm::i32vec2 ret = glm::i32vec2(0);
+
+			if (v.x > 0)
+			{
+				ret.x = 1;
+			}
+			else if (v.x < 0)
+			{
+				ret.x = -1;
+			}
+
+			if (v.y > 0)
+			{
+				ret.y = 1;
+			}
+			else if (v.y < 0)
+			{
+				ret.y = -1;
+			}
+
+			return ret;
+		}
 	};
 }
 

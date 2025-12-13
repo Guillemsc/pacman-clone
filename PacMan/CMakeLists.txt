@@ -79,6 +79,8 @@ add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Gameplay/Ghosts/Managers/GhostsBehaviourManager.h
         src/PacMan/Gameplay/Ghosts/Enums/GhostMode.h
         src/PacMan/Gameplay/MapMovement/Data/PathfindingResult.h
+        src/PacMan/Gameplay/Ghosts/Components/GhostAnimationComponent.cpp
+        src/PacMan/Gameplay/Ghosts/Components/GhostAnimationComponent.h
 )
 
 target_link_libraries(PacMan PRIVATE GEngineCore)
