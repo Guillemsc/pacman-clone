@@ -5,6 +5,7 @@
 #include "GhostAiComponent.h"
 
 #include "glm/vec2.hpp"
+#include "PacMan/Gameplay/Entities/Data/GameplayEntities.h"
 #include "PacMan/Gameplay/Ghosts/Data/GhostsStateData.h"
 
 namespace PacMan
@@ -77,5 +78,20 @@ namespace PacMan
 				_hasValidPreviousTargetGridPosition = true;
 			}
 		}
+	}
+
+	glm::i32vec2 GhostAiComponent::GetFrightenedTargetGridPosition() const
+	{
+		const std::shared_ptr<MapMovementComponent> mapMovement = _mapMovementComponent.lock();
+		if (!mapMovement) return glm::i32vec2(0);
+
+		const std::shared_ptr<GEngine::Entity> player = _gameplayEntities->Player.lock();
+		if (!player) return glm::i32vec2(0);
+
+		const std::shared_ptr<MapMovementComponent> playerMapMovement = player->GetComponent<MapMovementComponent>().lock();
+
+		const glm::i32vec2 distance = playerMapMovement->GetGridPosition() - mapMovement->GetGridPosition();
+
+		return mapMovement->GetGridPosition() - (distance * 2);
 	}
 } // PacMan

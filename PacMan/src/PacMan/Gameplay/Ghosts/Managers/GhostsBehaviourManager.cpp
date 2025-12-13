@@ -64,7 +64,7 @@ namespace PacMan
 	{
 		if (_ghostsStateData->ghostsMode != GhostMode::FRIGHTENED) return;
 
-		const bool timeReached = _ghostsStateData->ghostsFrightenedTimer.GetTimeSeconds() >= 8;
+		const bool timeReached = _ghostsStateData->ghostsFrightenedTimer.GetTimeSeconds() >= 999;
 
 		if (!timeReached) return;
 

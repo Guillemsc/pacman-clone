@@ -32,7 +32,9 @@ namespace PacMan
 	protected:
 		virtual glm::i32vec2 GetChaseTargetGridPosition() const = 0;
 		virtual glm::i32vec2 GetScatterTargetGridPosition() const = 0;
-		virtual glm::i32vec2 GetFrightenedTargetGridPosition() const = 0;
+
+	private:
+		glm::i32vec2 GetFrightenedTargetGridPosition() const;
 
 	protected:
 		GhostsStateData* const _ghostsStateData;

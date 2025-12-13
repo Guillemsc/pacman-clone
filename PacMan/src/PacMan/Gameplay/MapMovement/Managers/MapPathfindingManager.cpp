@@ -91,11 +91,26 @@ namespace PacMan
 
 		std::shared_ptr<PathfindingNode> checkingNode = foundNode;
 
-		while (checkingNode->position != originGridPosition)
+		if (checkingNode->position == originGridPosition)
 		{
+			return { false, false, originGridPosition };
+		}
+
+		while (true)
+		{
+			if (checkingNode->position == originGridPosition)
+			{
+				break;
+			}
+
 			generatedPath.push_back(checkingNode->position);
 
 			checkingNode = checkingNode->parent;
+
+			if (!checkingNode)
+			{
+				break;
+			}
 		}
 
 		std::ranges::reverse(generatedPath);

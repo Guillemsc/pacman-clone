@@ -12,7 +12,7 @@ namespace PacMan
     glm::i32vec2 OrangeGhostAiComponent::GetChaseTargetGridPosition() const
     {
         const std::shared_ptr<GEngine::Entity> player = _gameplayEntities->Player.lock();
-        if (player == nullptr) return { 0, 0 };
+        if (!player) return glm::i32vec2(0);
 
         const std::shared_ptr<MapMovementComponent> mapMovement = player->GetComponent<MapMovementComponent>().lock();
 
@@ -22,10 +22,5 @@ namespace PacMan
     glm::i32vec2 OrangeGhostAiComponent::GetScatterTargetGridPosition() const
     {
         return { -999, -999 };
-    }
-
-    glm::i32vec2 OrangeGhostAiComponent::GetFrightenedTargetGridPosition() const
-    {
-        return { 0, 0 };
     }
 }

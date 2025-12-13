@@ -117,8 +117,6 @@ namespace PacMan
 	{
 		if (!_hasValidGridPosition) return { false, false, _currentGridPosition };
 
-		ClearPath();
-
 		glm::i32vec2 direction = glm::i32vec2(0);
 
 		if (_hasValidLastPathPointData)
@@ -126,15 +124,19 @@ namespace PacMan
 			direction = _lastPathPointDirectionVector;
 		}
 
+		std::vector<glm::i32vec2> newGeneratedPath;
+
 		const PathfindingResult pathfindingResult = _mapPathfindingManager->GeneratePath(
 			_currentGridPosition,
 			direction,
 			targetGridPosition,
-			_pathToFollow
+			newGeneratedPath
 			);
 
 		if (pathfindingResult.couldReachAnyPosition)
 		{
+			ClearPath();
+			_pathToFollow = newGeneratedPath;
 			_isMovingRandomly = false;
 		}
 
@@ -173,10 +175,14 @@ namespace PacMan
 
 		if (hasReachedTarget)
 		{
-			_lastPathPointDirectionVector = nextPathGridPosition - _currentGridPosition;
+			if (nextPathGridPosition != _currentGridPosition)
+			{
+				_lastPathPointDirectionVector = nextPathGridPosition - _currentGridPosition;
+				_hasValidLastPathPointData = true;
+			}
+
 			_currentGridPosition = nextPathGridPosition;
 			_hasValidGridPosition = true;
-			_hasValidLastPathPointData = true;
 
 			_pathToFollow.erase(_pathToFollow.begin());
 
