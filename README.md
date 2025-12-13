@@ -25,6 +25,6 @@ A simple **Pac-Man** clone done as an example of the **C++** game engine framewo
 Main program entry point can be found [here](https://github.com/Guillemsc/pacman-clone/blob/main/PacMan/src/PacMan/Bootstrap/main.cpp).
 Here, GEngine is initialized, and PacMan is loaded and run.
 
-## References
+## References:
 - [Game Internals: Understanding Pac-Man Ghost Behavior](https://gameinternals.com/understanding-pac-man-ghost-behavior)
 
