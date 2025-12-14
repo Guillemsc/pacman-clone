@@ -26,6 +26,11 @@ namespace GEngine
 			}
 		}
 
+		void SetWhenReset(const std::function<void(T*)>& whenReset)
+		{
+			_whenReset = whenReset;
+		}
+
 		Ptr Acquire()
 		{
 			T* obj = nullptr;
@@ -43,13 +48,18 @@ namespace GEngine
 			// Wrap in unique_ptr with custom deleter
 			return Ptr(obj, [this](T* ptr)
 			{
-				//Reset(ptr);       // Optional: reset object state
+				if (_whenReset)
+				{
+					_whenReset(ptr);
+				}
+
 				_objects.push(ptr); // Return to pool
 			});
 		}
 
 	private:
 		std::stack<T*> _objects;
+		std::function<void(T*)> _whenReset;
 	};
 }
 

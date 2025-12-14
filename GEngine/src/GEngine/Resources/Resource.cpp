@@ -9,8 +9,8 @@ namespace GEngine
 	Resource::Resource(const std::filesystem::path &fullPath, const std::filesystem::path &resourcesPath)
 		: _fullPath(fullPath), _resourcesPath(resourcesPath)
 	{
-		_fullPathStringView = std::string_view(_fullPath.c_str());
-		_resourcesPathStringView = std::string_view(_resourcesPath.c_str());
+		_fullPathStringView = std::string_view(_fullPath.string().c_str());
+		_resourcesPathStringView = std::string_view(_resourcesPath.string().c_str());
 	}
 
 	std::filesystem::path Resource::GetFullPath() const

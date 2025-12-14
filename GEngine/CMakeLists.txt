@@ -287,7 +287,6 @@ add_library(GEngineCore STATIC
         src/GEngine/Memory/MemoryTracker.h
         src/GEngine/Editor/Windows/MemoryEditorWindow.cpp
         src/GEngine/Editor/Windows/MemoryEditorWindow.h
-        src/GEngine/Pooling/ObjectPool.cpp
         src/GEngine/Pooling/ObjectPool.h
         src/GEngine/Strings/StringBuilder.cpp
         src/GEngine/Strings/StringBuilder.h

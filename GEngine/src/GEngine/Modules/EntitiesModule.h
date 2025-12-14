@@ -60,7 +60,6 @@ namespace GEngine
 		std::uint32_t _nextEntityId = 1;
 
 		ObjectPool<std::vector<std::shared_ptr<Entity>>> _entitiesVectorPool;
-		std::vector<std::shared_ptr<Entity>> _checkingRemovingEntitiesBuffer;
 	};
 }
 

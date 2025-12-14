@@ -16,7 +16,10 @@ namespace GEngine
 {
 	EntitiesModule::EntitiesModule()
 	{
-
+		_entitiesVectorPool.SetWhenReset([](std::vector<std::shared_ptr<Entity>>* vector)
+		{
+			vector->clear();
+		});
 	}
 
 	void EntitiesModule::Init(GEngineCoreModules* modules)
@@ -112,21 +115,21 @@ namespace GEngine
 
 		VectorExtensions::Remove(_rootEntities, entity);
 
-		_checkingRemovingEntitiesBuffer.clear();
+		const ObjectPool<std::vector<std::shared_ptr<Entity>>>::Ptr entitiesBuffer = _entitiesVectorPool.Acquire();
 
-		_checkingRemovingEntitiesBuffer.push_back(entity);
+		entitiesBuffer->push_back(entity);
 
-		while (_checkingRemovingEntitiesBuffer.size() > 0)
+		while (entitiesBuffer->size() > 0)
 		{
-			const std::shared_ptr<Entity> checking = _checkingRemovingEntitiesBuffer.front();
-			_checkingRemovingEntitiesBuffer.erase(_checkingRemovingEntitiesBuffer.begin());
+			const std::shared_ptr<Entity> checking = entitiesBuffer->front();
+			entitiesBuffer->erase(entitiesBuffer->begin());
 
 			for (auto it = checking->_childEntities.begin(); it != checking->_childEntities.end(); ++it)
 			{
 				const std::shared_ptr<Entity> child = it->lock();
 				if (child == nullptr) continue;
 
-				_checkingRemovingEntitiesBuffer.push_back(child);
+				entitiesBuffer->push_back(child);
 			}
 
 			checking->Dispose();
@@ -258,7 +261,6 @@ namespace GEngine
 	void EntitiesModule::ForEachEntityInHierarchy(const std::function<void(const std::shared_ptr<Entity> &)> &callback)
 	{
 		const ObjectPool<std::vector<std::shared_ptr<Entity>>>::Ptr entitiesBuffer = _entitiesVectorPool.Acquire();
-		entitiesBuffer->clear();
 
 		for (auto it = _rootEntities.begin(); it != _rootEntities.end(); ++it)
 		{
