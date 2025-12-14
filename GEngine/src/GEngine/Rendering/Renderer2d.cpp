@@ -24,16 +24,6 @@ namespace GEngine
 
 	void Renderer2d::Render()
 	{
-		Add(0, []()
-		{
-			rlDrawText("Hello, raylib!", 190, 200, 20, LIGHTGRAY);
-		});
-
-		Add(1, []()
-		{
-			rlDrawText("Hello, raylib! 2", 190, 200, 20, RED);
-		});
-
 		_renderQueue.Execute();
 	}
 

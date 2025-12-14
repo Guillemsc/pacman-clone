@@ -21,16 +21,16 @@ namespace GEngine
 
 	bool GuizmosModule::IsComponentEnabled(const Component *component) const
 	{
-		const std::string name = component->GetTypeName();
+		const std::string_view& name = component->GetTypeName();
 		return _enabledComponents.contains(name);
 	}
 
-	bool GuizmosModule::IsComponentEnabled(const std::string &componentName) const
+	bool GuizmosModule::IsComponentEnabled(const std::string_view &componentName) const
 	{
 		return _enabledComponents.contains(componentName);
 	}
 
-	void GuizmosModule::SetComponentEnabled(const std::string &componentName, const bool enabled)
+	void GuizmosModule::SetComponentEnabled(const std::string_view &componentName, const bool enabled)
 	{
 		if (enabled)
 		{

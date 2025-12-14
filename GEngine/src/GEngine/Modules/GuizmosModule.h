@@ -22,14 +22,14 @@ namespace GEngine
 		void Init(GEngineCoreModules* modules);
 
 		bool IsComponentEnabled(const Component* component) const;
-		bool IsComponentEnabled(const std::string& componentName) const;
-		void SetComponentEnabled(const std::string& componentName, bool enabled);
+		bool IsComponentEnabled(const std::string_view& componentName) const;
+		void SetComponentEnabled(const std::string_view& componentName, bool enabled);
 		void DrawComponentGuizmo(Component* component) const;
 
 	private:
 		GEngineCoreModules* _modules = nullptr;
 
-		std::unordered_set<std::string> _enabledComponents;
+		std::unordered_set<std::string_view> _enabledComponents;
 	};
 }
 

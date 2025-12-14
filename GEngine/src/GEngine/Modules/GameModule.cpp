@@ -36,12 +36,12 @@ namespace GEngine
 		if (!_currentGame) return;
 
 		_currentGame->Dispose();
-		_currentGame = nullptr;
+		_currentGame.reset();
 	}
 
 	void GameModule::LoadGame(const std::shared_ptr<Game>& game)
 	{
-		if (_currentGame != nullptr)
+		if (_currentGame)
 		{
 			GENGINE_INFO("Unloading game {}", _currentGame->GetName());
 			_currentGame->Dispose();

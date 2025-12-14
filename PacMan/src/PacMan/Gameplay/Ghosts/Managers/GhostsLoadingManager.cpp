@@ -53,21 +53,21 @@ namespace PacMan
 			_mapGhostInitialGridPosition,
 			false
 			);
-		// _loadedGhostsData.LeftPrisionSlotGhostEntity = LoadGhost(
-		// 	GhostType::CIAN_GHOST,
-		// 	_ghostPrisionLeftSlotInitialGridPosition,
-		// 	true
-		// 	);
-		// _loadedGhostsData.CenterPrisionSlotGhostEntity = LoadGhost(
-		// 	GhostType::PINK_GHOST,
-		// 	_ghostPrisionCenterSlotInitialGridPosition,
-		// 	true
-		// 	);
-		// _loadedGhostsData.RightPrisionSlotGhostEntity = LoadGhost(
-		// 	GhostType::ORANGE_GHOST,
-		// 	_ghostPrisionRightSlotInitialGridPosition,
-		// 	true
-		// 	);
+		_loadedGhostsData.LeftPrisionSlotGhostEntity = LoadGhost(
+			GhostType::CIAN_GHOST,
+			_ghostPrisionLeftSlotInitialGridPosition,
+			true
+			);
+		_loadedGhostsData.CenterPrisionSlotGhostEntity = LoadGhost(
+			GhostType::PINK_GHOST,
+			_ghostPrisionCenterSlotInitialGridPosition,
+			true
+			);
+		_loadedGhostsData.RightPrisionSlotGhostEntity = LoadGhost(
+			GhostType::ORANGE_GHOST,
+			_ghostPrisionRightSlotInitialGridPosition,
+			true
+			);
 
 		GGAME_INFO("Ghosts loaded.");
 	}

@@ -57,9 +57,9 @@ namespace GEngine
 
 			const std::shared_ptr<IComponentInspectorEditor> inspector = GetInspectorEditor(it->get());
 
-			const char* name = (*it)->GetTypeName();
+			const std::string_view& name = (*it)->GetTypeName();
 
-			if (ImGui::CollapsingHeader(name, ImGuiTreeNodeFlags_DefaultOpen))
+			if (ImGui::CollapsingHeader(name.data(), ImGuiTreeNodeFlags_DefaultOpen))
 			{
 				if (inspector)
 				{

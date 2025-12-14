@@ -4,7 +4,6 @@
 
 #include "CoroutinesModule.h"
 
-#include "GEngine/Coroutines/Coroutines.h"
 #include "GEngine/Coroutines/CoroutinesRunner.h"
 #include "GEngine/Extensions/VectorExtensions.h"
 
@@ -13,11 +12,12 @@ namespace GEngine
 	void CoroutinesModule::Init(GEngineCoreModules *modules)
 	{
 		_modules = modules;
+		_mainRunner = std::make_shared<CoroutinesRunner>();
 	}
 
 	void CoroutinesModule::Tick() const
 	{
-		Coroutines::Scheduler().Update();
+		_mainRunner->Tick();
 
 		for (int i = _runners.size() - 1; i >= 0; i--)
 		{
@@ -27,7 +27,13 @@ namespace GEngine
 
 	void CoroutinesModule::Dispose()
 	{
+		_mainRunner.reset();
 		_runners.clear();
+	}
+
+	CoroutinesRunner* CoroutinesModule::GetMainRunner() const
+	{
+		return _mainRunner.get();
 	}
 
 	std::weak_ptr<CoroutinesRunner> CoroutinesModule::CreateRunner()

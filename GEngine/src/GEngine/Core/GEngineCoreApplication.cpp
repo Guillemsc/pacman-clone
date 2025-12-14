@@ -4,7 +4,9 @@
 
 #include "GEngineCoreApplication.h"
 
+#include "GEngine/Memory/MemoryTracker.h"
 #include "GEngine/Logging/GEngineLog.h"
+#include "GEngine/Memory/MemoryTracker.h"
 #include "GEngine/Modules/CameraModule.h"
 #include "GEngine/Modules/Collisions2dModule.h"
 #include "GEngine/Modules/ConfigurationModule.h"
@@ -31,6 +33,8 @@ namespace GEngine
 	GEngineCoreApplication::GEngineCoreApplication()
 	{
 		GEngineLog::Init();
+
+		MemoryTracker::Reset();
 
 		GENGINE_INFO("Welcome to GEngine :)");
 
@@ -79,7 +83,6 @@ namespace GEngine
 
 	GEngineCoreApplication::~GEngineCoreApplication()
 	{
-		GENGINE_INFO("Bye :)");
 	}
 
 	void GEngineCoreApplication::Init() const
@@ -136,7 +139,7 @@ namespace GEngine
 		_entities->LateTick();
 	}
 
-	void GEngineCoreApplication::Dispose() const
+	void GEngineCoreApplication::Dispose()
 	{
 		GENGINE_INFO("GEngine Dispose started.");
 
@@ -149,9 +152,36 @@ namespace GEngine
 		_ui->Dispose();
 		_deferredExecution->Dispose();
 		_resources->Dispose();
+		_coroutines->Dispose();
 		_rendering->Dispose();
 		_window->Dispose();
 
+		_modules.reset();
+		_configuration.reset();
+		_entities.reset();
+		_game.reset();
+		_camera.reset();
+		_window.reset();
+		_rendering.reset();
+		_resources.reset();
+		_time.reset();
+		_tickables.reset();
+		_input.reset();
+		_ui.reset();
+		_editor.reset();
+		_coroutines.reset();
+		_examples.reset();
+		_tweens.reset();
+		_guizmos.reset();
+		_collisions2d.reset();
+		_deferredExecution.reset();
+		_random.reset();
+
 		GENGINE_INFO("GEngine Dispose finished.");
+		GENGINE_INFO("Bye :)");
+
+		MemoryTracker::LogLeaks();
+
+		GEngineLog::Dispose();
 	}
 } // GEngineCore

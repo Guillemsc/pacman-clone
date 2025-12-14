@@ -56,9 +56,9 @@ namespace GEngine
 			return nullptr;
 		}
 
-		static void Clear()
+		static void Dispose()
 		{
-			_services.clear();
+			_services = std::unordered_map<std::type_index, void*>();
 		}
 
 	private:

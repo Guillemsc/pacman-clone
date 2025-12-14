@@ -9,7 +9,8 @@
 #include "GEngine/Components/UiShapeButtonComponent.h"
 #include "GEngine/Components/UiShapeRendererComponent.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
-#include "GEngine/Coroutines/Coroutines.h"
+#include "GEngine/Coroutines/CoroutinesRunner.h"
+#include "GEngine/Modules/CoroutinesModule.h"
 #include "GEngine/Modules/EntitiesModule.h"
 #include "GEngine/ServiceLocators/ServiceLocator.h"
 #include "spdlog/spdlog.h"
@@ -42,6 +43,6 @@ namespace PacMan
 		ContextsStack* contextsStack = GEngine::ServiceLocator::Get<ContextsStack>();
 
 		contextsStack->Pop();
-		GEngine::Coroutines::Start(&ContextsStack::PushAsync, contextsStack, std::make_shared<GameplayContext>(_modules)).Forget();
+		_modules->coroutines->GetMainRunner()->Start(&ContextsStack::PushAsync, contextsStack, std::make_shared<GameplayContext>(_modules)).Forget();
 	}
 }

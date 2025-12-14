@@ -257,27 +257,28 @@ namespace GEngine
 
 	void EntitiesModule::ForEachEntityInHierarchy(const std::function<void(const std::shared_ptr<Entity> &)> &callback)
 	{
-		std::vector<std::shared_ptr<Entity>> toCheck;
+		const ObjectPool<std::vector<std::shared_ptr<Entity>>>::Ptr entitiesBuffer = _entitiesVectorPool.Acquire();
+		entitiesBuffer->clear();
 
 		for (auto it = _rootEntities.begin(); it != _rootEntities.end(); ++it)
 		{
 			const std::shared_ptr<Entity> rootEntity = it->lock();
 			if (!rootEntity) continue;
 
-			toCheck.push_back(rootEntity);
+			entitiesBuffer->push_back(rootEntity);
 		}
 
-		while (toCheck.size() > 0)
+		while (entitiesBuffer->size() > 0)
 		{
-			std::shared_ptr<Entity> checking = toCheck.front();
-			toCheck.erase(toCheck.begin());
+			std::shared_ptr<Entity> checking = entitiesBuffer->front();
+			entitiesBuffer->erase(entitiesBuffer->begin());
 
 			for (auto it = checking->GetChildren().begin(); it != checking->GetChildren().end(); ++it)
 			{
 				const std::shared_ptr<Entity> childEntity = it->lock();
 				if (!childEntity) continue;
 
-				toCheck.push_back(childEntity);
+				entitiesBuffer->push_back(childEntity);
 			}
 
 			callback(checking);

@@ -6,13 +6,14 @@
 #define RESOURCESEDITORWINDOW_H
 
 #include "EditorWindow.h"
+#include "GEngine/Strings/StringBuilder.h"
 
 namespace GEngine
 {
 	class Resource;
 	class EditorModule;
 
-	class ResourcesEditorWindow : public EditorWindow
+	class ResourcesEditorWindow final : public EditorWindow
 	{
 	public:
 		explicit ResourcesEditorWindow(GEngineCoreModules* modules);
@@ -24,6 +25,9 @@ namespace GEngine
 			EditorModule* editor,
 			const std::shared_ptr<Resource> &resource
 		);
+
+	private:
+		StringBuilder _stringBuilder;
 	};
 }
 

@@ -8,6 +8,7 @@
 #include "glm/vec2.hpp"
 
 #include "GEngine/Extensions/VectorExtensions.h"
+#include "GEngine/Memory/MemoryTracker.h"
 #include "tmxlite/TileLayer.hpp"
 
 namespace GEngine
@@ -168,7 +169,10 @@ namespace GEngine
 
 	void TiledMapResource::Dispose()
 	{
+		MemoryTracker::isTracking = false;
 		_tiledMapPtr.reset();
+		MemoryTracker::isTracking = true;
+
 		_tilesetFirstGuidByTilesetIndex.clear();
 		_tileSetTextures.clear();
 	}

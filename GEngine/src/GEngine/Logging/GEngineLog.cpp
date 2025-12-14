@@ -24,6 +24,12 @@ namespace GEngine
 		RaylibLogger::Init();
 	}
 
+	void GEngineLog::Dispose()
+	{
+		_coreLogger.reset();
+		_gameLogger.reset();
+	}
+
 	std::shared_ptr<spdlog::logger> GEngineLog::_coreLogger;
 	std::shared_ptr<spdlog::logger> GEngineLog::_gameLogger;
 }

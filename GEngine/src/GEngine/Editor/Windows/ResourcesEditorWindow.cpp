@@ -28,8 +28,9 @@ namespace GEngine
 
 		for (auto it = resourcesList.begin(); it != resourcesList.end(); ++it)
 		{
-			std::string resourcePath = (*it)->GetResourcesPath().string();
-			std::string displayString = std::format("{} | {}", (*it)->GetTypeName(), resourcePath);
+			std::string_view resourcePath = (*it)->GetResourcesPathStringView();
+			_stringBuilder.Clear();
+			_stringBuilder.AppendFormat("%s | %s", (*it)->GetTypeName(), resourcePath.data());
 
 			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf;
 
@@ -43,7 +44,7 @@ namespace GEngine
 				}
 			}
 
-			if (ImGui::TreeNodeEx(displayString.c_str(), flags))
+			if (ImGui::TreeNodeEx(_stringBuilder.c_str(), flags))
 			{
 				DrawLeftClickContextMenu(_modules->editor, *it);
 

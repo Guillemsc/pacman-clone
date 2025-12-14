@@ -25,7 +25,7 @@ namespace GEngine
 		}
 		else
 		{
-			ImGui::Text("%s: %s", resourceName, resource->GetResourcesPath().c_str());
+			ImGui::Text("%s: %s", resourceName, resource->GetResourcesPathStringView().data());
 
 			ImGui::SameLine();
 

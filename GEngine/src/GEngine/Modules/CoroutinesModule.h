@@ -22,12 +22,15 @@ namespace GEngine
 		void Tick() const;
 		void Dispose();
 
+		CoroutinesRunner* GetMainRunner() const;
+
 		std::weak_ptr<CoroutinesRunner> CreateRunner();
 		void DestroyRunner(const std::weak_ptr<CoroutinesRunner>& runner);
 
 	private:
 		GEngineCoreModules* _modules = nullptr;
 
+		std::shared_ptr<CoroutinesRunner> _mainRunner;
 		std::vector<std::shared_ptr<CoroutinesRunner>> _runners;
 	};
 }

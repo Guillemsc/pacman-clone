@@ -211,8 +211,6 @@ add_library(GEngineCore STATIC
         src/GEngine/Editor/ResourcesInspector/FontResourceInspectorEditor.h
         src/GEngine/Components/UiTextRendererComponent.cpp
         src/GEngine/Components/UiTextRendererComponent.h
-        src/GEngine/Coroutines/Coroutines.h
-        src/GEngine/Coroutines/Coroutines.cpp
         src/GEngine/Tweens/Tween.cpp
         src/GEngine/Tweens/Tween.h
         src/GEngine/Tweens/ChildrenTweenSequenceMode.h
@@ -285,6 +283,14 @@ add_library(GEngineCore STATIC
         src/GEngine/Raylib/RaylibLogger.h
         src/GEngine/Modules/RandomModule.cpp
         src/GEngine/Modules/RandomModule.h
+        src/GEngine/Memory/MemoryTracker.cpp
+        src/GEngine/Memory/MemoryTracker.h
+        src/GEngine/Editor/Windows/MemoryEditorWindow.cpp
+        src/GEngine/Editor/Windows/MemoryEditorWindow.h
+        src/GEngine/Pooling/ObjectPool.cpp
+        src/GEngine/Pooling/ObjectPool.h
+        src/GEngine/Strings/StringBuilder.cpp
+        src/GEngine/Strings/StringBuilder.h
 )
 
 # Link raylib

@@ -9,7 +9,7 @@
 
 namespace GEngine
 {
-	class ExamplesEditorWindow : public EditorWindow
+	class ExamplesEditorWindow final : public EditorWindow
 	{
 	public:
 		explicit ExamplesEditorWindow(GEngineCoreModules* modules);

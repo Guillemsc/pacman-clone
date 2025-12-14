@@ -6,6 +6,7 @@
 
 #include "GEngine/Core/GEngineCoreApplication.h"
 #include "GEngine/Core/GEngineCoreModules.h"
+#include "GEngine/Memory/MemoryTracker.h"
 #include "GEngine/Modules/ResourcesModule.h"
 #include "GEngine/Resources/TextureResource.h"
 #include "GEngine/Resources/TiledMapResource.h"
@@ -28,9 +29,11 @@ namespace GEngine
 		)
 	{
 		const std::string fullPathString = fullPath.string();
-		const std::shared_ptr<tmx::Map> tiledMap = std::make_shared<tmx::Map>();
 
+		MemoryTracker::isTracking = false;
+		const std::shared_ptr<tmx::Map> tiledMap = std::make_shared<tmx::Map>();
 		const bool couldLoad = tiledMap->load(fullPathString);
+		MemoryTracker::isTracking = true;
 
 		if (!couldLoad)
 		{

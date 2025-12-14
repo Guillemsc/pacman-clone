@@ -28,7 +28,7 @@ namespace PacMan
 	class ContextsStack
 	{
 	public:
-		ContextsStack(GEngine::GEngineCoreModules* modules);
+		explicit ContextsStack(GEngine::GEngineCoreModules* modules);
 
 		tokoro::Async<void> PushAsync(std::shared_ptr<Context> context);
 		void Pop();

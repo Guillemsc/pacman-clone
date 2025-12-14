@@ -18,10 +18,10 @@ namespace GEngine
 
 	void GuizmosEditorWindow::DrawWindowContent()
 	{
-		for (const std::string& componentName : ComponentsRegister::GetComponentRegistry())
+		for (const std::string_view& componentName : ComponentsRegister::GetComponentRegistry())
 		{
 			bool isEnabled = _modules->guizmos->IsComponentEnabled(componentName);
-			if (ImGui::Checkbox(componentName.c_str(), &isEnabled))
+			if (ImGui::Checkbox(componentName.data(), &isEnabled))
 			{
 				_modules->guizmos->SetComponentEnabled(componentName, isEnabled);
 			}

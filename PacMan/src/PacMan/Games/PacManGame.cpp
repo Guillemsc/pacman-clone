@@ -17,8 +17,9 @@
 #include "GEngine/Components/UiTextRendererComponent.h"
 #include "GEngine/Components/UiTransformComponent.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
-#include "GEngine/Coroutines/Coroutines.h"
+#include "GEngine/Coroutines/CoroutinesRunner.h"
 #include "GEngine/Data/JsonData.h"
+#include "GEngine/Modules/CoroutinesModule.h"
 #include "GEngine/Modules/EntitiesModule.h"
 #include "GEngine/Modules/GameModule.h"
 #include "GEngine/Modules/ResourcesModule.h"
@@ -46,7 +47,7 @@ namespace PacMan
 		_contextsStack = std::make_unique<ContextsStack>(_modules);
 		GEngine::ServiceLocator::Register(_contextsStack.get());
 
-		GEngine::Coroutines::Start(&PacManGame::LaunchGameAsync, this).Forget();
+		_modules->coroutines->GetMainRunner()->Start(&PacManGame::LaunchGameAsync, this).Forget();
 	}
 
 	void PacManGame::Tick(float deltaTime)
@@ -56,13 +57,14 @@ namespace PacMan
 
 	void PacManGame::Dispose()
 	{
-		GEngine::ServiceLocator::Clear();
+		GEngine::ServiceLocator::Dispose();
 	}
 
 	tokoro::Async<void> PacManGame::LaunchGameAsync()
 	{
 		co_await _contextsStack->PushAsync(std::make_shared<SharedContext>(_modules));
 		co_await _contextsStack->PushAsync(std::make_shared<MetaContext>(_modules));
+		co_return;
 	}
 }
 

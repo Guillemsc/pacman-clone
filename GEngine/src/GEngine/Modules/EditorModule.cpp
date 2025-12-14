@@ -23,6 +23,7 @@
 #include "GEngine/Editor/Windows/GuizmosEditorWindow.h"
 #include "GEngine/Editor/Windows/HierarchyEditorWindow.h"
 #include "GEngine/Editor/Windows/InspectorEditorWindow.h"
+#include "GEngine/Editor/Windows/MemoryEditorWindow.h"
 #include "GEngine/Editor/Windows/ResourcesEditorWindow.h"
 #include "GEngine/Editor/Windows/UiEditorWindow.h"
 #include "GEngine/Extensions/UnorderedMapExtensions.h"
@@ -53,6 +54,7 @@ namespace GEngine
 		RegisterWindow<ExamplesEditorWindow>();
 		RegisterWindow<GuizmosEditorWindow>();
 		RegisterWindow<Collisions2dEditorWindow>();
+		RegisterWindow<MemoryEditorWindow>();
 		RegisterWindow<DemoEditorWindow>();
 	}
 

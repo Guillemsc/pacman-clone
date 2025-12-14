@@ -9,7 +9,6 @@
 #include "GEngine/Components/Shape2dRendererComponent.h"
 #include "GEngine/Components/TransformComponent.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
-#include "GEngine/Coroutines/Coroutines.h"
 #include "GEngine/Entities/Entity.h"
 #include "GEngine/Modules/EntitiesModule.h"
 #include "GEngine/Modules/TweensModule.h"

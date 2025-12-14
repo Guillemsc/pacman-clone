@@ -49,7 +49,7 @@ namespace PacMan
 
 		_poppingContexts.push_back(context);
 
-		_modules->deferredExecution->Push([this, &context]
+		_modules->deferredExecution->Push([this, context]
 		{
 			GEngine::VectorExtensions::Remove(_poppingContexts, context);
 		});

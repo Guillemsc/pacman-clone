@@ -12,14 +12,14 @@ namespace GEngine
 {
 	struct ComponentsRegister
 	{
-		explicit ComponentsRegister(const std::string& name)
+		explicit ComponentsRegister(const std::string_view& name)
 		{
 			GetComponentRegistry().push_back(name);
 		}
 
-		static std::vector<std::string>& GetComponentRegistry()
+		static std::vector<std::string_view>& GetComponentRegistry()
 		{
-			static std::vector<std::string> registry;
+			static std::vector<std::string_view> registry;
 			return registry;
 		}
 	};

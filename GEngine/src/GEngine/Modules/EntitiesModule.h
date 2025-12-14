@@ -9,6 +9,8 @@
 #include <memory>
 #include <vector>
 
+#include "GEngine/Pooling/ObjectPool.h"
+
 namespace GEngine
 {
 	class GEngineCoreModules;
@@ -57,6 +59,7 @@ namespace GEngine
 		std::vector<std::weak_ptr<Entity>> _entitiesToRemove;
 		std::uint32_t _nextEntityId = 1;
 
+		ObjectPool<std::vector<std::shared_ptr<Entity>>> _entitiesVectorPool;
 		std::vector<std::shared_ptr<Entity>> _checkingRemovingEntitiesBuffer;
 	};
 }

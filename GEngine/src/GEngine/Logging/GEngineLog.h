@@ -15,6 +15,7 @@ namespace GEngine
 	{
 	public:
 		static void Init();
+		static void Dispose();
 
 		static spdlog::logger* GetCoreLogger() { return _coreLogger.get(); }
 		static spdlog::logger* GetGameLogger() { return _gameLogger.get(); }

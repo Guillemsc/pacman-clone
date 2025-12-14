@@ -529,6 +529,8 @@ void rlImGuiShutdown(void)
 
     ImGui::DestroyContext(GlobalContext);
     GlobalContext = nullptr;
+
+    RaylibKeyMap.clear();
 }
 
 void rlImGuiImage(const Texture* image)

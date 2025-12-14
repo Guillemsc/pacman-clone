@@ -37,7 +37,7 @@ namespace GEngine
 		void Init() const;
 		bool CanRun() const;
 		void Tick() const;
-		void Dispose() const;
+		void Dispose();
 
 		GEngineCoreModules* Modules() const { return _modules.get(); }
 

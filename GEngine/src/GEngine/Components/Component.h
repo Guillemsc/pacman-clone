@@ -28,7 +28,7 @@ namespace GEngine
 		void SetEnabled(bool enabled);
 		[[nodiscard]] bool IsEnabled() const;
 
-		[[nodiscard]] virtual constexpr const char* GetTypeName() const = 0;
+		[[nodiscard]] virtual constexpr std::string_view GetTypeName() const = 0;
 
 	protected:
 		virtual void OnAwake() {}
@@ -56,8 +56,8 @@ namespace GEngine
 
 #define REGISTER_COMPONENT(TYPE)                                 \
 public:                                                         \
-	static constexpr const char* StaticTypeName() { return #TYPE; } \
-	constexpr const char* GetTypeName() const override { return TYPE::StaticTypeName(); } \
+	static constexpr std::string_view StaticTypeName() { return #TYPE; } \
+	constexpr std::string_view GetTypeName() const override { return TYPE::StaticTypeName(); } \
 private:                                                        \
 	inline static const GEngine::ComponentsRegister _reg_##TYPE{ TYPE::StaticTypeName() };
 
