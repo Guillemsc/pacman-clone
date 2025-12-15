@@ -19,6 +19,8 @@ namespace GEngine
 
 	void Sprite2dAnimatorComponent::OnTick()
 	{
+		if (_animations.empty()) return;
+
 		const std::shared_ptr<Sprite2dRendererComponent> spriteRenderer = _sprite2dRenderer.lock();
 		if (!spriteRenderer) return;
 
@@ -42,6 +44,7 @@ namespace GEngine
 
 		const std::int32_t currentAnimationSpriteIndex = animation.animationFrames[_currentAnimationFrameIndex];
 
+		spriteRenderer->SetSprite(animation.spriteResource);
 		spriteRenderer->SetSpriteIndex(currentAnimationSpriteIndex);
 	}
 

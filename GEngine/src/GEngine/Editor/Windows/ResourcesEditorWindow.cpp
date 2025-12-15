@@ -28,7 +28,7 @@ namespace GEngine
 
 		for (auto it = resourcesList.begin(); it != resourcesList.end(); ++it)
 		{
-			std::string_view resourcePath = (*it)->GetResourcesPathStringView();
+			std::string_view resourcePath = (*it)->GetResourcesPathString();
 			_stringBuilder.Clear();
 			_stringBuilder.AppendFormat("%s | %s", (*it)->GetTypeName(), resourcePath.data());
 

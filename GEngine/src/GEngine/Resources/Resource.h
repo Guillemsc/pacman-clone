@@ -31,8 +31,8 @@ namespace GEngine
 
 		std::filesystem::path GetFullPath() const;
 		std::filesystem::path GetResourcesPath() const;
-		std::string_view GetFullPathStringView() const;
-		std::string_view GetResourcesPathStringView() const;
+		const char* GetFullPathString() const;
+		const char* GetResourcesPathString() const;
 
 	protected:
 		virtual void Dispose() {};
@@ -40,8 +40,8 @@ namespace GEngine
 	private:
 		const std::filesystem::path _fullPath;
 		const std::filesystem::path _resourcesPath;
-		std::string_view _fullPathStringView;
-		std::string_view _resourcesPathStringView;
+		std::string _fullPathString;
+		std::string _resourcesPathString;
 	};
 }
 

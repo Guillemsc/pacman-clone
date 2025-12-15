@@ -6,20 +6,26 @@
 
 #include "GEngine/Components/Collider2dComponent.h"
 #include "GEngine/Components/Shape2dRendererComponent.h"
+#include "GEngine/Components/Sprite2dAnimatorComponent.h"
+#include "GEngine/Components/Sprite2dRendererComponent.h"
 #include "GEngine/Components/TransformComponent.h"
+#include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Entities/Entity.h"
 #include "GEngine/Logging/GEngineLog.h"
+#include "GEngine/Modules/ResourcesModule.h"
 #include "GEngine/Scenes/Scene.h"
 #include "PacMan/Gameplay/Collisions/Enums/CollisionLayers.h"
 #include "PacMan/Gameplay/Entities/Components/EntityIdComponent.h"
 #include "PacMan/Gameplay/Entities/Data/GameplayEntities.h"
 #include "PacMan/Gameplay/Ghosts/Components/CianGhostAiComponent.h"
+#include "PacMan/Gameplay/Ghosts/Components/GhostAnimationComponent.h"
 #include "PacMan/Gameplay/Ghosts/Components/OrangeGhostAiComponent.h"
 #include "PacMan/Gameplay/Ghosts/Components/PinkGhostAiComponent.h"
 #include "PacMan/Gameplay/Ghosts/Components/RedGhostAiComponent.h"
 #include "PacMan/Gameplay/MapLoading/Data/LoadedMapData.h"
 #include "PacMan/Gameplay/MapMovement/Components/MapMovementComponent.h"
 #include "PacMan/Gameplay/MapMovement/Managers/MapMovementManager.h"
+#include "GEngine/Resources/SpriteResource.h"
 
 namespace PacMan
 {
@@ -111,9 +117,18 @@ namespace PacMan
 
 		ghostEntity->AddComponent<EntityIdComponent>().lock()->SetType(EntityType::GHOST);
 
-		const std::shared_ptr<GEngine::Shape2dRendererComponent> shape = ghostEntity->AddComponent<GEngine::Shape2dRendererComponent>().lock();
-		shape->SetLayer(1);
-		shape->SetColor(ghostColor);
+		const std::string resourcePath = std::format("ghosts/{}.sprite", ghostName);
+		const std::weak_ptr<GEngine::SpriteResource> movementSpriteResource = _modules->resources->GetResource<GEngine::SpriteResource>(resourcePath);
+
+		const std::shared_ptr<GEngine::Sprite2dRendererComponent> spriteRenderer = ghostEntity->AddComponent<GEngine::Sprite2dRendererComponent>().lock();
+		spriteRenderer->SetLayer(1);
+
+		const std::shared_ptr<GEngine::Sprite2dAnimatorComponent> spriteAnimator = ghostEntity->AddComponent<GEngine::Sprite2dAnimatorComponent>().lock();
+		spriteAnimator->SetSprite2dRenderer(spriteRenderer);
+		spriteAnimator->AddAnimation({"right", movementSpriteResource, {0, 1}});
+		spriteAnimator->AddAnimation({"left", movementSpriteResource, {2, 3}});
+		spriteAnimator->AddAnimation({"up", movementSpriteResource, {4, 5}});
+		spriteAnimator->AddAnimation({"down", movementSpriteResource, {6, 7}});
 
 		const std::shared_ptr<GEngine::Collider2dComponent> collider = ghostEntity->AddComponent<GEngine::Collider2dComponent>().lock();
 
@@ -137,6 +152,12 @@ namespace PacMan
 		{
 			mapMovement->SetGridPosition(gridPosition);
 		}
+
+		ghostEntity->AddComponent<GhostAnimationComponent>(
+			_ghostsStateData,
+			spriteRenderer,
+			spriteAnimator
+			);
 
 		SetupGhostAi(ghostEntity.get(), mapMovement, ghostType);
 
@@ -173,13 +194,13 @@ namespace PacMan
 		switch (ghostType)
 		{
 			case GhostType::RED_GHOST:
-				return "Red";
+				return "red";
 			case GhostType::ORANGE_GHOST:
-				return "Orange";
+				return "orange";
 			case GhostType::CIAN_GHOST:
-				return "Cian";
+				return "cian";
 			case GhostType::PINK_GHOST:
-				return "Pink";
+				return "pink";
 		}
 
 		return "Unknown";

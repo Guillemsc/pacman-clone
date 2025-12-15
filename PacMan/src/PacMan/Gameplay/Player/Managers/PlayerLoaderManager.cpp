@@ -61,12 +61,11 @@ namespace PacMan
 	 	const std::weak_ptr<GEngine::SpriteResource> spriteResource = _modules->resources->GetResource<GEngine::SpriteResource>("pacman.sprite");
 
 		const std::shared_ptr<GEngine::Sprite2dRendererComponent> spriteRenderer = playerEntity->AddComponent<GEngine::Sprite2dRendererComponent>().lock();
-		spriteRenderer->SetSprite(spriteResource);
 		spriteRenderer->SetLayer(1);
 
 		const std::shared_ptr<GEngine::Sprite2dAnimatorComponent> spriteAnimator = playerEntity->AddComponent<GEngine::Sprite2dAnimatorComponent>().lock();
 		spriteAnimator->SetSprite2dRenderer(spriteRenderer);
-		spriteAnimator->AddAnimation({"test", {0, 1}});
+		spriteAnimator->AddAnimation({"test", spriteResource, {0, 1}});
 
 		const std::shared_ptr<GEngine::Collider2dComponent> collider = playerEntity->AddComponent<GEngine::Collider2dComponent>().lock();
 		collider->SetLayer(CollisionLayers::COLLISION_LAYER_PLAYER);

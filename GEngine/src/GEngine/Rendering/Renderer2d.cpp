@@ -65,7 +65,7 @@ namespace GEngine
 		const Color01 &color
 		)
 	{
-		Add(layer, [this, position, size, color, rotationRadians, scale]()
+		Add(layer, [position, size, color, rotationRadians, scale]()
 		{
 			const glm::vec2 renderPosition = PositionToRenderPosition(position);
 			const float rotationDegrees = RotationToRenderRotation(glm::degrees(rotationRadians));
