@@ -45,6 +45,7 @@ namespace PacMan
 	{
 		_ghostsStateData->ghostsModeBeforeFrightened = _ghostsStateData->ghostsMode;
 		_ghostsStateData->ghostsMode = GhostMode::FRIGHTENED;
+		_ghostsStateData->ghostsFrightenedAlmostFinished = false;
 		_ghostsStateData->ghostsFrightenedTimer.Restart();
 		_ghostsStateData->ghostsScaterChaseTimer.Pause();
 
@@ -65,7 +66,7 @@ namespace PacMan
 		}
 		else if (_ghostsStateData->ghostsMode == GhostMode::CHASE)
 		{
-			if (_ghostsStateData->ghostsScaterChaseTimer.GetTimeSeconds() > 20)
+			if (_ghostsStateData->ghostsScaterChaseTimer.GetTimeSeconds() > 12)
 			{
 				_ghostsStateData->ghostsMode = GhostMode::SCATTER;
 				_ghostsStateData->ghostsScaterChaseTimer.Restart();
@@ -77,7 +78,11 @@ namespace PacMan
 	{
 		if (_ghostsStateData->ghostsMode != GhostMode::FRIGHTENED) return;
 
-		const bool timeReached = _ghostsStateData->ghostsFrightenedTimer.GetTimeSeconds() >= 10;
+		constexpr float frightenedTime = 10;
+		const float frightenedTimeSeconds = _ghostsStateData->ghostsFrightenedTimer.GetTimeSeconds();
+
+		_ghostsStateData->ghostsFrightenedAlmostFinished = frightenedTimeSeconds > frightenedTime * 0.7f;
+		const bool timeReached = frightenedTimeSeconds >= frightenedTime;
 
 		if (!timeReached) return;
 

@@ -14,6 +14,7 @@
 #include "GEngine/Tweens/Tween.h"
 #include "PacMan/Gameplay/Collisions/Enums/CollisionLayers.h"
 #include "PacMan/Gameplay/Ghosts/Components/GhostAiComponent.h"
+#include "PacMan/Gameplay/Ghosts/Components/GhostStateComponent.h"
 #include "PacMan/Gameplay/Ghosts/Data/GhostPrisionSlotData.h"
 #include "PacMan/Gameplay/Ghosts/Data/GhostsStateData.h"
 #include "PacMan/Gameplay/Ghosts/Data/LoadedGhostsData.h"
@@ -91,10 +92,12 @@ namespace PacMan
 		const std::shared_ptr<GEngine::Collider2dComponent> collider = lGhost->GetComponent<GEngine::Collider2dComponent>().lock();
 		if (!collider) return;
 
+		const std::shared_ptr<GhostStateComponent> state = lGhost->GetComponent<GhostStateComponent>().lock();
+		if (!state) return;
+
 		collider->SetLayer(CollisionLayers::COLLISION_LAYER_DEFAULT);
 		ai->SetEnabled(false);
-
-		_ghostsStateData->ghostsReturningToPrision.push_back(lGhost);
+		state->isReturningToPrision = true;
 
 		_coroutines->Start(
 			&GhostsPrisionManager::PlayReturnGhostAsync,
@@ -194,6 +197,9 @@ namespace PacMan
 
 		const std::shared_ptr<GhostAiComponent> ai = ghostEntity->GetComponent<GhostAiComponent>().lock();
 		ai->SetEnabled(true);
+
+		const std::shared_ptr<GhostStateComponent> state = ghostEntity->GetComponent<GhostStateComponent>().lock();
+		state->isReturningToPrision = false;
 	}
 
 	tokoro::Async<void> GhostsPrisionManager::PlayReturnGhostAsync(
@@ -209,8 +215,6 @@ namespace PacMan
 		mapMovement->SetCanAutomaticallyKeepMovingOnCurrentDirection(false);
 		mapMovement->PathfindToGridPosition(_prisionExitGridPosition);
 		mapMovement->SetMovementSpeed(60);
-
-		transform->SetLocalScaleXY({0.5f, 0.5f});
 
 		while (mapMovement->GetGridPosition() != _prisionExitGridPosition)
 		{

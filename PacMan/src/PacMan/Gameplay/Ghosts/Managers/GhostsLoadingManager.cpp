@@ -26,6 +26,7 @@
 #include "PacMan/Gameplay/MapMovement/Components/MapMovementComponent.h"
 #include "PacMan/Gameplay/MapMovement/Managers/MapMovementManager.h"
 #include "GEngine/Resources/SpriteResource.h"
+#include "PacMan/Gameplay/Ghosts/Components/GhostStateComponent.h"
 
 namespace PacMan
 {
@@ -117,23 +118,39 @@ namespace PacMan
 
 		ghostEntity->AddComponent<EntityIdComponent>().lock()->SetType(EntityType::GHOST);
 
-		const std::string resourcePath = std::format("ghosts/{}.sprite", ghostName);
-		const std::weak_ptr<GEngine::SpriteResource> movementSpriteResource = _modules->resources->GetResource<GEngine::SpriteResource>(resourcePath);
+		const std::weak_ptr<GhostStateComponent> ghostState = ghostEntity->AddComponent<GhostStateComponent>();
+
+		const std::string movementResourcePath = std::format("ghosts/{}.sprite", ghostName);
+		const std::weak_ptr<GEngine::SpriteResource> movementSpriteResource
+			= _modules->resources->GetResource<GEngine::SpriteResource>(movementResourcePath);
+		const std::weak_ptr<GEngine::SpriteResource> deadSpriteResource
+			= _modules->resources->GetResource<GEngine::SpriteResource>("ghosts/dead.sprite");
+		const std::weak_ptr<GEngine::SpriteResource> scaredSpriteResource
+			= _modules->resources->GetResource<GEngine::SpriteResource>("ghosts/scared.sprite");
 
 		const std::shared_ptr<GEngine::Sprite2dRendererComponent> spriteRenderer = ghostEntity->AddComponent<GEngine::Sprite2dRendererComponent>().lock();
 		spriteRenderer->SetLayer(1);
 
 		const std::shared_ptr<GEngine::Sprite2dAnimatorComponent> spriteAnimator = ghostEntity->AddComponent<GEngine::Sprite2dAnimatorComponent>().lock();
 		spriteAnimator->SetSprite2dRenderer(spriteRenderer);
-		spriteAnimator->AddAnimation({"right", movementSpriteResource, {0, 1}});
-		spriteAnimator->AddAnimation({"left", movementSpriteResource, {2, 3}});
-		spriteAnimator->AddAnimation({"up", movementSpriteResource, {4, 5}});
-		spriteAnimator->AddAnimation({"down", movementSpriteResource, {6, 7}});
+
+		spriteAnimator->AddAnimation({"move_right", movementSpriteResource, {0, 1}});
+		spriteAnimator->AddAnimation({"move_left", movementSpriteResource, {2, 3}});
+		spriteAnimator->AddAnimation({"move_up", movementSpriteResource, {4, 5}});
+		spriteAnimator->AddAnimation({"move_down", movementSpriteResource, {6, 7}});
+
+		spriteAnimator->AddAnimation({"dead_right", deadSpriteResource, {0}});
+		spriteAnimator->AddAnimation({"dead_left", deadSpriteResource, {1}});
+		spriteAnimator->AddAnimation({"dead_up", deadSpriteResource, {2}});
+		spriteAnimator->AddAnimation({"dead_down", deadSpriteResource, {3}});
+
+		spriteAnimator->AddAnimation({"scared", scaredSpriteResource, {0, 1}});
+		spriteAnimator->AddAnimation({"scared_almost_finished", scaredSpriteResource, {0, 1, 2, 3}});
 
 		const std::shared_ptr<GEngine::Collider2dComponent> collider = ghostEntity->AddComponent<GEngine::Collider2dComponent>().lock();
-
 		const std::uint32_t collisionLayer = isPrision ? CollisionLayers::COLLISION_LAYER_DEFAULT : CollisionLayers::COLLISION_LAYER_GHOST;
 		collider->SetLayer(collisionLayer);
+		collider->SetSize({6, 6});
 
 		if (isPrision)
 		{
@@ -155,6 +172,8 @@ namespace PacMan
 
 		ghostEntity->AddComponent<GhostAnimationComponent>(
 			_ghostsStateData,
+			ghostState,
+			mapMovement,
 			spriteRenderer,
 			spriteAnimator
 			);

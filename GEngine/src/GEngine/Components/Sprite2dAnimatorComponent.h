@@ -5,6 +5,7 @@
 #ifndef SPRITE2DANIMATORCOMPONENT_H
 #define SPRITE2DANIMATORCOMPONENT_H
 
+#include <map>
 #include <memory>
 
 #include "Component.h"
@@ -28,10 +29,13 @@ namespace GEngine
 		void SetSprite2dRenderer(const std::weak_ptr<Sprite2dRendererComponent>& sprite2dRenderer);
 		void AddAnimation(const Sprite2dAnimation& animation);
 
+		void PlayAnimation(const std::string& animationName);
+
 	private:
 		std::weak_ptr<Sprite2dRendererComponent> _sprite2dRenderer;
 
 		std::vector<Sprite2dAnimation> _animations;
+		std::map<std::string, int> _animationNamesByAnimationIndex;
 		std::int32_t _currentAnimationIndex = 0;
 		std::int32_t _currentAnimationFrameIndex = 0;
 		float _currentAnimationTime = 0;

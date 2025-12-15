@@ -5,6 +5,7 @@
 #include "Sprite2dAnimatorComponent.h"
 
 #include "GEngine/Core/GEngineCoreModules.h"
+#include "GEngine/Extensions/MapExtensions.h"
 #include "GEngine/Extensions/VectorExtensions.h"
 #include "GEngine/Modules/TimeModule.h"
 
@@ -57,5 +58,14 @@ namespace GEngine
 	void Sprite2dAnimatorComponent::AddAnimation(const Sprite2dAnimation &animation)
 	{
 		_animations.push_back(animation);
+		_animationNamesByAnimationIndex[animation.name] = _animations.size() - 1;
+	}
+
+	void Sprite2dAnimatorComponent::PlayAnimation(const std::string &animationName)
+	{
+		const std::optional<int> optionalIndex = MapExtensions::GetValue(_animationNamesByAnimationIndex, animationName);
+		if (!optionalIndex.has_value()) return;
+
+		_currentAnimationIndex = optionalIndex.value();
 	}
 }
