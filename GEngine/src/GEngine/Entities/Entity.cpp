@@ -9,6 +9,7 @@
 #include "GEngine/Extensions/VectorExtensions.h"
 #include "GEngine/Modules/EntitiesModule.h"
 #include "GEngine/Modules/GuizmosModule.h"
+#include "GEngine/Pooling/Pools.h"
 
 namespace GEngine
 {
@@ -96,16 +97,15 @@ namespace GEngine
 		const std::function<bool(const std::shared_ptr<Entity>&)> &callback
 		)
 	{
-		// TODO: Pool this vector
-		std::vector<std::shared_ptr<Entity>> toCheck;
-		toCheck.push_back(shared_from_this());
+		const ObjectPool<std::vector<std::shared_ptr<Entity>>>::Ptr toCheck = Pools::entitiesVector.Acquire();
+		toCheck->push_back(shared_from_this());
 
 		bool firstChecking = true;
 
-		while (toCheck.size() > 0)
+		while (toCheck->size() > 0)
 		{
-			std::shared_ptr<Entity> checking = toCheck.front();
-			toCheck.erase(toCheck.begin());
+			std::shared_ptr<Entity> checking = toCheck->front();
+			toCheck->erase(toCheck->begin());
 
 			bool shouldAddChildren = true;
 
@@ -121,7 +121,7 @@ namespace GEngine
 					const std::shared_ptr<Entity> childEntity = it->lock();
 					if (!childEntity) continue;
 
-					toCheck.push_back(childEntity);
+					toCheck->push_back(childEntity);
 				}
 			}
 

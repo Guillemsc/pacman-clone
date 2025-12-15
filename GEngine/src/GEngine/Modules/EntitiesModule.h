@@ -58,8 +58,6 @@ namespace GEngine
 		std::vector<std::weak_ptr<Entity>> _rootEntities;
 		std::vector<std::weak_ptr<Entity>> _entitiesToRemove;
 		std::uint32_t _nextEntityId = 1;
-
-		ObjectPool<std::vector<std::shared_ptr<Entity>>> _entitiesVectorPool;
 	};
 }
 

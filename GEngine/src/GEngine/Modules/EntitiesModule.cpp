@@ -10,16 +10,14 @@
 #include "GEngine/Extensions/VectorExtensions.h"
 #include "GEngine/Components/TransformComponent.h"
 #include "GEngine/Components/UiTransformComponent.h"
+#include "GEngine/Pooling/Pools.h"
 #include "spdlog/spdlog.h"
 
 namespace GEngine
 {
 	EntitiesModule::EntitiesModule()
 	{
-		_entitiesVectorPool.SetWhenReset([](std::vector<std::shared_ptr<Entity>>* vector)
-		{
-			vector->clear();
-		});
+
 	}
 
 	void EntitiesModule::Init(GEngineCoreModules* modules)
@@ -115,7 +113,7 @@ namespace GEngine
 
 		VectorExtensions::Remove(_rootEntities, entity);
 
-		const ObjectPool<std::vector<std::shared_ptr<Entity>>>::Ptr entitiesBuffer = _entitiesVectorPool.Acquire();
+		const ObjectPool<std::vector<std::shared_ptr<Entity>>>::Ptr entitiesBuffer = Pools::entitiesVector.Acquire();
 
 		entitiesBuffer->push_back(entity);
 
@@ -260,7 +258,7 @@ namespace GEngine
 
 	void EntitiesModule::ForEachEntityInHierarchy(const std::function<void(const std::shared_ptr<Entity> &)> &callback)
 	{
-		const ObjectPool<std::vector<std::shared_ptr<Entity>>>::Ptr entitiesBuffer = _entitiesVectorPool.Acquire();
+		const ObjectPool<std::vector<std::shared_ptr<Entity>>>::Ptr entitiesBuffer = Pools::entitiesVector.Acquire();
 
 		for (auto it = _rootEntities.begin(); it != _rootEntities.end(); ++it)
 		{

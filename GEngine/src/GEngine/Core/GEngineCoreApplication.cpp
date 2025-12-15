@@ -26,6 +26,7 @@
 #include "GEngine/Modules/TweensModule.h"
 #include "GEngine/Modules/UiModule.h"
 #include "GEngine/Modules/WindowModule.h"
+#include "GEngine/Pooling/Pools.h"
 #include "spdlog/spdlog.h"
 
 namespace GEngine
@@ -37,6 +38,8 @@ namespace GEngine
 		MemoryTracker::Reset();
 
 		GENGINE_INFO("Welcome to GEngine :)");
+
+		Pools::Init();
 
 		_configuration = std::make_unique<ConfigurationModule>();
 		_entities = std::make_unique<EntitiesModule>();
@@ -176,6 +179,8 @@ namespace GEngine
 		_collisions2d.reset();
 		_deferredExecution.reset();
 		_random.reset();
+
+		Pools::Dispose();
 
 		GENGINE_INFO("GEngine Dispose finished.");
 		GENGINE_INFO("Bye :)");

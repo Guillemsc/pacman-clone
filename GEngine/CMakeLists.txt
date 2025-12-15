@@ -291,6 +291,8 @@ add_library(GEngineCore STATIC
         src/GEngine/Strings/StringBuilder.cpp
         src/GEngine/Strings/StringBuilder.h
         src/GEngine/RenderCommands/Renderer2dCommand.h
+        src/GEngine/Pooling/Pools.cpp
+        src/GEngine/Pooling/Pools.h
 )
 
 # Link raylib

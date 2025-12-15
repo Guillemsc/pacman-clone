@@ -19,11 +19,7 @@ namespace GEngine
 
 		~ObjectPool()
 		{
-			while (!_objects.empty())
-			{
-				delete _objects.top();
-				_objects.pop();
-			}
+			Clear();
 		}
 
 		void SetWhenReset(const std::function<void(T*)>& whenReset)
@@ -55,6 +51,15 @@ namespace GEngine
 
 				_objects.push(ptr); // Return to pool
 			});
+		}
+
+		void Clear()
+		{
+			while (!_objects.empty())
+			{
+				delete _objects.top();
+				_objects.pop();
+			}
 		}
 
 	private:
