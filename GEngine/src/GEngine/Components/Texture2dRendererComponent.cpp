@@ -39,11 +39,6 @@ namespace GEngine
 
 		position.x -= rawTexture.width * 0.5f * scale.x;
 		position.y -= rawTexture.height * 0.5f * scale.y;
-
-		modules->rendering->Render2d()->Add(0, [position, rotation, scale, rawTexture]()
-		{
-			RayLibExtensions::DrawTextureEx(rawTexture, {position.x, position.y}, rotation, {scale.x, scale.y}, WHITE);
-		});
 	}
 
 	void Texture2dRendererComponent::SetTexture(const std::weak_ptr<TextureResource> &texture)

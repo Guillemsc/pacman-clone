@@ -57,19 +57,20 @@ namespace GEngine
 
 		static glm::i32vec2 TiledGridPositionToEngineGridPosition(const tmx::TileLayer& tileLayer, glm::i32vec2 gridPosition);
 
+		[[nodiscard]] static glm::vec2 GridPositionToWorldPosition(
+			const glm::i32vec2& mapGridSize,
+			const glm::vec2& tilePixelSize,
+			const glm::vec2& tilemapPosition,
+			float tilemapRotation,
+			const glm::vec2& tilemapScale,
+			const glm::i32vec2& gridPosition,
+			CellPosition cellPosition = CellPosition::CENTER
+			);
+
 	private:
 		void GenerateLayersData();
 
 		[[nodiscard]] std::optional<std::reference_wrapper<const tmx::TileLayer>> GetTileLayer(std::int32_t layerIndex) const;
-
-		[[nodiscard]] glm::vec2 GridPositionToWorldPosition(
-			const glm::i32vec2& mapGridSize,
-			glm::vec2 tilemapPosition,
-			float tilemapRotation,
-			glm::vec2 tilemapScale,
-			const glm::i32vec2& gridPosition,
-			CellPosition cellPosition = CellPosition::CENTER
-			) const;
 
 		void RenderLayerGrid(
 			const TiledMapResource* tiledMapResource,

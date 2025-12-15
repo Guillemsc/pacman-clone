@@ -2,7 +2,7 @@
 // Created by guillem on 12/1/25.
 //
 
-#include "Guizmo2dRenderer.h"
+#include "GuizmoRenderer2d.h"
 
 #include "GEngine/Extensions/Color01Extensions.h"
 #include "GEngine/Data/CornersRect.h"
@@ -11,23 +11,23 @@
 
 namespace GEngine
 {
-	Guizmo2dRenderer::Guizmo2dRenderer(GEngineCoreModules *modules)
+	GuizmoRenderer2d::GuizmoRenderer2d(GEngineCoreModules *modules)
 		: _modules(modules)
 	{
 
 	}
 
-	void Guizmo2dRenderer::Add(const std::int32_t layer, const std::function<void()> &func)
+	void GuizmoRenderer2d::Add(const std::int32_t layer, const std::function<void()> &func)
 	{
 		_renderQueue.Add(layer, func);
 	}
 
-	void Guizmo2dRenderer::Render()
+	void GuizmoRenderer2d::Render()
 	{
 		_renderQueue.Execute(true);
 	}
 
-	void Guizmo2dRenderer::AddCircle(const glm::vec2 &position, float radius, const Color01 &color)
+	void GuizmoRenderer2d::AddCircle(const glm::vec2 &position, float radius, const Color01 &color)
 	{
 		Add(0, [this, position, radius, color]()
 		{
@@ -37,7 +37,7 @@ namespace GEngine
 		});
 	}
 
-	void Guizmo2dRenderer::AddRect(const glm::vec2 &position, const glm::vec2 &size, float rotationRadians, const Color01 &color)
+	void GuizmoRenderer2d::AddRect(const glm::vec2 &position, const glm::vec2 &size, float rotationRadians, const Color01 &color)
 	{
 		Add(0, [this, position, size, color, rotationRadians]()
 		{
@@ -58,7 +58,7 @@ namespace GEngine
 		});
 	}
 
-	void Guizmo2dRenderer::AddRectLines(const glm::vec2 &position, const glm::vec2 &size, const float rotationRadians, float thickness, const Color01 &color)
+	void GuizmoRenderer2d::AddRectLines(const glm::vec2 &position, const glm::vec2 &size, const float rotationRadians, float thickness, const Color01 &color)
 	{
 		Add(0, [this, position, size, color, rotationRadians, thickness]()
 		{
@@ -88,7 +88,7 @@ namespace GEngine
 		});
 	}
 
-	void Guizmo2dRenderer::AddLine(const glm::vec2 &start, const glm::vec2 &end, float thickness, const Color01 &color)
+	void GuizmoRenderer2d::AddLine(const glm::vec2 &start, const glm::vec2 &end, float thickness, const Color01 &color)
 	{
 		Add(0, [this, color, start, end, thickness]()
 		{
@@ -99,12 +99,12 @@ namespace GEngine
 		});
 	}
 
-	glm::vec2 Guizmo2dRenderer::PositionToRenderPosition(const glm::vec2 &position)
+	glm::vec2 GuizmoRenderer2d::PositionToRenderPosition(const glm::vec2 &position)
 	{
 		return { position.x, -position.y };
 	}
 
-	float Guizmo2dRenderer::RotationToRenderRotation(const float rotation)
+	float GuizmoRenderer2d::RotationToRenderRotation(const float rotation)
 	{
 		return -rotation;
 	}

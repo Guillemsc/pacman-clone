@@ -19,10 +19,10 @@ namespace GEngine
 	struct Color01;
 	class GEngineCoreModules;
 
-	class Guizmo2dRenderer
+	class GuizmoRenderer2d
 	{
 	public:
-		explicit Guizmo2dRenderer(GEngineCoreModules* modules);
+		explicit GuizmoRenderer2d(GEngineCoreModules* modules);
 
 		void Add(std::int32_t layer, const std::function<void()> &func);
 		void Render();

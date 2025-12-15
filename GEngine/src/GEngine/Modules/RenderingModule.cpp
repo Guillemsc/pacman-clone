@@ -24,7 +24,7 @@ namespace GEngine
 
 		_renderer2d = std::make_unique<Renderer2d>(modules);
 		_uiRenderer = std::make_unique<UiRenderer>(modules);
-		_guizmo2dRenderer = std::make_unique<Guizmo2dRenderer>(modules);
+		_guizmo2dRenderer = std::make_unique<GuizmoRenderer2d>(modules);
 		_guizmoUiRenderer = std::make_unique<GuizmoUiRenderer>(modules);
 		_imGuiRenderer = std::make_unique<ImGuiRenderer>();
 

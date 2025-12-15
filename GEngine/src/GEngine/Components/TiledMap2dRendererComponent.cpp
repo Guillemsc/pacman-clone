@@ -44,48 +44,28 @@ namespace GEngine
 		const std::shared_ptr<tmx::Map> rawMap = tiledMap->GetRawMap().lock();
 		if (!rawMap) return;
 
-		glm::vec2 position = transform->GetPositionXY();
-		float rotation = transform->GetRotationEulerZ();
-		glm::vec2 scale = transform->GetScaleXY();
+		const glm::vec2 position = transform->GetPositionXY();
+		const float rotation = transform->GetRotationEulerZ();
+		const glm::vec2 scale = transform->GetScaleXY();
 
-		modules->rendering->Render2d()->Add(0, [rawMap, position, scale, rotation, this, tiledMap]
+		const std::vector<tmx::Layer::Ptr>& layers = rawMap->getLayers();
+
+		for (int i = 0; i < layers.size(); ++i)
 		{
-			const tmx::Vector2u pixelSizeOfTile = rawMap->getTileSize();
-			const tmx::Vector2u mapGridSize = rawMap->getTileCount();
-			const std::vector<tmx::Layer::Ptr>& layers = rawMap->getLayers();
-
-			if (pixelSizeOfTile.x == 0 || pixelSizeOfTile.y == 0) return;
-
-			for (int i = 0; i < layers.size(); ++i)
-			{
-				const auto& layer = layers[i];
-
-				if (layer->getType() != tmx::Layer::Type::Tile) continue;
-
-				const bool isVisible = GetIsLayerVisible(i);
-				if (!isVisible) continue;
-
-				const tmx::TileLayer& tileLayer = layer->getLayerAs<tmx::TileLayer>();
-
-				const std::vector<tmx::TileLayer::Tile>& tileIds = tileLayer.getTiles();
-
-				RenderLayerGrid(
-					tiledMap.get(),
-					rawMap.get(),
-					tileIds,
-					pixelSizeOfTile,
-					mapGridSize,
-					position,
-					rotation,
-					scale
+			modules->rendering->Render2d()->AddTiledLayer(
+				0,
+				tiledMap.get(),
+				i,
+				position,
+				rotation,
+				scale
 				);
-			}
-		});
+		}
 	}
 
 	void TiledMap2dRendererComponent::OnDrawSelectedGuizmo()
 	{
-		Guizmo2dRenderer* guizmoRenderer = modules->rendering->Guizmo2dRender();
+		GuizmoRenderer2d* guizmoRenderer = modules->rendering->Guizmo2dRender();
 
 		const std::shared_ptr<TiledMapResource> tiledMap = _tiledMapPtr.lock();
 		if (!tiledMap) return;
@@ -190,6 +170,7 @@ namespace GEngine
 		if (_tilePixelSize.x == 0 || _tilePixelSize.y == 0) return Vec2Extensions::Zero;
 
 		const glm::i32vec2 mapGridSize = { mapData->getTileCount().x, mapData->getTileCount().y };
+		const tmx::Vector2u pixelSizeOfTile = mapData->getTileSize();
 
 		const glm::vec2 position = transform->GetPositionXY();
 		const float rotation = transform->GetRotationEulerZ();
@@ -197,6 +178,7 @@ namespace GEngine
 
 		return GridPositionToWorldPosition(
 			mapGridSize,
+			{pixelSizeOfTile.x, pixelSizeOfTile.y},
 			position,
 			rotation,
 			scale,
@@ -299,6 +281,52 @@ namespace GEngine
 		return { gridPosition.x, gridPositionY };
 	}
 
+	glm::vec2 TiledMap2dRendererComponent::GridPositionToWorldPosition(
+		const glm::i32vec2& mapGridSize,
+		const glm::vec2& tilePixelSize,
+		const glm::vec2& tilemapPosition,
+		const float tilemapRotation,
+		const glm::vec2& tilemapScale,
+		const glm::i32vec2& gridPosition,
+		const CellPosition cellPosition
+		)
+	{
+		if (tilePixelSize.x == 0 || tilePixelSize.y == 0) return Vec2Extensions::Zero;
+
+		const glm::vec2 layerGridSize = { mapGridSize.x, mapGridSize.y };
+		const glm::vec2 layerPixelSize = layerGridSize * tilePixelSize;
+		const glm::vec2 layerPixelSizeScaled = { layerPixelSize.x * tilemapScale.x, layerPixelSize.y * tilemapScale.y };
+
+		const float layerStartPositionX = tilemapPosition.x - (layerPixelSizeScaled.x * 0.5f);
+		const float layerStartPositionY = tilemapPosition.y - (layerPixelSizeScaled.y * 0.5f);
+
+		float tilePositionX = layerStartPositionX + (static_cast<float>(gridPosition.x) * tilePixelSize.x * tilemapScale.x);
+		float tilePositionY = layerStartPositionY + (static_cast<float>(gridPosition.y) * tilePixelSize.y * tilemapScale.y);
+
+		if (cellPosition == CellPosition::CENTER)
+		{
+			tilePositionX += tilePixelSize.x * 0.5f * tilemapScale.x;
+			tilePositionY += tilePixelSize.y * 0.5f * tilemapScale.y;
+		}
+
+		if (cellPosition == CellPosition::CENTER_RIGHT)
+		{
+			tilePositionX += tilePixelSize.x * tilemapScale.x;
+			tilePositionY += tilePixelSize.y * 0.5f * tilemapScale.y;
+		}
+
+		if (cellPosition == CellPosition::TOP_LEFT)
+		{
+			tilePositionY += tilePixelSize.y * tilemapScale.y;
+		}
+
+		const glm::vec2 point = { tilePositionX, tilePositionY };
+		const glm::vec2 pivot = tilemapPosition;
+		const glm::vec2 finalPosition = MathExtensions::RotatePointAroundPivot(point, pivot, tilemapRotation);
+
+		return finalPosition;
+	}
+
 	void TiledMap2dRendererComponent::GenerateLayersData()
 	{
 		_layersData.clear();
@@ -334,51 +362,6 @@ namespace GEngine
 		return tiledMap->GetTileLayer(layerIndex);
 	}
 
-	glm::vec2 TiledMap2dRendererComponent::GridPositionToWorldPosition(
-		const glm::i32vec2& mapGridSize,
-		const glm::vec2 tilemapPosition,
-		const float tilemapRotation,
-		const glm::vec2 tilemapScale,
-		const glm::i32vec2& gridPosition,
-		const CellPosition cellPosition
-		) const
-	{
-		if (_tilePixelSize.x == 0 || _tilePixelSize.y == 0) return Vec2Extensions::Zero;
-
-		const glm::vec2 layerGridSize = { mapGridSize.x, mapGridSize.y };
-		const glm::vec2 layerPixelSize = layerGridSize * _tilePixelSize;
-		const glm::vec2 layerPixelSizeScaled = { layerPixelSize.x * tilemapScale.x, layerPixelSize.y * tilemapScale.y };
-
-		const float layerStartPositionX = tilemapPosition.x - (layerPixelSizeScaled.x * 0.5f);
-		const float layerStartPositionY = tilemapPosition.y - (layerPixelSizeScaled.y * 0.5f);
-
-		float tilePositionX = layerStartPositionX + (static_cast<float>(gridPosition.x) * _tilePixelSize.x * tilemapScale.x);
-		float tilePositionY = layerStartPositionY + (static_cast<float>(gridPosition.y) * _tilePixelSize.y * tilemapScale.y);
-
-		if (cellPosition == CellPosition::CENTER)
-		{
-			tilePositionX += _tilePixelSize.x * 0.5f * tilemapScale.x;
-			tilePositionY += _tilePixelSize.y * 0.5f * tilemapScale.y;
-		}
-
-		if (cellPosition == CellPosition::CENTER_RIGHT)
-		{
-			tilePositionX += _tilePixelSize.x * tilemapScale.x;
-			tilePositionY += _tilePixelSize.y * 0.5f * tilemapScale.y;
-		}
-
-		if (cellPosition == CellPosition::TOP_LEFT)
-		{
-			tilePositionY += _tilePixelSize.y * tilemapScale.y;
-		}
-
-		const glm::vec2 point = { tilePositionX, tilePositionY };
-		const glm::vec2 pivot = tilemapPosition;
-		const glm::vec2 finalPosition = MathExtensions::RotatePointAroundPivot(point, pivot, tilemapRotation);
-
-		return finalPosition;
-	}
-
 	void TiledMap2dRendererComponent::RenderLayerGrid(
 		const TiledMapResource* tiledMapResource,
 		const tmx::Map* mapData,
@@ -390,83 +373,83 @@ namespace GEngine
 		const glm::vec2& scale
 		) const
 	{
-		const std::vector<tmx::Tileset>& tileSets = mapData->getTilesets();
-
-		for (std::int32_t y = 0; y < layerGridSize.y; ++y)
-		{
-			for (std::int32_t x = 0; x < layerGridSize.x; ++x)
-			{
-				const std::int32_t tileIdIndex = y * layerGridSize.x + x;
-
-				const bool outsideTileIdsBounds = tileIdIndex >= layerTileIds.size();
-				if (outsideTileIdsBounds) continue;
-
-				const std::uint32_t tileId = layerTileIds[tileIdIndex].ID;
-
-				const int tileSetIndex = tiledMapResource->GetTilesetIndexForTileId(tileId);
-
-				if (VectorExtensions::IsIndexOutsideBounds(tileSets, tileSetIndex)) continue;
-
-				const tmx::Tileset& tileSet = tileSets[tileSetIndex];
-				const std::uint32_t tileSetMargin = tileSet.getMargin();
-				const std::uint32_t tileSetSpacing = tileSet.getSpacing();
-				const std::uint32_t tileSetFirstGid = tileSet.getFirstGID();
-				const std::uint32_t tileSetTileCount = tileSet.getTileCount();
-
-				const bool insideBounds = tileId >= tileSetFirstGid
-					&& tileId < tileSetFirstGid + tileSetTileCount;
-
-				if (!insideBounds)
-				{
-					continue;
-				}
-
-				const std::shared_ptr<TextureResource> tileSetTexture = tiledMapResource->GetTilesetTexture(tileSetIndex).lock();
-				if (!tileSetTexture) continue;
-
-				const Texture2D& rawTexture = tileSetTexture->GetRawTexture();
-
-				const tmx::Vector2 textureSize = { rawTexture.width, rawTexture.height };
-
-				const std::int32_t tileSetGridSizeX = MathExtensions::SafeDivide(
-					textureSize.x - (2 * tileSetMargin) + tileSetSpacing,
-					pixelSizeOfTile.x + tileSetSpacing
-					);
-
-				const std::int32_t idIndex = tileId - tileSet.getFirstGID();
-				const float tileNormalizedPositionOnTileSetX = static_cast<float>(idIndex % tileSetGridSizeX);
-				const float tileNormalizedPositionOnTileSetY = static_cast<float>(idIndex / tileSetGridSizeX);
-
-				const float tileStartOnTileSetTextureX = tileSetMargin + tileNormalizedPositionOnTileSetX * (pixelSizeOfTile.x + tileSetSpacing);
-				const float tileStartOnTileSetTextureY = tileSetMargin + tileNormalizedPositionOnTileSetY * (pixelSizeOfTile.y + tileSetSpacing);
-
-				const glm::i32vec2 girdPosition = tiledMapResource->TiledGridPositionToEngineGridPosition({ x, y });
-
-				const glm::vec2 finalPosition = GridPositionToWorldPosition(
-					{ layerGridSize.x, layerGridSize.y },
-					position,
-					rotation,
-					scale,
-					girdPosition,
-					CellPosition::CENTER
-					);
-
-				rlRectangle source = {
-					tileStartOnTileSetTextureX,
-					tileStartOnTileSetTextureY,
-					static_cast<float>(pixelSizeOfTile.x),
-					static_cast<float>(pixelSizeOfTile.y)
-				};
-
-				Renderer2d::DrawTexture(
-					rawTexture,
-					source,
-					finalPosition,
-					rotation,
-					scale,
-					Color01::White
-					);
-			}
-		}
+		// const std::vector<tmx::Tileset>& tileSets = mapData->getTilesets();
+		//
+		// for (std::int32_t y = 0; y < layerGridSize.y; ++y)
+		// {
+		// 	for (std::int32_t x = 0; x < layerGridSize.x; ++x)
+		// 	{
+		// 		const std::int32_t tileIdIndex = y * layerGridSize.x + x;
+		//
+		// 		const bool outsideTileIdsBounds = tileIdIndex >= layerTileIds.size();
+		// 		if (outsideTileIdsBounds) continue;
+		//
+		// 		const std::uint32_t tileId = layerTileIds[tileIdIndex].ID;
+		//
+		// 		const int tileSetIndex = tiledMapResource->GetTilesetIndexForTileId(tileId);
+		//
+		// 		if (VectorExtensions::IsIndexOutsideBounds(tileSets, tileSetIndex)) continue;
+		//
+		// 		const tmx::Tileset& tileSet = tileSets[tileSetIndex];
+		// 		const std::uint32_t tileSetMargin = tileSet.getMargin();
+		// 		const std::uint32_t tileSetSpacing = tileSet.getSpacing();
+		// 		const std::uint32_t tileSetFirstGid = tileSet.getFirstGID();
+		// 		const std::uint32_t tileSetTileCount = tileSet.getTileCount();
+		//
+		// 		const bool insideBounds = tileId >= tileSetFirstGid
+		// 			&& tileId < tileSetFirstGid + tileSetTileCount;
+		//
+		// 		if (!insideBounds)
+		// 		{
+		// 			continue;
+		// 		}
+		//
+		// 		const std::shared_ptr<TextureResource> tileSetTexture = tiledMapResource->GetTilesetTexture(tileSetIndex).lock();
+		// 		if (!tileSetTexture) continue;
+		//
+		// 		const Texture2D& rawTexture = tileSetTexture->GetRawTexture();
+		//
+		// 		const tmx::Vector2 textureSize = { rawTexture.width, rawTexture.height };
+		//
+		// 		const std::int32_t tileSetGridSizeX = MathExtensions::SafeDivide(
+		// 			textureSize.x - (2 * tileSetMargin) + tileSetSpacing,
+		// 			pixelSizeOfTile.x + tileSetSpacing
+		// 			);
+		//
+		// 		const std::int32_t idIndex = tileId - tileSet.getFirstGID();
+		// 		const float tileNormalizedPositionOnTileSetX = static_cast<float>(idIndex % tileSetGridSizeX);
+		// 		const float tileNormalizedPositionOnTileSetY = static_cast<float>(idIndex / tileSetGridSizeX);
+		//
+		// 		const float tileStartOnTileSetTextureX = tileSetMargin + tileNormalizedPositionOnTileSetX * (pixelSizeOfTile.x + tileSetSpacing);
+		// 		const float tileStartOnTileSetTextureY = tileSetMargin + tileNormalizedPositionOnTileSetY * (pixelSizeOfTile.y + tileSetSpacing);
+		//
+		// 		const glm::i32vec2 girdPosition = tiledMapResource->TiledGridPositionToEngineGridPosition({ x, y });
+		//
+		// 		const glm::vec2 finalPosition = GridPositionToWorldPosition(
+		// 			{ layerGridSize.x, layerGridSize.y },
+		// 			position,
+		// 			rotation,
+		// 			scale,
+		// 			girdPosition,
+		// 			CellPosition::CENTER
+		// 			);
+		//
+		// 		rlRectangle source = {
+		// 			tileStartOnTileSetTextureX,
+		// 			tileStartOnTileSetTextureY,
+		// 			static_cast<float>(pixelSizeOfTile.x),
+		// 			static_cast<float>(pixelSizeOfTile.y)
+		// 		};
+		//
+		// 		Renderer2d::DrawTexture(
+		// 			rawTexture,
+		// 			source,
+		// 			finalPosition,
+		// 			rotation,
+		// 			scale,
+		// 			Color01::White
+		// 			);
+		// 	}
+		// }
 	}
 } // GEngineCore

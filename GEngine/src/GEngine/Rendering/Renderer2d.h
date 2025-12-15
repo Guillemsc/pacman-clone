@@ -7,6 +7,7 @@
 
 #include "LayeredRenderQueue.h"
 #include "GEngine/Raylib/RaylibWrapper.h"
+#include "GEngine/RenderCommands/Renderer2dCommand.h"
 #include "glm/vec2.hpp"
 
 namespace GEngine
@@ -22,7 +23,6 @@ namespace GEngine
 	public:
 		explicit Renderer2d(GEngineCoreModules* modules);
 
-		void Add(std::int32_t layer, const std::function<void()> &func);
 		void Render();
 
 		void AddTexture(
@@ -44,6 +44,15 @@ namespace GEngine
 			const Color01& color
 			);
 
+		void AddTiledLayer(
+			std::int32_t layer,
+			TiledMapResource* tiledMapResource,
+			int layerIndex,
+			const glm::vec2& position,
+			float rotationRadians,
+			const glm::vec2& scale
+		);
+
 		static void DrawTexture(
 			const Texture2D& texture,
 			const rlRectangle& source,
@@ -57,9 +66,17 @@ namespace GEngine
 		static float RotationToRenderRotation(float rotation);
 
 	private:
+		void AddCommand(std::int32_t layer, const Renderer2dCommand& command);
+
+		static void RenderCommand(const Renderer2dCommand& command);
+		static void RenderTextureCommand(const TextureRenderer2dCommand& command);
+		static void RenderRectCommand(const RectRenderer2dCommand& command);
+		static void RenderTiledLayerCommand(const TiledLayerRenderer2dCommand& command);
+
+	private:
 		GEngineCoreModules* const _modules = nullptr;
 
-		LayeredRenderQueue _renderQueue;
+		std::map<std::int32_t, std::vector<Renderer2dCommand>> _queue;
 	};
 }
 

@@ -245,8 +245,8 @@ add_library(GEngineCore STATIC
         src/GEngine/Components/Sprite2dAnimatorComponent.h
         src/GEngine/Sprite2dAnimator/Sprite2dAnimation.cpp
         src/GEngine/Sprite2dAnimator/Sprite2dAnimation.h
-        src/GEngine/Rendering/Guizmo2dRenderer.cpp
-        src/GEngine/Rendering/Guizmo2dRenderer.h
+        src/GEngine/Rendering/GuizmoRenderer2d.cpp
+        src/GEngine/Rendering/GuizmoRenderer2d.h
         src/GEngine/ComponentsRegister/ComponentsRegister.cpp
         src/GEngine/ComponentsRegister/ComponentsRegister.h
         src/GEngine/Modules/GuizmosModule.cpp
@@ -290,6 +290,7 @@ add_library(GEngineCore STATIC
         src/GEngine/Pooling/ObjectPool.h
         src/GEngine/Strings/StringBuilder.cpp
         src/GEngine/Strings/StringBuilder.h
+        src/GEngine/RenderCommands/Renderer2dCommand.h
 )
 
 # Link raylib

@@ -7,7 +7,7 @@
 
 #include <memory>
 
-#include "GEngine/Rendering/Guizmo2dRenderer.h"
+#include "GEngine/Rendering/GuizmoRenderer2d.h"
 #include "GEngine/Rendering/GuizmoUiRenderer.h"
 #include "GEngine/Rendering/ImGuiRenderer.h"
 #include "GEngine/Rendering/Renderer2d.h"
@@ -33,7 +33,7 @@ namespace GEngine
 
 		[[nodiscard]] Renderer2d* Render2d() const { return _renderer2d.get(); }
 		[[nodiscard]] UiRenderer* UiRender() const { return _uiRenderer.get(); }
-		[[nodiscard]] Guizmo2dRenderer* Guizmo2dRender() const { return _guizmo2dRenderer.get(); }
+		[[nodiscard]] GuizmoRenderer2d* Guizmo2dRender() const { return _guizmo2dRenderer.get(); }
 		[[nodiscard]] GuizmoUiRenderer* GuizmoUiRender() const { return _guizmoUiRenderer.get(); }
 		[[nodiscard]] ImGuiRenderer* ImGuiRender() const { return _imGuiRenderer.get(); }
 
@@ -45,7 +45,7 @@ namespace GEngine
 
 		std::unique_ptr<Renderer2d> _renderer2d;
 		std::unique_ptr<UiRenderer> _uiRenderer;
-		std::unique_ptr<Guizmo2dRenderer> _guizmo2dRenderer;
+		std::unique_ptr<GuizmoRenderer2d> _guizmo2dRenderer;
 		std::unique_ptr<GuizmoUiRenderer> _guizmoUiRenderer;
 		std::unique_ptr<ImGuiRenderer> _imGuiRenderer;
 	};
