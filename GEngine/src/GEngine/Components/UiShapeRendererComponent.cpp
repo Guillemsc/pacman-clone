@@ -32,21 +32,12 @@ namespace GEngine
 		const std::shared_ptr<UiTransformComponent> transform = entity->GetUiTransform().lock();
 		if (transform == nullptr) return;
 
-		UiRect uiRect = transform->GetWorldUiRect();
+		const UiRect uiRect = transform->GetWorldUiRect();
 
-		glm::vec2 position = uiRect.position;
-		glm::vec2 size = uiRect.size;
+		const glm::vec2 position = uiRect.GetPositionWithAppliedPivot();
+		const glm::vec2 size = uiRect.size;
 		const float rotation = uiRect.rotation;
-
-		glm::vec2 pivot = uiRect.pivot;
-		pivot.y = 1 - pivot.y;
-
-		const glm::vec2 center = { size.x * pivot.x, size.y * pivot.y };
-
-		const glm::vec2 offset = uiRect.GetPivotOffset();
-		position += offset;
-
-		position = modules->rendering->UiRender()->PositionToRenderPosition(position);
+		const glm::vec2 pivot = uiRect.pivot;
 
 		if (const auto rectShape = std::dynamic_pointer_cast<RectUiShape2d>(_shape2d->GetValue()))
 		{
@@ -55,7 +46,7 @@ namespace GEngine
 				position,
 				rotation,
 				size,
-				center,
+				pivot,
 				_color->GetValue()
 				);
 		}

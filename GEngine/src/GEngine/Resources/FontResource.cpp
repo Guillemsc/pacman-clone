@@ -16,6 +16,11 @@ namespace GEngine
 		_rawFont = font;
 	}
 
+	Font FontResource::GetRawFont() const
+	{
+		return _rawFont;
+	}
+
 	Texture2D FontResource::GetRawTexture() const
 	{
 		return _rawFont.texture;

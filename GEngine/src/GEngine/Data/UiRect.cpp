@@ -65,6 +65,12 @@ namespace GEngine
 		return translationMat * pivotBackMat * rotationMat * scaleMat * pivotToOriginMat;
 	}
 
+	glm::vec2 UiRect::GetPositionWithAppliedPivot() const
+	{
+		const glm::vec2 offset = GetPivotOffset();
+		return position + offset;
+	}
+
 	glm::vec2 UiRect::GetPivotOffset(const glm::vec2 &pivot) const
 	{
 		return (pivot - glm::vec2(0.5f)) * size;

@@ -28,6 +28,7 @@ namespace GEngine
 		ResourceType GetType() override { return GetTypeStatic(); }
 		const char* GetTypeName() override { return "Font"; }
 
+		[[nodiscard]] Font GetRawFont() const;
 		[[nodiscard]] Texture2D GetRawTexture() const;
 
 	protected:

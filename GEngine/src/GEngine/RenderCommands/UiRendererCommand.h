@@ -6,6 +6,7 @@
 #define UIRENDERERCOMMAND_H
 
 #include "GEngine/Colors/Color01.h"
+#include "GEngine/Resources/FontResource.h"
 #include "glm/vec2.hpp"
 
 namespace GEngine
@@ -13,6 +14,7 @@ namespace GEngine
 	enum class UiRendererCommandType
 	{
 		RECT,
+		TEXT,
 	};
 
 	struct RectUiRendererCommand
@@ -20,7 +22,18 @@ namespace GEngine
 		glm::vec2 position;
 		float rotationRadians;
 		glm::vec2 size;
-		glm::vec2 center;
+		glm::vec2 pivot;
+		Color01 color;
+	};
+
+	struct TextUiRendererCommand
+	{
+		FontResource* font;
+		std::string_view text;
+		glm::vec2 position;
+		float rotationRadians;
+		glm::vec2 size;
+		glm::vec2 pivot;
 		Color01 color;
 	};
 
@@ -31,6 +44,7 @@ namespace GEngine
 		union
 		{
 			RectUiRendererCommand rect;
+			TextUiRendererCommand text;
 		};
 	};
 }

@@ -18,6 +18,7 @@ namespace GEngine
 	{
 		static UiRect Transform(const UiRect& parent, const UiRect& child);
 		[[nodiscard]] glm::mat4 BuildMatrix() const;
+		[[nodiscard]] glm::vec2 GetPositionWithAppliedPivot() const;
 		[[nodiscard]] glm::vec2 GetPivotOffset(const glm::vec2& pivot) const;
 		[[nodiscard]] glm::vec2 GetPivotOffset() const;
 		[[nodiscard]] glm::vec2 GetPivotPosition(const glm::vec2& pivot) const;

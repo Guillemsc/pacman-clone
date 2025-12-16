@@ -32,15 +32,28 @@ namespace GEngine
 			const Color01 &color
 			);
 
+		void AddText(
+			std::int32_t layer,
+			FontResource* font,
+			const std::string_view& text,
+			const glm::vec2 &position,
+			float rotationRadians,
+			const glm::vec2 &size,
+			const glm::vec2& pivot,
+			const Color01 &color
+			);
+
 		glm::vec2 PositionToRenderPosition(const glm::vec2& position) const;
+		glm::vec2 PivotToRenderPivot(const glm::vec2& pivot) const;
 		glm::vec4 RectToRenderRect(const glm::vec4& rect) const;
 		static float RotationToRenderRotation(float rotation);
 
 	private:
 		void AddCommand(std::int32_t layer, const UiRendererCommand& command);
 
-		static void RenderCommand(const UiRendererCommand& command);
-		static void RenderRectCommand(const RectUiRendererCommand& command);
+		void RenderCommand(const UiRendererCommand& command);
+		void RenderRectCommand(const RectUiRendererCommand& command) const;
+		void RenderTextCommand(const TextUiRendererCommand& command);
 
 	private:
 		GEngineCoreModules* const _modules;

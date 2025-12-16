@@ -7,6 +7,7 @@
 
 #include "raylib.h"
 #include "raymath.h"
+#include "rlgl.h"
 
 inline void Raylib_CloseWindow() { ::rlCloseWindow(); }
 inline void Raylib_ShowCursor() { ::rlShowCursor(); }

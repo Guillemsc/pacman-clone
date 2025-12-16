@@ -8,6 +8,8 @@
 #include "GameplayContext.h"
 #include "GEngine/Components/UiShapeButtonComponent.h"
 #include "GEngine/Components/UiShapeRendererComponent.h"
+#include "GEngine/Components/UiTextRendererComponent.h"
+#include "GEngine/Components/UiTransformComponent.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
 #include "GEngine/Coroutines/CoroutinesRunner.h"
 #include "GEngine/Modules/CoroutinesModule.h"
@@ -29,6 +31,10 @@ namespace PacMan
 		const std::shared_ptr<GEngine::UiShapeButtonComponent> button = uiEntity2->AddComponent<GEngine::UiShapeButtonComponent>().lock();
 
 		button->OnClick().Add([this] { WhenPlayButtonClicked(); });
+
+		const std::shared_ptr<GEngine::Entity> uiEntity3 = _scene->AddUiEntity().lock();
+		uiEntity3->AddComponent<GEngine::UiTextRendererComponent>();
+		uiEntity3->GetUiTransform().lock()->SetAnchoredPosition({0, -100});
 
 		co_await Context::OnLoadAsync();
 	}

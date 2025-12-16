@@ -29,8 +29,6 @@ namespace GEngine
 		const UiRect uiRect = transform->GetWorldUiRect();
 		glm::vec2 position = uiRect.position;
 
-		position = modules->rendering->UiRender()->PositionToRenderPosition(position);
-
 		const std::shared_ptr<FontResource> fontResource = _fontResource.lock();
 
 		Font rawFont;
@@ -43,6 +41,17 @@ namespace GEngine
 		{
 			rawFont = GetFontDefault();
 		}
+
+		modules->rendering->UiRender()->AddText(
+			0,
+			fontResource.get(),
+			std::string_view(_text),
+			uiRect.position,
+			uiRect.rotation,
+			uiRect.size,
+			uiRect.pivot,
+			Color01::White
+			);
 
 		// modules->rendering->UiRender()->Add(0, [this, position, rawFont]()
 		// {

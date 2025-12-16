@@ -25,6 +25,15 @@ namespace GEngine
 
 			DrawTexturePro(texture, source, dest, origin, rotation, tint);
 		}
+
+		static void DrawTextCodepointExtension(
+			const Font &font,
+			int codepoint,
+			Vector2 position,
+			float rotation,
+			float fontSize,
+			Color tint
+			);
 	};
 }
 
