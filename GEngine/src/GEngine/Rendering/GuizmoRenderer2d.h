@@ -11,6 +11,7 @@
 #include <unordered_set>
 
 #include "LayeredRenderQueue.h"
+#include "GEngine/RenderCommands/GuizmoRenderer2dCommand.h"
 #include "glm/vec2.hpp"
 
 namespace GEngine
@@ -36,9 +37,19 @@ namespace GEngine
 		static float RotationToRenderRotation(float rotation);
 
 	private:
+		void AddCommand(std::int32_t layer, const GuizmoRenderer2dCommand& command);
+
+		static void RenderCommand(const GuizmoRenderer2dCommand& command);
+		static void RenderLineCommand(const LineGuizmoRenderer2dCommand& command);
+		static void RenderRectCommand(const RectGuizmoRenderer2dCommand& command);
+		static void RenderRectLinesCommand(const RectLinesGuizmoRenderer2dCommand& command);
+		static void RenderCircleCommand(const CircleGuizmoRenderer2dCommand& command);
+
+	private:
 		GEngineCoreModules* const _modules;
 
 		LayeredRenderQueue _renderQueue;
+		std::map<std::int32_t, std::vector<GuizmoRenderer2dCommand>> _queue;
 	};
 }
 
