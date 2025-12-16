@@ -17,11 +17,6 @@ namespace GEngine
 
 	}
 
-	void GuizmoRenderer2d::Add(const std::int32_t layer, const std::function<void()> &func)
-	{
-		_renderQueue.Add(layer, func);
-	}
-
 	void GuizmoRenderer2d::Render()
 	{
 		for (auto it = _queue.begin(); it != _queue.end(); ++it)
@@ -38,15 +33,16 @@ namespace GEngine
 		}
 	}
 
-	void GuizmoRenderer2d::AddCircle(const glm::vec2 &position, const float radius, const Color01 &color)
+	void GuizmoRenderer2d::AddLine(const glm::vec2 &start, const glm::vec2 &end, float thickness, const Color01 &color)
 	{
 		AddCommand(
-			0,
+		0,
 			GuizmoRenderer2dCommand {
-				.type = GuizmoRenderer2dCommandType::CIRCLE,
-				.circle =  {
-					position,
-					radius,
+				.type = GuizmoRenderer2dCommandType::LINE,
+				.line = {
+					start,
+					end,
+					thickness,
 					color
 				}
 			});
@@ -89,16 +85,15 @@ namespace GEngine
 			});
 	}
 
-	void GuizmoRenderer2d::AddLine(const glm::vec2 &start, const glm::vec2 &end, float thickness, const Color01 &color)
+	void GuizmoRenderer2d::AddCircleLines(const glm::vec2 &position, const float radius, const Color01 &color)
 	{
 		AddCommand(
-		0,
+			0,
 			GuizmoRenderer2dCommand {
-				.type = GuizmoRenderer2dCommandType::LINE,
-				.line = {
-					start,
-					end,
-					thickness,
+				.type = GuizmoRenderer2dCommandType::CIRCLE_LINES,
+				.circleLines =  {
+					position,
+					radius,
 					color
 				}
 			});
@@ -141,9 +136,9 @@ namespace GEngine
 				break;
 			}
 
-			case GuizmoRenderer2dCommandType::CIRCLE:
+			case GuizmoRenderer2dCommandType::CIRCLE_LINES:
 			{
-				RenderCircleCommand(command.circle);
+				RenderCircleLinesCommand(command.circleLines);
 				break;
 			}
 		}
@@ -203,7 +198,7 @@ namespace GEngine
 		DrawLineEx(topRight, topLeft, command.thickness, raylibColor);
 	}
 
-	void GuizmoRenderer2d::RenderCircleCommand(const CircleGuizmoRenderer2dCommand &command)
+	void GuizmoRenderer2d::RenderCircleLinesCommand(const CircleLinesGuizmoRenderer2dCommand &command)
 	{
 		const glm::vec2 renderPosition = PositionToRenderPosition(command.position);
 		const Color raylibColor = Color01Extensions::ToRaylibColor(command.color);

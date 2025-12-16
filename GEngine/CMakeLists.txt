@@ -294,6 +294,8 @@ add_library(GEngineCore STATIC
         src/GEngine/Pooling/Pools.cpp
         src/GEngine/Pooling/Pools.h
         src/GEngine/RenderCommands/GuizmoRenderer2dCommand.h
+        src/GEngine/RenderCommands/UiRendererCommand.h
+        src/GEngine/RenderCommands/GuizmoUiRendererCommand.h
 )
 
 # Link raylib

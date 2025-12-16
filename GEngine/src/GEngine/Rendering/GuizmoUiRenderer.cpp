@@ -17,43 +17,63 @@ namespace GEngine
 
 	}
 
-	void GuizmoUiRenderer::Add(const std::int32_t layer, const std::function<void()> &func)
-	{
-		_renderQueue.Add(layer, func);
-	}
-
 	void GuizmoUiRenderer::Render()
 	{
-		_renderQueue.Execute(true);
-	}
-
-	void GuizmoUiRenderer::AddCircle(const glm::vec2 &position, float radius, const Color01 &color)
-	{
-		Add(0, [this, position, radius, color]()
+		for (auto it = _queue.begin(); it != _queue.end(); ++it)
 		{
-			const glm::vec2 renderPosition = PositionToRenderPosition(position);
-			const Color raylibColor = Color01Extensions::ToRaylibColor(color);
-			DrawCircleLines(renderPosition.x, renderPosition.y, radius, raylibColor);
-		});
-	}
+			const std::vector<GuizmoUiRendererCommand>& commands = it->second;
 
-	void GuizmoUiRenderer::AddLineRect(const CornersRect& rect, const float thickness,const Color01 &color)
-	{
-		AddLine(rect.bottomLeft, rect.topLeft, thickness, color);
-		AddLine(rect.topLeft, rect.topRight, thickness, color);
-		AddLine(rect.topRight, rect.bottomRight, thickness, color);
-		AddLine(rect.bottomRight, rect.bottomLeft, thickness, color);
+			for (auto commandIt = commands.begin(); commandIt != commands.end(); ++commandIt)
+			{
+				const GuizmoUiRendererCommand& command = *commandIt;
+				RenderCommand(command);
+			}
+
+			it->second.clear();
+		}
 	}
 
 	void GuizmoUiRenderer::AddLine(const glm::vec2 &start, const glm::vec2 &end, float thickness, const Color01 &color)
 	{
-		Add(0, [this, color, start, end, thickness]()
-		{
-			const glm::vec2 renderStart = PositionToRenderPosition(start);
-			const glm::vec2 renderEnd = PositionToRenderPosition(end);
-			const Color raylibColor = Color01Extensions::ToRaylibColor(color);
-			DrawLineEx({renderStart.x, renderStart.y}, {renderEnd.x, renderEnd.y}, thickness, raylibColor);
-		});
+		AddCommand(
+			0,
+			GuizmoUiRendererCommand {
+				.type = GuizmoUiRendererCommandType::LINE,
+				.line = {
+					start,
+					end,
+					thickness,
+					color
+				}
+			});
+	}
+
+	void GuizmoUiRenderer::AddCornersRectLines(const CornersRect& rect, const float thickness, const Color01 &color)
+	{
+		AddCommand(
+			0,
+			GuizmoUiRendererCommand {
+				.type = GuizmoUiRendererCommandType::CORNERS_RECT_LINES,
+				.cornersRectLines = {
+					rect,
+					thickness,
+					color
+				}
+			});
+	}
+
+	void GuizmoUiRenderer::AddCircleLines(const glm::vec2 &position, const float radius, const Color01 &color)
+	{
+		AddCommand(
+			0,
+			GuizmoUiRendererCommand {
+				.type = GuizmoUiRendererCommandType::CIRCLE_LINES,
+				.circleLines = {
+					position,
+					radius,
+					color
+				}
+			});
 	}
 
 	glm::vec2 GuizmoUiRenderer::PositionToRenderPosition(const glm::vec2 &position) const
@@ -63,5 +83,59 @@ namespace GEngine
 		const float newPositionY = windowSize.y - position.y;
 
 		return { position.x, newPositionY };
+	}
+
+	void GuizmoUiRenderer::AddCommand(const std::int32_t layer, const GuizmoUiRendererCommand &command)
+	{
+		_queue[layer].push_back(command);
+	}
+
+	void GuizmoUiRenderer::RenderCommand(const GuizmoUiRendererCommand &command) const
+	{
+		switch (command.type)
+		{
+			case GuizmoUiRendererCommandType::LINE:
+			{
+				RenderLineCommand(command.line);
+				break;
+			}
+
+			case GuizmoUiRendererCommandType::CORNERS_RECT_LINES:
+			{
+				RenderRectLinesCommand(command.cornersRectLines);
+				break;
+			}
+
+			case GuizmoUiRendererCommandType::CIRCLE_LINES:
+			{
+				RenderCircleLinesCommand(command.circleLines);
+				break;
+			}
+		}
+	}
+
+	void GuizmoUiRenderer::RenderLineCommand(const LineGuizmoUiRendererCommand &command) const
+	{
+		const glm::vec2 renderStart = PositionToRenderPosition(command.start);
+		const glm::vec2 renderEnd = PositionToRenderPosition(command.end);
+		const Color raylibColor = Color01Extensions::ToRaylibColor(command.color);
+
+		DrawLineEx({renderStart.x, renderStart.y}, {renderEnd.x, renderEnd.y}, command.thickness, raylibColor);
+	}
+
+	void GuizmoUiRenderer::RenderRectLinesCommand(const CornersRectLinesGuizmoUiRendererCommand &command) const
+	{
+		RenderLineCommand({ command.rect.bottomLeft, command.rect.topLeft, command.thickness, command.color });
+		RenderLineCommand({ command.rect.topLeft, command.rect.topRight, command.thickness, command.color });
+		RenderLineCommand({ command.rect.topRight, command.rect.bottomRight, command.thickness, command.color });
+		RenderLineCommand({ command.rect.bottomRight, command.rect.bottomLeft, command.thickness, command.color });
+	}
+
+	void GuizmoUiRenderer::RenderCircleLinesCommand(const CircleLinesGuizmoUiRendererCommand &command) const
+	{
+		const glm::vec2 renderPosition = PositionToRenderPosition(command.position);
+		const Color raylibColor = Color01Extensions::ToRaylibColor(command.color);
+
+		DrawCircleLines(renderPosition.x, renderPosition.y, command.radius, raylibColor);
 	}
 }

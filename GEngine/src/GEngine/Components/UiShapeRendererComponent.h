@@ -27,15 +27,6 @@ namespace GEngine
 		void SetColor(const Color01& color) const;
 
 	private:
-		void RenderRectUiShape2d(
-			const glm::vec2& position,
-			float rotation,
-			const glm::vec2& size,
-			const glm::vec2& center,
-			const RectUiShape2d* rectShape
-		) const;
-
-	private:
 		std::shared_ptr<Property<std::shared_ptr<UiShape2d>>> _shape2d;
 		std::shared_ptr<Property<Color01>> _color;
 	};

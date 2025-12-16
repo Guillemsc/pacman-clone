@@ -25,6 +25,7 @@ namespace GEngine
 		[[nodiscard]] glm::vec2 GetPointFromNormalizedPoint(const glm::vec2& point) const;
 		[[nodiscard]] glm::vec4 GetRectFromNormalizedRect(const glm::vec4& point) const;
 		[[nodiscard]] CornersRect GetCorners() const;
+		[[nodiscard]] glm::vec2 InversePoint(const glm::vec2& point) const;
 		[[nodiscard]] bool ContainsPoint(const glm::vec2& point) const;
 
 		glm::vec2 position = glm::vec2(0);

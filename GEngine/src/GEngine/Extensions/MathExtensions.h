@@ -41,7 +41,7 @@ namespace GEngine
 
 		static glm::vec2 InverseRotatePointAroundPivot(const glm::vec2 point, const glm::vec2 pivot, const float radians)
 		{
-			return RotatePointAroundPivot(point, pivot, -radians);
+			return RotatePointAroundPivot(point, pivot, radians);
 		}
 
 		static float SafeDivide(const float v1, const float v2)

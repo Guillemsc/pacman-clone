@@ -36,7 +36,7 @@ namespace GEngine
 
 		glm::vec2 position = uiRect.position;
 		glm::vec2 size = uiRect.size;
-		const float rotation = glm::degrees(uiRect.rotation);
+		const float rotation = uiRect.rotation;
 
 		glm::vec2 pivot = uiRect.pivot;
 		pivot.y = 1 - pivot.y;
@@ -48,36 +48,21 @@ namespace GEngine
 
 		position = modules->rendering->UiRender()->PositionToRenderPosition(position);
 
-		auto selfPtr = weak_from_this();
-
-		modules->rendering->UiRender()->Add(0, [selfPtr, size, rotation, center, position]()
+		if (const auto rectShape = std::dynamic_pointer_cast<RectUiShape2d>(_shape2d->GetValue()))
 		{
-			const auto self = selfPtr.lock();
-			if (!self) return;
-
-			if (const auto rectShape = std::dynamic_pointer_cast<RectUiShape2d>(self->_shape2d->GetValue()))
-			{
-				self->RenderRectUiShape2d(position, rotation, size, center, rectShape.get());
-			}
-		});
+			modules->rendering->UiRender()->AddRect(
+				0,
+				position,
+				rotation,
+				size,
+				center,
+				_color->GetValue()
+				);
+		}
 	}
 
 	void UiShapeRendererComponent::SetColor(const Color01& color) const
 	{
 		_color->SetValue(color);
-	}
-
-	void UiShapeRendererComponent::RenderRectUiShape2d(
-		const glm::vec2 &position,
-		const float rotation,
-		const glm::vec2 &size,
-		const glm::vec2 &center,
-		const RectUiShape2d *rectShape
-		) const
-	{
-		const Color color = Color01Extensions::ToRaylibColor(_color->GetValue());
-		const rlRectangle button = {position.x, position.y, size.x, size.y};
-		DrawRectanglePro(button, { center.x, center.y }, rotation, color);
-		rlDrawText("Click Me", button.x + 10, button.y + 15, 20, BLACK);
 	}
 } // GEngine

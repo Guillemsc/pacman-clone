@@ -15,7 +15,7 @@
 namespace GEngine
 {
 	UiTransformComponent::UiTransformComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity)
-	: Component(modules, entity)
+		: Component(modules, entity)
 	{
 		_localPosition = _properties.Register("Position", Vec2Extensions::Zero);
 		_localSize = _properties.Register("Size", glm::vec2(100, 100));
@@ -46,16 +46,16 @@ namespace GEngine
 
 		const UiRect parentUiRect = GetParentWorldUiRect();
 		const CornersRect anchorsScreenPosition = GetAnchorsScreenPosition(parentUiRect);
-		guizmoUiRenderer->AddCircle(anchorsScreenPosition.topLeft, 5, Color01::Green);
-		guizmoUiRenderer->AddCircle(anchorsScreenPosition.topRight, 5, Color01::Green);
-		guizmoUiRenderer->AddCircle(anchorsScreenPosition.bottomLeft, 5, Color01::Green);
-		guizmoUiRenderer->AddCircle(anchorsScreenPosition.bottomRight, 5, Color01::Green);
+		guizmoUiRenderer->AddCircleLines(anchorsScreenPosition.topLeft, 5, Color01::Green);
+		guizmoUiRenderer->AddCircleLines(anchorsScreenPosition.topRight, 5, Color01::Green);
+		guizmoUiRenderer->AddCircleLines(anchorsScreenPosition.bottomLeft, 5, Color01::Green);
+		guizmoUiRenderer->AddCircleLines(anchorsScreenPosition.bottomRight, 5, Color01::Green);
 
 		const glm::vec2 pivotPosition = _worldUiRect.GetPivotPosition(_localUiRect.pivot);
-		guizmoUiRenderer->AddCircle(pivotPosition, 5, Color01::Blue);
+		guizmoUiRenderer->AddCircleLines(pivotPosition, 5, Color01::Blue);
 
 		const CornersRect cornersRect = _worldUiRect.GetCorners();
-		guizmoUiRenderer->AddLineRect(cornersRect, 2, Color01::White);
+		guizmoUiRenderer->AddCornersRectLines(cornersRect, 2, Color01::White);
 	}
 
 	void UiTransformComponent::SetAnchors(const glm::vec4& anchors) const
@@ -168,7 +168,6 @@ namespace GEngine
 		);
 	}
 
-
 	UiRect UiTransformComponent::GetParentWorldUiRect() const
 	{
 		const std::shared_ptr<Entity> entity = GetEntity().lock();
@@ -219,7 +218,7 @@ namespace GEngine
 		anchoredPosition *= uiScale;
 
 		anchoredPosition *= parentUiRect.scale;
-		anchoredPosition = MathExtensions::RotatePointAroundOrigin(anchoredPosition, -parentUiRect.rotation);
+		anchoredPosition = MathExtensions::RotatePointAroundOrigin(anchoredPosition, parentUiRect.rotation);
 
 		const glm::vec2 finalPosition = anchorsCenter + anchoredPosition;
 		const glm::vec2 finalSize = anchorsSize + sizeDelta;
@@ -227,7 +226,7 @@ namespace GEngine
 		const UiRect parentRect = GetParentWorldUiRect();
 		glm::vec2 localPosition = finalPosition - parentRect.position;
 
-		localPosition = MathExtensions::RotatePointAroundOrigin(localPosition, parentUiRect.rotation);
+		localPosition = MathExtensions::RotatePointAroundOrigin(localPosition, -parentUiRect.rotation);
 		localPosition /= parentUiRect.scale;
 
 		_localPosition->SetValue(localPosition, false);

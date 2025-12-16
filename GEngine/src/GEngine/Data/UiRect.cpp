@@ -10,6 +10,7 @@
 
 #include "GEngine/Extensions/Vec2Extensions.h"
 #include "GEngine/Extensions/Vec4Extensions.h"
+#include "GEngine/Logging/GEngineLog.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/matrix_decompose.hpp"
 #include "glm/gtx/quaternion.hpp"
@@ -35,7 +36,7 @@ namespace GEngine
 
 		UiRect global;
 		global.position = { translation.x, translation.y };
-		global.rotation = -eulerRotation.z;
+		global.rotation = eulerRotation.z;
 		global.scale = { scale.x, scale.y };
 
 		global.size = global.scale * child.size;
@@ -49,14 +50,13 @@ namespace GEngine
 		const glm::vec2 pivotOffset = GetPivotOffset();;
 		const glm::vec3 matrixPivotOffset = glm::vec3(pivotOffset.x, pivotOffset.y, 0);
 		const glm::vec3 matrixPosition = { position.x - pivotOffset.x, position.y - pivotOffset.y, 0 };
-		const glm::vec3 matrixRotation = {0, 0, -rotation};
-		const glm::quat matrixRotationQuaternion = glm::quat(matrixRotation);
+		const glm::quat matrixRotationQuaternion = glm::angleAxis(rotation, glm::vec3(0, 0, 1));
 		const glm::quat normalizedRotation = glm::normalize(matrixRotationQuaternion);
 		const glm::vec3 matrixScale = { scale.x, scale.y, 1 };
 
 		constexpr glm::mat4 identityMatrix = glm::mat4(1.0f);
 
-		const glm::mat4 translationMat = glm::translate(identityMatrix, matrixPosition );
+		const glm::mat4 translationMat = glm::translate(identityMatrix, matrixPosition);
 		const glm::mat4 rotationMat = glm::toMat4(normalizedRotation);
 		const glm::mat4 scaleMat = glm::scale(identityMatrix, matrixScale);
 		const glm::mat4 pivotToOriginMat = glm::translate(identityMatrix, -matrixPivotOffset);
@@ -78,7 +78,7 @@ namespace GEngine
 	glm::vec2 UiRect::GetPivotPosition(const glm::vec2& pivot) const
 	{
 		glm::vec2 pivotOffset = GetPivotOffset(pivot);
-		pivotOffset = MathExtensions::RotatePointAroundOrigin(pivotOffset, -rotation);
+		pivotOffset = MathExtensions::RotatePointAroundOrigin(pivotOffset, rotation);
 		return position + pivotOffset;
 	}
 
@@ -99,24 +99,34 @@ namespace GEngine
 		corners.topRight = glm::vec2(halfSize.x, halfSize.y) + pivotOffset;
 		corners.bottomRight = glm::vec2(halfSize.x, -halfSize.y) + pivotOffset;
 
-		corners.bottomLeft = position + MathExtensions::RotatePointAroundPivot(corners.bottomLeft, pivotOffset, -rotation);
-		corners.topLeft = position + MathExtensions::RotatePointAroundPivot(corners.topLeft, pivotOffset, -rotation);
-		corners.topRight = position + MathExtensions::RotatePointAroundPivot(corners.topRight, pivotOffset, -rotation);
-		corners.bottomRight = position + MathExtensions::RotatePointAroundPivot(corners.bottomRight, pivotOffset, -rotation);
+		corners.bottomLeft = position + MathExtensions::RotatePointAroundPivot(corners.bottomLeft, pivotOffset, rotation);
+		corners.topLeft = position + MathExtensions::RotatePointAroundPivot(corners.topLeft, pivotOffset, rotation);
+		corners.topRight = position + MathExtensions::RotatePointAroundPivot(corners.topRight, pivotOffset, rotation);
+		corners.bottomRight = position + MathExtensions::RotatePointAroundPivot(corners.bottomRight, pivotOffset, rotation);
 
 		return corners;
 	}
 
+	glm::vec2 UiRect::InversePoint(const glm::vec2 &point) const
+	{
+		const glm::mat4 matrix = BuildMatrix();
+		const glm::mat4 inverseMatrix = glm::inverse(matrix);
+		const glm::vec4 local = inverseMatrix * glm::vec4(point, 0.0f, 1.0f);
+		return { local.x, local.y };
+	}
+
 	bool UiRect::ContainsPoint(const glm::vec2 &point) const
 	{
-		const glm::vec2 local = point - position;
-		const glm::vec2 unrotated = MathExtensions::RotatePointAroundOrigin(local, -rotation);
-		const glm::vec2 unscaled = Vec2Extensions::SafeDivide(unrotated, scale);
+		const glm::vec2 local = InversePoint(point);
 
-		const glm::vec2 min = -pivot * size;
-		const glm::vec2 max = min + size;
+		// We need to account for the positional offset of the rect bounds
+		const glm::vec2 finalSize = Vec2Extensions::SafeDivide(size, scale);
+		const float x = -pivot.x * finalSize.x;
+		const float y = -pivot.y * finalSize.y;
+		const float w = x + finalSize.x;
+		const float h = y + finalSize.y;
 
-		return unscaled.x >= min.x && unscaled.x <= max.x &&
-				unscaled.y >= min.y && unscaled.y <= max.y;
+		return local.x >= x && local.x <= w &&
+			   local.y >= y && local.y <= h;
 	}
 } // GEngine

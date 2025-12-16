@@ -22,7 +22,7 @@ namespace GEngine
 
 		static glm::vec2 SafeDivide(const glm::vec2 v1, const glm::vec2 v2)
 		{
-			return { MathExtensions::SafeDivide(v1.x, v2.x), MathExtensions::SafeDivide(v1.y, v2.x) };
+			return { MathExtensions::SafeDivide(v1.x, v2.x), MathExtensions::SafeDivide(v1.y, v2.y) };
 		}
 
 		static glm::vec2 GetNormalizedValue(const glm::vec2 value, const glm::vec2 start, const glm::vec2 end)

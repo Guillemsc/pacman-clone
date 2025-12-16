@@ -15,7 +15,7 @@ namespace GEngine
 		LINE,
 		RECT,
 		RECT_LINES,
-		CIRCLE,
+		CIRCLE_LINES,
 	};
 
 	struct LineGuizmoRenderer2dCommand
@@ -43,7 +43,7 @@ namespace GEngine
 		Color01 color;
 	};
 
-	struct CircleGuizmoRenderer2dCommand
+	struct CircleLinesGuizmoRenderer2dCommand
 	{
 		glm::vec2 position;
 		float radius;
@@ -59,7 +59,7 @@ namespace GEngine
 			LineGuizmoRenderer2dCommand line;
 			RectGuizmoRenderer2dCommand rect;
 			RectLinesGuizmoRenderer2dCommand rectLines;
-			CircleGuizmoRenderer2dCommand circle;
+			CircleLinesGuizmoRenderer2dCommand circleLines;
 		};
 	};
 }

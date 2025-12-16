@@ -8,6 +8,7 @@
 #include <memory>
 
 #include "LayeredRenderQueue.h"
+#include "GEngine/RenderCommands/UiRendererCommand.h"
 #include "glm/vec2.hpp"
 #include "glm/vec4.hpp"
 
@@ -20,16 +21,31 @@ namespace GEngine
 	public:
 		explicit UiRenderer(GEngineCoreModules* modules);
 
-		void Add(std::int32_t layer, const std::function<void()> &func);
 		void Render();
+
+		void AddRect(
+			std::int32_t layer,
+			const glm::vec2 &position,
+			float rotationRadians,
+			const glm::vec2 &size,
+			const glm::vec2& center,
+			const Color01 &color
+			);
 
 		glm::vec2 PositionToRenderPosition(const glm::vec2& position) const;
 		glm::vec4 RectToRenderRect(const glm::vec4& rect) const;
+		static float RotationToRenderRotation(float rotation);
+
+	private:
+		void AddCommand(std::int32_t layer, const UiRendererCommand& command);
+
+		static void RenderCommand(const UiRendererCommand& command);
+		static void RenderRectCommand(const RectUiRendererCommand& command);
 
 	private:
 		GEngineCoreModules* const _modules;
 
-		LayeredRenderQueue _renderQueue;
+		std::map<std::int32_t, std::vector<UiRendererCommand>> _queue;
 	};
 }
 #endif //UIRENDERER_H

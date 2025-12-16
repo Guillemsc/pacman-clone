@@ -44,9 +44,9 @@ namespace GEngine
 			rawFont = GetFontDefault();
 		}
 
-		modules->rendering->UiRender()->Add(0, [this, position, rawFont]()
-		{
-			rlDrawTextEx(rawFont, _text.c_str(), Vector2(position.x, position.y), static_cast<float>(rawFont.baseSize), 2, MAROON);
-		});
+		// modules->rendering->UiRender()->Add(0, [this, position, rawFont]()
+		// {
+		// 	rlDrawTextEx(rawFont, _text.c_str(), Vector2(position.x, position.y), static_cast<float>(rawFont.baseSize), 2, MAROON);
+		// });
 	}
 }

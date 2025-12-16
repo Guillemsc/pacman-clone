@@ -25,10 +25,9 @@ namespace GEngine
 	public:
 		explicit GuizmoRenderer2d(GEngineCoreModules* modules);
 
-		void Add(std::int32_t layer, const std::function<void()> &func);
 		void Render();
 
-		void AddCircle(const glm::vec2& position, float radius, const Color01& color);
+		void AddCircleLines(const glm::vec2& position, float radius, const Color01& color);
 		void AddRect(const glm::vec2 &position, const glm::vec2 &size, float rotationRadians, const Color01 &color);
 		void AddRectLines(const glm::vec2 &position, const glm::vec2 &size, float rotationRadians, float thickness, const Color01 &color);
 		void AddLine(const glm::vec2& start, const glm::vec2& end, float thickness, const Color01& color);
@@ -43,12 +42,11 @@ namespace GEngine
 		static void RenderLineCommand(const LineGuizmoRenderer2dCommand& command);
 		static void RenderRectCommand(const RectGuizmoRenderer2dCommand& command);
 		static void RenderRectLinesCommand(const RectLinesGuizmoRenderer2dCommand& command);
-		static void RenderCircleCommand(const CircleGuizmoRenderer2dCommand& command);
+		static void RenderCircleLinesCommand(const CircleLinesGuizmoRenderer2dCommand& command);
 
 	private:
 		GEngineCoreModules* const _modules;
 
-		LayeredRenderQueue _renderQueue;
 		std::map<std::int32_t, std::vector<GuizmoRenderer2dCommand>> _queue;
 	};
 }

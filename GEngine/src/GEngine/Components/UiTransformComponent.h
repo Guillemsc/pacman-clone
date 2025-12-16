@@ -32,10 +32,10 @@ namespace GEngine
 
 		[[nodiscard]] glm::vec2 GetScreenPosition() const;
 		[[nodiscard]] glm::vec2 GetScreenSize() const;
-		float GetRotation() const;
+		[[nodiscard]] float GetRotation() const;
 		[[nodiscard]] glm::vec2 GetPivot() const;
 
-		UiRect GetWorldUiRect() const;
+		[[nodiscard]] UiRect GetWorldUiRect() const;
 
 		[[nodiscard]] glm::vec2 GetAnchoredPosition() const;
 		[[nodiscard]] glm::vec2 GetSizeDelta() const;
