@@ -9,6 +9,8 @@
 
 #include "LayeredRenderQueue.h"
 #include "GEngine/RenderCommands/UiRendererCommand.h"
+#include "GEngine/Text/HorizontalTextAlign.h"
+#include "GEngine/Text/VerticalTextAlign.h"
 #include "glm/vec2.hpp"
 #include "glm/vec4.hpp"
 
@@ -40,7 +42,10 @@ namespace GEngine
 			float rotationRadians,
 			const glm::vec2 &size,
 			const glm::vec2& pivot,
-			const Color01 &color
+			float wordSpacing,
+			const Color01 &color,
+			HorizontalTextAlign horizontalAlign,
+			VerticalTextAlign verticalAlign
 			);
 
 		glm::vec2 PositionToRenderPosition(const glm::vec2& position) const;

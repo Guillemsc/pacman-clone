@@ -6,6 +6,8 @@
 #define UITEXTRENDERERCOMPONENT_H
 
 #include "Component.h"
+#include "GEngine/Text/HorizontalTextAlign.h"
+#include "GEngine/Text/VerticalTextAlign.h"
 
 namespace GEngine
 {
@@ -20,10 +22,25 @@ namespace GEngine
 
 		void OnTick() override;
 
+		std::string GetText() const;
+		void SetText(const std::string& text);
+
+		HorizontalTextAlign GetHorizontalAlign() const;
+		void SetHorizontalAlign(HorizontalTextAlign horizontalAlign);
+
+		VerticalTextAlign GetVerticalAlign() const;
+		void SetVerticalAlign(VerticalTextAlign verticalAlign);
+
+		float GetWordSpacing() const;
+		void SetWordSpacing(float wordSpacing);
+
 	private:
 		std::weak_ptr<FontResource> _fontResource;
 
 		std::string _text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s";
+		HorizontalTextAlign _horizontalAlign = HorizontalTextAlign::LEFT;
+		VerticalTextAlign _verticalAlign = VerticalTextAlign::TOP;
+		float _wordSpacing = 2.0f;
 	};
 }
 

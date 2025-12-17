@@ -27,20 +27,8 @@ namespace GEngine
 		if (!transform) return;
 
 		const UiRect uiRect = transform->GetWorldUiRect();
-		glm::vec2 position = uiRect.position;
 
 		const std::shared_ptr<FontResource> fontResource = _fontResource.lock();
-
-		Font rawFont;
-
-		if (fontResource)
-		{
-			rawFont = fontResource->_rawFont;
-		}
-		else
-		{
-			rawFont = GetFontDefault();
-		}
 
 		modules->rendering->UiRender()->AddText(
 			0,
@@ -50,12 +38,50 @@ namespace GEngine
 			uiRect.rotation,
 			uiRect.size,
 			uiRect.pivot,
-			Color01::White
+			_wordSpacing,
+			Color01::White,
+			_horizontalAlign,
+			_verticalAlign
 			);
+	}
 
-		// modules->rendering->UiRender()->Add(0, [this, position, rawFont]()
-		// {
-		// 	rlDrawTextEx(rawFont, _text.c_str(), Vector2(position.x, position.y), static_cast<float>(rawFont.baseSize), 2, MAROON);
-		// });
+	std::string UiTextRendererComponent::GetText() const
+	{
+		return _text;
+	}
+
+	void UiTextRendererComponent::SetText(const std::string &text)
+	{
+		_text = text;
+	}
+
+	HorizontalTextAlign UiTextRendererComponent::GetHorizontalAlign() const
+	{
+		return _horizontalAlign;
+	}
+
+	void UiTextRendererComponent::SetHorizontalAlign(const HorizontalTextAlign horizontalAlign)
+	{
+		_horizontalAlign = horizontalAlign;
+	}
+
+	VerticalTextAlign UiTextRendererComponent::GetVerticalAlign() const
+	{
+		return _verticalAlign;
+	}
+
+	void UiTextRendererComponent::SetVerticalAlign(const VerticalTextAlign verticalAlign)
+	{
+		_verticalAlign = verticalAlign;
+	}
+
+	float UiTextRendererComponent::GetWordSpacing() const
+	{
+		return _wordSpacing;
+	}
+
+	void UiTextRendererComponent::SetWordSpacing(const float wordSpacing)
+	{
+		_wordSpacing = wordSpacing;
 	}
 }

@@ -67,7 +67,10 @@ namespace GEngine
 		const float rotationRadians,
 		const glm::vec2 &size,
 		const glm::vec2 &pivot,
-		const Color01 &color
+		const float wordSpacing,
+		const Color01 &color,
+		const HorizontalTextAlign horizontalAlign,
+		const VerticalTextAlign verticalAlign
 		)
 	{
 		AddCommand(
@@ -81,7 +84,10 @@ namespace GEngine
 					rotationRadians,
 					size,
 					pivot,
-					color
+					wordSpacing,
+					color,
+					horizontalAlign,
+					verticalAlign
 				}
 			});
 	}
@@ -156,9 +162,8 @@ namespace GEngine
 
 	void UiRenderer::RenderTextCommand(const TextUiRendererCommand &command)
 	{
-		bool wordWrap = false;
 		constexpr float scaleFactor = 1.0f;
-		constexpr float spacing = 2;
+		constexpr float charSpacing = 2.0f;
 
 		Font rawFont;
 
@@ -174,13 +179,14 @@ namespace GEngine
 		const glm::vec2 renderPosition = PositionToRenderPosition(command.position);
 		const glm::vec2 renderPivot = PivotToRenderPivot(command.pivot);
 		const glm::vec2 center = { command.size.x * renderPivot.x, command.size.y * renderPivot.y };
-		const rlRectangle rect = { renderPosition.x, renderPosition.y, command.size.x, command.size.y};
 		const float renderRotation = RotationToRenderRotation(command.rotationRadians);
 		const float renderRotationDegrees = glm::degrees(renderRotation);
 		const Color raylibColor = Color01Extensions::ToRaylibColor(command.color);
 
 		const char* text = command.text.data();
 		const int textLength = TextLength(text);
+
+		bool wordWrap = command.horizontalAlign != HorizontalTextAlign::NO_WORD_WRAP;
 
 		// Offset to next character to draw
 		glm::vec2 charRenderOffset = glm::vec2(0.0f);
@@ -190,6 +196,7 @@ namespace GEngine
 
 		int currentStartLine = -1; // Index where to begin drawing (where a line begins)
 		int currentEndLine = -1; // Index where to stop drawing (where a line ends)
+		float currentLineWidth = 0.0f;
 
 		for (int i = 0; i < textLength; i++)
 		{
@@ -219,7 +226,7 @@ namespace GEngine
 				const bool isLastCharacter = i + 1 >= textLength;
 				if (!isLastCharacter)
 				{
-					glyphWidth = glyphWidth + spacing;
+					glyphWidth = glyphWidth + charSpacing;
 				}
 			}
 
@@ -236,9 +243,11 @@ namespace GEngine
 				if (isSpaceCharacter)
 				{
 					currentEndLine = i;
+					currentLineWidth = charRenderOffset.x - charSpacing;
 				}
 
-				const bool characterGoesOutsideBounds = charRenderOffset.x + glyphWidth > command.size.x;
+				float testingLineWidth = charRenderOffset.x + glyphWidth;
+				const bool characterGoesOutsideBounds = testingLineWidth > command.size.x;
 				if (characterGoesOutsideBounds)
 				{
 					currentEndLine = currentEndLine < 1 ? i : currentEndLine;
@@ -257,10 +266,12 @@ namespace GEngine
 				else if (i + 1 == textLength)
 				{
 					currentEndLine = i;
+					currentLineWidth = testingLineWidth;
 					renderState = DRAW_STATE;
 				}
 				else if (charCodepoint == '\n')
 				{
+					currentLineWidth = testingLineWidth;
 					renderState = DRAW_STATE;
 				}
 
@@ -297,13 +308,23 @@ namespace GEngine
 					const bool areWeExceedingHeightLimit = (charRenderOffset.y + rawFont.baseSize * scaleFactor) > command.size.y;
 					if (areWeExceedingHeightLimit) break;
 
+					const float spaceLeftToFillRect = command.size.x - currentLineWidth;
+
 					// Draw current character glyph
 					const bool charCanBeRendered = charCodepoint != ' ' && charCodepoint != '\t';
-
 
 					if (charCanBeRendered)
 					{
 						glm::vec2 finalCharRenderOffset = charRenderOffset - center;
+
+						if (command.horizontalAlign == HorizontalTextAlign::RIGHT)
+						{
+							finalCharRenderOffset.x += spaceLeftToFillRect;
+						}
+						else if (command.horizontalAlign == HorizontalTextAlign::CENTER)
+						{
+							finalCharRenderOffset.x += spaceLeftToFillRect * 0.5f;
+						}
 
 						glm::vec2 finalPosition = MathExtensions::RotatePointAroundPivot(
 							finalCharRenderOffset,
@@ -311,10 +332,15 @@ namespace GEngine
 							renderRotation
 							);
 
+						finalPosition += renderPosition;
+
+						finalPosition.x = std::round(finalPosition.x);
+						finalPosition.y = std::round(finalPosition.y);
+
 						RayLibExtensions::DrawTextCodepointExtension(
 							rawFont,
 							charCodepoint,
-							(Vector2){ renderPosition.x + finalPosition.x, renderPosition.y + finalPosition.y },
+							{ finalPosition.x, finalPosition.y },
 							renderRotationDegrees,
 							static_cast<float>(rawFont.baseSize),
 							raylibColor
@@ -329,6 +355,7 @@ namespace GEngine
 					charRenderOffset.x = 0;
 					currentStartLine = currentEndLine;
 					currentEndLine = -1;
+					currentLineWidth = 0;
 					glyphWidth = 0;
 
 					renderState = MEASURE_STATE;
@@ -336,19 +363,14 @@ namespace GEngine
 			}
 
 			// Avoid leading spaces
-			if ((charRenderOffset.x != 0) || (charCodepoint != ' '))
+			if (charRenderOffset.x != 0 || (charCodepoint != ' '))
 			{
 				charRenderOffset.x += glyphWidth;
 			}
+			// else if (charRenderOffset.x != 0 && charCodepoint == ' ')
+			// {
+			// 	charRenderOffset.x += glyphWidth;
+			// }
 		}
-
-		// rlDrawTextEx(
-		// 	rawFont,
-		// 	command.text.data(),
-		// 	{ renderPosition.x, renderPosition.y },
-		// 	static_cast<float>(rawFont.baseSize),
-		// 	2,
-		// 	raylibColor
-		// 	);
 	}
 } // GEngine

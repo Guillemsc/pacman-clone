@@ -17,6 +17,7 @@ namespace GEngine
 	{
 	public:
 		static bool InputText(const char* label, std::string* str, ImGuiInputTextFlags flags = 0);
+		static bool InputTextMultiline(const char* label, std::string* str, const ImVec2& size, ImGuiInputTextFlags flags = 0);
 
 	private:
 		static int InputTextCallback(ImGuiInputTextCallbackData* data);

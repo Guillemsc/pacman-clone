@@ -35,6 +35,7 @@ namespace PacMan
 		const std::shared_ptr<GEngine::Entity> uiEntity3 = _scene->AddUiEntity().lock();
 		uiEntity3->AddComponent<GEngine::UiTextRendererComponent>();
 		uiEntity3->GetUiTransform().lock()->SetAnchoredPosition({0, -100});
+		uiEntity3->GetUiTransform().lock()->SetSizeDelta({200, 100});
 
 		co_await Context::OnLoadAsync();
 	}

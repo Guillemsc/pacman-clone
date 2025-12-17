@@ -247,8 +247,7 @@ add_library(GEngineCore STATIC
         src/GEngine/Sprite2dAnimator/Sprite2dAnimation.h
         src/GEngine/Rendering/GuizmoRenderer2d.cpp
         src/GEngine/Rendering/GuizmoRenderer2d.h
-        src/GEngine/ComponentsRegister/ComponentsRegister.cpp
-        src/GEngine/ComponentsRegister/ComponentsRegister.h
+        src/GEngine/Registers/ComponentsRegister.h
         src/GEngine/Modules/GuizmosModule.cpp
         src/GEngine/Modules/GuizmosModule.h
         src/GEngine/Editor/Windows/GuizmosEditorWindow.cpp
@@ -296,6 +295,10 @@ add_library(GEngineCore STATIC
         src/GEngine/RenderCommands/GuizmoRenderer2dCommand.h
         src/GEngine/RenderCommands/UiRendererCommand.h
         src/GEngine/RenderCommands/GuizmoUiRendererCommand.h
+        src/GEngine/Editor/ComponentsInspector/UiTextRendererComponentInspectorEditor.cpp
+        src/GEngine/Editor/ComponentsInspector/UiTextRendererComponentInspectorEditor.h
+        src/GEngine/Text/HorizontalTextAlign.h
+        src/GEngine/Text/VerticalTextAlign.h
 )
 
 # Link raylib

@@ -27,7 +27,7 @@ namespace GEngine
 	class ComponentInspectorEditor : public IComponentInspectorEditor
 	{
 	public:
-		ComponentInspectorEditor(GEngineCoreModules* modules);
+		explicit ComponentInspectorEditor(GEngineCoreModules* modules);
 
 		void Draw(const std::shared_ptr<Component>& inspect) override;
 

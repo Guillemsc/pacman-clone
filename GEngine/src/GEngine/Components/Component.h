@@ -7,7 +7,7 @@
 
 #include "GEngine/Entities/Entity.h"
 #include "GEngine/SerializedProperties/PropertiesContainer.h"
-#include "GEngine/ComponentsRegister/ComponentsRegister.h"
+#include "GEngine/Registers/ComponentsRegister.h"
 
 namespace GEngine
 {

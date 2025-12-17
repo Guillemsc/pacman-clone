@@ -5,7 +5,7 @@
 #include "GuizmosEditorWindow.h"
 
 #include "imgui.h"
-#include "GEngine/ComponentsRegister/ComponentsRegister.h"
+#include "GEngine/Registers/ComponentsRegister.h"
 #include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Modules/GuizmosModule.h"
 

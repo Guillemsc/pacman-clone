@@ -7,6 +7,8 @@
 
 #include "GEngine/Colors/Color01.h"
 #include "GEngine/Resources/FontResource.h"
+#include "GEngine/Text/HorizontalTextAlign.h"
+#include "GEngine/Text/VerticalTextAlign.h"
 #include "glm/vec2.hpp"
 
 namespace GEngine
@@ -34,7 +36,10 @@ namespace GEngine
 		float rotationRadians;
 		glm::vec2 size;
 		glm::vec2 pivot;
+		float wordSpacing;
 		Color01 color;
+		HorizontalTextAlign horizontalAlign;
+		VerticalTextAlign verticalAlign;
 	};
 
 	struct UiRendererCommand

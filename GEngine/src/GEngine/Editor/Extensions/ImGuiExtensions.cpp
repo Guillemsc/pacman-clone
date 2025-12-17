@@ -17,6 +17,13 @@ namespace GEngine
 		return ImGui::InputText(label, str->data(), str->capacity() + 1, flags, InputTextCallback, str);
 	}
 
+	bool ImGuiExtensions::InputTextMultiline(const char *label, std::string *str, const ImVec2& size, ImGuiInputTextFlags flags)
+	{
+		IM_ASSERT((flags & ImGuiInputTextFlags_CallbackResize) == 0);
+		flags |= ImGuiInputTextFlags_CallbackResize;
+		return ImGui::InputTextMultiline(label, str->data(), str->capacity() + 1, size, flags, InputTextCallback, str);
+	}
+
 	int ImGuiExtensions::InputTextCallback(ImGuiInputTextCallbackData *data)
 	{
 		if (data->EventFlag == ImGuiInputTextFlags_CallbackResize)
