@@ -69,7 +69,7 @@ namespace GEngine
 		);
 	}
 
-	void Sprite2dRendererComponent::SetLayer(const int layer) const
+	void Sprite2dRendererComponent::SetLayer(const std::int32_t layer) const
 	{
 		_layer->SetValue(layer);
 	}

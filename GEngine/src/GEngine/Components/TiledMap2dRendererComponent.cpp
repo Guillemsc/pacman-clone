@@ -26,8 +26,9 @@
 namespace GEngine
 {
 	TiledMap2dRendererComponent::TiledMap2dRendererComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity)
-	: Component(modules, entity)
+		: Component(modules, entity)
 	{
+		_layer = _properties.Register("Layer", 0);
 	}
 
 	void TiledMap2dRendererComponent::OnTick()
@@ -52,8 +53,12 @@ namespace GEngine
 
 		for (int i = 0; i < layers.size(); ++i)
 		{
+			const TiledLayerData& layerData = _layersData[i];
+
+			if (!layerData.Visible) continue;
+
 			modules->rendering->Render2d()->AddTiledLayer(
-				0,
+				_layer->GetValue(),
 				tiledMap.get(),
 				i,
 				position,
@@ -91,6 +96,11 @@ namespace GEngine
 				guizmoRenderer->AddRectLines(worldPosition, tileWorldSize, rotationRadians, 0.5f, Color01::Green);
 			}
 		}
+	}
+
+	void TiledMap2dRendererComponent::SetLayer(const std::int32_t layer) const
+	{
+		_layer->SetValue(layer);
 	}
 
 	void TiledMap2dRendererComponent::SetTiledMap(const std::weak_ptr<TiledMapResource> &resource)
@@ -339,14 +349,19 @@ namespace GEngine
 
 		const std::vector<tmx::Layer::Ptr>& layers = mapData->getLayers();
 
-		for (const auto& layer : layers)
+		for (int i = 0; i < layers.size(); i++)
 		{
+			const tmx::Layer::Ptr& layer = layers[i];
+
 			if (layer->getType() != tmx::Layer::Type::Tile)
 			{
 				continue;
 			}
 
-			TiledLayerData layerData;
+			TiledLayerData layerData
+			{
+				.Visible = layer->getVisible(),
+			};
 
 			_layersData.push_back(layerData);
 		}

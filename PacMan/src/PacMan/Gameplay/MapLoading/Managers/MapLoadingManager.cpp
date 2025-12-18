@@ -10,6 +10,7 @@
 #include "GEngine/Logging/GEngineLog.h"
 #include "GEngine/Modules/ResourcesModule.h"
 #include "GEngine/Resources/TiledMapResource.h"
+#include "PacMan/Gameplay/Layers/Enums/RenderingLayer.h"
 #include "PacMan/Gameplay/MapLoading/Data/LoadedMapData.h"
 #include "spdlog/spdlog.h"
 #include "tmxlite/TileLayer.hpp"
@@ -69,6 +70,7 @@ namespace PacMan
 		const std::shared_ptr<GEngine::Entity> tilemapEntity = _scene->AddWorldEntity().lock();
 		tilemapEntity->SetName("Tilemap");
 		const std::shared_ptr<GEngine::TiledMap2dRendererComponent> tilemap = tilemapEntity->AddComponent<GEngine::TiledMap2dRendererComponent>().lock();
+		tilemap->SetLayer(static_cast<std::int32_t>(RenderingLayer::MAP));
 
 		tilemap->SetTiledMap(tilemapResource);
 

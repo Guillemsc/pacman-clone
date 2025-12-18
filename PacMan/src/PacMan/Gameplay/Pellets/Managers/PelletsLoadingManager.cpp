@@ -14,6 +14,7 @@
 #include "GEngine/Scenes/Scene.h"
 #include "PacMan/Gameplay/Collisions/Enums/CollisionLayers.h"
 #include "PacMan/Gameplay/Entities/Components/EntityIdComponent.h"
+#include "PacMan/Gameplay/Layers/Enums/RenderingLayer.h"
 #include "PacMan/Gameplay/MapLoading/Data/LoadedMapData.h"
 #include "PacMan/Gameplay/MapMovement/Managers/MapMovementManager.h"
 
@@ -51,7 +52,7 @@ namespace PacMan
 			transform->SetPositionXY(worldPosition);
 
 			const std::shared_ptr<GEngine::Shape2dRendererComponent> shapeRenderer = entity->AddComponent<GEngine::Shape2dRendererComponent>().lock();
-			shapeRenderer->SetLayer(1);
+			shapeRenderer->SetLayer(static_cast<std::int32_t>(RenderingLayer::PELLETS));
 
 			const std::shared_ptr<GEngine::Collider2dComponent> collider = entity->AddComponent<GEngine::Collider2dComponent>().lock();
 			collider->SetLayer(CollisionLayers::COLLISION_LAYER_PELLETS);

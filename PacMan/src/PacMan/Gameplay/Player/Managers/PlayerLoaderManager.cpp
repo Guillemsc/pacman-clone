@@ -20,6 +20,7 @@
 #include "PacMan/Gameplay/Entities/Components/EntityIdComponent.h"
 #include "PacMan/Gameplay/Entities/Data/GameplayEntities.h"
 #include "PacMan/Gameplay/Input/Systems/PlayerInputSystem.h"
+#include "PacMan/Gameplay/Layers/Enums/RenderingLayer.h"
 #include "PacMan/Gameplay/MapMovement/Components/MapMovementComponent.h"
 #include "PacMan/Gameplay/MapMovement/Managers/MapMovementManager.h"
 #include "PacMan/Gameplay/Player/Components/PlayerAnimationComponent.h"
@@ -61,7 +62,7 @@ namespace PacMan
 	 	const std::weak_ptr<GEngine::SpriteResource> spriteResource = _modules->resources->GetResource<GEngine::SpriteResource>("pacman.sprite");
 
 		const std::shared_ptr<GEngine::Sprite2dRendererComponent> spriteRenderer = playerEntity->AddComponent<GEngine::Sprite2dRendererComponent>().lock();
-		spriteRenderer->SetLayer(1);
+		spriteRenderer->SetLayer(static_cast<std::int32_t>(RenderingLayer::PLAYER));
 
 		const std::shared_ptr<GEngine::Sprite2dAnimatorComponent> spriteAnimator = playerEntity->AddComponent<GEngine::Sprite2dAnimatorComponent>().lock();
 		spriteAnimator->SetSprite2dRenderer(spriteRenderer);

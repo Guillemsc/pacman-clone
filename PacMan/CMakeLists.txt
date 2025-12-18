@@ -83,6 +83,7 @@ add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Gameplay/Ghosts/Components/GhostAnimationComponent.h
         src/PacMan/Gameplay/Ghosts/Components/GhostStateComponent.cpp
         src/PacMan/Gameplay/Ghosts/Components/GhostStateComponent.h
+        src/PacMan/Gameplay/Layers/Enums/RenderingLayer.h
 )
 
 target_link_libraries(PacMan PRIVATE GEngineCore)

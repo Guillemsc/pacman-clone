@@ -23,7 +23,7 @@ namespace GEngine
 
 		void OnTick() override;
 
-		void SetLayer(int layer) const;
+		void SetLayer(std::int32_t layer) const;
 		void SetSprite(const std::weak_ptr<SpriteResource> &sprite) const;
 		void SetSpriteIndex(int index) const;
 		void SetFlippedX(bool flippedX) const;

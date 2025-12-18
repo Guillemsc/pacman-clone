@@ -55,7 +55,7 @@ namespace GEngine
 
 	}
 
-	void Shape2dRendererComponent::SetLayer(const int layer) const
+	void Shape2dRendererComponent::SetLayer(const std::int32_t layer) const
 	{
 		_layer->SetValue(layer);
 	}

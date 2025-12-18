@@ -25,7 +25,7 @@ namespace GEngine
 		void OnTick() override;
 		void OnDestroy() override;
 
-		void SetLayer(int layer) const;
+		void SetLayer(std::int32_t layer) const;
 		void SetColor(const Color01& color) const;
 
 	private:

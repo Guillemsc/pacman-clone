@@ -48,7 +48,7 @@ namespace PacMan
 		void LoadGhosts(const LoadedMapData& loadedMapData);
 		[[nodiscard]] const LoadedGhostsData& GetLoadedGhostsData() const;
 
-		void SetGhostsToInitialPosition();
+		void SetGhostsToInitialPosition() const;
 
 	private:
 		std::shared_ptr<GEngine::Entity> LoadGhost(GhostType ghostType, const glm::i32vec2& gridPosition, bool isPrision);

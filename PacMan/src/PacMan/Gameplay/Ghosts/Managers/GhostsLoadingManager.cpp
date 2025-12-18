@@ -27,6 +27,7 @@
 #include "PacMan/Gameplay/MapMovement/Managers/MapMovementManager.h"
 #include "GEngine/Resources/SpriteResource.h"
 #include "PacMan/Gameplay/Ghosts/Components/GhostStateComponent.h"
+#include "PacMan/Gameplay/Layers/Enums/RenderingLayer.h"
 
 namespace PacMan
 {
@@ -84,7 +85,7 @@ namespace PacMan
 		return _loadedGhostsData;
 	}
 
-	void GhostsLoadingManager::SetGhostsToInitialPosition()
+	void GhostsLoadingManager::SetGhostsToInitialPosition() const
 	{
 		SetGhostToInitialPosition(
 			_loadedGhostsData.MapGhostEntity,
@@ -129,7 +130,7 @@ namespace PacMan
 			= _modules->resources->GetResource<GEngine::SpriteResource>("ghosts/scared.sprite");
 
 		const std::shared_ptr<GEngine::Sprite2dRendererComponent> spriteRenderer = ghostEntity->AddComponent<GEngine::Sprite2dRendererComponent>().lock();
-		spriteRenderer->SetLayer(1);
+		spriteRenderer->SetLayer(static_cast<std::int32_t>(RenderingLayer::GHOSTS));
 
 		const std::shared_ptr<GEngine::Sprite2dAnimatorComponent> spriteAnimator = ghostEntity->AddComponent<GEngine::Sprite2dAnimatorComponent>().lock();
 		spriteAnimator->SetSprite2dRenderer(spriteRenderer);

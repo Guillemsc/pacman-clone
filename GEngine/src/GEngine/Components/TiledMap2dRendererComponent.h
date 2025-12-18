@@ -37,6 +37,8 @@ namespace GEngine
 		void OnTick() override;
 		void OnDrawSelectedGuizmo() override;
 
+		void SetLayer(std::int32_t layer) const;
+
 		void SetTiledMap(const std::weak_ptr<TiledMapResource> &resource);
 		[[nodiscard]] std::weak_ptr<TiledMapResource> GetTiledMap() const;
 
@@ -84,6 +86,8 @@ namespace GEngine
 			) const;
 
 	private:
+		std::shared_ptr<Property<std::int32_t>> _layer;
+
 		std::weak_ptr<TiledMapResource> _tiledMapPtr;
 		std::vector<TiledLayerData> _layersData;
 
