@@ -8,6 +8,7 @@
 #include <memory>
 
 #include "glm/vec2.hpp"
+#include "PacMan/Gameplay/MapMovement/Data/PathPointData.h"
 
 namespace PacMan
 {
@@ -15,7 +16,7 @@ namespace PacMan
 	{
 		float priority;
 		float distance;
-		glm::i32vec2 position = glm::i32vec2(0);
+		PathPointData pathPoint;
 		std::shared_ptr<PathfindingNode> parent;
 	};
 }

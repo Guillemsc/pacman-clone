@@ -12,6 +12,7 @@
 #include "GEngine/Resources/TiledMapResource.h"
 #include "PacMan/Gameplay/Layers/Enums/RenderingLayer.h"
 #include "PacMan/Gameplay/MapLoading/Data/LoadedMapData.h"
+#include "PacMan/Gameplay/MapLoading/Data/MapPortalData.h"
 #include "spdlog/spdlog.h"
 #include "tmxlite/TileLayer.hpp"
 
@@ -168,7 +169,46 @@ namespace PacMan
 		{
 			const tmx::Object& object = portalObjects[i];
 
-			int r = 2;
+			const std::int32_t connectionId = GEngine::TiledMapResource::GetObjectIntProperty(object, "connectionId", -1);
+			const std::int32_t enterDirectionX = GEngine::TiledMapResource::GetObjectIntProperty(object, "enterDirectionX", 0);
+			const std::int32_t enterDirectionY = GEngine::TiledMapResource::GetObjectIntProperty(object, "enterDirectionY", 0);
+			const std::int32_t exitDirectionX = GEngine::TiledMapResource::GetObjectIntProperty(object, "exitDirectionX", 0);
+			const std::int32_t exitDirectionY = GEngine::TiledMapResource::GetObjectIntProperty(object, "exitDirectionY", 0);
+
+			glm::vec2 tiledLocalPosition = { object.getPosition().x,  object.getPosition().y };
+			const glm::i32vec2 gridPosition = tilemapResource->GetGridPositionFromTiledLocalMapPosition(tiledLocalPosition);
+
+			MapPortalData portalData
+			{
+				i,
+				gridPosition,
+				{ enterDirectionX, enterDirectionY },
+				{ exitDirectionX, exitDirectionY },
+				connectionId,
+				-1,
+			};
+
+			loadedMapData.MapPortals.push_back(portalData);
+		}
+
+		for (int i = 0; i < loadedMapData.MapPortals.size(); ++i)
+		{
+			MapPortalData& portalData = loadedMapData.MapPortals[i];
+
+			if (portalData.connectionId < 0) continue;
+			if (portalData.connectedPortalId >= 0) continue;
+
+			for (int y = 0; y < loadedMapData.MapPortals.size(); ++y)
+			{
+				MapPortalData& checkingPortalData = loadedMapData.MapPortals[y];
+
+				if (portalData.id == checkingPortalData.id) continue;
+				if (portalData.connectionId != checkingPortalData.connectionId) continue;
+
+				portalData.connectedPortalId = checkingPortalData.id;
+				checkingPortalData.connectedPortalId = portalData.id;
+				break;
+			}
 		}
 	}
 

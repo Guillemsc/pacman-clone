@@ -22,7 +22,7 @@ namespace PacMan
 		const glm::i32vec2 &originGridPosition,
 		const glm::i32vec2 &allowedDirection,
 		const glm::i32vec2 &targetGridPosition,
-		std::vector<glm::i32vec2> &generatedPath
+		std::vector<PathPointData> &generatedPath
 		)
 	{
 		generatedPath.clear();
@@ -30,7 +30,7 @@ namespace PacMan
 		const std::shared_ptr<PathfindingNode> initialNode = std::make_shared<PathfindingNode>(
 			0,
 			GEngine::Vec2Extensions::Distance(originGridPosition, targetGridPosition),
-			originGridPosition,
+			PathPointData { originGridPosition, false },
 			nullptr
 			);
 		_checkingNodes.push(initialNode);
@@ -42,7 +42,7 @@ namespace PacMan
 		{
 			std::shared_ptr<PathfindingNode> currentNode = _checkingNodes.top();
 
-			if (currentNode->position == targetGridPosition)
+			if (currentNode->pathPoint.gridPosition == targetGridPosition)
 			{
 				foundNode = currentNode;
 				nodeFound = true;
@@ -50,24 +50,24 @@ namespace PacMan
 			}
 
 			_checkingNodes.pop();
-			_checkedNodes.insert(currentNode->position);
+			_checkedNodes.insert(currentNode->pathPoint.gridPosition);
 			_checkedNodesByDistance.push(currentNode);
 
 			glm::i32vec2 direction = GetDirectionFromParent(currentNode.get(), allowedDirection);
-			GenerateNeighbors(currentNode->position, direction);
+			GenerateNeighbors(currentNode->pathPoint.gridPosition, direction);
 
-			for (glm::i32vec2 neighborGridPosition : _neighborsBuffer)
+			for (const PathPointData& neighbor : _neighborsBuffer)
 			{
-				const bool isWalkable = _mapMovementManager->IsWalkable(neighborGridPosition);
+				const bool isWalkable = _mapMovementManager->IsWalkable(neighbor.gridPosition);
 				if (!isWalkable) continue;
 
-				const bool alreadyChecked = _checkedNodes.contains(neighborGridPosition);
+				const bool alreadyChecked = _checkedNodes.contains(neighbor.gridPosition);
 				if (alreadyChecked) continue;
 
 				const std::shared_ptr<PathfindingNode> newNode = std::make_shared<PathfindingNode>(
 					0,
-					GEngine::Vec2Extensions::Distance(neighborGridPosition, targetGridPosition),
-					neighborGridPosition,
+					GEngine::Vec2Extensions::Distance(neighbor.gridPosition, targetGridPosition),
+					neighbor,
 					currentNode
 					);
 				_checkingNodes.push(newNode);
@@ -91,16 +91,16 @@ namespace PacMan
 
 		std::shared_ptr<PathfindingNode> checkingNode = foundNode;
 
-		if (checkingNode->position == originGridPosition)
+		if (checkingNode->pathPoint.gridPosition == originGridPosition)
 		{
 			return { false, false, originGridPosition };
 		}
 
 		while (true)
 		{
-			generatedPath.push_back(checkingNode->position);
+			generatedPath.push_back(checkingNode->pathPoint);
 
-			if (checkingNode->position == originGridPosition)
+			if (checkingNode->pathPoint.gridPosition == originGridPosition)
 			{
 				break;
 			}
@@ -115,22 +115,22 @@ namespace PacMan
 
 		std::ranges::reverse(generatedPath);
 
-		return { true, couldReachTarget, foundNode->position };
+		return { true, couldReachTarget, foundNode->pathPoint.gridPosition };
 	}
 
 	void MapPathfindingManager::GenerateWalkableNeighbors(
 		const glm::i32vec2 &originGridPosition,
 		const glm::i32vec2 &allowedDirection,
-		std::vector<glm::i32vec2> &generatedNeighbors
+		std::vector<PathPointData> &generatedNeighbors
 		)
 	{
 		generatedNeighbors.clear();
 
 		GenerateNeighbors(originGridPosition, allowedDirection);
 
-		for (glm::i32vec2 neighbor : _neighborsBuffer)
+		for (const PathPointData& neighbor : _neighborsBuffer)
 		{
-			const bool isWalkable = _mapMovementManager->IsWalkable(neighbor);
+			const bool isWalkable = _mapMovementManager->IsWalkable(neighbor.gridPosition);
 			if (!isWalkable) continue;
 
 			generatedNeighbors.push_back(neighbor);
@@ -141,7 +141,17 @@ namespace PacMan
 	{
 		if (!pathfindingNode->parent) return defaultDirection;
 
-		return pathfindingNode->position - pathfindingNode->parent->position;
+		if (pathfindingNode->parent->pathPoint.fromPortal)
+		{
+			const std::optional<MapPortalData> portalData = _mapMovementManager->GetPortal(pathfindingNode->pathPoint.gridPosition);
+
+			if (portalData.has_value())
+			{
+				return portalData.value().exitDirection;
+			}
+		}
+
+		return pathfindingNode->pathPoint.gridPosition - pathfindingNode->parent->pathPoint.gridPosition;
 	}
 
 	void MapPathfindingManager::GenerateNeighbors(
@@ -166,7 +176,17 @@ namespace PacMan
 
 			if (isReverseDirection) continue;
 
-			_neighborsBuffer.push_back(gridPosition + direction);
+			const glm::i32vec2 finalGridPosition = gridPosition + direction;
+			_neighborsBuffer.push_back({ finalGridPosition, false });
+		}
+
+		const auto optionalPortal = _mapMovementManager->GetPortal(gridPosition);
+
+		if (optionalPortal.has_value())
+		{
+			const MapPortalData portalData = optionalPortal.value();
+			const MapPortalData connectedPortalData = _mapMovementManager->GetPortal(portalData.connectedPortalId).value();
+			_neighborsBuffer.push_back({ connectedPortalData.gridPosition, true });
 		}
 	}
 }

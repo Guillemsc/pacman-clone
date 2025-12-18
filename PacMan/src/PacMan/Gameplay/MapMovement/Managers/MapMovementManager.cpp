@@ -6,12 +6,17 @@
 
 #include "GEngine/Components/TiledMap2dRendererComponent.h"
 #include "GEngine/Components/TransformComponent.h"
+#include "GEngine/Extensions/VectorExtensions.h"
 
 namespace PacMan
 {
-	void MapMovementManager::Setup(const std::weak_ptr<GEngine::TiledMap2dRendererComponent> &tiledMap)
+	void MapMovementManager::Setup(
+		const std::weak_ptr<GEngine::TiledMap2dRendererComponent> &tiledMap,
+		const std::vector<MapPortalData>& portals
+		)
 	{
 		_tiledMap = tiledMap;
+		_portals = portals;
 
 		const std::shared_ptr<GEngine::TiledMap2dRendererComponent> lTiledMap = _tiledMap.lock();
 
@@ -41,5 +46,23 @@ namespace PacMan
 			_walkabilityLayerIndex,
 			gridPosition
 			);
+	}
+
+	std::optional<MapPortalData> MapMovementManager::GetPortal(const glm::ivec2 &gridPosition) const
+	{
+		// Not very fast, but we only have a max of 4 portals, so...
+		for (const MapPortalData& portal : _portals)
+		{
+			if (portal.gridPosition == gridPosition) return portal;
+		}
+
+		return std::nullopt;
+	}
+
+	std::optional<MapPortalData> MapMovementManager::GetPortal(const std::int32_t portalIndex) const
+	{
+		if (GEngine::VectorExtensions::IsIndexOutsideBounds(_portals, portalIndex)) return std::nullopt;
+
+		return _portals[portalIndex];
 	}
 }

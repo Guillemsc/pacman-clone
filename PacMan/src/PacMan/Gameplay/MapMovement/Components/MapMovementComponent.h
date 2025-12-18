@@ -14,6 +14,7 @@
 #include "GEngine/Extensions/Vec2Extensions.h"
 #include "glm/fwd.hpp"
 #include "PacMan/Gameplay/MapMovement/Data/PathfindingResult.h"
+#include "PacMan/Gameplay/MapMovement/Data/PathPointData.h"
 
 namespace PacMan
 {
@@ -72,7 +73,7 @@ namespace PacMan
 			GEngine::CardinalDirection direction
 			) const;
 
-		std::optional<glm::i32vec2> FindNextValidNeighbor() const;
+		std::optional<PathPointData> FindNextValidNeighbor() const;
 
 	private:
 		MapMovementManager* const _mapMovementManager;
@@ -87,7 +88,7 @@ namespace PacMan
 		glm::i32vec2 _currentGridPosition = glm::i32vec2(0);
 		bool _hasValidGridPosition = false;
 
-		std::vector<glm::i32vec2> _pathToFollow;
+		std::vector<PathPointData> _pathToFollow;
 		float _distanceCarriedFromLastPathPoint = 0;
 		glm::i32vec2 _currentDirectionVector = glm::i32vec2(0);
 		glm::i32vec2 _gridDirectionVector = glm::i32vec2(0);

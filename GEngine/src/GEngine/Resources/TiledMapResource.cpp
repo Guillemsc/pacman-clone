@@ -173,12 +173,9 @@ namespace GEngine
 
 	glm::i32vec2 TiledMapResource::GetGridPositionFromTiledLocalMapPosition(const glm::vec2 &localMapPosition) const
 	{
-		const glm::vec2 layerGridSize = GetGridSize();
 		const glm::vec2 tilePixelSize = GetTilePixelSize();
 
-		const glm::vec2 mapPixelSize = layerGridSize * tilePixelSize;
-
-		const glm::vec2 gridPositionDecimal = Vec2Extensions::SafeDivide(localMapPosition, mapPixelSize);
+		const glm::vec2 gridPositionDecimal = Vec2Extensions::SafeDivide(localMapPosition, tilePixelSize);
 		const glm::i32vec2 gridPosition = glm::i32vec2(std::floor(gridPositionDecimal.x), std::floor(gridPositionDecimal.y));
 		const glm::i32vec2 gridPositionEngine = TiledGridPositionToEngineGridPosition(gridPosition);
 
@@ -201,12 +198,29 @@ namespace GEngine
 		const std::string &defaultValue
 		)
 	{
-		for (tmx::Property property : tile->properties)
+		for (const tmx::Property& property : tile->properties)
 		{
 			if (property.getType() != tmx::Property::Type::String) continue;
 			if (property.getName() != name) continue;
 
 			return property.getStringValue();
+		}
+
+		return defaultValue;
+	}
+
+	std::int32_t TiledMapResource::GetObjectIntProperty(
+		const tmx::Object &object,
+		const std::string &name,
+		const std::int32_t defaultValue
+		)
+	{
+		for (const tmx::Property& property : object.getProperties())
+		{
+			if (property.getType() != tmx::Property::Type::Int) continue;
+			if (property.getName() != name) continue;
+
+			return property.getIntValue();
 		}
 
 		return defaultValue;

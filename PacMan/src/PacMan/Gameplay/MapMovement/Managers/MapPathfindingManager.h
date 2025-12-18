@@ -13,6 +13,7 @@
 #include "PacMan/Gameplay/MapMovement/Comparers/PathfindingComparer.h"
 #include "PacMan/Gameplay/MapMovement/Data/PathfindingNode.h"
 #include "PacMan/Gameplay/MapMovement/Data/PathfindingResult.h"
+#include "PacMan/Gameplay/MapMovement/Data/PathPointData.h"
 
 namespace PacMan
 {
@@ -27,13 +28,13 @@ namespace PacMan
 			const glm::i32vec2& originGridPosition,
 			const glm::i32vec2& allowedDirection,
 			const glm::i32vec2& targetGridPosition,
-			std::vector<glm::i32vec2>& generatedPath
+			std::vector<PathPointData>& generatedPath
 			);
 
 		void GenerateWalkableNeighbors(
 			const glm::i32vec2& originGridPosition,
 			const glm::i32vec2 &allowedDirection,
-			std::vector<glm::i32vec2>& generatedNeighbors
+			std::vector<PathPointData>& generatedNeighbors
 			);
 
 	private:
@@ -46,7 +47,7 @@ namespace PacMan
 		std::priority_queue<std::shared_ptr<PathfindingNode>, std::vector<std::shared_ptr<PathfindingNode>>, PathfindingComparer> _checkingNodes;
 		std::unordered_set<glm::i32vec2, GEngine::Vec2IntHash> _checkedNodes;
 		std::priority_queue<std::shared_ptr<PathfindingNode>, std::vector<std::shared_ptr<PathfindingNode>>, PathfindingComparer> _checkedNodesByDistance;
-		std::vector<glm::i32vec2> _neighborsBuffer;
+		std::vector<PathPointData> _neighborsBuffer;
 	};
 }
 

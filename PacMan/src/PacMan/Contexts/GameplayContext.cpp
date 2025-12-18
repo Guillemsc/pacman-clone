@@ -139,7 +139,7 @@ namespace PacMan
 		const LoadedMapData loadedMapData = _mapLoadingManager->GetLoadedMapData();
 
 		_cameraManager->SetBounds(loadedMapData.MapBounds);
-		_mapMovementManager->Setup(loadedMapData.Tilemap);
+		_mapMovementManager->Setup(loadedMapData.Tilemap, loadedMapData.MapPortals);
 
 		_playerLoaderManager->LoadPlayer(loadedMapData.PlayerPosition);
 

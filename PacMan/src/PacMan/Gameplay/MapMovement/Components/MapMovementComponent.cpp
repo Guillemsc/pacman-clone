@@ -39,9 +39,10 @@ namespace PacMan
 		if (!_canMove) return;
 
 		glm::vec2 previousWorldPosition = GetEntity().lock()->GetTransform().lock()->GetPositionXY();
-		for (glm::i32vec2 gridPosition : _pathToFollow)
+
+		for (const PathPointData& pathPoint : _pathToFollow)
 		{
-			glm::vec2 worldPosition = _mapMovementManager->GridPositionToWorldPosition(gridPosition);
+			glm::vec2 worldPosition = _mapMovementManager->GridPositionToWorldPosition(pathPoint.gridPosition);
 
 			modules->rendering->Guizmo2dRender()->AddLine(
 				previousWorldPosition,
@@ -109,7 +110,7 @@ namespace PacMan
 			if (nextDirectionWhenPathEmptyIsValid)
 			{
 				ClearPath();
-				_pathToFollow.push_back(nextPosition);
+				_pathToFollow.push_back({ nextPosition, false });
 				return;
 			}
 		}
@@ -132,7 +133,7 @@ namespace PacMan
 			startGridPosition = _targetGridPosition;
 		}
 
-		std::vector<glm::i32vec2> newGeneratedPath;
+		std::vector<PathPointData> newGeneratedPath;
 
 		const PathfindingResult pathfindingResult = _mapPathfindingManager->GeneratePath(
 			startGridPosition,
@@ -179,28 +180,46 @@ namespace PacMan
 		const std::shared_ptr<GEngine::Entity> entity = GetEntity().lock();
 		const std::shared_ptr<GEngine::TransformComponent> transform = entity->GetTransform().lock();
 
-		_targetGridPosition = _pathToFollow[0];
+		const PathPointData pathPoint = _pathToFollow[0];
 
-		if (_targetGridPosition != _currentGridPosition)
+		if (pathPoint.fromPortal)
 		{
-			_gridDirectionVector = GEngine::Vec2Extensions::Normalize(_targetGridPosition - _currentGridPosition);
-		}
+			const glm::vec2 currentTargetPosition = _mapMovementManager->GridPositionToWorldPosition(pathPoint.gridPosition);
+			transform->SetPositionXY(currentTargetPosition);
+			_currentGridPosition = pathPoint.gridPosition;
 
-		_currentDirectionVector = GEngine::Vec2Extensions::SafeNormalize(_targetGridPosition - _currentGridPosition);
-
-		const glm::vec2 currentTargetPosition = _mapMovementManager->GridPositionToWorldPosition(_targetGridPosition);
-
-		const bool hasReachedTarget = MoveTowardsPosition(transform.get(), currentTargetPosition, _movementSpeed);
-
-		if (hasReachedTarget)
-		{
-			_hasValidLastPathPointData = true;
-			_currentGridPosition = _targetGridPosition;
-			_hasValidGridPosition = true;
+			const std::optional<MapPortalData> portalData = _mapMovementManager->GetPortal(pathPoint.gridPosition);
+			_currentDirectionVector = portalData.value().exitDirection;
 
 			_pathToFollow.erase(_pathToFollow.begin());
 
 			TryGenerateNextPathIfEmpty();
+		}
+		else
+		{
+			_targetGridPosition = pathPoint.gridPosition;
+
+			if (_targetGridPosition != _currentGridPosition)
+			{
+				_gridDirectionVector = GEngine::Vec2Extensions::Normalize(_targetGridPosition - _currentGridPosition);
+			}
+
+			_currentDirectionVector = GEngine::Vec2Extensions::SafeNormalize(_targetGridPosition - _currentGridPosition);
+
+			const glm::vec2 currentTargetPosition = _mapMovementManager->GridPositionToWorldPosition(_targetGridPosition);
+
+			const bool hasReachedTarget = MoveTowardsPosition(transform.get(), currentTargetPosition, _movementSpeed);
+
+			if (hasReachedTarget)
+			{
+				_hasValidLastPathPointData = true;
+				_currentGridPosition = _targetGridPosition;
+				_hasValidGridPosition = true;
+
+				_pathToFollow.erase(_pathToFollow.begin());
+
+				TryGenerateNextPathIfEmpty();
+			}
 		}
 	}
 
@@ -285,7 +304,7 @@ namespace PacMan
 		const glm::i32vec2 nextPosition = _currentGridPosition + directionVector;
 
 		ClearPath();
-		_pathToFollow.push_back(nextPosition);
+		_pathToFollow.push_back({ nextPosition, false });
 		_nextDirectionWhenPathEmpty.reset();
 
 		return true;
@@ -293,7 +312,7 @@ namespace PacMan
 
 	bool MapMovementComponent::TryGenerateNextPathFromAnyValidNeighbor()
 	{
-		std::vector<glm::i32vec2> neighbors;
+		std::vector<PathPointData> neighbors;
 		_mapPathfindingManager->GenerateWalkableNeighbors(_currentGridPosition, {1, 0}, neighbors);
 
 		if (neighbors.empty()) return false;
@@ -310,20 +329,35 @@ namespace PacMan
 	{
 		if (!_canAutomaticallyKeepMovingOnCurrentDirection) return false;
 
+		const auto optionalPortal = _mapMovementManager->GetPortal(_currentGridPosition);
+
+		if (optionalPortal.has_value())
+		{
+			const MapPortalData portalData = optionalPortal.value();
+
+			if (portalData.enterDirection == _gridDirectionVector)
+			{
+				const MapPortalData connectedPortalData = _mapMovementManager->GetPortal(portalData.connectedPortalId).value();
+				ClearPath();
+				_pathToFollow.push_back({ connectedPortalData.gridPosition, true });
+				return true;
+			}
+		}
+
 		const glm::i32vec2 nextPosition = _currentGridPosition + _gridDirectionVector;
 		const bool hasTile = _mapMovementManager->IsWalkable(nextPosition);
 
-		if (!hasTile)return false;
+		if (!hasTile) return false;
 
 		ClearPath();
-		_pathToFollow.push_back(nextPosition);
+		_pathToFollow.push_back({ nextPosition, false });
 
 		return true;
 	}
 
 	bool MapMovementComponent::TryGeneratePathFromRandomValidDirection()
 	{
-		const std::optional<glm::i32vec2> optionalNextNeighbor = FindNextValidNeighbor();
+		const std::optional<PathPointData> optionalNextNeighbor = FindNextValidNeighbor();
 
 		if (!optionalNextNeighbor.has_value()) return false;
 
@@ -350,9 +384,9 @@ namespace PacMan
 		return hasTile;
 	}
 
-	std::optional<glm::i32vec2> MapMovementComponent::FindNextValidNeighbor() const
+	std::optional<PathPointData> MapMovementComponent::FindNextValidNeighbor() const
 	{
-		std::vector<glm::i32vec2> neighbors;
+		std::vector<PathPointData> neighbors;
 		_mapPathfindingManager->GenerateWalkableNeighbors(_currentGridPosition, _gridDirectionVector, neighbors);
 
 		if (neighbors.empty()) return std::nullopt;

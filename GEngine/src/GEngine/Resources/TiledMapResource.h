@@ -54,6 +54,8 @@ namespace GEngine
 		static std::int32_t GetLocalTilesetIndexForTileID(const tmx::Tileset& tileset, uint32_t gid);
 		static std::string GetTilesetTileStringProperty(const tmx::Tileset::Tile* tile, const std::string& name, const std::string& defaultValue);
 
+		static std::int32_t GetObjectIntProperty(const tmx::Object& object, const std::string& name, std::int32_t defaultValue);
+
 	protected:
 		void Dispose() override;
 

@@ -84,6 +84,9 @@ add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Gameplay/Ghosts/Components/GhostStateComponent.cpp
         src/PacMan/Gameplay/Ghosts/Components/GhostStateComponent.h
         src/PacMan/Gameplay/Layers/Enums/RenderingLayer.h
+        src/PacMan/Gameplay/MapLoading/Data/MapPortalData.cpp
+        src/PacMan/Gameplay/MapLoading/Data/MapPortalData.h
+        src/PacMan/Gameplay/MapMovement/Data/PathPointData.h
 )
 
 target_link_libraries(PacMan PRIVATE GEngineCore)
