@@ -41,7 +41,8 @@ namespace PacMan
 		}
 
 		LoadTilemapGameObject(_loadedMapData, tilemapResource);
-		LoadMapData(_loadedMapData, tilemapResource);
+		LoadTilesMapData(_loadedMapData, tilemapResource.get());
+		LoadPortalsMapData(_loadedMapData, tilemapResource.get());
 
 		GGAME_INFO("Map data loaded [Player:x{0} y{1}] [RedGhost:x{2} y{3}] [CianGhost:x{4} y{5}] [PinkGhost:x{6} y{7}] [OrangeGhost:x{8} y{9}].",
 			_loadedMapData.PlayerPosition.x,
@@ -81,9 +82,9 @@ namespace PacMan
 		loadedMapData.MapBounds = tilemap->GetWorldBounds();
 	}
 
-	void MapLoadingManager::LoadMapData(
+	void MapLoadingManager::LoadTilesMapData(
 		LoadedMapData& loadedMapData,
-		const std::shared_ptr<GEngine::TiledMapResource>& tilemapResource
+		GEngine::TiledMapResource* tilemapResource
 	)
 	{
 		const std::string entitiesLayer = "Entities";
@@ -101,9 +102,6 @@ namespace PacMan
 
 		const std::int32_t pelletsLayerIndex = tilemapResource->GetLayerIndexFromLayerName(pelletsLayer);
 		if (pelletsLayerIndex < 0) return;
-
-		const std::int32_t portalsLayerIndex = tilemapResource->GetLayerIndexFromLayerName(portalsLayer);
-		if (portalsLayerIndex < 0) return;
 
 		const auto optionalEntitiesLayer = tilemapResource->GetTileLayer(entitiesLayerIndex);
 		if (!optionalEntitiesLayer) return;
@@ -147,6 +145,30 @@ namespace PacMan
 					LoadPelletsTileData(loadedMapData, gridPosition, pelletLocalTile);
 				}
 			}
+		}
+	}
+
+	void MapLoadingManager::LoadPortalsMapData(
+		LoadedMapData &loadedMapData,
+		const GEngine::TiledMapResource* tilemapResource
+		)
+	{
+		const std::string portalsLayer = "Portals";
+
+		const std::int32_t portalsLayerIndex = tilemapResource->GetLayerIndexFromLayerName(portalsLayer);
+		if (portalsLayerIndex < 0) return;
+
+		const auto optionalPortalsLayer = tilemapResource->GetObjectLayer(portalsLayerIndex);
+		if (!optionalPortalsLayer) return;
+		const tmx::ObjectGroup& portalsTileLayer = optionalPortalsLayer->get();
+
+		const std::vector<tmx::Object>& portalObjects = portalsTileLayer.getObjects();
+
+		for (int i = 0; i < portalObjects.size(); ++i)
+		{
+			const tmx::Object& object = portalObjects[i];
+
+			int r = 2;
 		}
 	}
 

@@ -91,7 +91,7 @@ namespace GEngine
 		return std::cref(tileLayer);
 	}
 
-	std::optional<std::reference_wrapper<const tmx::Layer::Ptr>> TiledMapResource::GetObjectLayer(
+	std::optional<std::reference_wrapper<const tmx::ObjectGroup>> TiledMapResource::GetObjectLayer(
 		const std::int32_t layerIndex
 		) const
 	{
@@ -105,7 +105,9 @@ namespace GEngine
 
 		if (layer->getType() != tmx::Layer::Type::Object) return std::nullopt;
 
-		return std::cref(layer);
+		const tmx::ObjectGroup& objectLayer = layer->getLayerAs<tmx::ObjectGroup>();
+
+		return std::cref(objectLayer);
 	}
 
 	std::int32_t TiledMapResource::GetTileIdFromTiledGridPosition(const tmx::TileLayer& layer, const glm::i32vec2 &gridPosition) const

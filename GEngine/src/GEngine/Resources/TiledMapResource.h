@@ -40,7 +40,7 @@ namespace GEngine
 
 		std::int32_t GetLayerIndexFromLayerName(const std::string& layerName) const;
 		std::optional<std::reference_wrapper<const tmx::TileLayer>> GetTileLayer(std::int32_t layerIndex) const;
-		std::optional<std::reference_wrapper<const tmx::Layer::Ptr>> GetObjectLayer(std::int32_t layerIndex) const;
+		std::optional<std::reference_wrapper<const tmx::ObjectGroup>> GetObjectLayer(std::int32_t layerIndex) const;
 
 		std::int32_t GetTileIdFromTiledGridPosition(const tmx::TileLayer& layer, const glm::i32vec2& gridPosition) const;
 		std::int32_t GetTilesetIndexForTileId(uint32_t gid) const;
