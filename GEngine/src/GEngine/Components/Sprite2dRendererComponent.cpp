@@ -21,7 +21,7 @@ namespace GEngine
 		)
 		: Component(modules, entity)
 	{
-		_layer = _properties.Register("Layer", 0);
+		_renderLayer = _properties.Register("Render Layer", 0);
 		_spriteResource = _properties.Register("Sprite", std::weak_ptr<SpriteResource>());
 		_spriteIndex = _properties.Register("Sprite Index", 0);
 		_isFlippedX = _properties.Register("Flipped X", false);
@@ -59,7 +59,7 @@ namespace GEngine
 		}
 
 		modules->rendering->Render2d()->AddTexture(
-			_layer->GetValue(),
+			_renderLayer->GetValue(),
 			rawTexture,
 			rectangle,
 			position,
@@ -69,9 +69,9 @@ namespace GEngine
 		);
 	}
 
-	void Sprite2dRendererComponent::SetLayer(const std::int32_t layer) const
+	void Sprite2dRendererComponent::SetRenderLayer(const std::int32_t layer) const
 	{
-		_layer->SetValue(layer);
+		_renderLayer->SetValue(layer);
 	}
 
 	void Sprite2dRendererComponent::SetSprite(const std::weak_ptr<SpriteResource>& sprite) const

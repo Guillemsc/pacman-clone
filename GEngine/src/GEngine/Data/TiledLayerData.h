@@ -15,6 +15,7 @@ namespace GEngine
 		static const TiledLayerData Default;
 
 		bool Visible = true;
+		std::int32_t RenderLayerOffset = 0;
 	};
 }
 

@@ -23,7 +23,7 @@ namespace GEngine
 
 		void OnTick() override;
 
-		void SetLayer(std::int32_t layer) const;
+		void SetRenderLayer(std::int32_t layer) const;
 		void SetSprite(const std::weak_ptr<SpriteResource> &sprite) const;
 		void SetSpriteIndex(int index) const;
 		void SetFlippedX(bool flippedX) const;
@@ -32,7 +32,7 @@ namespace GEngine
 		[[nodiscard]] int GetSpriteIndex() const;
 
 	private:
-		std::shared_ptr<Property<std::int32_t>> _layer;
+		std::shared_ptr<Property<std::int32_t>> _renderLayer;
 		std::shared_ptr<Property<std::weak_ptr<SpriteResource>>> _spriteResource;
 		std::shared_ptr<Property<std::int32_t>> _spriteIndex;
 		std::shared_ptr<Property<bool>> _isFlippedX;

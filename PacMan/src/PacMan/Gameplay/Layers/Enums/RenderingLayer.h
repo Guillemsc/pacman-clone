@@ -15,6 +15,7 @@ namespace PacMan
 		PELLETS = 3,
 		GHOSTS = 4,
 		PLAYER = 5,
+		MAP_HIDDING_PLANE = 8
 	};
 }
 

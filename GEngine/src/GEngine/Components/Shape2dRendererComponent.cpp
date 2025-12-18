@@ -18,7 +18,7 @@ namespace GEngine
 	Shape2dRendererComponent::Shape2dRendererComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity)
 	: Component(modules, entity)
 	{
-		_layer = _properties.Register("Layer", 0);
+		_renderLayer = _properties.Register("Render Layer", 0);
 		_shape2d = _properties.RegisterObject<Shape2d>("Shape", std::make_shared<RectShape2d>());
 		_color = _properties.Register<Color01>("Color", Color01::White);
 	}
@@ -40,7 +40,7 @@ namespace GEngine
 		if (const auto rectShape = std::dynamic_pointer_cast<RectShape2d>(_shape2d->GetValue()))
 		{
 			modules->rendering->Render2d()->AddRect(
-				_layer->GetValue(),
+				_renderLayer->GetValue(),
 				position,
 				rotation,
 				scale,
@@ -55,9 +55,9 @@ namespace GEngine
 
 	}
 
-	void Shape2dRendererComponent::SetLayer(const std::int32_t layer) const
+	void Shape2dRendererComponent::SetRenderLayer(const std::int32_t layer) const
 	{
-		_layer->SetValue(layer);
+		_renderLayer->SetValue(layer);
 	}
 
 	void Shape2dRendererComponent::SetColor(const Color01 &color) const

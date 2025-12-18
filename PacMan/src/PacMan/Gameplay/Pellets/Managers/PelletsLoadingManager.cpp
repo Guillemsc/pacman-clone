@@ -52,7 +52,7 @@ namespace PacMan
 			transform->SetPositionXY(worldPosition);
 
 			const std::shared_ptr<GEngine::Shape2dRendererComponent> shapeRenderer = entity->AddComponent<GEngine::Shape2dRendererComponent>().lock();
-			shapeRenderer->SetLayer(static_cast<std::int32_t>(RenderingLayer::PELLETS));
+			shapeRenderer->SetRenderLayer(static_cast<std::int32_t>(RenderingLayer::PELLETS));
 
 			const std::shared_ptr<GEngine::Collider2dComponent> collider = entity->AddComponent<GEngine::Collider2dComponent>().lock();
 			collider->SetLayer(CollisionLayers::COLLISION_LAYER_PELLETS);
@@ -73,7 +73,7 @@ namespace PacMan
 			transform->SetPositionXY(worldPosition);
 
 			const std::shared_ptr<GEngine::Shape2dRendererComponent> shapeRenderer = entity->AddComponent<GEngine::Shape2dRendererComponent>().lock();
-			shapeRenderer->SetLayer(1);
+			shapeRenderer->SetRenderLayer(1);
 
 			const std::shared_ptr<GEngine::Collider2dComponent> collider = entity->AddComponent<GEngine::Collider2dComponent>().lock();
 			collider->SetLayer(CollisionLayers::COLLISION_LAYER_PELLETS);

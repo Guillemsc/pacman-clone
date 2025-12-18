@@ -17,7 +17,7 @@ namespace PacMan
 
 		if (lTiledMap)
 		{
-			_walkabilityLayerIndex = lTiledMap->GetLayerNameFromLayerIndex("Walkability");
+			_walkabilityLayerIndex = lTiledMap->GetTileLayerIndexFromName("Walkability");
 		}
 	}
 

@@ -130,7 +130,7 @@ namespace PacMan
 			= _modules->resources->GetResource<GEngine::SpriteResource>("ghosts/scared.sprite");
 
 		const std::shared_ptr<GEngine::Sprite2dRendererComponent> spriteRenderer = ghostEntity->AddComponent<GEngine::Sprite2dRendererComponent>().lock();
-		spriteRenderer->SetLayer(static_cast<std::int32_t>(RenderingLayer::GHOSTS));
+		spriteRenderer->SetRenderLayer(static_cast<std::int32_t>(RenderingLayer::GHOSTS));
 
 		const std::shared_ptr<GEngine::Sprite2dAnimatorComponent> spriteAnimator = ghostEntity->AddComponent<GEngine::Sprite2dAnimatorComponent>().lock();
 		spriteAnimator->SetSprite2dRenderer(spriteRenderer);
@@ -151,7 +151,7 @@ namespace PacMan
 		const std::shared_ptr<GEngine::Collider2dComponent> collider = ghostEntity->AddComponent<GEngine::Collider2dComponent>().lock();
 		const std::uint32_t collisionLayer = isPrision ? CollisionLayers::COLLISION_LAYER_DEFAULT : CollisionLayers::COLLISION_LAYER_GHOST;
 		collider->SetLayer(collisionLayer);
-		collider->SetSize({6, 6});
+		collider->SetSize({7, 7});
 
 		if (isPrision)
 		{

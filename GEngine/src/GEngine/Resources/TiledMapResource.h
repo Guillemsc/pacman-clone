@@ -35,15 +35,19 @@ namespace GEngine
 		std::weak_ptr<tmx::Map> GetRawMap() const;
 
 		glm::i32vec2 GetGridSize() const;
+		[[nodiscard]] glm::vec2 GetTilePixelSize() const;
 		glm::i32vec2 TiledGridPositionToEngineGridPosition(glm::i32vec2 gridPosition) const;
 
 		std::int32_t GetLayerIndexFromLayerName(const std::string& layerName) const;
 		std::optional<std::reference_wrapper<const tmx::TileLayer>> GetTileLayer(std::int32_t layerIndex) const;
+		std::optional<std::reference_wrapper<const tmx::Layer::Ptr>> GetObjectLayer(std::int32_t layerIndex) const;
 
-		std::int32_t GetTileIdFromGridPosition(const tmx::TileLayer& layer, const glm::i32vec2& gridPosition) const;
+		std::int32_t GetTileIdFromTiledGridPosition(const tmx::TileLayer& layer, const glm::i32vec2& gridPosition) const;
 		std::int32_t GetTilesetIndexForTileId(uint32_t gid) const;
 		std::optional<std::reference_wrapper<const tmx::Tileset>> GetTilesetForTileID(uint32_t gid) const;
-		std::optional<const tmx::Tileset::Tile*> GetLocalTileForGridPosition(const tmx::TileLayer& tileLayer, const glm::i32vec2& gridPosition) const;
+		std::optional<const tmx::Tileset::Tile*> GetLocalTileForTiledGridPosition(const tmx::TileLayer& tileLayer, const glm::i32vec2& gridPosition) const;
+
+		glm::i32vec2 GetGridPositionFromTiledLocalMapPosition(const glm::vec2& localMapPosition) const;
 
 		std::weak_ptr<TextureResource> GetTilesetTexture(int index) const;
 

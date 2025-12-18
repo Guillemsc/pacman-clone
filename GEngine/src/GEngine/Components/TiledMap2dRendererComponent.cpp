@@ -28,7 +28,7 @@ namespace GEngine
 	TiledMap2dRendererComponent::TiledMap2dRendererComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity)
 		: Component(modules, entity)
 	{
-		_layer = _properties.Register("Layer", 0);
+		_renderLayer = _properties.Register("Render Layer", 0);
 	}
 
 	void TiledMap2dRendererComponent::OnTick()
@@ -53,12 +53,14 @@ namespace GEngine
 
 		for (int i = 0; i < layers.size(); ++i)
 		{
-			const TiledLayerData& layerData = _layersData[i];
+			const TiledLayerData& layerData = _tileLayersData[i];
 
 			if (!layerData.Visible) continue;
 
+			const std::int32_t finalLayer = _renderLayer->GetValue() + layerData.RenderLayerOffset;
+
 			modules->rendering->Render2d()->AddTiledLayer(
-				_layer->GetValue(),
+				finalLayer,
 				tiledMap.get(),
 				i,
 				position,
@@ -98,9 +100,9 @@ namespace GEngine
 		}
 	}
 
-	void TiledMap2dRendererComponent::SetLayer(const std::int32_t layer) const
+	void TiledMap2dRendererComponent::SetRenderLayer(const std::int32_t layer) const
 	{
-		_layer->SetValue(layer);
+		_renderLayer->SetValue(layer);
 	}
 
 	void TiledMap2dRendererComponent::SetTiledMap(const std::weak_ptr<TiledMapResource> &resource)
@@ -261,24 +263,39 @@ namespace GEngine
 		return _tilePixelSize * scale;
 	}
 
-	std::int32_t TiledMap2dRendererComponent::GetLayerNameFromLayerIndex(const std::string &layerName) const
+	std::int32_t TiledMap2dRendererComponent::GetTileLayerIndexFromName(const std::string &tileLayerName) const
 	{
 		const std::shared_ptr<TiledMapResource> tiledMap = _tiledMapPtr.lock();
 		if (!tiledMap) return -1;
 
-		return tiledMap->GetLayerIndexFromLayerName(layerName);
+		return tiledMap->GetLayerIndexFromLayerName(tileLayerName);
 	}
 
-	void TiledMap2dRendererComponent::SetLayerVisible(const std::int32_t layerIndex, const bool visible)
+	void TiledMap2dRendererComponent::SetTileLayerVisible(const std::int32_t layerIndex, const bool visible)
 	{
-		if (VectorExtensions::IsIndexOutsideBounds(_layersData, layerIndex)) return;
+		if (VectorExtensions::IsIndexOutsideBounds(_tileLayersData, layerIndex)) return;
 
-		_layersData[layerIndex].Visible = visible;
+		_tileLayersData[layerIndex].Visible = visible;
 	}
 
-	bool TiledMap2dRendererComponent::GetIsLayerVisible(const std::int32_t layerIndex) const
+	bool TiledMap2dRendererComponent::GetIsTileLayerVisible(const std::int32_t tileLayerIndex) const
 	{
-		return VectorExtensions::GetOrDefault(_layersData, layerIndex, TiledLayerData::Default).Visible;
+		return VectorExtensions::GetOrDefault(_tileLayersData, tileLayerIndex, TiledLayerData::Default).Visible;
+	}
+
+	void TiledMap2dRendererComponent::SetTileLayerRenderLayerOffset(
+		const std::int32_t tileLayerIndex,
+		const std::int32_t renderLayerOffset
+		)
+	{
+		if (VectorExtensions::IsIndexOutsideBounds(_tileLayersData, tileLayerIndex)) return;
+
+		_tileLayersData[tileLayerIndex].RenderLayerOffset = renderLayerOffset;
+	}
+
+	std::int32_t TiledMap2dRendererComponent::GetTileLayerRenderLayerOffset(const std::int32_t tileLayerIndex) const
+	{
+		return VectorExtensions::GetOrDefault(_tileLayersData, tileLayerIndex, TiledLayerData::Default).RenderLayerOffset;
 	}
 
 	glm::i32vec2 TiledMap2dRendererComponent::TiledGridPositionToEngineGridPosition(
@@ -339,7 +356,7 @@ namespace GEngine
 
 	void TiledMap2dRendererComponent::GenerateLayersData()
 	{
-		_layersData.clear();
+		_tileLayersData.clear();
 
 		const std::shared_ptr<TiledMapResource> tiledMap = _tiledMapPtr.lock();
 		if (!tiledMap) return;
@@ -363,7 +380,7 @@ namespace GEngine
 				.Visible = layer->getVisible(),
 			};
 
-			_layersData.push_back(layerData);
+			_tileLayersData.push_back(layerData);
 		}
 
 		_tilePixelSize = { mapData->getTileSize().x, mapData->getTileSize().y };

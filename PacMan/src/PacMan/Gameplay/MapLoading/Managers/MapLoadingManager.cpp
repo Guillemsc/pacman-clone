@@ -69,10 +69,13 @@ namespace PacMan
 	{
 		const std::shared_ptr<GEngine::Entity> tilemapEntity = _scene->AddWorldEntity().lock();
 		tilemapEntity->SetName("Tilemap");
-		const std::shared_ptr<GEngine::TiledMap2dRendererComponent> tilemap = tilemapEntity->AddComponent<GEngine::TiledMap2dRendererComponent>().lock();
-		tilemap->SetLayer(static_cast<std::int32_t>(RenderingLayer::MAP));
 
+		const std::shared_ptr<GEngine::TiledMap2dRendererComponent> tilemap = tilemapEntity->AddComponent<GEngine::TiledMap2dRendererComponent>().lock();
+		tilemap->SetRenderLayer(static_cast<std::int32_t>(RenderingLayer::MAP));
 		tilemap->SetTiledMap(tilemapResource);
+
+		const std::int32_t hiddingTileLayer = tilemap->GetTileLayerIndexFromName("HiddingPlane");
+		tilemap->SetTileLayerRenderLayerOffset(hiddingTileLayer, static_cast<std::int32_t>(RenderingLayer::MAP_HIDDING_PLANE));
 
 		loadedMapData.Tilemap = tilemap;
 		loadedMapData.MapBounds = tilemap->GetWorldBounds();
@@ -86,6 +89,7 @@ namespace PacMan
 		const std::string entitiesLayer = "Entities";
 		const std::string walkabilityLayer = "Walkability";
 		const std::string pelletsLayer = "Pellets";
+		const std::string portalsLayer = "Portals";
 
 		const glm::i32vec2 gridSize = tilemapResource->GetGridSize();
 
@@ -97,6 +101,9 @@ namespace PacMan
 
 		const std::int32_t pelletsLayerIndex = tilemapResource->GetLayerIndexFromLayerName(pelletsLayer);
 		if (pelletsLayerIndex < 0) return;
+
+		const std::int32_t portalsLayerIndex = tilemapResource->GetLayerIndexFromLayerName(portalsLayer);
+		if (portalsLayerIndex < 0) return;
 
 		const auto optionalEntitiesLayer = tilemapResource->GetTileLayer(entitiesLayerIndex);
 		if (!optionalEntitiesLayer) return;
@@ -116,7 +123,7 @@ namespace PacMan
 			{
 				const glm::i32vec2 gridPosition = { x, y };
 
-				auto optionalEntityLocalTile = tilemapResource->GetLocalTileForGridPosition(entitiesTileLayer, gridPosition);
+				auto optionalEntityLocalTile = tilemapResource->GetLocalTileForTiledGridPosition(entitiesTileLayer, gridPosition);
 
 				if (optionalEntityLocalTile.has_value())
 				{
@@ -124,7 +131,7 @@ namespace PacMan
 					LoadEntityTileData(loadedMapData, gridPosition, localTile);
 				}
 
-				auto optionalWalkabilityLocalTile = tilemapResource->GetLocalTileForGridPosition(walkabilityTileLayer, gridPosition);
+				auto optionalWalkabilityLocalTile = tilemapResource->GetLocalTileForTiledGridPosition(walkabilityTileLayer, gridPosition);
 
 				if (optionalWalkabilityLocalTile.has_value())
 				{
@@ -132,7 +139,7 @@ namespace PacMan
 					LoadWalkabilityTileData(loadedMapData, gridPosition, walkabilityLocalTile);
 				}
 
-				auto optionalPelletsLocalTile = tilemapResource->GetLocalTileForGridPosition(pelletsTileLayer, gridPosition);
+				auto optionalPelletsLocalTile = tilemapResource->GetLocalTileForTiledGridPosition(pelletsTileLayer, gridPosition);
 
 				if (optionalPelletsLocalTile.has_value())
 				{

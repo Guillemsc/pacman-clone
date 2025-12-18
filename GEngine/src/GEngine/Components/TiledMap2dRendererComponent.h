@@ -37,7 +37,7 @@ namespace GEngine
 		void OnTick() override;
 		void OnDrawSelectedGuizmo() override;
 
-		void SetLayer(std::int32_t layer) const;
+		void SetRenderLayer(std::int32_t layer) const;
 
 		void SetTiledMap(const std::weak_ptr<TiledMapResource> &resource);
 		[[nodiscard]] std::weak_ptr<TiledMapResource> GetTiledMap() const;
@@ -52,10 +52,13 @@ namespace GEngine
 		[[nodiscard]] glm::vec2 GetWorldBounds() const;
 		[[nodiscard]] glm::vec2 GetTileWorldSize() const;
 
-		[[nodiscard]] std::int32_t GetLayerNameFromLayerIndex(const std::string& layerName) const;
+		[[nodiscard]] std::int32_t GetTileLayerIndexFromName(const std::string& tileLayerName) const;
 
-		void SetLayerVisible(std::int32_t layerIndex, bool visible);
-		[[nodiscard]] bool GetIsLayerVisible(std::int32_t layerIndex) const;
+		void SetTileLayerVisible(std::int32_t layerIndex, bool visible);
+		[[nodiscard]] bool GetIsTileLayerVisible(std::int32_t layerIndex) const;
+
+		void SetTileLayerRenderLayerOffset(std::int32_t tileLayerIndex, std::int32_t renderLayerOffset);
+		std::int32_t GetTileLayerRenderLayerOffset(std::int32_t tileLayerIndex) const;
 
 		static glm::i32vec2 TiledGridPositionToEngineGridPosition(const tmx::TileLayer& tileLayer, glm::i32vec2 gridPosition);
 
@@ -86,10 +89,10 @@ namespace GEngine
 			) const;
 
 	private:
-		std::shared_ptr<Property<std::int32_t>> _layer;
+		std::shared_ptr<Property<std::int32_t>> _renderLayer;
 
 		std::weak_ptr<TiledMapResource> _tiledMapPtr;
-		std::vector<TiledLayerData> _layersData;
+		std::vector<TiledLayerData> _tileLayersData;
 
 		glm::vec2 _tilePixelSize = Vec2Extensions::Zero;
 	};

@@ -62,7 +62,7 @@ namespace PacMan
 	 	const std::weak_ptr<GEngine::SpriteResource> spriteResource = _modules->resources->GetResource<GEngine::SpriteResource>("pacman.sprite");
 
 		const std::shared_ptr<GEngine::Sprite2dRendererComponent> spriteRenderer = playerEntity->AddComponent<GEngine::Sprite2dRendererComponent>().lock();
-		spriteRenderer->SetLayer(static_cast<std::int32_t>(RenderingLayer::PLAYER));
+		spriteRenderer->SetRenderLayer(static_cast<std::int32_t>(RenderingLayer::PLAYER));
 
 		const std::shared_ptr<GEngine::Sprite2dAnimatorComponent> spriteAnimator = playerEntity->AddComponent<GEngine::Sprite2dAnimatorComponent>().lock();
 		spriteAnimator->SetSprite2dRenderer(spriteRenderer);

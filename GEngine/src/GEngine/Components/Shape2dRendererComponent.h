@@ -25,11 +25,11 @@ namespace GEngine
 		void OnTick() override;
 		void OnDestroy() override;
 
-		void SetLayer(std::int32_t layer) const;
+		void SetRenderLayer(std::int32_t layer) const;
 		void SetColor(const Color01& color) const;
 
 	private:
-		std::shared_ptr<Property<std::int32_t>> _layer;
+		std::shared_ptr<Property<std::int32_t>> _renderLayer;
 		std::shared_ptr<Property<std::shared_ptr<Shape2d>>> _shape2d;
 		std::shared_ptr<Property<Color01>> _color;
 	};

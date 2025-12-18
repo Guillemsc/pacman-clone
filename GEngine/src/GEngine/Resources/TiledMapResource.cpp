@@ -5,6 +5,9 @@
 #include "TiledMapResource.h"
 
 #include <ranges>
+
+#include "GEngine/Extensions/MathExtensions.h"
+#include "GEngine/Extensions/Vec2Extensions.h"
 #include "glm/vec2.hpp"
 
 #include "GEngine/Extensions/VectorExtensions.h"
@@ -36,6 +39,15 @@ namespace GEngine
 		const tmx::Vector2u gridSize = _tiledMapPtr->getTileCount();
 
 		return { gridSize.x, gridSize.y };
+	}
+
+	glm::vec2 TiledMapResource::GetTilePixelSize() const
+	{
+		if (!_tiledMapPtr) return { 0, 0 };
+
+		const tmx::Vector2u tileSize = _tiledMapPtr->getTileSize();
+
+		return { tileSize.x, tileSize.y };
 	}
 
 	glm::i32vec2 TiledMapResource::TiledGridPositionToEngineGridPosition(glm::i32vec2 gridPosition) const
@@ -79,7 +91,24 @@ namespace GEngine
 		return std::cref(tileLayer);
 	}
 
-	std::int32_t TiledMapResource::GetTileIdFromGridPosition(const tmx::TileLayer& layer, const glm::i32vec2 &gridPosition) const
+	std::optional<std::reference_wrapper<const tmx::Layer::Ptr>> TiledMapResource::GetObjectLayer(
+		const std::int32_t layerIndex
+		) const
+	{
+		if (!_tiledMapPtr) return std::nullopt;
+
+		const std::vector<tmx::Layer::Ptr>& layers = _tiledMapPtr->getLayers();
+
+		if (VectorExtensions::IsIndexOutsideBounds(layers, layerIndex)) return std::nullopt;
+
+		const tmx::Layer::Ptr& layer = layers[layerIndex];
+
+		if (layer->getType() != tmx::Layer::Type::Object) return std::nullopt;
+
+		return std::cref(layer);
+	}
+
+	std::int32_t TiledMapResource::GetTileIdFromTiledGridPosition(const tmx::TileLayer& layer, const glm::i32vec2 &gridPosition) const
 	{
 		if (!_tiledMapPtr) return 0;
 		const tmx::Vector2u mapGridSize = _tiledMapPtr->getTileCount();
@@ -122,12 +151,12 @@ namespace GEngine
 		return std::cref(tileSet);
 	}
 
-	std::optional<const tmx::Tileset::Tile*> TiledMapResource::GetLocalTileForGridPosition(
+	std::optional<const tmx::Tileset::Tile*> TiledMapResource::GetLocalTileForTiledGridPosition(
 		const tmx::TileLayer &tileLayer,
 		const glm::i32vec2 &gridPosition
 		) const
 	{
-		const std::int32_t tileId = GetTileIdFromGridPosition(tileLayer, gridPosition);
+		const std::int32_t tileId = GetTileIdFromTiledGridPosition(tileLayer, gridPosition);
 		if (tileId == 0) return std::nullopt;
 
 		const auto optionalTileset = GetTilesetForTileID(tileId);
@@ -138,6 +167,20 @@ namespace GEngine
 		if (localTile == nullptr) return std::nullopt;
 
 		return localTile;
+	}
+
+	glm::i32vec2 TiledMapResource::GetGridPositionFromTiledLocalMapPosition(const glm::vec2 &localMapPosition) const
+	{
+		const glm::vec2 layerGridSize = GetGridSize();
+		const glm::vec2 tilePixelSize = GetTilePixelSize();
+
+		const glm::vec2 mapPixelSize = layerGridSize * tilePixelSize;
+
+		const glm::vec2 gridPositionDecimal = Vec2Extensions::SafeDivide(localMapPosition, mapPixelSize);
+		const glm::i32vec2 gridPosition = glm::i32vec2(std::floor(gridPositionDecimal.x), std::floor(gridPositionDecimal.y));
+		const glm::i32vec2 gridPositionEngine = TiledGridPositionToEngineGridPosition(gridPosition);
+
+		return gridPositionEngine;
 	}
 
 	std::weak_ptr<TextureResource> TiledMapResource::GetTilesetTexture(const int index) const

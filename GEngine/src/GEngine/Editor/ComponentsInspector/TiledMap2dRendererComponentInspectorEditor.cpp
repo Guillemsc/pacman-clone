@@ -32,7 +32,7 @@ namespace GEngine
 				const std::vector<tmx::Layer::Ptr>& layers = rawMap->getLayers();
 
 				ImGui::Spacing();
-				ImGui::CollapsingHeader("Layers", ImGuiTreeNodeFlags_Leaf);
+				ImGui::CollapsingHeader("Tile Layers", ImGuiTreeNodeFlags_Leaf);
 
 				std::int32_t layerIndex = 0;
 				for (const auto& layer : layers)
@@ -41,10 +41,16 @@ namespace GEngine
 
 					if (ImGui::CollapsingHeader(layer->getName().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 					{
-						bool visible = inspect->GetIsLayerVisible(layerIndex);
+						bool visible = inspect->GetIsTileLayerVisible(layerIndex);
 						if (ImGui::Checkbox("Visible", &visible))
 						{
-							inspect->SetLayerVisible(layerIndex, visible);
+							inspect->SetTileLayerVisible(layerIndex, visible);
+						}
+
+						std::int32_t renderLayerOffset = inspect->GetTileLayerRenderLayerOffset(layerIndex);
+						if (ImGui::DragInt("Render Layer Offset", &renderLayerOffset))
+						{
+							inspect->SetTileLayerRenderLayerOffset(layerIndex, renderLayerOffset);
 						}
 					}
 
