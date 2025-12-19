@@ -58,6 +58,8 @@ namespace GEngine
 		std::vector<std::weak_ptr<Entity>> _rootEntities;
 		std::vector<std::weak_ptr<Entity>> _entitiesToRemove;
 		std::uint32_t _nextEntityId = 1;
+
+		std::deque<Entity*> _tickEntitiesBuffer;
 	};
 }
 

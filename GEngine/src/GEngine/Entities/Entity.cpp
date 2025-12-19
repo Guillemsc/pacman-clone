@@ -65,6 +65,11 @@ namespace GEngine
 		RefreshChildrenHierarchyActiveState();
 	}
 
+	std::uint32_t Entity::GetRenderingPositionInHierarchy() const
+	{
+		return _renderingPositionInHierarchy;
+	}
+
 	bool Entity::IsInsideChildHierarchy(const std::weak_ptr<Entity> &checkingPtr) const
 	{
 		std::shared_ptr<Entity> checking = checkingPtr.lock();
@@ -76,7 +81,7 @@ namespace GEngine
 				return true;
 			}
 
-			checking = checking->_parentPtr.lock();
+			checking = checking->_parent.lock();
 		}
 
 		return false;
@@ -131,7 +136,7 @@ namespace GEngine
 
 	std::weak_ptr<Entity> Entity::GetParent() const
 	{
-		return _parentPtr;
+		return _parent;
 	}
 
 	const std::vector<std::weak_ptr<Entity>>& Entity::GetChildren() const
@@ -165,12 +170,12 @@ namespace GEngine
 
 	std::weak_ptr<TransformComponent> Entity::GetTransform() const
 	{
-		return _transformPtr;
+		return _transformComponent;
 	}
 
 	std::weak_ptr<UiTransformComponent> Entity::GetUiTransform() const
 	{
-		return _uiTransformPtr;
+		return _uiTransformComponent;
 	}
 
 	void GEngine::Entity::Dispose()
@@ -178,10 +183,10 @@ namespace GEngine
 		RemoveAllComponents();
 
 		_id = 0;
-		_parentPtr.reset();
+		_parent.reset();
 		_childEntities.clear();
 		_components.clear();
-		_transformPtr.reset();
+		_transformComponent.reset();
 	}
 
 	void Entity::TickAllComponents()
@@ -218,7 +223,7 @@ namespace GEngine
 	{
 		bool parentIsActive = true;
 
-		const std::shared_ptr<Entity> parent = _parentPtr.lock();
+		const std::shared_ptr<Entity> parent = _parent.lock();
 
 		if (parent)
 		{

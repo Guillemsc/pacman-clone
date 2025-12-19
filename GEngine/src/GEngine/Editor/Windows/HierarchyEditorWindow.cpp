@@ -88,7 +88,7 @@ namespace GEngine
 				}
 				else
 				{
-					for (auto it = children.begin(); it != children.end(); ++it)
+					for (auto it = children.rbegin(); it != children.rend(); ++it)
 					{
 						const std::shared_ptr<Entity> child = it->lock();
 						if (!child) continue;

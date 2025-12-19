@@ -44,7 +44,12 @@ namespace GEngine
 		}
 
 		ImGui::SameLine();
-		ImGui::Text("[%d]", inspect->GetId());
+		ImGui::Text("[Id: %d]", inspect->GetId());
+
+		if (inspect->IsActiveInHierarchy())
+		{
+			ImGui::Text("Rendering index: %d", inspect->GetRenderingPositionInHierarchy());
+		}
 
 		DrawComponents(inspect);
 	}

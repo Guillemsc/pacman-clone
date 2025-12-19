@@ -30,14 +30,15 @@ namespace PacMan
 		_ghostsLoadingManager(ghostsLoadingManager),
 		_ghostsBehaviourManager(ghostsBehaviourManager)
 	{
+		_cancellationTokenSource = std::make_shared<GEngine::CancellationTokenSource>();
 	}
 
 	void PlayerDeathManager::RunDeath()
 	{
-		_coroutines->Start(&PlayerDeathManager::RunDeathSequenceAsync, this).Forget();
+		_coroutines->Start(&PlayerDeathManager::RunDeathSequenceAsync, this, _cancellationTokenSource->GetToken()).Forget();
 	}
 
-	tokoro::Async<void> PlayerDeathManager::RunDeathSequenceAsync() const
+	tokoro::Async<void> PlayerDeathManager::RunDeathSequenceAsync(const GEngine::CancellationToken cancellationToken) const
 	{
 		GGAME_INFO("Starting death sequence.");
 
@@ -45,10 +46,14 @@ namespace PacMan
 		_entitiesManager->StopAllEntitiesMovement();
 		_ghostsPrisionManager->Stop();
 
+		co_await GEngine::ChronoTimer::AwaitSeconds(1, cancellationToken);
+		if (cancellationToken.IsCancelled()) co_return;
+
 		_playerLoaderManager->SetPlayerToInitialPosition();
 		_ghostsLoadingManager->SetGhostsToInitialPosition();
 
-		co_await GEngine::ChronoTimer::AwaitSeconds(1, GEngine::CancellationToken::None());
+		co_await GEngine::ChronoTimer::AwaitSeconds(1, cancellationToken);
+		if (cancellationToken.IsCancelled()) co_return;
 
 		_ghostsPrisionManager->Reset();
 		_entitiesManager->StartPlayerAndMapGhostEntitiesMovement();

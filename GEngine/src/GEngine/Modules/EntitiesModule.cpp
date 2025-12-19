@@ -83,7 +83,7 @@ namespace GEngine
 	bool EntitiesModule::RemoveEntity(const std::weak_ptr<Entity> &entityPtr)
 	{
 		const std::shared_ptr<Entity> entity = entityPtr.lock();
-		if (entity == nullptr) return false;
+		if (!entity) return false;
 
 		if (!entity->_isAlive)
 		{
@@ -106,7 +106,7 @@ namespace GEngine
 		const std::shared_ptr<Entity> entity = entityPtr.lock();
 		if (!entity) return false;
 
-		if (!entity->_parentPtr.expired())
+		if (!entity->_parent.expired())
 		{
 			entity->RemoveParent();
 		}
@@ -161,24 +161,20 @@ namespace GEngine
 		)
 	{
 		const std::shared_ptr<Entity> target = targetPtr.lock();
-		if (target == nullptr) return;
+		if (!target) return;
 
 		const std::shared_ptr<Entity> parent = parentPtr.lock();
-		if (parent == nullptr) return;
+		if (!parent) return;
 
 		const bool isInsideChildHierarchy = parent->IsInsideChildHierarchy(target);
+		if (isInsideChildHierarchy) return;
 
-		if (isInsideChildHierarchy)
-		{
-			return;
-		}
-
-		if (!target->_parentPtr.expired())
+		if (!target->_parent.expired())
 		{
 			RemoveEntityParent(target);
 		}
 
-		target->_parentPtr = parent;
+		target->_parent = parent;
 		parent->_childEntities.push_back(target);
 
 		VectorExtensions::Remove(_rootEntities, target);
@@ -211,11 +207,11 @@ namespace GEngine
 		const std::shared_ptr<Entity> target = targetPtr.lock();
 		if (target == nullptr) return;
 
-		const std::shared_ptr<Entity> parent = target->_parentPtr.lock();
+		const std::shared_ptr<Entity> parent = target->_parent.lock();
 		if (parent == nullptr) return;
 
 		VectorExtensions::Remove(parent->_childEntities, target);
-		target->_parentPtr.reset();
+		target->_parent.reset();
 
 		_rootEntities.push_back(target);
 
@@ -307,16 +303,37 @@ namespace GEngine
 
 	void EntitiesModule::TickEntities()
 	{
-		ForEachEntityInHierarchy([](const std::shared_ptr<Entity>& entity)
+		_tickEntitiesBuffer.clear();
+
+		for (auto it = _rootEntities.begin(); it != _rootEntities.end(); ++it)
 		{
-			if (!entity->IsActiveInHierarchy())
+			const std::shared_ptr<Entity> rootEntity = it->lock();
+			if (!rootEntity) continue;
+
+			_tickEntitiesBuffer.push_back(rootEntity.get());
+		}
+
+		std::int32_t entityIndex = 0;
+		while (_tickEntitiesBuffer.size() > 0)
+		{
+			Entity* checking = _tickEntitiesBuffer.front();
+			_tickEntitiesBuffer.pop_front();
+
+			if (!checking->IsActiveInHierarchy()) continue;
+
+			for (auto it = checking->GetChildren().rbegin(); it != checking->GetChildren().rend(); ++it)
 			{
-				return false;
+				const std::shared_ptr<Entity> childEntity = it->lock();
+				if (!childEntity) continue;
+
+				_tickEntitiesBuffer.push_front(childEntity.get());
 			}
 
-			entity->TickAllComponents();
-			return true;
-		});
+			checking->_renderingPositionInHierarchy = entityIndex;
+			checking->TickAllComponents();
+
+			++entityIndex;
+		}
 	}
 
 	void EntitiesModule::ActuallyRemoveEntities()

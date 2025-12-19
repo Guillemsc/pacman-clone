@@ -46,6 +46,8 @@ namespace GEngine
 		bool IsActiveInHierarchy() const;
 		void SetActive(bool active);
 
+		std::uint32_t GetRenderingPositionInHierarchy() const;
+
 		bool IsInsideChildHierarchy(const std::weak_ptr<Entity> &checkingPtr) const;
 		void SetParent(const std::weak_ptr<Entity> &parentPtr, bool worldPositionStays = true);
 		void RemoveParent(bool worldPositionStays = true);
@@ -87,12 +89,15 @@ namespace GEngine
 		bool _isActiveSelf = false;
 		bool _isActiveInHierarchy = false;
 
-		std::weak_ptr<Entity> _parentPtr;
+		std::weak_ptr<Entity> _parent;
+
 		std::vector<std::weak_ptr<Entity>> _childEntities;
 
 		std::vector<std::shared_ptr<Component>> _components; // TODO: Make contiguous arrays of Components, this is faster to impl for now :)
-		std::weak_ptr<TransformComponent> _transformPtr;
-		std::weak_ptr<UiTransformComponent> _uiTransformPtr;
+		std::weak_ptr<TransformComponent> _transformComponent;
+		std::weak_ptr<UiTransformComponent> _uiTransformComponent;
+
+		std::uint32_t _renderingPositionInHierarchy = 0;
 	};
 
 	template <class T>
@@ -130,19 +135,19 @@ namespace GEngine
 
 		const std::shared_ptr<T> component = std::make_shared<T>(modules, weak_from_this(), std::forward<Args>(args)...);
 
-		if (_transformPtr.expired())
+		if (_transformComponent.expired())
 		{
 			if constexpr (std::is_same_v<T, TransformComponent>)
 			{
-				_transformPtr = component;
+				_transformComponent = component;
 			}
 		}
 
-		if (_uiTransformPtr.expired())
+		if (_uiTransformComponent.expired())
 		{
 			if constexpr (std::is_same_v<T, UiTransformComponent>)
 			{
-				_uiTransformPtr = component;
+				_uiTransformComponent = component;
 			}
 		}
 

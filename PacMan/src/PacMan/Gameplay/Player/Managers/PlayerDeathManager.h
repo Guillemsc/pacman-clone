@@ -14,6 +14,8 @@ namespace PacMan
 
 namespace GEngine
 {
+	class CancellationToken;
+	class CancellationTokenSource;
 	class CoroutinesRunner;
 }
 
@@ -39,7 +41,7 @@ namespace PacMan
 		void RunDeath();
 
 	private:
-		[[nodiscard]] tokoro::Async<void> RunDeathSequenceAsync() const;
+		[[nodiscard]] tokoro::Async<void> RunDeathSequenceAsync(GEngine::CancellationToken cancellationToken) const;
 
 	private:
 		GEngine::CoroutinesRunner* const _coroutines;
@@ -48,6 +50,8 @@ namespace PacMan
 		PlayerLoaderManager* const _playerLoaderManager;
 		GhostsLoadingManager* const _ghostsLoadingManager;
 		GhostsBehaviourManager* const _ghostsBehaviourManager;
+
+		std::shared_ptr<GEngine::CancellationTokenSource> _cancellationTokenSource;
 	};
 }
 

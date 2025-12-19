@@ -11,6 +11,7 @@
 #include "GEngine/Components/UiTextRendererComponent.h"
 #include "GEngine/Components/UiTransformComponent.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
+#include "GEngine/Coroutines/CancellationToken.h"
 #include "GEngine/Coroutines/CoroutinesRunner.h"
 #include "GEngine/Modules/CoroutinesModule.h"
 #include "GEngine/Modules/EntitiesModule.h"
@@ -26,6 +27,10 @@ namespace PacMan
 
 	tokoro::Async<void> MetaContext::OnLoadAsync()
 	{
+		std::unique_ptr<SplashManager> splashManager = std::make_unique<SplashManager>(_scene.get());
+
+		_splashManager = std::move(splashManager);
+
 		const std::shared_ptr<GEngine::Entity> uiEntity2 = _scene->AddUiEntity().lock();
 		uiEntity2->AddComponent<GEngine::UiShapeRendererComponent>();
 		const std::shared_ptr<GEngine::UiShapeButtonComponent> button = uiEntity2->AddComponent<GEngine::UiShapeButtonComponent>().lock();
@@ -38,6 +43,11 @@ namespace PacMan
 		uiEntity3->GetUiTransform().lock()->SetSizeDelta({200, 100});
 
 		co_await Context::OnLoadAsync();
+	}
+
+	void MetaContext::OnStart()
+	{
+		GetCoroutinesRunner()->Start(&SplashManager::PlaySplashAsync, _splashManager.get(), GEngine::CancellationToken::None()).Forget();
 	}
 
 	void MetaContext::OnDispose()
