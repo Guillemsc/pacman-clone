@@ -9,6 +9,11 @@
 
 namespace GEngine
 {
+	class GEngineCoreModules;
+}
+
+namespace GEngine
+{
 	class Scene;
 	class CancellationToken;
 }
@@ -18,11 +23,12 @@ namespace PacMan
 	class SplashManager
 	{
 	public:
-		SplashManager(GEngine::Scene* scene);
+		SplashManager(GEngine::GEngineCoreModules* modules, GEngine::Scene* scene);
 
 		[[nodiscard]] tokoro::Async<void> PlaySplashAsync(GEngine::CancellationToken cancellationToken) const;
 
 	private:
+		GEngine::GEngineCoreModules* const _modules;
 		GEngine::Scene* const _scene;
 	};
 }

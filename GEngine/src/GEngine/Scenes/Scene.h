@@ -22,6 +22,7 @@ namespace GEngine
 
 		std::weak_ptr<Entity> AddWorldEntity() const;
 		std::weak_ptr<Entity> AddUiEntity() const;
+		std::weak_ptr<Entity> AddUiEntity(const std::weak_ptr<Entity>& parent) const;
 
 		bool RemoveEntity(const std::weak_ptr<Entity> &entity) const;
 

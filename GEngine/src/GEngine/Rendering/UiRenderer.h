@@ -25,6 +25,16 @@ namespace GEngine
 
 		void Render();
 
+		void AddTexture(
+			std::int32_t layer,
+			const Texture2D& texture,
+			const glm::vec2 &position,
+			float rotationRadians,
+			const glm::vec2 &size,
+			const glm::vec2& center,
+			const Color01 &color
+			);
+
 		void AddRect(
 			std::int32_t layer,
 			const glm::vec2 &position,
@@ -57,6 +67,7 @@ namespace GEngine
 		void AddCommand(std::int32_t layer, const UiRendererCommand& command);
 
 		void RenderCommand(const UiRendererCommand& command);
+		void RenderTextureCommand(const TextureUiRendererCommand& command) const;
 		void RenderRectCommand(const RectUiRendererCommand& command) const;
 		void RenderTextCommand(const TextUiRendererCommand& command);
 

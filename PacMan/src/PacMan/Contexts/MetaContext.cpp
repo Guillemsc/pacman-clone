@@ -27,7 +27,10 @@ namespace PacMan
 
 	tokoro::Async<void> MetaContext::OnLoadAsync()
 	{
-		std::unique_ptr<SplashManager> splashManager = std::make_unique<SplashManager>(_scene.get());
+		std::unique_ptr<SplashManager> splashManager = std::make_unique<SplashManager>(
+			_modules,
+			_scene.get()
+			);
 
 		_splashManager = std::move(splashManager);
 

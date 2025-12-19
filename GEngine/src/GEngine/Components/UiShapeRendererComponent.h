@@ -15,7 +15,7 @@ namespace GEngine
 	class RectUiShape2d;
 	class UiShape2d;
 
-	class UiShapeRendererComponent final : public Component, public std::enable_shared_from_this<UiShapeRendererComponent>
+	class UiShapeRendererComponent final : public Component
 	{
 		REGISTER_COMPONENT(UiShapeRendererComponent)
 
@@ -25,6 +25,7 @@ namespace GEngine
 		void OnTick() override;
 
 		void SetColor(const Color01& color) const;
+		Color01 GetColor() const;
 
 	private:
 		std::shared_ptr<Property<std::shared_ptr<UiShape2d>>> _shape2d;

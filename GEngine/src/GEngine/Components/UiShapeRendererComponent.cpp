@@ -18,7 +18,7 @@
 namespace GEngine
 {
 	UiShapeRendererComponent::UiShapeRendererComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity)
-	: Component(modules, entity)
+		: Component(modules, entity)
 	{
 		_shape2d = _properties.RegisterObject<UiShape2d>("Shape", std::make_shared<RectUiShape2d>());
 		_color = _properties.Register<Color01>("Color", Color01::White);
@@ -42,7 +42,7 @@ namespace GEngine
 		if (const auto rectShape = std::dynamic_pointer_cast<RectUiShape2d>(_shape2d->GetValue()))
 		{
 			modules->rendering->UiRender()->AddRect(
-				0,
+				entity->GetRenderingPositionInHierarchy(),
 				position,
 				rotation,
 				size,
@@ -55,5 +55,10 @@ namespace GEngine
 	void UiShapeRendererComponent::SetColor(const Color01& color) const
 	{
 		_color->SetValue(color);
+	}
+
+	Color01 UiShapeRendererComponent::GetColor() const
+	{
+		return _color->GetValue();
 	}
 } // GEngine

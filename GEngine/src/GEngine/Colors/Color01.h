@@ -22,6 +22,7 @@ namespace GEngine
 		static Color01 FromHex(const std::string& hex);
 
 		static const Color01 White;
+		static const Color01 Black;
 		static const Color01 Green;
 		static const Color01 Blue;
 

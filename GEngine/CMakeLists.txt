@@ -299,6 +299,11 @@ add_library(GEngineCore STATIC
         src/GEngine/Editor/ComponentsInspector/UiTextRendererComponentInspectorEditor.h
         src/GEngine/Text/HorizontalTextAlign.h
         src/GEngine/Text/VerticalTextAlign.h
+        src/GEngine/Examples/Hierarchy/HierarchyExample.cpp
+        src/GEngine/Examples/Hierarchy/HierarchyExample.h
+        src/GEngine/Examples/Hierarchy/HierarchyExample.cpp
+        src/GEngine/Components/UiTextureRendererComponent.cpp
+        src/GEngine/Components/UiTextureRendererComponent.h
 )
 
 # Link raylib

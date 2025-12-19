@@ -47,8 +47,10 @@ namespace GEngine
 			const auto [node, depth] = _stack.front();
 			_stack.erase(_stack.begin());
 
-			if (currentDepth > depth)
+			int depthToReduce = std::max(0, currentDepth - depth);
+			while (depthToReduce > 0)
 			{
+				--depthToReduce;
 				ImGui::TreePop();
 			}
 

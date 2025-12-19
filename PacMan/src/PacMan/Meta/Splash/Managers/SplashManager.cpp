@@ -10,16 +10,19 @@
 
 namespace PacMan
 {
-	SplashManager::SplashManager(GEngine::Scene *scene)
-		: _scene(scene)
+	SplashManager::SplashManager(GEngine::GEngineCoreModules* modules, GEngine::Scene *scene)
+		: _modules(modules), _scene(scene)
 	{
 	}
 
 	tokoro::Async<void> SplashManager::PlaySplashAsync(const GEngine::CancellationToken cancellationToken) const
 	{
-		const std::shared_ptr<SplashView> splashView = SplashView::Load(_scene);
+		const std::shared_ptr<SplashView> splashView = SplashView::Load(_modules, _scene);
 
-		co_await GEngine::ChronoTimer::AwaitSeconds(5, cancellationToken);
+		co_await GEngine::ChronoTimer::AwaitSeconds(0.3f, cancellationToken);
+		co_await splashView->PlaySplashAsync(cancellationToken);
+
+		co_await GEngine::ChronoTimer::AwaitSeconds(99, cancellationToken);
 
 		splashView->Dispose();
 	}

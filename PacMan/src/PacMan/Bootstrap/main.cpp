@@ -1,6 +1,7 @@
 #include <memory>
 
 #include "GEngine/Core/GEngineCoreApplication.h"
+#include "GEngine/Examples/Hierarchy/HierarchyExample.h"
 #include "GEngine/Memory/MemoryTracker.h"
 #include "GEngine/Modules/GameModule.h"
 #include "PacMan/Games/PacManGame.h"

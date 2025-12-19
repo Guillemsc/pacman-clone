@@ -87,9 +87,9 @@ namespace GEngine
 		return false;
 	}
 
-	void Entity::SetParent(const std::weak_ptr<Entity> &parentPtr, const bool worldPositionStays)
+	void Entity::SetParent(const std::weak_ptr<Entity> &parentEntity, const bool worldPositionStays)
 	{
-		modules->entities->SetEntityParent(weak_from_this(), parentPtr, worldPositionStays);
+		modules->entities->SetEntityParent(weak_from_this(), parentEntity, worldPositionStays);
 	}
 
 	void Entity::RemoveParent(const bool worldPositionStays)

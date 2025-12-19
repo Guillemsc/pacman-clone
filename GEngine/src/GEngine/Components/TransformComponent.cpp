@@ -13,7 +13,7 @@
 namespace GEngine
 {
 	TransformComponent::TransformComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity)
-	: Component(modules, entity)
+		: Component(modules, entity)
 	{
 		_localPositionProperty = _properties.Register("Position", Vec3Extensions::Zero);
 	}

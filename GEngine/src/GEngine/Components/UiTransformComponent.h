@@ -25,8 +25,9 @@ namespace GEngine
 		void SetAnchoredPosition(const glm::vec2& anchoredPosition) const;
 		void SetSizeDelta(const glm::vec2& sizeDelta) const;
 		void SetPivot(const glm::vec2& pivot) const;
-		void SetRotation(const float rotation) const;
+		void SetRotation(float rotation) const;
 		bool IsContainedInWorldRect(const glm::vec2& screenPosition) const;
+		void ExpandOnParent() const;
 
 		void SetWorldPosition(const glm::vec2& worldPosition) const;
 

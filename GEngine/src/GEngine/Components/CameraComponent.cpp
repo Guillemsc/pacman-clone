@@ -11,7 +11,8 @@
 
 namespace GEngine
 {
-	CameraComponent::CameraComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity) : Component(modules, entity)
+	CameraComponent::CameraComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity)
+		: Component(modules, entity)
 	{
 	}
 

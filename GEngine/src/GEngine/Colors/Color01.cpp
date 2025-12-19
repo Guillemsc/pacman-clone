@@ -14,7 +14,7 @@ namespace GEngine
 		this->a = a;
 	}
 
-	Color01::Color01(const char scalar) : Color01(scalar, scalar, scalar, scalar)
+	Color01::Color01(const char scalar) : Color01(scalar, scalar, scalar, 1.0f)
 	{
 	}
 
@@ -50,6 +50,7 @@ namespace GEngine
 	}
 
 	const Color01 Color01::White = Color01(1);
+	const Color01 Color01::Black = Color01(0);
 	const Color01 Color01::Green = Color01(0, 1, 0);
 	const Color01 Color01::Blue = Color01(0, 0, 1);
 } // GEngineCore

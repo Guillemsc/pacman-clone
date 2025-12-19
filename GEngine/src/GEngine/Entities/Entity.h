@@ -49,7 +49,7 @@ namespace GEngine
 		std::uint32_t GetRenderingPositionInHierarchy() const;
 
 		bool IsInsideChildHierarchy(const std::weak_ptr<Entity> &checkingPtr) const;
-		void SetParent(const std::weak_ptr<Entity> &parentPtr, bool worldPositionStays = true);
+		void SetParent(const std::weak_ptr<Entity> &parentEntity, bool worldPositionStays = true);
 		void RemoveParent(bool worldPositionStays = true);
 		void ForEachEntityInChildHierarchy(bool includeCurrent, const std::function<bool(const std::shared_ptr<Entity>&)> &callback);
 

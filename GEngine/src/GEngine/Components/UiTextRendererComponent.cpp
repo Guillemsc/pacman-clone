@@ -14,7 +14,7 @@
 namespace GEngine
 {
 	UiTextRendererComponent::UiTextRendererComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity)
-	: Component(modules, entity)
+		: Component(modules, entity)
 	{
 	}
 
@@ -31,7 +31,7 @@ namespace GEngine
 		const std::shared_ptr<FontResource> fontResource = _fontResource.lock();
 
 		modules->rendering->UiRender()->AddText(
-			0,
+			entity->GetRenderingPositionInHierarchy(),
 			fontResource.get(),
 			std::string_view(_text),
 			uiRect.position,

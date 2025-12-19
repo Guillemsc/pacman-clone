@@ -305,19 +305,20 @@ namespace GEngine
 	{
 		_tickEntitiesBuffer.clear();
 
-		for (auto it = _rootEntities.begin(); it != _rootEntities.end(); ++it)
+		for (auto it = _rootEntities.rbegin(); it != _rootEntities.rend(); ++it)
 		{
 			const std::shared_ptr<Entity> rootEntity = it->lock();
 			if (!rootEntity) continue;
 
-			_tickEntitiesBuffer.push_back(rootEntity.get());
+			Entity* entity = rootEntity.get();
+			_tickEntitiesBuffer.push_back(entity);
 		}
 
 		std::int32_t entityIndex = 0;
 		while (_tickEntitiesBuffer.size() > 0)
 		{
-			Entity* checking = _tickEntitiesBuffer.front();
-			_tickEntitiesBuffer.pop_front();
+			Entity* checking = _tickEntitiesBuffer.back();
+			_tickEntitiesBuffer.erase(_tickEntitiesBuffer.end());
 
 			if (!checking->IsActiveInHierarchy()) continue;
 
@@ -326,7 +327,7 @@ namespace GEngine
 				const std::shared_ptr<Entity> childEntity = it->lock();
 				if (!childEntity) continue;
 
-				_tickEntitiesBuffer.push_front(childEntity.get());
+				_tickEntitiesBuffer.push_back(childEntity.get());
 			}
 
 			checking->_renderingPositionInHierarchy = entityIndex;

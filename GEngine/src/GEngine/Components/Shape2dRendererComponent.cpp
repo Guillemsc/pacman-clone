@@ -16,7 +16,7 @@
 namespace GEngine
 {
 	Shape2dRendererComponent::Shape2dRendererComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity)
-	: Component(modules, entity)
+		: Component(modules, entity)
 	{
 		_renderLayer = _properties.Register("Render Layer", 0);
 		_shape2d = _properties.RegisterObject<Shape2d>("Shape", std::make_shared<RectShape2d>());

@@ -88,6 +88,12 @@ namespace GEngine
 		return _worldUiRect.ContainsPoint(screenPosition);
 	}
 
+	void UiTransformComponent::ExpandOnParent() const
+	{
+		SetAnchors({ 0, 0, 1, 1 });
+		SetSizeDelta({ 0, 0 });
+	}
+
 	void UiTransformComponent::SetWorldPosition(const glm::vec2 &worldPosition) const
 	{
 		const UiRect parentRect = GetParentWorldUiRect();

@@ -36,6 +36,31 @@ namespace GEngine
 		}
 	}
 
+	void UiRenderer::AddTexture(
+		const std::int32_t layer,
+		const Texture2D& texture,
+		const glm::vec2 &position,
+		const float rotationRadians,
+		const glm::vec2 &size,
+		const glm::vec2 &center,
+		const Color01 &color
+		)
+	{
+		AddCommand(
+			layer,
+			UiRendererCommand {
+				.type = UiRendererCommandType::TEXTURE,
+				.texture = {
+					texture,
+					position,
+					rotationRadians,
+					size,
+					center,
+					color
+				}
+			});
+	}
+
 	void UiRenderer::AddRect(
 		const std::int32_t layer,
 		const glm::vec2 &position,
@@ -134,6 +159,12 @@ namespace GEngine
 	{
 		switch (command.type)
 		{
+			case UiRendererCommandType::TEXTURE:
+			{
+				RenderTextureCommand(command.texture);
+				break;
+			}
+
 			case UiRendererCommandType::RECT:
 			{
 				RenderRectCommand(command.rect);
@@ -146,6 +177,20 @@ namespace GEngine
 				break;
 			}
 		}
+	}
+
+	void UiRenderer::RenderTextureCommand(const TextureUiRendererCommand &command) const
+	{
+		const glm::vec2 renderPosition = PositionToRenderPosition(command.position);
+		const rlRectangle rect = { renderPosition.x, renderPosition.y, command.size.x, command.size.y};
+		const float rotationDegrees = RotationToRenderRotation(glm::degrees(command.rotationRadians));
+		const glm::vec2 renderPivot = PivotToRenderPivot(command.pivot);
+		const glm::vec2 center = { command.size.x * renderPivot.x, command.size.y * renderPivot.y };
+		const Color raylibColor = Color01Extensions::ToRaylibColor(command.color);
+
+		const rlRectangle sourceRect = rlRectangle{ 0, 0, static_cast<float>(command.texture.width), static_cast<float>(command.texture.height) };
+
+		DrawTexturePro(command.texture, sourceRect, rect, { center.x, center.y }, rotationDegrees, raylibColor);
 	}
 
 	void UiRenderer::RenderRectCommand(const RectUiRendererCommand &command) const

@@ -9,7 +9,7 @@
 namespace GEngine
 {
 	UiShapeButtonComponent::UiShapeButtonComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity)
-	: Component(modules, entity)
+		: Component(modules, entity)
 	{
 		SetState();
 	}

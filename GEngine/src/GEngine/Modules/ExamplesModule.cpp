@@ -5,6 +5,7 @@
 #include "ExamplesModule.h"
 
 #include "GEngine/Data/ExampleData.h"
+#include "GEngine/Examples/Hierarchy/HierarchyExample.h"
 #include "GEngine/Examples/Tweens/DevelopmentTweensExample.h"
 #include "GEngine/Examples/UiTransform/AnchorsUiTransformExample.h"
 
@@ -19,6 +20,10 @@ namespace GEngine
 		_examples.push_back(ExampleData(
 			"Development Tweens",
 			std::make_shared<DevelopmentTweensExample>()
+			));
+		_examples.push_back(ExampleData(
+			"Hierarchy",
+			std::make_shared<HierarchyExample>()
 			));
 	}
 

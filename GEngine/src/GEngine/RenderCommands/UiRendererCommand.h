@@ -15,8 +15,19 @@ namespace GEngine
 {
 	enum class UiRendererCommandType
 	{
+		TEXTURE,
 		RECT,
 		TEXT,
+	};
+
+	struct TextureUiRendererCommand
+	{
+		Texture2D texture;
+		glm::vec2 position;
+		float rotationRadians;
+		glm::vec2 size;
+		glm::vec2 pivot;
+		Color01 color;
 	};
 
 	struct RectUiRendererCommand
@@ -48,6 +59,7 @@ namespace GEngine
 
 		union
 		{
+			TextureUiRendererCommand texture;
 			RectUiRendererCommand rect;
 			TextUiRendererCommand text;
 		};
