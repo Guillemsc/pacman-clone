@@ -4,6 +4,7 @@
 
 #include "Entity.h"
 
+#include "EntityHierarchyIterator.h"
 #include "GEngine/Components/Component.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
 #include "GEngine/Extensions/VectorExtensions.h"
@@ -97,43 +98,6 @@ namespace GEngine
 		modules->entities->RemoveEntityParent(weak_from_this(), worldPositionStays);
 	}
 
-	void Entity::ForEachEntityInChildHierarchy(
-		const bool includeCurrent,
-		const std::function<bool(const std::shared_ptr<Entity>&)> &callback
-		)
-	{
-		const ObjectPool<std::vector<std::shared_ptr<Entity>>>::Ptr toCheck = Pools::entitiesVector.Acquire();
-		toCheck->push_back(shared_from_this());
-
-		bool firstChecking = true;
-
-		while (toCheck->size() > 0)
-		{
-			std::shared_ptr<Entity> checking = toCheck->front();
-			toCheck->erase(toCheck->begin());
-
-			bool shouldAddChildren = true;
-
-			if (includeCurrent || !firstChecking)
-			{
-				shouldAddChildren = callback(checking);
-			}
-
-			if (shouldAddChildren)
-			{
-				for (auto it = checking->GetChildren().begin(); it != checking->GetChildren().end(); ++it)
-				{
-					const std::shared_ptr<Entity> childEntity = it->lock();
-					if (!childEntity) continue;
-
-					toCheck->push_back(childEntity);
-				}
-			}
-
-			firstChecking = false;
-		}
-	}
-
 	std::weak_ptr<Entity> Entity::GetParent() const
 	{
 		return _parent;
@@ -213,10 +177,20 @@ namespace GEngine
 
 	void Entity::RefreshChildrenHierarchyActiveState()
 	{
-		ForEachEntityInChildHierarchy(true, [](const std::shared_ptr<Entity> &checking)
+		EntityHierarchyIterator entityHierarchyIterator(weak_from_this());
+
+		while (entityHierarchyIterator.HasNext())
 		{
-			return checking->RefreshActiveState();
-		});
+			Entity* checkingEntity = entityHierarchyIterator.GetNext(false);
+			if (!checkingEntity) break;
+
+			const bool stateChanged = checkingEntity->RefreshActiveState();
+
+			if (stateChanged)
+			{
+				entityHierarchyIterator.AddCurrentChildren();
+			}
+		}
 	}
 
 	bool Entity::RefreshActiveState()

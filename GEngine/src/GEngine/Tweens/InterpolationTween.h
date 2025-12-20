@@ -15,7 +15,7 @@
 namespace GEngine
 {
 	template <class T>
-	class InterpolationTween : public Tween
+	class InterpolationTween final : public Tween
 	{
 	public:
 		InterpolationTween(

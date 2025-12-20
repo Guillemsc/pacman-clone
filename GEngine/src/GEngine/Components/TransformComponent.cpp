@@ -6,6 +6,7 @@
 
 #include "TransformComponent.h"
 
+#include "GEngine/Entities/EntityHierarchyIterator.h"
 #include "GEngine/Extensions/Vec3Extensions.h"
 #include "glm/gtx/matrix_decompose.hpp"
 #include "glm/gtx/quaternion.hpp"
@@ -294,20 +295,20 @@ namespace GEngine
 
 	void TransformComponent::RecalculateChildrenHierarchyWorldMatrices() const
 	{
-		const std::shared_ptr<Entity> entity = GetEntity().lock();
-		if (!entity) return;
+		EntityHierarchyIterator entityHierarchyIterator(GetEntity());
 
-		entity->ForEachEntityInChildHierarchy(
-			true,
-			[this](const std::shared_ptr<Entity> &checkingEntity)
-			{
-				const std::shared_ptr<TransformComponent> childTransform = checkingEntity->GetTransform().lock();
-				if (!childTransform) return false;
+		while (entityHierarchyIterator.HasNext())
+		{
+			const Entity* checkingEntity = entityHierarchyIterator.GetNext(false);
+			if (!checkingEntity) break;
 
-				childTransform->RecalculateWorldMatrix();
-				return true;
-			}
-		);
+			const std::shared_ptr<TransformComponent> childTransform = checkingEntity->GetTransform().lock();
+			if (!childTransform) continue;
+
+			childTransform->RecalculateWorldMatrix();
+
+			entityHierarchyIterator.AddCurrentChildren();
+		}
 	}
 
 	void TransformComponent::ComposeLocalMatrix()

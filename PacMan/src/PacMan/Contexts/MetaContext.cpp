@@ -32,25 +32,20 @@ namespace PacMan
 			_scene.get()
 			);
 
+		std::unique_ptr<MainMenuManager> mainMenuManager = std::make_unique<MainMenuManager>(
+			_modules,
+			_scene.get()
+			);
+
 		_splashManager = std::move(splashManager);
-
-		const std::shared_ptr<GEngine::Entity> uiEntity2 = _scene->AddUiEntity().lock();
-		uiEntity2->AddComponent<GEngine::UiShapeRendererComponent>();
-		const std::shared_ptr<GEngine::UiShapeButtonComponent> button = uiEntity2->AddComponent<GEngine::UiShapeButtonComponent>().lock();
-
-		button->OnClick().Add([this] { WhenPlayButtonClicked(); });
-
-		const std::shared_ptr<GEngine::Entity> uiEntity3 = _scene->AddUiEntity().lock();
-		uiEntity3->AddComponent<GEngine::UiTextRendererComponent>();
-		uiEntity3->GetUiTransform().lock()->SetAnchoredPosition({0, -100});
-		uiEntity3->GetUiTransform().lock()->SetSizeDelta({200, 100});
+		_mainMenuManager = std::move(mainMenuManager);
 
 		co_await Context::OnLoadAsync();
 	}
 
 	void MetaContext::OnStart()
 	{
-		GetCoroutinesRunner()->Start(&SplashManager::PlaySplashAsync, _splashManager.get(), GEngine::CancellationToken::None()).Forget();
+		GetCoroutinesRunner()->Start(&MetaContext::StartFromSplashAsync, this, GEngine::CancellationToken::None()).Forget();
 	}
 
 	void MetaContext::OnDispose()
@@ -58,11 +53,9 @@ namespace PacMan
 
 	}
 
-	void MetaContext::WhenPlayButtonClicked()
+	tokoro::Async<void> MetaContext::StartFromSplashAsync(const GEngine::CancellationToken cancellationToken) const
 	{
-		ContextsStack* contextsStack = GEngine::ServiceLocator::Get<ContextsStack>();
-
-		contextsStack->Pop();
-		_modules->coroutines->GetMainRunner()->Start(&ContextsStack::PushAsync, contextsStack, std::make_shared<GameplayContext>(_modules)).Forget();
+		co_await _splashManager->PlaySplashAsync(cancellationToken);
+		co_await _mainMenuManager->ShowAsync(cancellationToken);
 	}
 }

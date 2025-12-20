@@ -5,6 +5,7 @@
 #include "UiTransformComponent.h"
 
 #include "GEngine/Core/GEngineCoreModules.h"
+#include "GEngine/Entities/EntityHierarchyIterator.h"
 #include "GEngine/Extensions/Vec4Extensions.h"
 #include "GEngine/Modules/RenderingModule.h"
 #include "GEngine/Modules/UiModule.h"
@@ -156,22 +157,22 @@ namespace GEngine
 
 	void UiTransformComponent::RecalculateChildrenHierarchyWorldUiRects() const
 	{
-		const std::shared_ptr<Entity> entity = GetEntity().lock();
-		if (!entity) return;
+		EntityHierarchyIterator entityHierarchyIterator(GetEntity());
 
-		entity->ForEachEntityInChildHierarchy(
-			true,
-			[this](const std::shared_ptr<Entity> &checkingEntity)
-			{
-				const std::shared_ptr<UiTransformComponent> childTransform = checkingEntity->GetUiTransform().lock();
-				if (!childTransform) return false;
+		while (entityHierarchyIterator.HasNext())
+		{
+			const Entity* checkingEntity = entityHierarchyIterator.GetNext(false);
+			if (!checkingEntity) break;
 
-				childTransform->RecalculateLocalPositionAndLocalSizeFromAnchoredPositionAndSizeDelta();
-				childTransform->ComposeLocalUiRect();
-				childTransform->RecalculateWorldUiRect();
-				return true;
-			}
-		);
+			const std::shared_ptr<UiTransformComponent> childTransform = checkingEntity->GetUiTransform().lock();
+			if (!childTransform) continue;
+
+			childTransform->RecalculateLocalPositionAndLocalSizeFromAnchoredPositionAndSizeDelta();
+			childTransform->ComposeLocalUiRect();
+			childTransform->RecalculateWorldUiRect();
+
+			entityHierarchyIterator.AddCurrentChildren();
+		}
 	}
 
 	UiRect UiTransformComponent::GetParentWorldUiRect() const

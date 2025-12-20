@@ -8,40 +8,30 @@
 #include <memory>
 
 #include "tokoro.h"
+#include "PacMan/Shared/Views/UiView.h"
 
 namespace GEngine
 {
 	class GEngineCoreModules;
 	class CancellationToken;
 	class UiShapeRendererComponent;
-	class Entity;
-	class Scene;
 }
 
 namespace PacMan
 {
-	class SplashView
+	class SplashUiView final : public UiView
 	{
 	public:
-		explicit SplashView(
+		explicit SplashUiView(
 			GEngine::GEngineCoreModules* modules,
 			GEngine::Scene* scene
 			);
 
-		static std::shared_ptr<SplashView> Load(
-			GEngine::GEngineCoreModules* modules,
-			GEngine::Scene* scene
-			);
-
-		void Dispose() const;
+		void BuildTree(const std::shared_ptr<GEngine::Entity>& root) override;
 
 		tokoro::Async<void> PlaySplashAsync(GEngine::CancellationToken cancellationToken) const;
 
 	private:
-		GEngine::GEngineCoreModules* const _modules;
-		GEngine::Scene* const _scene;
-
-		std::weak_ptr<GEngine::Entity> _rootEntity;
 		std::weak_ptr<GEngine::UiShapeRendererComponent> _blackScreenImage;
 	};
 }

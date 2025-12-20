@@ -304,6 +304,12 @@ add_library(GEngineCore STATIC
         src/GEngine/Examples/Hierarchy/HierarchyExample.cpp
         src/GEngine/Components/UiTextureRendererComponent.cpp
         src/GEngine/Components/UiTextureRendererComponent.h
+        src/GEngine/Tweens/WaitTween.cpp
+        src/GEngine/Tweens/WaitTween.h
+        src/GEngine/Components/UiRenderersAlphaGroupComponent.cpp
+        src/GEngine/Components/UiRenderersAlphaGroupComponent.h
+        src/GEngine/Entities/EntityHierarchyIterator.cpp
+        src/GEngine/Entities/EntityHierarchyIterator.h
 )
 
 # Link raylib

@@ -10,6 +10,7 @@
 #include "GEngine/Extensions/VectorExtensions.h"
 #include "GEngine/Components/TransformComponent.h"
 #include "GEngine/Components/UiTransformComponent.h"
+#include "GEngine/Entities/EntityHierarchyIterator.h"
 #include "GEngine/Pooling/Pools.h"
 #include "spdlog/spdlog.h"
 
@@ -84,17 +85,17 @@ namespace GEngine
 	{
 		const std::shared_ptr<Entity> entity = entityPtr.lock();
 		if (!entity) return false;
+		if (!entity->_isAlive) return false;
 
-		if (!entity->_isAlive)
+		EntityHierarchyIterator entityHierarchyIterator(entity);
+
+		while (entityHierarchyIterator.HasNext())
 		{
-			return false;
+			Entity* checkingEntity = entityHierarchyIterator.GetNext(true);
+			if (!checkingEntity) break;
+
+			checkingEntity->_isAlive = false;
 		}
-
-		entity->ForEachEntityInChildHierarchy(true, [](const std::shared_ptr<Entity>& childEntity)
-		{
-			childEntity->_isAlive = false;
-			return true;
-		});
 
 		_entitiesToRemove.push_back(entity);
 
@@ -269,7 +270,8 @@ namespace GEngine
 			std::shared_ptr<Entity> checking = entitiesBuffer->front();
 			entitiesBuffer->erase(entitiesBuffer->begin());
 
-			for (auto it = checking->GetChildren().begin(); it != checking->GetChildren().end(); ++it)
+			const std::vector<std::weak_ptr<Entity>>& children = checking->GetChildren();
+			for (auto it = children.begin(); it != children.end(); ++it)
 			{
 				const std::shared_ptr<Entity> childEntity = it->lock();
 				if (!childEntity) continue;
@@ -322,7 +324,8 @@ namespace GEngine
 
 			if (!checking->IsActiveInHierarchy()) continue;
 
-			for (auto it = checking->GetChildren().rbegin(); it != checking->GetChildren().rend(); ++it)
+			const std::vector<std::weak_ptr<Entity>>& children = checking->GetChildren();
+			for (auto it = children.rbegin(); it != children.rend(); ++it)
 			{
 				const std::shared_ptr<Entity> childEntity = it->lock();
 				if (!childEntity) continue;

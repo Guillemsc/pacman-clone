@@ -6,7 +6,7 @@
 
 #include "GEngine/Coroutines/CancellationToken.h"
 #include "GEngine/Timers/ChronoTimer.h"
-#include "PacMan/Meta/Splash/Views/SplashView.h"
+#include "PacMan/Meta/Splash/Views/SplashUiView.h"
 
 namespace PacMan
 {
@@ -17,12 +17,10 @@ namespace PacMan
 
 	tokoro::Async<void> SplashManager::PlaySplashAsync(const GEngine::CancellationToken cancellationToken) const
 	{
-		const std::shared_ptr<SplashView> splashView = SplashView::Load(_modules, _scene);
+		const std::shared_ptr<SplashUiView> splashView = UiView::Create<SplashUiView>(_modules, _scene);
 
 		co_await GEngine::ChronoTimer::AwaitSeconds(0.3f, cancellationToken);
 		co_await splashView->PlaySplashAsync(cancellationToken);
-
-		co_await GEngine::ChronoTimer::AwaitSeconds(99, cancellationToken);
 
 		splashView->Dispose();
 	}

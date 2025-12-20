@@ -51,7 +51,6 @@ namespace GEngine
 		bool IsInsideChildHierarchy(const std::weak_ptr<Entity> &checkingPtr) const;
 		void SetParent(const std::weak_ptr<Entity> &parentEntity, bool worldPositionStays = true);
 		void RemoveParent(bool worldPositionStays = true);
-		void ForEachEntityInChildHierarchy(bool includeCurrent, const std::function<bool(const std::shared_ptr<Entity>&)> &callback);
 
 		std::weak_ptr<Entity> GetParent() const;
 		const std::vector<std::weak_ptr<Entity>>& GetChildren() const;
@@ -99,6 +98,9 @@ namespace GEngine
 
 		std::uint32_t _renderingPositionInHierarchy = 0;
 	};
+
+	// -------------------------------------------------------
+	// -------------------------------------------------------
 
 	template <class T>
 	bool Entity::HasComponent() const

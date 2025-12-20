@@ -9,6 +9,7 @@
 
 #include "Context.h"
 #include "GEngine/Entities/Entity.h"
+#include "PacMan/Meta/MainMenu/Managers/MainMenuManager.h"
 #include "PacMan/Meta/Splash/Managers/SplashManager.h"
 
 namespace PacMan
@@ -26,10 +27,11 @@ namespace PacMan
 		void OnDispose() override;
 
 	private:
-		void WhenPlayButtonClicked();
+		tokoro::Async<void> StartFromSplashAsync(GEngine::CancellationToken cancellationToken) const;
 
 	private:
 		std::unique_ptr<SplashManager> _splashManager;
+		std::unique_ptr<MainMenuManager> _mainMenuManager;
 	};
 }
 

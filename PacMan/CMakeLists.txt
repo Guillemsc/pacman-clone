@@ -89,8 +89,14 @@ add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Gameplay/MapMovement/Data/PathPointData.h
         src/PacMan/Meta/Splash/Managers/SplashManager.cpp
         src/PacMan/Meta/Splash/Managers/SplashManager.h
-        src/PacMan/Meta/Splash/Views/SplashView.cpp
-        src/PacMan/Meta/Splash/Views/SplashView.h
+        src/PacMan/Meta/Splash/Views/SplashUiView.cpp
+        src/PacMan/Meta/Splash/Views/SplashUiView.h
+        src/PacMan/Meta/MainMenu/Views/MainMenuUiView.cpp
+        src/PacMan/Meta/MainMenu/Views/MainMenuUiView.h
+        src/PacMan/Shared/Views/UiView.cpp
+        src/PacMan/Shared/Views/UiView.h
+        src/PacMan/Meta/MainMenu/Managers/MainMenuManager.cpp
+        src/PacMan/Meta/MainMenu/Managers/MainMenuManager.h
 )
 
 target_link_libraries(PacMan PRIVATE GEngineCore)
