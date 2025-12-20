@@ -41,7 +41,8 @@ namespace PacMan
 	private:
 		void TickCheckScatterChaseBehaviour() const;
 		void TickCheckGhostsFrightenedTimeFinished() const;
-		void SetNonDeathGhostsMovementSpeed(float speed) const;
+		void SetNonDeadGhostsMovementSpeed(float speed) const;
+		void RecalculateGhostsPathfinding() const;
 
 	private:
 		GhostsStateData* const _ghostsStateData;

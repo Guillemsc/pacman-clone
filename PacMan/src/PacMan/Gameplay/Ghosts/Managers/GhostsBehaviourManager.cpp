@@ -30,7 +30,7 @@ namespace PacMan
 	void GhostsBehaviourManager::StartGhostsBehaviours() const
 	{
 		_ghostsStateData->ghostsScaterChaseTimer.Start();
-		SetNonDeathGhostsMovementSpeed(_initialGhostsMovementSpeed);
+		SetNonDeadGhostsMovementSpeed(_initialGhostsMovementSpeed);
 	}
 
 	void GhostsBehaviourManager::ResetGhostsBehavioursState() const
@@ -38,7 +38,7 @@ namespace PacMan
 		_ghostsStateData->ghostsMode = GhostMode::SCATTER;
 		_ghostsStateData->ghostsScaterChaseTimer.Reset();
 
-		SetNonDeathGhostsMovementSpeed(_initialGhostsMovementSpeed);
+		SetNonDeadGhostsMovementSpeed(_initialGhostsMovementSpeed);
 	}
 
 	void GhostsBehaviourManager::SetGhostsFrightened() const
@@ -49,7 +49,8 @@ namespace PacMan
 		_ghostsStateData->ghostsFrightenedTimer.Restart();
 		_ghostsStateData->ghostsScaterChaseTimer.Pause();
 
-		SetNonDeathGhostsMovementSpeed(15);
+		SetNonDeadGhostsMovementSpeed(15);
+		RecalculateGhostsPathfinding();
 	}
 
 	void GhostsBehaviourManager::TickCheckScatterChaseBehaviour() const
@@ -89,10 +90,10 @@ namespace PacMan
 		_ghostsStateData->ghostsMode = _ghostsStateData->ghostsModeBeforeFrightened;
 		_ghostsStateData->ghostsScaterChaseTimer.Resume();
 
-		SetNonDeathGhostsMovementSpeed(_initialGhostsMovementSpeed);
+		SetNonDeadGhostsMovementSpeed(_initialGhostsMovementSpeed);
 	}
 
-	void GhostsBehaviourManager::SetNonDeathGhostsMovementSpeed(const float speed) const
+	void GhostsBehaviourManager::SetNonDeadGhostsMovementSpeed(const float speed) const
 	{
 		for (const std::weak_ptr<GEngine::Entity>& entry : _gameplayEntities->Ghosts)
 		{
@@ -103,6 +104,20 @@ namespace PacMan
 			if (!mapMovement) continue;
 
 			mapMovement->SetMovementSpeed(speed);
+		}
+	}
+
+	void GhostsBehaviourManager::RecalculateGhostsPathfinding() const
+	{
+		for (const std::weak_ptr<GEngine::Entity>& entry : _gameplayEntities->Ghosts)
+		{
+			const std::shared_ptr<GEngine::Entity> entity = entry.lock();
+			if (!entity) continue;
+
+			const std::shared_ptr<MapMovementComponent> mapMovement = entity->GetComponent<MapMovementComponent>().lock();
+			if (!mapMovement) continue;
+
+			mapMovement->SwitchPathfindingDirection();
 		}
 	}
 }

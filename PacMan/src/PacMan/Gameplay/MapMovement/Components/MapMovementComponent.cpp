@@ -99,7 +99,7 @@ namespace PacMan
 	void MapMovementComponent::SetNextDirection(const GEngine::CardinalDirection &nextDirection)
 	{
 		const glm::i32vec2 nextDirectionVector = GEngine::CardinalDirectionExtensions::GetDirectionVector(nextDirection);
-		const bool isSameMovementDirection = _currentDirectionVector.x == nextDirectionVector.x || _currentDirectionVector.y == nextDirectionVector.y;
+		const bool isSameMovementDirection = _gridDirectionVector.x == nextDirectionVector.x || _gridDirectionVector.y == nextDirectionVector.y;
 
 		if (isSameMovementDirection)
 		{
@@ -117,6 +117,20 @@ namespace PacMan
 
 		_nextDirectionWhenPathEmpty = nextDirection;
 		TryGenerateNextPathIfEmpty();
+	}
+
+	void MapMovementComponent::SwitchPathfindingDirection()
+	{
+		if (_pathToFollow.size() == 0) return;
+
+		const PathPointData targetPathPoint = _pathToFollow[_pathToFollow.size() - 1];
+		if (targetPathPoint.fromPortal) return;
+
+		_gridDirectionVector = -_gridDirectionVector;
+		_targetGridPosition = _currentGridPosition;
+
+		ClearPath();
+		PathfindToGridPosition(targetPathPoint.gridPosition);
 	}
 
 	PathfindingResult MapMovementComponent::PathfindToGridPosition(const glm::i32vec2& targetGridPosition)
@@ -159,7 +173,7 @@ namespace PacMan
 
 	glm::i32vec2 MapMovementComponent::GetGridDirectionVector() const
 	{
-		return _currentDirectionVector;
+		return _gridDirectionVector;
 	}
 
 	bool MapMovementComponent::GetIsMovingRandomly() const
@@ -196,7 +210,7 @@ namespace PacMan
 			_currentGridPosition = pathPoint.gridPosition;
 
 			const std::optional<MapPortalData> portalData = _mapMovementManager->GetPortal(pathPoint.gridPosition);
-			_currentDirectionVector = portalData.value().exitDirection;
+			_gridDirectionVector = portalData.value().exitDirection;
 
 			_pathToFollow.erase(_pathToFollow.begin());
 
@@ -210,8 +224,6 @@ namespace PacMan
 			{
 				_gridDirectionVector = GEngine::Vec2Extensions::Normalize(_targetGridPosition - _currentGridPosition);
 			}
-
-			_currentDirectionVector = GEngine::Vec2Extensions::SafeNormalize(_targetGridPosition - _currentGridPosition);
 
 			const glm::vec2 currentTargetPosition = _mapMovementManager->GridPositionToWorldPosition(_targetGridPosition);
 

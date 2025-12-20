@@ -76,10 +76,15 @@ namespace PacMan
 		_timeSinceLastGhostReleasedTimer.Start();
 	}
 
-	void GhostsPrisionManager::KillGhostAndStartPathBackToPrision(const std::weak_ptr<GEngine::Entity> &ghost)
+	void GhostsPrisionManager::TryKillGhostAndStartPathBackToPrision(const std::weak_ptr<GEngine::Entity> &ghost)
 	{
 		const std::shared_ptr<GEngine::Entity> lGhost = ghost.lock();
 		if (!lGhost) return;
+
+		const std::shared_ptr<GhostStateComponent> ghostsState = lGhost->GetComponent<GhostStateComponent>().lock();
+		if (!ghostsState) return;
+
+		if (ghostsState->isReturningToPrision) return;
 
 		const std::shared_ptr<MapMovementComponent> mapMovement = lGhost->GetComponent<MapMovementComponent>().lock();
 		if (!mapMovement) return;

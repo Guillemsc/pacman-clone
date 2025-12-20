@@ -67,7 +67,7 @@ namespace PacMan
 	{
 		if (_ghostsStateData->ghostsMode == GhostMode::FRIGHTENED)
 		{
-			_ghostsPrisionManager->KillGhostAndStartPathBackToPrision(collider);
+			_ghostsPrisionManager->TryKillGhostAndStartPathBackToPrision(collider);
 		}
 		else
 		{

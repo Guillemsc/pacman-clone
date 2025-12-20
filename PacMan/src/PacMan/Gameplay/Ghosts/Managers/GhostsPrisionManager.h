@@ -52,7 +52,7 @@ namespace PacMan
 		void Stop();
 		void Reset();
 
-		void KillGhostAndStartPathBackToPrision(const std::weak_ptr<GEngine::Entity> &ghost);
+		void TryKillGhostAndStartPathBackToPrision(const std::weak_ptr<GEngine::Entity> &ghost);
 
 	private:
 		void ReleaseNextGhost();
