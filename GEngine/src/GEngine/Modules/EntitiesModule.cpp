@@ -10,7 +10,7 @@
 #include "GEngine/Extensions/VectorExtensions.h"
 #include "GEngine/Components/TransformComponent.h"
 #include "GEngine/Components/UiTransformComponent.h"
-#include "GEngine/Entities/EntityHierarchyIterator.h"
+#include "GEngine/Entities/EntityChildHierarchyIterator.h"
 #include "GEngine/Pooling/Pools.h"
 #include "spdlog/spdlog.h"
 
@@ -87,7 +87,7 @@ namespace GEngine
 		if (!entity) return false;
 		if (!entity->_isAlive) return false;
 
-		EntityHierarchyIterator entityHierarchyIterator(entity);
+		EntityChildHierarchyIterator entityHierarchyIterator(entity);
 
 		while (entityHierarchyIterator.HasNext())
 		{

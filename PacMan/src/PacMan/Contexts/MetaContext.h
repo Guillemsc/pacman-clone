@@ -20,7 +20,7 @@ namespace PacMan
 	class MetaContext final : public Context
 	{
 	public:
-		explicit MetaContext(GEngine::GEngineCoreModules* modules);
+		explicit MetaContext(GEngine::GEngineCoreModules* modules, bool returningFromGameplay);
 
 		tokoro::Async<void> OnLoadAsync() override;
 		void OnStart() override;
@@ -30,6 +30,8 @@ namespace PacMan
 		tokoro::Async<void> StartFromSplashAsync(GEngine::CancellationToken cancellationToken) const;
 
 	private:
+		const bool _returningFromGameplay = false;
+
 		std::unique_ptr<SplashManager> _splashManager;
 		std::unique_ptr<MainMenuManager> _mainMenuManager;
 	};

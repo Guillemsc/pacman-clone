@@ -6,7 +6,7 @@
 
 #include "TransformComponent.h"
 
-#include "GEngine/Entities/EntityHierarchyIterator.h"
+#include "GEngine/Entities/EntityChildHierarchyIterator.h"
 #include "GEngine/Extensions/Vec3Extensions.h"
 #include "glm/gtx/matrix_decompose.hpp"
 #include "glm/gtx/quaternion.hpp"
@@ -295,7 +295,7 @@ namespace GEngine
 
 	void TransformComponent::RecalculateChildrenHierarchyWorldMatrices() const
 	{
-		EntityHierarchyIterator entityHierarchyIterator(GetEntity());
+		EntityChildHierarchyIterator entityHierarchyIterator(GetEntity());
 
 		while (entityHierarchyIterator.HasNext())
 		{

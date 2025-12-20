@@ -21,6 +21,7 @@
 #include "PacMan/Gameplay/Player/Managers/PlayerLoaderManager.h"
 #include "PacMan/Gameplay/Pellets/Managers/PelletCollectionManager.h"
 #include "PacMan/Gameplay/Ghosts/Managers/GhostsBehaviourManager.h"
+#include "PacMan/Gameplay/Hud/Managers/HudManager.h"
 
 namespace GEngine
 {
@@ -41,7 +42,10 @@ namespace PacMan
 		void OnStart() override;
 		void OnDispose() override;
 
+		[[nodiscard]] tokoro::Async<void> StartGameAsync(GEngine::CancellationToken cancellationToken);
+
 	private:
+		std::unique_ptr<HudManager> _hudManager;
 		std::shared_ptr<CameraManager> _cameraManager;
 		std::unique_ptr<MapLoadingManager> _mapLoadingManager;
 		std::unique_ptr<MapMovementManager> _mapMovementManager;

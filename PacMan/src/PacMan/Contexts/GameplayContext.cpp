@@ -8,6 +8,7 @@
 #include "GEngine/Components/TiledMap2dRendererComponent.h"
 #include "GEngine/Components/TransformComponent.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
+#include "GEngine/Coroutines/CoroutinesRunner.h"
 #include "GEngine/Modules/EntitiesModule.h"
 #include "GEngine/Modules/ResourcesModule.h"
 #include "GEngine/Modules/TickablesModule.h"
@@ -35,6 +36,8 @@ namespace PacMan
 	{
 		CameraData* cameraData = GEngine::ServiceLocator::Get<CameraData>();
 
+		std::unique_ptr<HudManager> hudManager = std::make_unique<HudManager>(_modules, _scene.get());
+
 		_cameraManager = std::make_shared<CameraManager>(
 			cameraData
 			);
@@ -54,7 +57,7 @@ namespace PacMan
 			gameplayEntities.get()
 			);
 
-		std::shared_ptr<GhostsPrisionManager> ghostsPrisionManager = std::make_shared<GhostsPrisionManager>(
+		const std::shared_ptr<GhostsPrisionManager> ghostsPrisionManager = std::make_shared<GhostsPrisionManager>(
 			_modules,
 			GetCoroutinesRunner(),
 			mapMovementManager.get(),
@@ -62,10 +65,10 @@ namespace PacMan
 			);
 		_modules->tickables->AddTickable(ghostsPrisionManager);
 
-		std::shared_ptr<PlayerInputSystem> playerInputSystem = std::make_shared<PlayerInputSystem>();
+		const std::shared_ptr<PlayerInputSystem> playerInputSystem = std::make_shared<PlayerInputSystem>();
 		_modules->tickables->AddTickable(playerInputSystem);
 
-		std::shared_ptr<GhostsBehaviourManager> ghostsBehaviourManager = std::make_shared<GhostsBehaviourManager>(
+		const std::shared_ptr<GhostsBehaviourManager> ghostsBehaviourManager = std::make_shared<GhostsBehaviourManager>(
 			ghostsStateData.get(),
 			gameplayEntities.get()
 			);
@@ -119,6 +122,7 @@ namespace PacMan
 
 		playerCollisionsManager->Init(playerDeathManager.get());
 
+		_hudManager = std::move(hudManager);
 		_mapLoadingManager = std::move(mapLoadingManager);
 		_mapMovementManager = std::move(mapMovementManager);
 		_mapPathfindingManager = std::move(mapPathfindingManager);
@@ -154,7 +158,7 @@ namespace PacMan
 
 	void GameplayContext::OnStart()
 	{
-		_ghostsBehaviourManager->StartGhostsBehaviours();
+		GetCoroutinesRunner()->Start(&GameplayContext::StartGameAsync, this, GEngine::CancellationToken::None()).Forget();
 	}
 
 	void GameplayContext::OnDispose()
@@ -163,5 +167,13 @@ namespace PacMan
 		_modules->tickables->RemoveTickable(_playerInputSystem);
 		_modules->tickables->RemoveTickable(_ghostsPrisionManager);
 		_modules->tickables->RemoveTickable(_ghostsBehaviourManager);
+	}
+
+	tokoro::Async<void> GameplayContext::StartGameAsync(const GEngine::CancellationToken cancellationToken)
+	{
+		co_await _hudManager->ShowAsync(cancellationToken);
+		_ghostsBehaviourManager->StartGhostsBehaviours();
+
+		co_return;
 	}
 } // PacMan

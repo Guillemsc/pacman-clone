@@ -5,6 +5,7 @@
 #include "UiShapeRendererComponent.h"
 
 #include "TransformComponent.h"
+#include "UiRenderersAlphaGroupComponent.h"
 #include "UiTransformComponent.h"
 #include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Extensions/Color01Extensions.h"
@@ -39,6 +40,10 @@ namespace GEngine
 		const float rotation = uiRect.rotation;
 		const glm::vec2 pivot = uiRect.pivot;
 
+		Color01 color = _color->GetValue();
+		const float alphaMultiplier = UiRenderersAlphaGroupComponent::GetAlphaMultiplier(entity);
+		color = color.WithAlphaMultiplier(alphaMultiplier);
+
 		if (const auto rectShape = std::dynamic_pointer_cast<RectUiShape2d>(_shape2d->GetValue()))
 		{
 			modules->rendering->UiRender()->AddRect(
@@ -47,7 +52,7 @@ namespace GEngine
 				rotation,
 				size,
 				pivot,
-				_color->GetValue()
+				color
 				);
 		}
 	}

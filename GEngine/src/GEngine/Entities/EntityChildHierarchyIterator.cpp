@@ -2,25 +2,25 @@
 // Created by guillem on 12/20/25.
 //
 
-#include "EntityHierarchyIterator.h"
+#include "EntityChildHierarchyIterator.h"
 
 #include "GEngine/Pooling/Pools.h"
 
 namespace GEngine
 {
-	EntityHierarchyIterator::EntityHierarchyIterator(const std::weak_ptr<Entity> &entity)
+	EntityChildHierarchyIterator::EntityChildHierarchyIterator(const std::weak_ptr<Entity> &entity)
 	{
-		_startEntity = entity;
+		_currentEntity = entity;
 		_pooledVector = Pools::entitiesVector.Acquire();
-		_pooledVector->push_back(_startEntity.lock());
+		_pooledVector->push_back(_currentEntity.lock());
 	}
 
-	bool EntityHierarchyIterator::HasNext() const
+	bool EntityChildHierarchyIterator::HasNext() const
 	{
 		return !_pooledVector->empty();
 	}
 
-	Entity* EntityHierarchyIterator::GetNext(const bool automaticallyAddChildren)
+	Entity* EntityChildHierarchyIterator::GetNext(const bool automaticallyAddChildren)
 	{
 		_entityToAddChildren.reset();
 
@@ -50,7 +50,7 @@ namespace GEngine
 		return entity.get();
 	}
 
-	void EntityHierarchyIterator::AddCurrentChildren()
+	void EntityChildHierarchyIterator::AddCurrentChildren()
 	{
 		const std::shared_ptr<Entity>& entity = _entityToAddChildren.lock();
 		if (!entity) return;

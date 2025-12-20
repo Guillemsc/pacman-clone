@@ -14,10 +14,9 @@ namespace PacMan
 	{
 	}
 
-	tokoro::Async<void> MainMenuManager::ShowAsync(GEngine::CancellationToken cancellationToken)
+	tokoro::Async<void> MainMenuManager::ShowAsync(const GEngine::CancellationToken cancellationToken)
 	{
 		_mainMenuView = UiView::Create<MainMenuUiView>(_modules, _scene);
-
-		co_return;
+		co_await _mainMenuView->ShowAsync(cancellationToken);
 	}
 }

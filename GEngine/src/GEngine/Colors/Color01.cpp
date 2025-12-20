@@ -27,6 +27,11 @@ namespace GEngine
 		return Color01(r, g, b, alpha);
 	}
 
+	Color01 Color01::WithAlphaMultiplier(const float alphaMultiplier) const
+	{
+		return Color01(r, g, b, a * alphaMultiplier);
+	}
+
 	Color01 Color01::FromHex(const std::string &hex)
 	{
 		const std::string cleanHex = (hex[0] == '#') ? hex.substr(1) : hex;

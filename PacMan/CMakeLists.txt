@@ -97,6 +97,10 @@ add_executable(PacMan src/PacMan/Bootstrap/main.cpp
         src/PacMan/Shared/Views/UiView.h
         src/PacMan/Meta/MainMenu/Managers/MainMenuManager.cpp
         src/PacMan/Meta/MainMenu/Managers/MainMenuManager.h
+        src/PacMan/Gameplay/Hud/Managers/HudManager.cpp
+        src/PacMan/Gameplay/Hud/Managers/HudManager.h
+        src/PacMan/Gameplay/Hud/Views/HudUiView.cpp
+        src/PacMan/Gameplay/Hud/Views/HudUiView.h
 )
 
 target_link_libraries(PacMan PRIVATE GEngineCore)

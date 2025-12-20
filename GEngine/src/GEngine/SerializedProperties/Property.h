@@ -27,7 +27,7 @@ namespace GEngine
 	// -------------------------------------------------------
 
 	template<class TValue>
-	class Property : public IProperty
+	class Property final : public IProperty
 	{
 	public:
 		explicit Property(const std::string &name, TValue value);

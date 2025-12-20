@@ -63,7 +63,7 @@ namespace PacMan
 	tokoro::Async<void> PacManGame::LaunchGameAsync()
 	{
 		co_await _contextsStack->PushAsync(std::make_shared<SharedContext>(_modules));
-		co_await _contextsStack->PushAsync(std::make_shared<MetaContext>(_modules));
+		co_await _contextsStack->PushAsync(std::make_shared<MetaContext>(_modules, false));
 	}
 }
 

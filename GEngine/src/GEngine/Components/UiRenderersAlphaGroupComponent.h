@@ -16,6 +16,8 @@ namespace GEngine
 	public:
 		UiRenderersAlphaGroupComponent(GEngineCoreModules* modules, const std::weak_ptr<Entity> &entity);
 
+		static float GetAlphaMultiplier(const std::weak_ptr<Entity> &entity);
+
 		void SetAlpha(float alpha) const;
 		float GetAlpha() const;
 

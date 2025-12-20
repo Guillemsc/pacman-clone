@@ -4,7 +4,7 @@
 
 #include "Entity.h"
 
-#include "EntityHierarchyIterator.h"
+#include "EntityChildHierarchyIterator.h"
 #include "GEngine/Components/Component.h"
 #include "GEngine/Core/GEngineCoreApplication.h"
 #include "GEngine/Extensions/VectorExtensions.h"
@@ -177,7 +177,7 @@ namespace GEngine
 
 	void Entity::RefreshChildrenHierarchyActiveState()
 	{
-		EntityHierarchyIterator entityHierarchyIterator(weak_from_this());
+		EntityChildHierarchyIterator entityHierarchyIterator(weak_from_this());
 
 		while (entityHierarchyIterator.HasNext())
 		{

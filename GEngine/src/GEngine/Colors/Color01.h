@@ -18,6 +18,7 @@ namespace GEngine
 		Color01();
 
 		[[nodiscard]] Color01 WithAlpha(float alpha) const;
+		[[nodiscard]] Color01 WithAlphaMultiplier(float alphaMultiplier) const;
 
 		static Color01 FromHex(const std::string& hex);
 

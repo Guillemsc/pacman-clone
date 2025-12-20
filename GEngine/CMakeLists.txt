@@ -308,8 +308,10 @@ add_library(GEngineCore STATIC
         src/GEngine/Tweens/WaitTween.h
         src/GEngine/Components/UiRenderersAlphaGroupComponent.cpp
         src/GEngine/Components/UiRenderersAlphaGroupComponent.h
-        src/GEngine/Entities/EntityHierarchyIterator.cpp
-        src/GEngine/Entities/EntityHierarchyIterator.h
+        src/GEngine/Entities/EntityChildHierarchyIterator.cpp
+        src/GEngine/Entities/EntityChildHierarchyIterator.h
+        src/GEngine/Entities/EntityParentHierarchyIterator.cpp
+        src/GEngine/Entities/EntityParentHierarchyIterator.h
 )
 
 # Link raylib

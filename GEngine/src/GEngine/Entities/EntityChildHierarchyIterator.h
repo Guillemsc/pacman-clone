@@ -17,17 +17,17 @@ namespace GEngine
 
 namespace GEngine
 {
-	class EntityHierarchyIterator
+	class EntityChildHierarchyIterator
 	{
 	public:
-		explicit EntityHierarchyIterator(const std::weak_ptr<Entity> &entity);
+		explicit EntityChildHierarchyIterator(const std::weak_ptr<Entity> &entity);
 
 		bool HasNext() const;
 		[[nodiscard]] Entity* GetNext(bool automaticallyAddChildren = true);
 		void AddCurrentChildren();
 
 	private:
-		std::weak_ptr<Entity> _startEntity;
+		std::weak_ptr<Entity> _currentEntity;
 		std::weak_ptr<Entity> _entityToAddChildren;
 
 		ObjectPool<std::vector<std::shared_ptr<Entity>>>::Ptr _pooledVector;

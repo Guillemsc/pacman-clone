@@ -20,8 +20,8 @@
 
 namespace PacMan
 {
-	MetaContext::MetaContext(GEngine::GEngineCoreModules* modules)
-		: Context(modules, "Meta")
+	MetaContext::MetaContext(GEngine::GEngineCoreModules* modules, const bool returningFromGameplay)
+		: Context(modules, "Meta"), _returningFromGameplay(returningFromGameplay)
 	{
 	}
 
@@ -55,7 +55,11 @@ namespace PacMan
 
 	tokoro::Async<void> MetaContext::StartFromSplashAsync(const GEngine::CancellationToken cancellationToken) const
 	{
-		co_await _splashManager->PlaySplashAsync(cancellationToken);
+		if (!_returningFromGameplay)
+		{
+			co_await _splashManager->PlaySplashAsync(cancellationToken);
+		}
+
 		co_await _mainMenuManager->ShowAsync(cancellationToken);
 	}
 }

@@ -5,7 +5,7 @@
 #include "UiTransformComponent.h"
 
 #include "GEngine/Core/GEngineCoreModules.h"
-#include "GEngine/Entities/EntityHierarchyIterator.h"
+#include "GEngine/Entities/EntityChildHierarchyIterator.h"
 #include "GEngine/Extensions/Vec4Extensions.h"
 #include "GEngine/Modules/RenderingModule.h"
 #include "GEngine/Modules/UiModule.h"
@@ -95,6 +95,11 @@ namespace GEngine
 		SetSizeDelta({ 0, 0 });
 	}
 
+	void UiTransformComponent::SetAnchorsTopLeft() const
+	{
+		SetAnchors({ 1, 1, 1, 1 });
+	}
+
 	void UiTransformComponent::SetWorldPosition(const glm::vec2 &worldPosition) const
 	{
 		const UiRect parentRect = GetParentWorldUiRect();
@@ -157,7 +162,7 @@ namespace GEngine
 
 	void UiTransformComponent::RecalculateChildrenHierarchyWorldUiRects() const
 	{
-		EntityHierarchyIterator entityHierarchyIterator(GetEntity());
+		EntityChildHierarchyIterator entityHierarchyIterator(GetEntity());
 
 		while (entityHierarchyIterator.HasNext())
 		{
