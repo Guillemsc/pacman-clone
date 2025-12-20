@@ -22,7 +22,7 @@ namespace GEngine
 		rlTranslatef(position.x, position.y, 0.0f);
 		rlRotatef(rotation, 0.0f, 0.0f, 1.0f);
 
-		DrawTextCodepoint(font, codepoint, (Vector2){ 0.0f, 0.0f }, fontSize, tint);
+		DrawTextCodepoint(font, codepoint, { 0.0f, 0.0f }, fontSize, tint);
 
 		rlPopMatrix();
 	}
