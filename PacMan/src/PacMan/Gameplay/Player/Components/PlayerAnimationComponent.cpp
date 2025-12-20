@@ -35,6 +35,9 @@ namespace PacMan
 		const std::shared_ptr<GEngine::Sprite2dRendererComponent> spriteRenderer = _spriteRendererComponent.lock();
 		if (!spriteRenderer) return;
 
+		const std::shared_ptr<GEngine::Sprite2dAnimatorComponent> spriteAnimator = _spriteAnimatorComponent.lock();
+		if (!spriteAnimator) return;
+
 		const glm::vec2 directionVector = mapMovement->GetGridDirectionVector();
 
 		const bool flipX = directionVector.x < 0;
@@ -57,5 +60,8 @@ namespace PacMan
 		{
 			transform->SetLocalRotationEulerDegreesZ(-90);
 		}
+
+		const float distanceMoved = mapMovement->GetDistanceMovedThisFrame();
+		spriteAnimator->SetAnimationSpeed(distanceMoved * 0.06f);
 	}
 }

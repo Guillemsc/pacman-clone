@@ -65,6 +65,9 @@ namespace PacMan
 			const std::string downAnimation = GetDownAnimation();
 			spriteAnimator->PlayAnimation(downAnimation);
 		}
+
+		const float distanceMoved = mapMovement->GetDistanceMovedThisFrame();
+		spriteAnimator->SetAnimationSpeed(distanceMoved * 0.06f);
 	}
 
 	std::string GhostAnimationComponent::GetLeftAnimation() const

@@ -94,7 +94,7 @@ namespace PacMan
 
 	void GhostsBehaviourManager::SetNonDeathGhostsMovementSpeed(const float speed) const
 	{
-		for (std::weak_ptr<GEngine::Entity> entry : _gameplayEntities->Ghosts)
+		for (const std::weak_ptr<GEngine::Entity>& entry : _gameplayEntities->Ghosts)
 		{
 			const std::shared_ptr<GEngine::Entity> entity = entry.lock();
 			if (!entity) continue;

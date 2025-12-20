@@ -54,6 +54,8 @@ namespace PacMan
 		[[nodiscard]] glm::i32vec2 GetGridDirectionVector() const;
 		[[nodiscard]] bool GetIsMovingRandomly() const;
 
+		[[nodiscard]] float GetDistanceMovedThisFrame() const;
+
 		void SetGuizmoColor(const GEngine::Color01& color);
 
 	private:
@@ -87,6 +89,8 @@ namespace PacMan
 
 		glm::i32vec2 _currentGridPosition = glm::i32vec2(0);
 		bool _hasValidGridPosition = false;
+
+		float _distanceMovedThisFrame = 0.0f;
 
 		std::vector<PathPointData> _pathToFollow;
 		float _distanceCarriedFromLastPathPoint = 0;

@@ -167,6 +167,11 @@ namespace PacMan
 		return _isMovingRandomly;
 	}
 
+	float MapMovementComponent::GetDistanceMovedThisFrame() const
+	{
+		return _distanceMovedThisFrame;
+	}
+
 	void MapMovementComponent::SetGuizmoColor(const GEngine::Color01 &color)
 	{
 		_guizmoColor = color;
@@ -174,6 +179,8 @@ namespace PacMan
 
 	void MapMovementComponent::MoveThroughPath()
 	{
+		_distanceMovedThisFrame = 0.0f;
+
 		if (!_canMove) return;
 		if (_pathToFollow.empty()) return;
 
@@ -239,6 +246,7 @@ namespace PacMan
 		const float distanceLeftMagnitude = glm::length(distanceLeft);
 		const glm::vec2 direction = GEngine::Vec2Extensions::SafeNormalize(distanceLeft);
 
+		_distanceMovedThisFrame = speed + _distanceCarriedFromLastPathPoint;
 		float distanceToMove = (speed * deltaTime) + _distanceCarriedFromLastPathPoint;
 		_distanceCarriedFromLastPathPoint = 0;
 

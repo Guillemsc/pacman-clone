@@ -79,6 +79,8 @@ namespace PacMan
 		).lock();
 		mapMovement->SetGuizmoColor(color);
 		mapMovement->SetGridPosition(_playerInitialGridPosition);
+		mapMovement->SetMovementSpeed(40);
+		mapMovement->SetCanMove(false);
 
 		const std::shared_ptr<PlayerAnimationComponent> playerAnimation = playerEntity->AddComponent<PlayerAnimationComponent>(
 			mapMovement,

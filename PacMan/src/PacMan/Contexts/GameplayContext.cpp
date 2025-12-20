@@ -172,7 +172,12 @@ namespace PacMan
 	tokoro::Async<void> GameplayContext::StartGameAsync(const GEngine::CancellationToken cancellationToken)
 	{
 		co_await _hudManager->ShowAsync(cancellationToken);
+
+		co_await GEngine::ChronoTimer::AwaitSeconds(2, cancellationToken);
+
 		_ghostsBehaviourManager->StartGhostsBehaviours();
+		_ghostsPrisionManager->Reset();
+		_entitiesManager->StartPlayerAndMapGhostEntitiesMovement();
 
 		co_return;
 	}

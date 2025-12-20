@@ -31,7 +31,10 @@ namespace GEngine
 
 		void PlayAnimation(const std::string& animationName);
 
+		void SetAnimationSpeed(float speed) const;
+
 	private:
+		std::shared_ptr<Property<float>> _animationSpeed;
 		std::weak_ptr<Sprite2dRendererComponent> _sprite2dRenderer;
 
 		std::vector<Sprite2dAnimation> _animations;

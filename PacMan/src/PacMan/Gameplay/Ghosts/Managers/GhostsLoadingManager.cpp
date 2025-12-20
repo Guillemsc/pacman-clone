@@ -165,6 +165,7 @@ namespace PacMan
 			).lock();
 		mapMovement->SetCanAutomaticallyFindNextDirection(true);
 		mapMovement->SetGuizmoColor(ghostColor.WithAlpha(0.6f));
+		mapMovement->SetCanMove(false);
 
 		if (!isPrision)
 		{

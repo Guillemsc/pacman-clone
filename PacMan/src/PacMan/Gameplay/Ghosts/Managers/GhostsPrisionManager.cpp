@@ -57,8 +57,6 @@ namespace PacMan
 			loadedMapData.GhostPrisionCenterSlotGridPosition,
 			GEngine::CellPosition::CENTER_RIGHT
 			);
-
-		_timeSinceLastGhostReleasedTimer.Start();
 	}
 
 	void GhostsPrisionManager::Stop()

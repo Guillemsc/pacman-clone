@@ -16,6 +16,7 @@ namespace GEngine
 		const std::weak_ptr<Entity> &entity
 		) : Component(modules, entity)
 	{
+		_animationSpeed = _properties.Register("Animation Speed", 1.0f);
 	}
 
 	void Sprite2dAnimatorComponent::OnTick()
@@ -26,7 +27,7 @@ namespace GEngine
 		if (!spriteRenderer) return;
 
 		const float deltaTime = modules->time->GetDeltaTime();
-		_currentAnimationTime += deltaTime;
+		_currentAnimationTime += deltaTime * _animationSpeed->GetValue();
 
 		const Sprite2dAnimation& animation = _animations[_currentAnimationIndex];
 
@@ -67,5 +68,10 @@ namespace GEngine
 		if (!optionalIndex.has_value()) return;
 
 		_currentAnimationIndex = optionalIndex.value();
+	}
+
+	void Sprite2dAnimatorComponent::SetAnimationSpeed(const float speed) const
+	{
+		_animationSpeed->SetValue(std::max(0.0f, speed));
 	}
 }

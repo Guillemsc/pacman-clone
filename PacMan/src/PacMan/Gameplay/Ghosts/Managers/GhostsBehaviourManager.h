@@ -47,7 +47,7 @@ namespace PacMan
 		GhostsStateData* const _ghostsStateData;
 		GameplayEntities* const _gameplayEntities;
 
-		float _initialGhostsMovementSpeed = 30;
+		float _initialGhostsMovementSpeed = 40;
 	};
 }
 
