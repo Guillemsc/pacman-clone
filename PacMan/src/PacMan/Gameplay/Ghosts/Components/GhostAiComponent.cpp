@@ -7,6 +7,7 @@
 #include "glm/vec2.hpp"
 #include "PacMan/Gameplay/Entities/Data/GameplayEntities.h"
 #include "PacMan/Gameplay/Ghosts/Data/GhostsStateData.h"
+#include "PacMan/Gameplay/MapMovement/Components/MapMovementComponent.h"
 
 namespace PacMan
 {
@@ -15,11 +16,13 @@ namespace PacMan
 		const std::weak_ptr<GEngine::Entity> &entity,
 		GhostsStateData* ghostsStateData,
 		GameplayEntities* gameplayEntities,
+		const std::weak_ptr<GhostStateComponent>& ghostStateComponent,
 		const std::weak_ptr<MapMovementComponent>& mapMovementComponent
 		)
 		: Component(modules, entity),
 		_ghostsStateData(ghostsStateData),
 		_gameplayEntities(gameplayEntities),
+		_ghostStateComponent(ghostStateComponent),
 		_mapMovementComponent(mapMovementComponent)
 	{
 	}
@@ -30,6 +33,12 @@ namespace PacMan
 	}
 
 	void GhostAiComponent::OnTick()
+	{
+		TickPathfinding();
+		TickSpeed();
+	}
+
+	void GhostAiComponent::TickPathfinding()
 	{
 		const std::shared_ptr<MapMovementComponent> mapMovement = _mapMovementComponent.lock();
 		if (!mapMovement) return;
@@ -83,6 +92,28 @@ namespace PacMan
 				_hasValidPreviousTargetGridPosition = true;
 			}
 		}
+	}
+
+	void GhostAiComponent::TickSpeed() const
+	{
+		const std::shared_ptr<GhostStateComponent> ghostState = _ghostStateComponent.lock();
+		if (!ghostState) return;
+
+		const std::shared_ptr<MapMovementComponent> mapMovement = _mapMovementComponent.lock();
+		if (!mapMovement) return;
+
+		float speed = 40.0f;
+
+		if (ghostState->isReturningToPrision)
+		{
+			speed = 50.0f;
+		}
+		else if (_ghostsStateData->ghostsMode == GhostMode::FRIGHTENED)
+		{
+			speed = 20.0f;
+		}
+
+		mapMovement->SetMovementSpeed(speed);
 	}
 
 	glm::i32vec2 GhostAiComponent::GetFrightenedTargetGridPosition() const

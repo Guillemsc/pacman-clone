@@ -5,12 +5,13 @@
 #ifndef GHOSTAICOMPONENT_H
 #define GHOSTAICOMPONENT_H
 
+#include "GhostStateComponent.h"
 #include "GEngine/Components/Component.h"
-#include "glm/fwd.hpp"
-#include "PacMan/Gameplay/MapMovement/Components/MapMovementComponent.h"
+#include "glm/vec2.hpp"
 
 namespace PacMan
 {
+	class MapMovementComponent;
 	class GameplayEntities;
 	struct GhostsStateData;
 
@@ -24,10 +25,15 @@ namespace PacMan
 			const std::weak_ptr<GEngine::Entity> &entity,
 			GhostsStateData* ghostsStateData,
 			GameplayEntities* gameplayEntities,
+			const std::weak_ptr<GhostStateComponent>& ghostStateComponent,
 			const std::weak_ptr<MapMovementComponent>& mapMovementComponent
 			);
 
 		void OnEnable() override;
+
+		void TickPathfinding();
+		void TickSpeed() const;
+
 		void OnTick() override;
 
 	protected:
@@ -40,6 +46,7 @@ namespace PacMan
 	protected:
 		GhostsStateData* const _ghostsStateData;
 		GameplayEntities* const _gameplayEntities;
+		std::weak_ptr<GhostStateComponent> _ghostStateComponent;
 		std::weak_ptr<MapMovementComponent> _mapMovementComponent;
 
 	private:

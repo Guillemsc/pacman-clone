@@ -41,14 +41,11 @@ namespace PacMan
 	private:
 		void TickCheckScatterChaseBehaviour() const;
 		void TickCheckGhostsFrightenedTimeFinished() const;
-		void SetNonDeadGhostsMovementSpeed(float speed) const;
 		void RecalculateGhostsPathfinding() const;
 
 	private:
 		GhostsStateData* const _ghostsStateData;
 		GameplayEntities* const _gameplayEntities;
-
-		float _initialGhostsMovementSpeed = 40;
 	};
 }
 

@@ -6,6 +6,7 @@
 
 #include "GEngine/ServiceLocators/ServiceLocator.h"
 #include "PacMan/Gameplay/Entities/Data/GameplayEntities.h"
+#include "PacMan/Gameplay/MapMovement/Components/MapMovementComponent.h"
 
 namespace PacMan
 {

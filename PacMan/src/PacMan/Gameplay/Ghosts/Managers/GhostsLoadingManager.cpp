@@ -61,21 +61,21 @@ namespace PacMan
 			_mapGhostInitialGridPosition,
 			false
 			);
-		// _loadedGhostsData.LeftPrisionSlotGhostEntity = LoadGhost(
-		// 	GhostType::CIAN_GHOST,
-		// 	_ghostPrisionLeftSlotInitialGridPosition,
-		// 	true
-		// 	);
-		// _loadedGhostsData.CenterPrisionSlotGhostEntity = LoadGhost(
-		// 	GhostType::PINK_GHOST,
-		// 	_ghostPrisionCenterSlotInitialGridPosition,
-		// 	true
-		// 	);
-		// _loadedGhostsData.RightPrisionSlotGhostEntity = LoadGhost(
-		// 	GhostType::ORANGE_GHOST,
-		// 	_ghostPrisionRightSlotInitialGridPosition,
-		// 	true
-		// 	);
+		_loadedGhostsData.LeftPrisionSlotGhostEntity = LoadGhost(
+			GhostType::CIAN_GHOST,
+			_ghostPrisionLeftSlotInitialGridPosition,
+			true
+			);
+		_loadedGhostsData.CenterPrisionSlotGhostEntity = LoadGhost(
+			GhostType::PINK_GHOST,
+			_ghostPrisionCenterSlotInitialGridPosition,
+			true
+			);
+		_loadedGhostsData.RightPrisionSlotGhostEntity = LoadGhost(
+			GhostType::ORANGE_GHOST,
+			_ghostPrisionRightSlotInitialGridPosition,
+			true
+			);
 
 		GGAME_INFO("Ghosts loaded.");
 	}
@@ -180,7 +180,7 @@ namespace PacMan
 			spriteAnimator
 			);
 
-		SetupGhostAi(ghostEntity.get(), mapMovement, ghostType);
+		SetupGhostAi(ghostEntity.get(), ghostState, mapMovement, ghostType);
 
 		_gameplayEntities->Ghosts.push_back(ghostEntity);
 
@@ -246,6 +246,7 @@ namespace PacMan
 
 	void GhostsLoadingManager::SetupGhostAi(
 		GEngine::Entity *ghostEntity,
+		const std::weak_ptr<GhostStateComponent>& ghostStateComponent,
 		const std::weak_ptr<MapMovementComponent>& mapMovement,
 		const GhostType ghostType
 		) const
@@ -257,6 +258,7 @@ namespace PacMan
 				ghostEntity->AddComponent<RedGhostAiComponent>(
 					_ghostsStateData,
 					_gameplayEntities,
+					ghostStateComponent,
 					mapMovement
 					);
 				break;
@@ -266,6 +268,7 @@ namespace PacMan
 				ghostEntity->AddComponent<OrangeGhostAiComponent>(
 					_ghostsStateData,
 					_gameplayEntities,
+					ghostStateComponent,
 					mapMovement
 					);
 				break;
@@ -275,6 +278,7 @@ namespace PacMan
 				ghostEntity->AddComponent<CianGhostAiComponent>(
 					_ghostsStateData,
 					_gameplayEntities,
+					ghostStateComponent,
 					mapMovement
 					);
 				break;
@@ -284,6 +288,7 @@ namespace PacMan
 				ghostEntity->AddComponent<PinkGhostAiComponent>(
 					_ghostsStateData,
 					_gameplayEntities,
+					ghostStateComponent,
 					mapMovement
 					);
 				break;

@@ -15,6 +15,7 @@
 
 namespace PacMan
 {
+	class GhostStateComponent;
 	class MapPathfindingManager;
 }
 
@@ -63,6 +64,7 @@ namespace PacMan
 		GEngine::Color01 GetGhostColor(GhostType ghostType);
 		void SetupGhostAi(
 			GEngine::Entity* ghostEntity,
+			const std::weak_ptr<GhostStateComponent>& ghostStateComponent,
 			const std::weak_ptr<MapMovementComponent>& mapMovement,
 			GhostType ghostType
 			) const;
