@@ -216,6 +216,7 @@ namespace PacMan
 
 			const std::optional<MapPortalData> portalData = _mapMovementManager->GetPortal(pathPoint.gridPosition);
 			_gridDirectionVector = portalData.value().exitDirection;
+			_targetGridPosition = _currentGridPosition + _gridDirectionVector;
 
 			_pathToFollow.erase(_pathToFollow.begin());
 
