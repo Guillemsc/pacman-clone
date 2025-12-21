@@ -4,10 +4,13 @@
 
 #include "GhostAiComponent.h"
 
+#include "GEngine/Core/GEngineCoreModules.h"
+#include "GEngine/Modules/RenderingModule.h"
 #include "glm/vec2.hpp"
 #include "PacMan/Gameplay/Entities/Data/GameplayEntities.h"
 #include "PacMan/Gameplay/Ghosts/Data/GhostsStateData.h"
 #include "PacMan/Gameplay/MapMovement/Components/MapMovementComponent.h"
+#include "PacMan/Gameplay/MapMovement/Managers/MapMovementManager.h"
 
 namespace PacMan
 {
@@ -36,6 +39,18 @@ namespace PacMan
 	{
 		TickPathfinding();
 		TickSpeed();
+	}
+
+	void GhostAiComponent::OnDrawGuizmo()
+	{
+		if (!_hasValidPreviousTargetGridPosition) return;
+
+		const std::shared_ptr<MapMovementComponent> mapMovement = _mapMovementComponent.lock();
+		if (!mapMovement) return;
+
+		const glm::vec2 targetWorldPosition = mapMovement->GetMapMovementManager()->GridPositionToWorldPosition(_validTargetGridPosition);
+
+		modules->rendering->Guizmo2dRender()->AddRect(targetWorldPosition, {6, 6}, 0, _guizmoColor);
 	}
 
 	void GhostAiComponent::TickPathfinding()
@@ -114,6 +129,11 @@ namespace PacMan
 		}
 
 		mapMovement->SetMovementSpeed(speed);
+	}
+
+	void GhostAiComponent::SetGuizmoColor(const GEngine::Color01 &color)
+	{
+		_guizmoColor = color;
 	}
 
 	glm::i32vec2 GhostAiComponent::GetFrightenedTargetGridPosition() const

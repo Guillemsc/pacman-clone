@@ -55,6 +55,11 @@ namespace PacMan
 		}
 	}
 
+	MapMovementManager* MapMovementComponent::GetMapMovementManager() const
+	{
+		return _mapMovementManager;
+	}
+
 	void MapMovementComponent::SetGridPosition(
 		const glm::i32vec2& gridPosition,
 		const GEngine::CellPosition &cellPosition

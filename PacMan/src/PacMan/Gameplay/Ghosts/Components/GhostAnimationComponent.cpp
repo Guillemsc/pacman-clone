@@ -32,6 +32,11 @@ namespace PacMan
 
 	void GhostAnimationComponent::OnTick()
 	{
+		const std::shared_ptr<GhostStateComponent> ghostState = _ghostStateComponent.lock();
+		if (!ghostState) return;
+
+		if (ghostState->isOnCinematic) return;
+
 		const std::shared_ptr<GEngine::TransformComponent> transform = GetEntity().lock()->GetTransform().lock();
 
 		const std::shared_ptr<MapMovementComponent> mapMovement = _mapMovementComponent.lock();
@@ -43,7 +48,7 @@ namespace PacMan
 		const std::shared_ptr<GEngine::Sprite2dAnimatorComponent> spriteAnimator = _spriteAnimatorComponent.lock();
 		if (!spriteAnimator) return;
 
-		const glm::vec2 directionVector = mapMovement->GetGridDirectionVector();
+		const glm::i32vec2 directionVector = mapMovement->GetGridDirectionVector();
 
 		if (directionVector.x < 0)
 		{

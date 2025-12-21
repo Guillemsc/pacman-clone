@@ -61,6 +61,8 @@ namespace PacMan
 			_mapGhostInitialGridPosition,
 			false
 			);
+		_gameplayEntities->MapGhost = _loadedGhostsData.MapGhostEntity;
+
 		_loadedGhostsData.LeftPrisionSlotGhostEntity = LoadGhost(
 			GhostType::CIAN_GHOST,
 			_ghostPrisionLeftSlotInitialGridPosition,
@@ -181,6 +183,9 @@ namespace PacMan
 			);
 
 		SetupGhostAi(ghostEntity.get(), ghostState, mapMovement, ghostType);
+
+		const std::shared_ptr<GhostAiComponent> ghostAiComponent = ghostEntity->GetComponent<GhostAiComponent>().lock();
+		ghostAiComponent->SetGuizmoColor(ghostColor.WithAlpha(0.9f));
 
 		_gameplayEntities->Ghosts.push_back(ghostEntity);
 

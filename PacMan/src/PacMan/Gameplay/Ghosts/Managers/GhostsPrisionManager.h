@@ -55,6 +55,7 @@ namespace PacMan
 		void TryKillGhostAndStartPathBackToPrision(const std::weak_ptr<GEngine::Entity> &ghost);
 
 	private:
+		void StartGhostPrisionAnimation(const std::weak_ptr<GEngine::Entity> &ghost);
 		void ReleaseNextGhost();
 		GhostPrisionSlotData* GetNextSlotToReleaseOrNull() const;
 		tokoro::Async<void> PlayReleaseGhostAsync(

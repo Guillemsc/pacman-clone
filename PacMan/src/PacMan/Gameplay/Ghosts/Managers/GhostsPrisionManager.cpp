@@ -73,6 +73,10 @@ namespace PacMan
 		_centerSlot->ghostEntity = _loadedGhostsData.CenterPrisionSlotGhostEntity;
 		_rightSlot->ghostEntity = _loadedGhostsData.RightPrisionSlotGhostEntity;
 
+		StartGhostPrisionAnimation(_leftSlot->ghostEntity);
+		StartGhostPrisionAnimation(_centerSlot->ghostEntity);
+		StartGhostPrisionAnimation(_rightSlot->ghostEntity);
+
 		_timeSinceLastGhostReleasedTimer.Start();
 	}
 
@@ -108,6 +112,17 @@ namespace PacMan
 			lGhost,
 			_cancellationTokenSource->GetToken()
 			).Forget();
+	}
+
+	void GhostsPrisionManager::StartGhostPrisionAnimation(const std::weak_ptr<GEngine::Entity> &ghost)
+	{
+		const std::shared_ptr<GEngine::Entity> entity = ghost.lock();
+		if (!entity) return;
+
+		const std::shared_ptr<GhostStateComponent> ghostState = entity->GetComponent<GhostStateComponent>().lock();
+		if (!ghostState) return;
+
+		ghostState->isOnCinematic = true;
 	}
 
 	void GhostsPrisionManager::Tick()
@@ -161,6 +176,9 @@ namespace PacMan
 		const GEngine::CancellationToken cancellationToken
 		)
 	{
+		const std::shared_ptr<GhostStateComponent> ghostState = ghostEntity->GetComponent<GhostStateComponent>().lock();
+		ghostState->isOnCinematic = true;
+
 		const std::shared_ptr<GEngine::TransformComponent> transform = ghostEntity->GetTransform().lock();
 		const glm::vec2 position = transform->GetPositionXY();
 
@@ -201,8 +219,8 @@ namespace PacMan
 		const std::shared_ptr<GhostAiComponent> ai = ghostEntity->GetComponent<GhostAiComponent>().lock();
 		ai->SetEnabled(true);
 
-		const std::shared_ptr<GhostStateComponent> state = ghostEntity->GetComponent<GhostStateComponent>().lock();
-		state->isReturningToPrision = false;
+		ghostState->isReturningToPrision = false;
+		ghostState->isOnCinematic = false;
 	}
 
 	tokoro::Async<void> GhostsPrisionManager::PlayReturnGhostAsync(

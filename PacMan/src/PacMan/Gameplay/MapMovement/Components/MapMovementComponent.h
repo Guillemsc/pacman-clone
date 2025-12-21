@@ -36,6 +36,8 @@ namespace PacMan
 		void OnTick() override;
 		void OnDrawGuizmo() override;
 
+		MapMovementManager* GetMapMovementManager() const;
+
 		void SetGridPosition(
 			const glm::i32vec2& gridPosition,
 			const GEngine::CellPosition& cellPosition = GEngine::CellPosition::CENTER

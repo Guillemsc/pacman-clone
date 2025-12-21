@@ -20,6 +20,7 @@ namespace PacMan
 	public:
 		std::weak_ptr<GEngine::Entity> Player;
 		std::vector<std::weak_ptr<GEngine::Entity>> Ghosts;
+		std::weak_ptr<GEngine::Entity> MapGhost;
 		std::vector<std::weak_ptr<GEngine::Entity>> Collectables;
 	};
 }

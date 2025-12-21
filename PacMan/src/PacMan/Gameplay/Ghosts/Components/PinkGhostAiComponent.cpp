@@ -16,8 +16,13 @@ namespace PacMan
         if (!player) return glm::i32vec2(0);
 
         const std::shared_ptr<MapMovementComponent> mapMovement = player->GetComponent<MapMovementComponent>().lock();
+        if (!mapMovement) return glm::i32vec2(0);
 
-        return mapMovement->GetGridPosition();
+        const glm::i32vec2 directionVector = mapMovement->GetGridDirectionVector();
+
+        const glm::i32vec2 targetPosition = mapMovement->GetGridPosition() + (directionVector * 3);
+
+        return targetPosition;
     }
 
     glm::i32vec2 PinkGhostAiComponent::GetScatterTargetGridPosition() const

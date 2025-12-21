@@ -17,6 +17,7 @@ namespace PacMan
 		using Component::Component;
 
 	public:
+		bool isOnCinematic = false;
 		bool isReturningToPrision = false;
 	};
 }
