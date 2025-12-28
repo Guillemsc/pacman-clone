@@ -4,7 +4,7 @@
 
 A simple **Pac-Man** clone done as an example of the **C++** game engine framework: **GEngine**. 
 
-https://github.com/user-attachments/assets/76efffae-11cc-40e7-9daf-2e8e1b1346bc
+https://github.com/user-attachments/assets/d4df2ee9-591d-46cc-9c47-51ff3a4386df
 
 ## Building:
 
