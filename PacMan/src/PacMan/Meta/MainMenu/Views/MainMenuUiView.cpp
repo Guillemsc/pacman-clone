@@ -30,11 +30,15 @@ namespace PacMan
 		uiEntity2->AddComponent<GEngine::UiShapeRendererComponent>();
 		const std::shared_ptr<GEngine::UiShapeButtonComponent> button = uiEntity2->AddComponent<GEngine::UiShapeButtonComponent>().lock();
 		button->OnClick().Add([this] { WhenPlayButtonClicked(); });
+		uiEntity2->GetUiTransform().lock()->SetSizeDelta({150, 70});
 
 		const std::shared_ptr<GEngine::Entity> uiEntity3 = _scene->AddUiEntity(root).lock();
-		uiEntity3->AddComponent<GEngine::UiTextRendererComponent>();
-		uiEntity3->GetUiTransform().lock()->SetAnchoredPosition({0, -100});
+	 	const std::shared_ptr<GEngine::UiTextRendererComponent> textRenderer = uiEntity3->AddComponent<GEngine::UiTextRendererComponent>().lock();
+		textRenderer->SetText("Play");
+		textRenderer->SetSize(3);
+		textRenderer->SetHorizontalAlign(GEngine::HorizontalTextAlign::CENTER);
 		uiEntity3->GetUiTransform().lock()->SetSizeDelta({200, 100});
+		uiEntity3->GetUiTransform().lock()->SetAnchoredPosition({0, -35});
 
 		const std::shared_ptr<GEngine::Entity> blackScreen = _scene->AddUiEntity(root).lock();
 		const std::shared_ptr<GEngine::UiTransformComponent> blackScreenTransform = blackScreen->GetUiTransform().lock();

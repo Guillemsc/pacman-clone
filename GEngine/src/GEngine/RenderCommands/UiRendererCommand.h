@@ -43,6 +43,7 @@ namespace GEngine
 	{
 		FontResource* font;
 		std::string_view text;
+		float textScale;
 		glm::vec2 position;
 		float rotationRadians;
 		glm::vec2 size;

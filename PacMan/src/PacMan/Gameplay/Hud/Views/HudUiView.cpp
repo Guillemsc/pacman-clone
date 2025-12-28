@@ -7,6 +7,7 @@
 #include "GEngine/Components/UiRenderersAlphaGroupComponent.h"
 #include "GEngine/Components/UiShapeButtonComponent.h"
 #include "GEngine/Components/UiShapeRendererComponent.h"
+#include "GEngine/Components/UiTextRendererComponent.h"
 #include "GEngine/Core/GEngineCoreModules.h"
 #include "GEngine/Coroutines/CoroutinesRunner.h"
 #include "GEngine/Modules/CoroutinesModule.h"
@@ -30,10 +31,21 @@ namespace PacMan
 		const std::shared_ptr<GEngine::Entity> uiEntity2 = _scene->AddUiEntity(root).lock();
 		const std::shared_ptr<GEngine::UiTransformComponent> transform = uiEntity2->GetUiTransform().lock();
 		transform->SetAnchorsTopLeft();
-		transform->SetAnchoredPosition({ -30, -30 });
+		transform->SetAnchoredPosition({ -52, -30 });
+		transform->SetSizeDelta({88, 42});
 		uiEntity2->AddComponent<GEngine::UiShapeRendererComponent>();
 		const std::shared_ptr<GEngine::UiShapeButtonComponent> button = uiEntity2->AddComponent<GEngine::UiShapeButtonComponent>().lock();
 		button->OnClick().Add([this] { WhenExitButtonClicked(); });
+
+		const std::shared_ptr<GEngine::Entity> uiEntity3 = _scene->AddUiEntity(root).lock();
+		const std::shared_ptr<GEngine::UiTransformComponent> textTransform = uiEntity3->GetUiTransform().lock();
+		textTransform->SetAnchorsTopLeft();
+		textTransform->SetSizeDelta({200, 100});
+		textTransform->SetAnchoredPosition({ -50, -69 });
+		const std::shared_ptr<GEngine::UiTextRendererComponent> textRenderer = uiEntity3->AddComponent<GEngine::UiTextRendererComponent>().lock();
+		textRenderer->SetText("Exit");
+		textRenderer->SetSize(2);
+		textRenderer->SetHorizontalAlign(GEngine::HorizontalTextAlign::CENTER);
 
 		_alphaGroupComponent = alphaGroupComponent;
 	}

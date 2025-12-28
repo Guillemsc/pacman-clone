@@ -48,6 +48,7 @@ namespace GEngine
 			std::int32_t layer,
 			FontResource* font,
 			const std::string_view& text,
+			float textScale,
 			const glm::vec2 &position,
 			float rotationRadians,
 			const glm::vec2 &size,

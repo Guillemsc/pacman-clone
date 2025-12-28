@@ -88,6 +88,7 @@ namespace GEngine
 		const std::int32_t layer,
 		FontResource *font,
 		const std::string_view &text,
+		const float textScale,
 		const glm::vec2 &position,
 		const float rotationRadians,
 		const glm::vec2 &size,
@@ -105,6 +106,7 @@ namespace GEngine
 				.text = {
 					font,
 					text,
+					textScale,
 					position,
 					rotationRadians,
 					size,
@@ -207,7 +209,6 @@ namespace GEngine
 
 	void UiRenderer::RenderTextCommand(const TextUiRendererCommand &command)
 	{
-		constexpr float scaleFactor = 1.0f;
 		constexpr float charSpacing = 2.0f;
 
 		Font rawFont;
@@ -265,8 +266,8 @@ namespace GEngine
 			if (charCodepoint != '\n')
 			{
 				glyphWidth = rawFont.glyphs[glyphIndex].advanceX == 0 ?
-					rawFont.recs[glyphIndex].width * scaleFactor :
-					rawFont.glyphs[glyphIndex].advanceX * scaleFactor;
+					rawFont.recs[glyphIndex].width * command.textScale :
+					rawFont.glyphs[glyphIndex].advanceX * command.textScale;
 
 				const bool isLastCharacter = i + 1 >= textLength;
 				if (!isLastCharacter)
@@ -336,7 +337,7 @@ namespace GEngine
 					// If we find a new line, we force line jump, even if it's the middle of a word
 					if (!wordWrap)
 					{
-						charRenderOffset.y += (rawFont.baseSize + rawFont.baseSize / 2) * scaleFactor;
+						charRenderOffset.y += (rawFont.baseSize + rawFont.baseSize / 2) * command.textScale;
 						charRenderOffset.x = 0;
 					}
 				}
@@ -345,12 +346,12 @@ namespace GEngine
 					// If we are outside the bounds, we force line jump, even if it's the middle of a word
 					if (!wordWrap && ((charRenderOffset.x + glyphWidth) > command.size.x))
 					{
-						charRenderOffset.y += (rawFont.baseSize + rawFont.baseSize / 2) * scaleFactor;
+						charRenderOffset.y += (rawFont.baseSize + rawFont.baseSize / 2) * command.textScale;
 						charRenderOffset.x = 0;
 					}
 
 					// When text overflows rectangle height limit, just stop drawing
-					const bool areWeExceedingHeightLimit = (charRenderOffset.y + rawFont.baseSize * scaleFactor) > command.size.y;
+					const bool areWeExceedingHeightLimit = (charRenderOffset.y + rawFont.baseSize * command.textScale) > command.size.y;
 					if (areWeExceedingHeightLimit) break;
 
 					const float spaceLeftToFillRect = command.size.x - currentLineWidth;
@@ -382,12 +383,14 @@ namespace GEngine
 						finalPosition.x = std::round(finalPosition.x);
 						finalPosition.y = std::round(finalPosition.y);
 
+						float charSize = static_cast<float>(rawFont.baseSize) *  command.textScale;
+
 						RayLibExtensions::DrawTextCodepointExtension(
 							rawFont,
 							charCodepoint,
 							{ finalPosition.x, finalPosition.y },
 							renderRotationDegrees,
-							static_cast<float>(rawFont.baseSize),
+							charSize,
 							raylibColor
 							);
 					}
@@ -396,7 +399,7 @@ namespace GEngine
 				const bool hasFinishedRenderingCurrentLine = wordWrap && i == currentEndLine;
 				if (hasFinishedRenderingCurrentLine)
 				{
-					charRenderOffset.y += (rawFont.baseSize + rawFont.baseSize / 2) * scaleFactor;
+					charRenderOffset.y += (rawFont.baseSize + rawFont.baseSize / 2) * command.textScale;
 					charRenderOffset.x = 0;
 					currentStartLine = currentEndLine;
 					currentEndLine = -1;
@@ -412,10 +415,6 @@ namespace GEngine
 			{
 				charRenderOffset.x += glyphWidth;
 			}
-			// else if (charRenderOffset.x != 0 && charCodepoint == ' ')
-			// {
-			// 	charRenderOffset.x += glyphWidth;
-			// }
 		}
 	}
 } // GEngine

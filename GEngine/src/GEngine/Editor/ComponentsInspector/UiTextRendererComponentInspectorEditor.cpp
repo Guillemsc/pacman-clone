@@ -18,6 +18,12 @@ namespace GEngine
 			inspect->SetText(text);
 		}
 
+		float size = inspect->GetSize();
+		if (ImGui::DragFloat("Size", &size, 1))
+		{
+			inspect->SetSize(size);
+		}
+
 		ImGui::Text("Horizontal Alignment:");
 
 		const HorizontalTextAlign horizontal = inspect->GetHorizontalAlign();

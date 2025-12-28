@@ -25,6 +25,9 @@ namespace GEngine
 		std::string GetText() const;
 		void SetText(const std::string& text);
 
+		float GetSize() const;
+		void SetSize(float size);
+
 		HorizontalTextAlign GetHorizontalAlign() const;
 		void SetHorizontalAlign(HorizontalTextAlign horizontalAlign);
 
@@ -37,10 +40,12 @@ namespace GEngine
 	private:
 		std::weak_ptr<FontResource> _fontResource;
 
-		std::string _text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s";
+		std::string _text = "Text";
+		float _size = 1.0f;
 		HorizontalTextAlign _horizontalAlign = HorizontalTextAlign::LEFT;
 		VerticalTextAlign _verticalAlign = VerticalTextAlign::TOP;
 		float _wordSpacing = 2.0f;
+
 	};
 }
 

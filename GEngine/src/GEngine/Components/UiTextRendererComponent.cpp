@@ -34,6 +34,7 @@ namespace GEngine
 			entity->GetRenderingPositionInHierarchy(),
 			fontResource.get(),
 			std::string_view(_text),
+			_size,
 			uiRect.position,
 			uiRect.rotation,
 			uiRect.size,
@@ -53,6 +54,16 @@ namespace GEngine
 	void UiTextRendererComponent::SetText(const std::string &text)
 	{
 		_text = text;
+	}
+
+	float UiTextRendererComponent::GetSize() const
+	{
+		return _size;
+	}
+
+	void UiTextRendererComponent::SetSize(const float size)
+	{
+		_size = std::max(0.0f, size);
 	}
 
 	HorizontalTextAlign UiTextRendererComponent::GetHorizontalAlign() const
