@@ -2,7 +2,7 @@
 
 <img width="1640" height="664" alt="logo" src="https://github.com/user-attachments/assets/ecd61182-7382-4f7e-accc-9c49940e7d10" />
 
-A simple **Pac-Man** clone done as an example of the **C++** game engine framework: **GEngine**. 
+A **Pac-Man** clone done as an example of the **C++** game engine framework: **GEngine**. 
 
 https://github.com/user-attachments/assets/d4df2ee9-591d-46cc-9c47-51ff3a4386df
 
